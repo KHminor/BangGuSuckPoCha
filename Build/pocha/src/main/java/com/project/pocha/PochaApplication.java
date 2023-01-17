@@ -10,4 +10,6 @@ public class PochaApplication {
 		SpringApplication.run(PochaApplication.class, args);
 	}
 
+
+
 }
