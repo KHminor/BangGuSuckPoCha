@@ -94,3 +94,13 @@
 ![image-20230116172654150](C:\Users\SSAFY\Desktop\S08P11E201\Sanghyeon\README.assets\image-20230116172654150.png)
 
 ![image-20230116172723585](C:\Users\SSAFY\Desktop\S08P11E201\Sanghyeon\README.assets\image-20230116172723585.png)
+
+## 01-17
+
+- 컴포넌트 구조 정리
+
+![component_draw.drawio](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\component_draw.drawio.png)
+
+- 와이어프레임
+
+![image-20230117170829884](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230117170829884.png)
