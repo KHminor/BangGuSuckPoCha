@@ -2,7 +2,7 @@
 
 방구석 포차 만의 특별한 점
 
-1. 재미
+1. 재미.
    1. 포차 컨셉을 총 4가지로 나눕니다, ( 게임 포차, 소통 포차(default), 썰 포차, 헌팅 포차 )
       1. 게임 포차, 소통 포차, 썰 포차 VS 헌팅 포차
       2. 헌팅포차는 처음 15분 동안 얼굴이 드러나지 않습니다. ( 차별점 )
@@ -94,3 +94,13 @@
 ![image-20230116172654150](C:\Users\SSAFY\Desktop\S08P11E201\Sanghyeon\README.assets\image-20230116172654150.png)
 
 ![image-20230116172723585](C:\Users\SSAFY\Desktop\S08P11E201\Sanghyeon\README.assets\image-20230116172723585.png)
+
+## 01-17
+
+- 컴포넌트 구조 정리
+
+![component_draw.drawio](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\component_draw.drawio.png)
+
+- 와이어프레임
+
+![image-20230117170829884](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230117170829884.png)
