@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import axios from "axios";
+import React, {useState} from 'react'
 function App() {
+  let [data,setData] = useState()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div>
+        <button
+          onClick={() => {
+            axios.get("http://54.237.250.181:8080/")
+            .then((r)=> {
+              console.log(r.data);
+            })
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          버튼
+        </button>
+      </div>
     </div>
   );
 }
