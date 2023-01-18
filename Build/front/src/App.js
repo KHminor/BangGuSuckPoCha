@@ -7,13 +7,21 @@ function App() {
     <div className="App">
       <div>
         <button
-          onClick={() => {
-            axios.get("http://54.237.250.181:8080/")
+          onClick={()=> {
+            axios({
+              method: 'get',
+              url: 'http://54.237.250.181:8080/',
+              headers: {
+                "Allow-Control-Allow-Origin" : '*'
+              }
+            })
             .then((r)=> {
               console.log(r.data);
             })
-          }}
-        >
+            .catch((e)=>{
+              console.log(e);
+            })
+          }}>
           버튼
         </button>
       </div>
