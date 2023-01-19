@@ -104,3 +104,19 @@
 - 와이어프레임
 
 ![image-20230117170829884](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230117170829884.png)
+
+## 01-18
+
+- 화면정의서
+
+![image-20230118172356293](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230118172356293.png)
+
+- 컴포넌트 구조 작성
+
+![image-20230118172423223](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230118172423223.png)
+
+## 01-19
+
+- 디자인 화면정의
+
+![image-20230119170635747](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230119170635747.png)
