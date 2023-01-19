@@ -114,3 +114,9 @@
 - 컴포넌트 구조 작성
 
 ![image-20230118172423223](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230118172423223.png)
+
+## 01-19
+
+- 디자인 화면정의
+
+![image-20230119170635747](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230119170635747.png)
