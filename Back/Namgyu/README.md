@@ -55,3 +55,9 @@
   <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4ff25dc9-3566-43c2-9f41-ed7324527fd5/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230118T082848Z&X-Amz-Expires=86400&X-Amz-Signature=22e2d8a4f3edc485114317eae4667ee71a5ff37f74731f4fbc1f4c97d17f6710&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
 - ERD
 - 설계 회의
+
+## 2023.01.19
+
+- 인터페이스 명세서
+- Swagger 테스트
+- JWT 테스트
