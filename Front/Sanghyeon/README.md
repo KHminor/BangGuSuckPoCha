@@ -120,3 +120,13 @@
 - 디자인 화면정의
 
 ![image-20230119170635747](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230119170635747.png)
+
+## 01-20
+
+- 와이어프레임 수정
+
+![image-20230120151716963](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230120151716963.png)
+
+- 컴포넌트 구조 정리
+
+![image-20230120151800248](C:\Users\SSAFY\Desktop\S08P12E201\Front\Sanghyeon\README.assets\image-20230120151800248.png)
