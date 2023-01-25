@@ -3,8 +3,10 @@ package com.server.back.jwt.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.back.config.auth.PrincipalDetails;
 import com.server.back.domain.user.User;
+import com.server.back.jwt.JwtProperties;
 import com.server.back.jwt.JwtToken;
 import com.server.back.jwt.service.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -89,12 +91,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Map<String, String> jsonResponse = jwtService.successLoginResponse(jwtToken);
         String result = objectMapper.writeValueAsString(jsonResponse);
-
+//        response.setStatus(HttpStatus.OK.value());
         //response 응답
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);
 
-        //response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+ jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + jwtToken);
     }
 }

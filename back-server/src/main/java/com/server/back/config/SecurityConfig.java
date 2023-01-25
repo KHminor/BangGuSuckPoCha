@@ -28,8 +28,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .antMatchers("/join","/", "/home","/refresh/**")
-                .antMatchers("/login/oauth2/code/naver", "/user/api/oauth2/token/naver", "/swagger-ui/index.html",
-                        "/swagger/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs");
+                .antMatchers("/login/oauth2/code/naver", "/user/api/oauth2/token/naver",
+                        "/swagger/**","/swagger-ui/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs");
 
     }
 
