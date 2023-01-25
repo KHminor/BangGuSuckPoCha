@@ -4,19 +4,12 @@ import { useSelector } from "react-redux";
 // import Footer from "../Common/Footer";
 import Navbar from "../Common/Nav";
 import "./Main.css";
-<<<<<<< HEAD:front/src/components/Main/Main.tsx
+
 import menuBground from "../../assets/logoIcon/menuBground.png";
 import mypage from "../../assets/logoIcon/mypage.png";
 import friend from "../../assets/logoIcon/friend.png";
 import logout from "../../assets/logoIcon/logout.png";
 import UserProfile from "../UserProfile/UserProfile";
-=======
-// import menuBground from ".//../../assets/logoIcon/menuBground.png";
-// import mypage from "../../assets/logoIcon/mypage.png";
-// import friend from "../../assets/logoIcon/friend.png";
-// import logout from "/assets/logoIcon/logout.png";
-// import UserProfile from "../UserProfile/UserProfile";
->>>>>>> 37b1efc0dc521646be361b7dad559babfe0a0b60:Build/front/src/components/Main/Main.tsx
 
 function Main(): JSX.Element {
   return (
@@ -40,21 +33,23 @@ function Main(): JSX.Element {
 export default Main;
 
 function Tag(): JSX.Element {
-  
-  const checkMenuState:any = useSelector((state:any)=> {return state.menuClickCheck})
-  const alarmClickCheck:any = useSelector((state:any)=> {return state.alarmClickCheck})
-  
-  
+  const checkMenuState: any = useSelector((state: any) => {
+    return state.menuClickCheck;
+  });
+  const alarmClickCheck: any = useSelector((state: any) => {
+    return state.alarmClickCheck;
+  });
+
   if (checkMenuState === true) {
-    document.getElementById('menu')?.classList.remove('hidden')
+    document.getElementById("menu")?.classList.remove("hidden");
   } else {
-    document.getElementById('menu')?.classList.add('hidden')
+    document.getElementById("menu")?.classList.add("hidden");
   }
 
   if (alarmClickCheck === true) {
-    document.getElementById('alarm')?.classList.remove('hidden')
+    document.getElementById("alarm")?.classList.remove("hidden");
   } else {
-    document.getElementById('alarm')?.classList.add('hidden')
+    document.getElementById("alarm")?.classList.add("hidden");
   }
 
   return (
@@ -114,29 +109,39 @@ function Tag(): JSX.Element {
           <div className="flex-none">
             <button></button>
           </div>
-
         </div>
       </div>
       {/* 메뉴 클릭시 보이기 */}
-      <div id="menu" className="absolute rounded-full w-48 h-16 hidden" style={{right: '5%', top: '17%'}} >
+      <div
+        id="menu"
+        className="absolute rounded-full w-48 h-16 hidden"
+        style={{ right: "5%", top: "17%" }}
+      >
         {/* <img src={menuBground} className="bg-inherit h-full w-full" alt="" /> */}
-        <div className="flex justify-center items-center absolute   w-48 h-16" style={{right: '-1%', top: '-9%'}}>
-          <div className="ml-5 cursor-pointer" style={{height: '52%'}}>
+        <div
+          className="flex justify-center items-center absolute   w-48 h-16"
+          style={{ right: "-1%", top: "-9%" }}
+        >
+          <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
             {/* <img src={mypage} className="bg-white bg-cover rounded-full" style={{height: '90%', border: 'solid 1px white'}}/> */}
             <p className="text-stone-200 text-xs">My</p>
           </div>
-          <div className="mx-5 cursor-pointer" style={{height: '52%'}}>
+          <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
             {/* <img src="" className="bg-white bg-cover rounded-full" style={{height: '90%'}}/> */}
             <p className="text-stone-200 text-xs">friend</p>
           </div>
-          <div className="mr-5 cursor-pointer" style={{height: '52%'}}>
+          <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
             {/* <img src={logout} className="bg-white bg-cover rounded-full" style={{height: '90%'}}/> */}
             <p className="text-stone-200 text-xs">logout</p>
           </div>
         </div>
       </div>
       {/* 알림 클릭시 보이기 */}
-      <div id="alarm" className="grid grid-rows-12 absolute w-56 bg-black rounded-3xl neonDefault" style={{right: '1.5%', top: '17.6%', height:'34%'}} >
+      <div
+        id="alarm"
+        className="grid grid-rows-12 absolute w-56 bg-black rounded-3xl neonDefault"
+        style={{ right: "1.5%", top: "17.6%", height: "34%" }}
+      >
         <div className="grid grid-cols-12 row-span-1 items-center">
           <div className="col-span-5"></div>
           <div className="col-span-2 opacity-50">알림</div>
@@ -151,12 +156,20 @@ function Tag(): JSX.Element {
           <div className="col-span-3 text-xl opacity-50">리뷰</div>
           <div className="col-span-1"></div>
         </div>
-        <div className="row-span-6 hideScroll" style={{overflow: 'auto'}} >
-          <div className="my-2 cursor-pointer" style={{height: '20%'}} onClick={()=> {
-            
-          }}>한상현 바보</div>
-          <div className="my-2 cursor-pointer" style={{height: '20%'}}>한상현 바보</div>
-          <div className="my-2 cursor-pointer" style={{height: '20%'}}>한상현 바보</div>
+        <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
+          <div
+            className="my-2 cursor-pointer"
+            style={{ height: "20%" }}
+            onClick={() => {}}
+          >
+            한상현 바보
+          </div>
+          <div className="my-2 cursor-pointer" style={{ height: "20%" }}>
+            한상현 바보
+          </div>
+          <div className="my-2 cursor-pointer" style={{ height: "20%" }}>
+            한상현 바보
+          </div>
         </div>
       </div>
     </div>
@@ -164,68 +177,80 @@ function Tag(): JSX.Element {
 }
 
 function Room() {
-  let [hoverCheck, setHoverCheck] = useState(false) 
+  let [hoverCheck, setHoverCheck] = useState(false);
   let cards: JSX.Element[] = [1, 1, 1, 1].map((e, idx) => {
     return (
-      <div key={idx} className="mx-12 cursor-pointer rounded-2xl neon" style={{height: '90%'}}>
-        <div style={{height: '68%'}} >
+      <div
+        key={idx}
+        className="mx-12 cursor-pointer rounded-2xl neon"
+        style={{ height: "90%" }}
+      >
+        <div style={{ height: "68%" }}>
           <img
             className="rounded-t-2xl object-cover object-center h-full "
             src="https://images.pexels.com/photos/5220092/pexels-photo-5220092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
         </div>
-        <div className="grid grid-rows-3 p-6 bg-black rounded-b-2xl text-white" style={{height:'32%'}}>
+        <div
+          className="grid grid-rows-3 p-6 bg-black rounded-b-2xl text-white"
+          style={{ height: "32%" }}
+        >
           <div className="grid grid-cols-12 ">
-            <div className="col-span-5 rounded-full flex justify-center items-center text-xl font-normal" style={{backgroundColor: 'rgb(227, 114, 0)', height: '80%'}}>
+            <div
+              className="col-span-5 rounded-full flex justify-center items-center text-xl font-normal"
+              style={{ backgroundColor: "rgb(227, 114, 0)", height: "80%" }}
+            >
               Talk
             </div>
             <div className="col-span-7 "></div>
           </div>
-          <div className="flex justify-start items-end text-sm">우리의 시간은 낮보다 밤이 더 아름답다...🤑</div>
-          <div className="flex justify-start items-end text-sm">#20대 #부산 #이자카야 #소주</div>
+          <div className="flex justify-start items-end text-sm">
+            우리의 시간은 낮보다 밤이 더 아름답다...🤑
+          </div>
+          <div className="flex justify-start items-end text-sm">
+            #20대 #부산 #이자카야 #소주
+          </div>
         </div>
       </div>
     );
   });
   return (
-    <div style={{height: '62%'}}>
+    <div style={{ height: "62%" }}>
       <div className="flex h-full">
-        <div style={{width: '10%', height:'100&'}}></div>
-        <div className="grid grid-cols-4" style={{width: '80%'}}>
+        <div style={{ width: "10%", height: "100&" }}></div>
+        <div className="grid grid-cols-4" style={{ width: "80%" }}>
           {cards}
         </div>
-        <div style={{width: '10%'}}></div>
+        <div style={{ width: "10%" }}></div>
       </div>
       <div className="flex h-full">
-        <div style={{width: '10%', height:'100&'}}></div>
-        <div className="grid grid-cols-4 " style={{width: '80%'}}>
+        <div style={{ width: "10%", height: "100&" }}></div>
+        <div className="grid grid-cols-4 " style={{ width: "80%" }}>
           {cards}
         </div>
-        <div style={{width: '10%'}}></div>
+        <div style={{ width: "10%" }}></div>
       </div>
       <div className="flex h-full">
-        <div style={{width: '10%', height:'100&'}}></div>
-        <div className="grid grid-cols-4 " style={{width: '80%'}}>
+        <div style={{ width: "10%", height: "100&" }}></div>
+        <div className="grid grid-cols-4 " style={{ width: "80%" }}>
           {cards}
         </div>
-        <div style={{width: '10%'}}></div>
+        <div style={{ width: "10%" }}></div>
       </div>
       <div className="flex h-full">
-        <div style={{width: '10%', height:'100&'}}></div>
-        <div className="grid grid-cols-4 " style={{width: '80%'}}>
+        <div style={{ width: "10%", height: "100&" }}></div>
+        <div className="grid grid-cols-4 " style={{ width: "80%" }}>
           {cards}
         </div>
-        <div style={{width: '10%'}}></div>
+        <div style={{ width: "10%" }}></div>
       </div>
       <div className="flex h-full">
-        <div style={{width: '10%', height:'100&'}}></div>
-        <div className="grid grid-cols-4 " style={{width: '80%'}}>
+        <div style={{ width: "10%", height: "100&" }}></div>
+        <div className="grid grid-cols-4 " style={{ width: "80%" }}>
           {cards}
         </div>
-        <div style={{width: '10%'}}></div>
+        <div style={{ width: "10%" }}></div>
       </div>
-      
     </div>
   );
 }
-
