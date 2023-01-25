@@ -1,0 +1,122 @@
+.tagBox {
+  font-family: "maplestory";
+  font-size: 1.2rem;
+  width: 10rem;
+  height: 3rem;
+  /* padding: 0px 10px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border: 2px solid white;
+  border-radius: 20px;
+  margin: 10px 10px;
+  
+}
+.tagBox:hover {
+  cursor: pointer;
+  box-shadow: 0 0 5px #A63268,
+  0 0 10px #A63268,
+  0 0 20px #A63268,
+  0 0 35px #A63268;
+
+}
+.selectBtn {
+  color: #e94b94;
+
+  }
+
+
+.tagListbox {
+	display: flex;
+
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	top: 70%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+  
+}
+
+.tagbox {
+	max-width: 900px;
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+
+
+.createBtn {
+	font-family: "maplestory";
+  font-size: 1.2rem;
+  position: relative;
+  display: inline-block;
+  /* color: #fff; */
+	font-weight: 100;
+  text-decoration: none;
+  /* text-transform: uppercase; */
+  /* overflow: hidden; */
+  transition: .3s;
+	margin-left: 10px;
+	margin-right: 10px;
+  padding: 5px 50px;
+  margin-bottom: 5px;
+	margin-top: 10px;
+  border: 2px solid white;
+  border-radius: 5px;
+  /* border: none; */
+  outline: none;
+  background: transparent;
+  box-shadow: 0 0 5px rgba(0, 26, 255, 0.5),
+              0 0 10px rgba(0, 26, 255, 0.5),
+              0 0 15px rgba(0, 26, 255, 0.5),
+              0 0 25px rgba(0, 26, 255, 0.5);
+}
+
+.createBtn:hover {
+  /* background: rgba(248, 248, 248, 0.185); */
+  color: rgb(150, 183, 255);
+  box-shadow: 0 0 5px rgba(0, 26, 255, 0.5),
+              0 0 15px rgba(0, 26, 255, 0.5),
+              0 0 35px rgba(0, 26, 255, 0.5),
+              0 0 75px rgba(0, 26, 255, 0.5);
+}
+
+
+.cancelBtn {
+	font-family: "maplestory";
+  font-size: 1.2rem;
+  position: relative;
+  display: inline-block;
+  /* color: #fff; */
+	font-weight: 100;
+  text-decoration: none;
+  /* text-transform: uppercase; */
+  /* overflow: hidden; */
+  transition: .3s;
+	margin-left: 10px;
+	margin-right: 10px;
+  padding: 5px 50px;
+  margin-bottom: 5px;
+	margin-top: 10px;
+  border: 2px solid white;
+  border-radius: 5px;
+  /* border: none; */
+  outline: none;
+  background: transparent;
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.5),
+              0 0 10px rgba(255, 51, 51, 0.5),
+              0 0 15px rgba(255, 51, 51, 0.5),
+              0 0 25px rgba(255, 51, 51, 0.5);
+}
+
+.cancelBtn:hover {
+  /* background: rgba(248, 248, 248, 0.185); */
+  color: rgb(255, 124, 190);
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.5),
+              0 0 15px rgba(255, 51, 51, 0.5),
+              0 0 35px rgba(255, 51, 51, 0.5),
+              0 0 75px rgba(255, 51, 51, 0.5);
+}
