@@ -10,9 +10,18 @@
 .neon:hover {
   color: #fff;
   box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+  z-index: 100;
 }
 
 /* .neon1:hover {
   color: #fff;
   box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
 } */
+
+img {
+  border-radius: 16px 16px 0px 0px;
+}
+
+.radiusbottom {
+  border-radius: 0px 0px 16px 16px;
+}

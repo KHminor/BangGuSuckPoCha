@@ -1,23 +1,11 @@
 import style from "./MainCreateRoom.module.css";
-import { useRef, useState } from "react";
+import MainCreateRoomSelect from "./MainCreateRoomSelect";
+import MainCreateRoomPeople from "./MainCreateRoomPeople";
 
 const MainCreateRoom = (): React.ReactElement => {
-  const selectTags = useRef<any>([]);
-
-
-  const onSelectTag = (index: number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(event.target);
-    // selectTags.current[index].classList.toggle(`${style.selectBtn}`)
-    (event.target as Element).classList.toggle(`${style.selectBtn}`)
-    // if (isSelect) {
-    //   setIsSelect((prev) => !prev);
-    //   selectTags.current[index].classList = `${style.tagBox}`;
-    // } else {
-    //   setIsSelect((prev) => !prev);
-    //   selectTags.current[index].classList += `${ style.selectBtn}`;
-    // }
-  };
-
+  const regionOption = ["지역", "전국", "부산광역시"];
+  const ageOption = ["나이", "ALL", "20대"];
+  const peopleOption = ["인원", "2", "3", "4", "5", "6"];
   const tagList = [
     "애니메이션",
     "게임",
@@ -31,19 +19,37 @@ const MainCreateRoom = (): React.ReactElement => {
     "연예인",
     "사주팔자",
     "타로",
+    "막걸리",
+    "연애",
+    "똥",
   ];
 
+  const onSelectTag = (
+    index: number,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    // console.log(event.target);
+    // selectTags.current[index].classList.toggle(`${style.selectBtn}`)
+    (event.target as Element).classList.toggle(`${style.selectBtn}`);
+  };
+
+
   return (
-    <div style={{ height: "100vh", backgroundColor: "black", color: "white" }}>
-      <div className={`${style.tagListbox}`}>
-        <div className={`${style.tagbox}`}>
+    <div className="bg-black bg-opacity-90 absolute h-screen text-white">
+      <div className={`${style.tagListbox} bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}>
+        <div className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}>Create Room</div>
+        <MainCreateRoomPeople selectOption={peopleOption} />
+        <MainCreateRoomSelect selectOption={ageOption} />
+        <MainCreateRoomSelect selectOption={regionOption} />
+        <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">태그</div>
+        <div className="flex justify-center flex-wrap">
           {tagList.map((tag, index) => {
             return (
               <div
                 onClick={(event) => onSelectTag(index, event)}
-                ref={(tag) => {
-                  selectTags.current[index] = tag;
-                }}
+                // ref={(tag) => {
+                //   selectTags.current[index] = tag;
+                // }}
                 key={index}
                 className={`${style.tagBox}`}
               >
@@ -52,13 +58,13 @@ const MainCreateRoom = (): React.ReactElement => {
             );
           })}
         </div>
-        <div className="flex justify-end w-full">
+        <div className="flex justify-end w-full mt-10">
           <input
-            className={`${style.createBtn}`}
+            className={`${style.createBtn} cursor-pointer`}
             type="submit"
             value="방만들기"
           />
-          <input className={`${style.cancelBtn}`} type="submit" value="취소" />
+          <input className={`${style.cancelBtn} cursor-pointer`} type="submit" value="취소" />
         </div>
       </div>
     </div>
