@@ -1,5 +1,6 @@
 package com.server.back.domain.pocha;
 
+import com.server.back.dto.pocha.InviteRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +29,4 @@ public class Invite extends BaseTimeEntity{
     @ManyToOne(targetEntity = Pocha.class, fetch = FetchType.LAZY)
     @JoinColumn(name="pocha_id")
     private Pocha pocha;
-
 }

@@ -164,4 +164,57 @@ public class PochaServiceImpl implements PochaService{
         entity.updateSsul(reqeustDto);
         // 유저 포인트 차감.
     }
+
+    @Override
+    public List<InviteResponseDto> pochaInviteList(String username) {
+        // User user = userRepository.findByUsername(username)
+        List<InviteResponseDto> responseDtoList = new ArrayList<>();
+        // 유효한 포차인지 확인하여 추가.
+
+        return responseDtoList;
+    }
+
+    @Override
+    public void pochaInvite(InviteRequestDto requestDto) {
+        Invite invite = Invite.builder()
+                // fromId, toId 추가!!!
+                .pocha(pochaRepository.findByPochaId(requestDto.getPochaId()))
+                .build();
+        // 초대 추가.
+        Invite entity = inviteRepository.save(invite);
+    }
+
+    @Override
+    public void pochaInviteRefuse(Long inviteId) {
+        inviteRepository.deleteById(inviteId);
+        Invite invite = inviteRepository.findById(inviteId).orElse(null);
+    }
+
+    @Override
+    public boolean pochaInviteAccept(Long inviteId, Long pochaId) {
+        Invite invite = inviteRepository.findById(inviteId).orElse(null);
+
+        if(invite != null) {
+            // User user = invite.getTo();
+            Pocha pocha = invite.getPocha();
+            
+            // 참여 인원 수 계산
+            int participantToal = 0;
+            for(Participant p : pocha.getParticipant()){
+                if(p.getExitAt() == null) participantToal++;
+            }
+            // 참여가 가능하다면 참여.
+            if(pocha.getLimitUser() > participantToal) {
+                Participant entity = participantRepository.save(Participant.builder()
+                        .pocha(pocha)
+                        .isHost(0)
+                        .waiting(0)
+                        .build());
+                return true;
+            }
+        }
+
+        // 불가능하다면 불참.
+        return false;
+    }
 }
