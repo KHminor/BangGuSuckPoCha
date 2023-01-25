@@ -2,23 +2,29 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../Common/Navbar";
 import styles from "./Main.module.css";
+import MainCreateRoom from "./MainCreateRoom";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
-  const checkMenuState:any = useSelector((state:any)=> {return state.menuClickCheck})
-  const alarmClickCheck:any = useSelector((state:any)=> {return state.alarmClickCheck})
-  
-  
+  // const [createRoom, setCreateRoom] = useState(false);
+
+  const checkMenuState: any = useSelector((state: any) => {
+    return state.menuClickCheck;
+  });
+  const alarmClickCheck: any = useSelector((state: any) => {
+    return state.alarmClickCheck;
+  });
+
   if (checkMenuState === true) {
-    document.getElementById('menu')?.classList.remove('hidden')
+    document.getElementById("menu")?.classList.remove("hidden");
   } else {
-    document.getElementById('menu')?.classList.add('hidden')
+    document.getElementById("menu")?.classList.add("hidden");
   }
 
   if (alarmClickCheck === true) {
-    document.getElementById('alarm')?.classList.remove('hidden')
+    document.getElementById("alarm")?.classList.remove("hidden");
   } else {
-    document.getElementById('alarm')?.classList.add('hidden')
+    document.getElementById("alarm")?.classList.add("hidden");
   }
   return (
     <div className={`grid screen min-w-[75rem] h-screen ${styles.hideScroll}`} style={{backgroundColor: "rgb(25, 25, 25)", gridTemplateRows:'11rem 1fr', overflow:'auto'}}>

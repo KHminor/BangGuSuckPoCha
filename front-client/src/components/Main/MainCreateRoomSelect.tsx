@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import style from "./MainCreateRoom.module.css";
 
 const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => { 
   const [selectTitle, selectAge, selectRegion] = selectOption;
@@ -18,19 +19,19 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
     // (event.target as Element).classList.toggle("bg-white");
   };
   return (
-    <div className="flex w-full h-12 mb-20 font-bold items-center">
-      <div className="text-left text-2xl mr-10">{selectTitle}</div>
+    <div className="flex w-full h-12 mb-10 font-bold items-center">
+      <div className="text-left text-xl mr-10">{selectTitle}</div>
       <div
         onClick={onSelectRegion}
         ref={selectRegionAll}
-        className="border border-white bg-white w-32 h-full text-black text-xl flex justify-center items-center cursor-pointer"
+        className={`${style.selectHover} border border-white bg-white w-28 h-full text-black text-lg flex justify-center items-center cursor-pointer`}
       >
-        <div>{selectAge}</div>
+        <span>{selectAge}</span>
       </div>
       <div
         onClick={onSelectRegion}
         ref={selectRegionCity}
-        className="border border-white w-32 h-full text-xl flex justify-center items-center cursor-pointer"
+        className={`${style.selectHover} border border-white w-28 h-full text-lg flex justify-center items-center cursor-pointer`}
       >
         <span>{selectRegion}</span>
       </div>
