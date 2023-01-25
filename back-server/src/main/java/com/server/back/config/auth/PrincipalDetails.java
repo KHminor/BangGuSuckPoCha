@@ -1,55 +1,61 @@
 package com.server.back.config.auth;
 
+
+import com.server.back.domain.user.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
-public class CustomAuthDetails implements UserDetails, OAuth2User {
-    @Override
-    public Map<String, Object> getAttributes() {
-        return null;
-    }
+@Data
+public class PrincipalDetails implements UserDetails {
 
-    @Override
-    public String getName() {
-        return null;
+    private User user;
+
+    public PrincipalDetails(User user) {
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> authorities  = new ArrayList<>();
+
+        user.getRoleList().forEach(r -> {
+            authorities.add(() -> r);
+        });
+
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
