@@ -1,7 +1,12 @@
+.neonTitle {
+  color: #fff;
+  text-shadow: 0 0 5px rgb(94, 94, 94), 0 0 10px rgb(54, 43, 75), 0 0 20px rgb(25, 6, 63), 0 0 30px rgb(19, 2, 53), 0 0 40px rgb(62, 2, 151), 0 0 55px rgb(60, 6, 128), 0 0 75px #390397, 0 0 95px #550397, 0 0 115px #36045f , 0 0 135px #490542, 0 0 155px #11010f;
+}
+
 .tagBox {
   font-family: "maplestory";
-  font-size: 1.2rem;
-  width: 10rem;
+  font-size: 1.125rem;
+  width: 6.5rem;
   height: 3rem;
   /* padding: 0px 10px; */
   display: flex;
@@ -22,6 +27,17 @@
   0 0 35px #A63268;
 
 }
+.selectHover {
+  cursor: pointer;
+}
+
+.selectHover:hover {
+  box-shadow: 0 0 5px #A63268,
+  0 0 10px #A63268,
+  0 0 15px #A63268,
+  0 0 25px #A63268;
+}
+
 .selectBtn {
   color: #e94b94;
 
@@ -30,23 +46,14 @@
 
 .tagListbox {
 	display: flex;
-  max-width: 100%;
 	flex-direction: column;
 	align-items: center;
-	position: absolute;
-	top: 70%;
-	left: 50%;
+	/* position: absolute; */
+	/* top: 50%;
+	left: 50%; */
 	transform: translate(-50%, -50%);
-  
 }
-
-.tagbox {
-	
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
+  /* max-width: 100%; */
 
 .createBtn {
 	font-family: "maplestory";
