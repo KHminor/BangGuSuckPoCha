@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,5 +117,44 @@ public class PochaController {
         pochaService.pochaSsul(pochaId, reqeustDto);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @ApiOperation(value = "포차 초대 목록")
+    @GetMapping("/invite/{username}")
+    public ResponseEntity<Map<String, Object>> pochaInviteList(@PathParam(value = "username") String username){
+        Map<String, Object> response = new HashMap<>();
+        List<InviteResponseDto> inviteResponseDto = pochaService.pochaInviteList(username);
+        response.put("data", inviteResponseDto);
+        response.put("message", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @ApiOperation(value = "포차에 친구 초대")
+    @PostMapping("/invite")
+    public ResponseEntity<Map<String, Object>> pochaInvite(@RequestBody InviteRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        pochaService.pochaInvite(requestDto);
+        response.put("message", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @ApiOperation(value = "포차 초대 거절")
+    @DeleteMapping("/invite/refuse/{invite_id}")
+    public ResponseEntity<String> pochaInviteRefuse(@PathParam(value = "invite_id") Long inviteId){
+        Map<String, Object> response = new HashMap<>();
+        pochaService.pochaInviteRefuse(inviteId);
+        response.put("message", "success");
+        return new ResponseEntity<>("초대 거절 완료", HttpStatus.OK);
+    }
+    @ApiOperation(value = "포차 초대 수락")
+    @PostMapping("/invite/accept/{invite_id}/{pocha_id}")
+    public ResponseEntity<String> pochaInviteAccept(@PathParam(value = "invite_id") Long inviteId, @PathParam(value = "pocha_id") Long pochaId){
+        Map<String, Object> response = new HashMap<>();
+
+        if(pochaService.pochaInviteAccept(inviteId, pochaId)){
+
+        }
+
+        response.put("message", "success");
+        return new ResponseEntity<>("초대 수락 완료", HttpStatus.OK);
     }
 }

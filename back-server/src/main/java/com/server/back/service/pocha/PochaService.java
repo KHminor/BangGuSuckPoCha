@@ -26,4 +26,12 @@ public interface PochaService {
     void pochaAlcohol(Long pochaId);
 
     void pochaSsul(Long pochaId, SsulReqeustDto reqeustDto);
+
+    List<InviteResponseDto> pochaInviteList(String username);
+
+    void pochaInvite(InviteRequestDto requestDto);
+
+    void pochaInviteRefuse(Long inviteId);
+
+    boolean pochaInviteAccept(Long inviteId, Long pochaId);
 }
