@@ -3,14 +3,14 @@ import { useDispatch } from "react-redux";
 
 function Navbar(): JSX.Element {
   return (
-    <div style={{ height: "100%" , width: '100%'}}>
-      <div className="flex bg-black" >
-        <div style={{ width: "34vw" }}></div>
+    <div className="h-full min-w-[75rem]" >
+      <div className="flex justify-center bg-black h-full" >
+        <div style={{ width: "34%" }}></div>
         <img
           src={require('../../assets/logo/Logo.png')}
           alt="logo"
-          className=" h-full"
-          style={{ width: "32vw" }}
+          className=" object-contain w-[32%]"
+          
         />
         <div className="" style={{ width: "16%" }}></div>
         <div className="grid grid-cols-1 " style={{ width: "18%" }}>
