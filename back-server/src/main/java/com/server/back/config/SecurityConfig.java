@@ -28,7 +28,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .antMatchers("/join","/", "/home","/refresh/**")
-                .antMatchers("/login/oauth2/code/naver", "/api/oauth2/token/naver");
+                .antMatchers("/login/oauth2/code/naver", "/user/api/oauth2/token/naver", "/swagger-ui/index.html",
+                        "/swagger/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs");
 
     }
 
@@ -46,10 +47,12 @@ public class SecurityConfig {
 
 
                 .authorizeRequests()
-                .antMatchers("/api/v1/user/**").hasAuthority("USER")
-                .antMatchers("/api/v1/manager/**").hasAuthority("MANAGER")
-                .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
-                .anyRequest().permitAll()
+//                .antMatchers("**").permitAll()
+                    .antMatchers("user/**").hasAuthority("USER")
+                    .antMatchers("/swagger-ui/**").hasAuthority("USER")
+                    .antMatchers("/api/v1/manager/**").hasAuthority("MANAGER")
+                    .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+                    .anyRequest().permitAll()
 
                 .and()
                 .build();
@@ -64,7 +67,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 
             http
-                    .addFilter(config.corsFilter())
+                .addFilter(config.corsFilter())
                     .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtService)) //AuthenticationManger가 있어야 된다.(파라미터로)
                     .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtService));
 
