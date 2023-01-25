@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -37,6 +38,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         ObjectMapper objectMapper = new ObjectMapper();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
+
+
+        Enumeration<String> enumeration = request.getHeaderNames();
+        System.out.println("---------------header");
+        while(enumeration.hasMoreElements()){
+            String headerName = enumeration.nextElement();
+            System.out.println(headerName + " : " +request.getHeader(headerName));
+        }
+        System.out.println("----------------------");
 
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         if(jwtHeader ==null) {

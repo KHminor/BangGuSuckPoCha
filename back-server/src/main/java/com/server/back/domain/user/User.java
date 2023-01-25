@@ -18,7 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="user_id")
-    private Long userid;//우리 pk
+    private Long userId;//우리 pk
 
     private String username; //네이버 id pk
     private String password;
@@ -44,10 +44,10 @@ public class User {
     private Region region;
 
     @Builder
-    public User(Long userid, String username, String password, String nickname, String profile, String comment,
+    public User(Long userId, String username, String password, String nickname, String profile, String comment,
                 String gender, String birth, Double manner, Integer point, Integer is_ban, Integer report_point,
-                String role,LocalDateTime time, Region region, RefreshToken jwtRefreshToken) {
-        this.userid = userid;
+                String role, LocalDateTime time, Region region, RefreshToken jwtRefreshToken) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.nickname = nickname;

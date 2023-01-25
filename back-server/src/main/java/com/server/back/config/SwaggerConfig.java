@@ -1,5 +1,6 @@
 package com.server.back.config;
 
+import com.server.back.jwt.JwtProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -63,7 +64,7 @@ public class SwaggerConfig {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
+        return new ApiKey("JWT", JwtProperties.HEADER_STRING, "header");
     }
 
     private SecurityContext securityContext() {

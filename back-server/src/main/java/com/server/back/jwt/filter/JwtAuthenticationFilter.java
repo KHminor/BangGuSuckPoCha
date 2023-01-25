@@ -6,7 +6,6 @@ import com.server.back.domain.user.User;
 import com.server.back.jwt.JwtProperties;
 import com.server.back.jwt.JwtToken;
 import com.server.back.jwt.service.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Tip: 인증 프로바이더의 디폴트 암호화 방식은 BCryptPasswordEncoder
         // 결론은 인증 프로바이더에게 알려줄 필요가 없음.
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getUserid(), user.getPassword());
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 

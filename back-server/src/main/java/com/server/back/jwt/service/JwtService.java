@@ -40,7 +40,7 @@ public class JwtService {
         if(userRefreshToken == null) {
 
             //access, refresh 토큰 생성
-            JwtToken jwtToken = jwtProviderService.createJwtToken(user.getUserid(), user.getUsername());
+            JwtToken jwtToken = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
 
             //refreshToken 생성
             RefreshToken refreshToken = new RefreshToken(jwtToken.getRefreshToken());
@@ -61,7 +61,7 @@ public class JwtService {
             }
             else { //refresh 토큰 기간만료
                 //새로운 access, refresh 토큰 생성
-                JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getUserid(), user.getUsername());
+                JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
 
                 user.SetRefreshToken(newJwtToken.getRefreshToken());
                 return newJwtToken;
@@ -80,7 +80,7 @@ public class JwtService {
             DecodedJWT verify = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken);
 
             if(!verify.getExpiresAt().before(new Date())) {
-                return verify.getClaim("userid").asString();
+                return verify.getClaim("username").asString();
             }
 
         }catch (Exception e) {
@@ -112,7 +112,7 @@ public class JwtService {
         }
         //refresh 토큰이 만료됨 -> access, refresh 토큰 모두 재발급
         else {
-            JwtToken newJwtToken = jwtProviderService.createJwtToken(findUser.getUserid(), findUser.getUsername());
+            JwtToken newJwtToken = jwtProviderService.createJwtToken(findUser.getUserId(), findUser.getUsername());
             findUser.SetRefreshToken(newJwtToken.getRefreshToken());
             return newJwtToken;
         }
