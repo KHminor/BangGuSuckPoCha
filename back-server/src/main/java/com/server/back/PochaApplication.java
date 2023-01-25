@@ -1,4 +1,4 @@
-package com.project.pocha;
+package com.server.back;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
