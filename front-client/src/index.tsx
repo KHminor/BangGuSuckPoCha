@@ -22,13 +22,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <QueryClientProvider client={queryClient}>
-    <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </Provider>
-    </React.StrictMode>
   </QueryClientProvider>
 );
 
