@@ -43,6 +43,12 @@
 
   }
 
+.boxShadow {
+  box-shadow: 5px 5px 20px #5e1235;
+  /* 0 0 20px #A63268,
+  0 0 25px #a63268b9,
+  0 0 25px #9c39675e; */
+}
 
 .tagListbox {
 	display: flex;

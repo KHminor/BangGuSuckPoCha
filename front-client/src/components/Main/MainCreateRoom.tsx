@@ -35,8 +35,8 @@ const MainCreateRoom = (): React.ReactElement => {
 
 
   return (
-    <div className="bg-black bg-opacity-90 absolute h-screen text-white">
-      <div className={`${style.tagListbox} bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}>
+    <div className={`bg-black bg-opacity-90 absolute h-screen text-white`}>
+      <div className={`${style.tagListbox} ${style.boxShadow} min-w-[44rem] bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}>
         <div className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}>Create Room</div>
         <MainCreateRoomPeople selectOption={peopleOption} />
         <MainCreateRoomSelect selectOption={ageOption} />
