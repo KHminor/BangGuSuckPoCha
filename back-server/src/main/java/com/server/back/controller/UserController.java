@@ -3,6 +3,7 @@ package com.server.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.back.config.oauth.Provider.NaverToken;
 import com.server.back.domain.user.User;
+import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.jwt.service.JwtService;
 import com.server.back.service.user.NaverService;
 import com.server.back.service.user.UserService;
@@ -95,7 +96,6 @@ public class UserController {
         UserResponseDto responseDto = userService.userInfo(username);
         response.put("data", responseDto);
         response.put("message", "success");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "회원 정보 조회.")
@@ -111,17 +111,11 @@ public class UserController {
     @GetMapping("/point/{username}")
     // PointResponseDto 추가 후 [Map -> PointResponseDto]로 변경
     public ResponseEntity<List<Map<String, Object>>> userPointList(@PathVariable(value = "username") String username){
-        List<Map<String, Object>> pointResponseDto = new ArrayList<>();
-        pointResponseDto.add(new HashMap<>());
-        pointResponseDto.get(0).put("point_id", "포인트 식별자");
-        pointResponseDto.get(0).put("user_id", "회원 식별자");
-        pointResponseDto.get(0).put("nickname", "닉네임");
-        pointResponseDto.get(0).put("content", "사용 내역");
-        pointResponseDto.get(0).put("amount", 700);
-        pointResponseDto.get(0).put("current_point", 7000);
-        pointResponseDto.get(0).put("create_at", "프로필");
-
-        return new ResponseEntity<>(pointResponseDto, HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+        List<PochaParticipantResponseDto> responseDtoList = userService.userPointList(username);
+        response.put("data", responseDtoList);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포인트 획득, 사용")
     @PutMapping("/point/{username}")

@@ -1,6 +1,5 @@
 package com.server.back.service.user;
 
-import com.server.back.domain.user.User;
 import com.server.back.dto.user.*;
 
 
