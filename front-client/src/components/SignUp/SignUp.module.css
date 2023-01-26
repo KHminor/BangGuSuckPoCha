@@ -1,0 +1,58 @@
+.neonTitle {
+  color: #fff;
+  text-shadow: 0 0 5px rgb(94, 94, 94), 0 0 10px rgb(54, 43, 75),
+    0 0 20px rgb(25, 6, 63), 0 0 30px rgb(19, 2, 53), 0 0 40px rgb(40, 3, 95),
+    0 0 55px rgb(38, 3, 82), 0 0 75px #2f027c, 0 0 95px #3f0470,
+    0 0 115px #35035e, 0 0 135px #3f0239, 0 0 155px #2c0126, 0 0 185px #150112,
+    0 0 205px #0d000b;
+  z-index: 100;
+}
+
+.neonSignUp {
+  color: #fff;
+  box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080,
+    0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+}
+
+input {
+  color: white;
+  caret-color: rgb(32, 28, 38);
+}
+
+input:focus {
+  outline: none;
+}
+
+select:focus {
+  /* border: 0px; */
+  outline: none;
+}
+
+.btn:hover {
+  box-shadow: 0 0 1px rgb(68, 51, 96), 0 0 0px rgb(59, 26, 116),
+    0 0 50px rgb(34, 7, 87), 0 0 70px rgb(13, 0, 39);
+}
+
+.bgImg {
+  background-image: url("../../assets/img/backgroundImg.jpg");
+  background-size: contain;
+}
+
+/* .neonDefault {
+  color: #fff;
+  box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+  z-index: 100;
+} */
+.neonDefault {
+  color: #fff;
+  box-shadow: 0 0 5px rgba(93, 0, 255, 0.5), 0 0 10px rgba(93, 0, 255, 0.5),
+    0 0 15px rgba(85, 4, 143, 0.5), 0 0 25px rgba(65, 4, 109, 0.5);
+  z-index: 100;
+}
+
+.neon:hover {
+  color: #fff;
+  box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080,
+    0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+  z-index: 100;
+}

@@ -1,60 +1,56 @@
-// import sul from '../../assets/signUpIcon/sul.png'
-import './SignUp.css'
+import styles from './SignUp.module.css'
 
 function SignUp():JSX.Element {
   return (
-    <div className="bg-black w-screen h-screen flex">
-      <div className="" style={{width: '11%'}}></div>
-      <div className="flex flex-col items-center text-white" style={{width: '78%'}}>
-        <div className="grid grid-cols-3   w-full items-center" style={{height:'38%'}}>
+    <div className={`${styles.bgImg} h-screen w-screen min-w-[100vw] min-h-[100vh]  `}>
+      {/* <div className=' bg-black   opacity-20 z-0'></div> */}
+      {/* signup 박스 */}
+      <div className='flex justify-center items-center absolute w-screen h-screen min-w-[100vw] min-h-[100vh] z-20' >
+        <div className='grid relative w-[44rem] min-w-[44rem] h-[27rem] min-h-[27rem] bg-black rounded-[1.2rem]' style={{gridTemplateColumns: '0.15fr 1fr 0.15fr'}}>
           <div></div>
-          <div>
-            {/* <img className='absolute' src={sul} alt="" style={{left: '32.5%', top: '17%' , width:'4%'}}/> */}
-            <p className='font-extrabold neonTitle tracking-wide cursor-pointer' style={{fontSize: '10rem', lineHeight: '1'}}>welcome</p>
+          <div className='grid ' style={{gridTemplateRows: '0.05fr 1fr 1fr 1fr 1.5fr'}}>
+            <div className='bg-black'></div>
+            <div className='flex justify-center items-center bg-black pr-4'>
+              {/* 소주병 */}
+              <img src={require('../../assets/signUpIcon/sul.png')} alt="sul" className='w-10' />
+              {/* Welcom */}
+              <div className={`text-[3rem] text-white ${styles.neonTitle}`}>WELCOME</div>
+            </div>
+            <div className='grid justify-center items-end h-full min-h-full w-full min-w-full bg-black ' style={{gridTemplateColumns: '1fr 3fr 1fr '}}>
+              <div className='h-[50%] flex items-center text-left pl-4 '><label className='text-white text-xl cursor-pointer' htmlFor="Id">Name</label></div>
+              <div className='h-[50%] flex items-center w-ful'>
+                <input className='h-full w-full bg-black justify-center text-center text-white border-b-2 border-b-white/[0.2] caret-white/[0.4]' type="text" id='Id'/>
+              </div>
+              <div className='h-[50%] w-full flex justify-end items-center bg-black'><div className={`h-[80%] min-h-[80%] w-[75%] min-w-[75%] flex justify-center items-center text-white text-lg cursor-pointer ${styles.neonDefault}`}>버튼</div></div>
+            </div>
+            <div className='grid justify-center items-end h-full min-h-full w-full min-w-full bg-black' style={{gridTemplateColumns: '1fr 2rem 1fr '}}>
+              <div className='flex justify-start items-center h-1/2 min-h-[50%] w-full min-w-[100%] border-0' style={{borderBottom: 'solid 0.2rem white'}}>
+                <select className='w-full min-w-full h-full min-h-full pl-4 bg-black text-white text-lg cursor-pointer' name="mainRegion" id="mainRegion">
+                  <option className='' value="default" defaultChecked>ADDRESS</option>
+                  <option value="seoul">서울</option>
+                  <option value="daejeon">대전</option>
+                  <option value="daegu">대구</option>
+                  <option value="busan">부산</option>
+                </select>
+              </div>
+              <div className='flex justify-start items-center h-1/2 min-h-[50%] w-full min-w-[100%] bg-black'></div>
+              <div className='flex justify-start items-center h-1/2 min-h-[50%] w-full min-w-[100%] border-0' style={{borderBottom: 'solid 0.2rem white'}}>
+                <select className='w-full min-w-full h-full min-h-full pl-4 bg-black text-white text-lg cursor-pointer' name="mainRegion" id="mainRegion">
+                  <option className='' value="default" defaultChecked>ADDRESS</option>
+                  <option value="seoul">서울</option>
+                  <option value="daejeon">대전</option>
+                  <option value="daegu">대구</option>
+                  <option value="busan">부산</option>
+                </select>
+              </div>
+            </div>
+            <div className='flex justify-center items-center h-full min-h-full w-full min-w-full bg-black'>
+              <div className={`flex justify-center items-center h-[50%] min-h-[50%] w-full min-w-full text-white text-xl cursor-pointer ${styles.neonDefault}`}>회원가입</div>
+            </div>
           </div>
           <div></div>
         </div>
-        <div className="grid grid-rows-2 w-full" style={{height:'35%'}}>
-          <div className='h-4/5  flex items-end'>
-            <div className='cursor-pointer ' style={{width:'81%', borderBottom: 'solid 0.7rem rgb(255, 255, 255)', borderBottomLeftRadius:'0.2rem',borderBottomRightRadius:'0.2rem'  , textAlign: 'start'}}>
-              <label htmlFor="ID" className="mx-24 " style={{fontSize: '5rem'}} >NAME</label>
-              <input className='bg-black ml-36 ' type="text" id='ID' style={{fontSize: '5rem', border: '0px '}}/>
-            </div>
-            <div className='mx-4 flex h-3/5' style={{width:'19%'}}>
-              <div className='w-2/12'></div>
-              <div className='w-10/12 rounded-3xl mr-8 flex justify-center items-center cursor-pointer btn' style={{border: 'solid 0.5rem white', fontSize: '3rem'}}>확인</div>
-              {/* <div className='w-2/12 rounded-3xl'></div> */}
-            </div>
-          </div>
-          <div className='grid grid-cols-2 h-full pb-10'>
-            <div className=' flex justify-end items-end' style={{width:'97%', borderBottom: 'solid 0.7rem rgb(255, 255, 255)', borderBottomLeftRadius:'0.2rem',borderBottomRightRadius:'0.2rem'}}>
-              <select className='ml-24 w-full border-0 bg-black cursor-pointer' name="region" id="region"  style={{fontSize: '5rem'}}>
-                <option value="" defaultChecked>ADDRESS</option>
-                <option value="">1</option>
-                <option value="">2</option>
-              </select>
-            </div>
-            <div className=' flex justify-end items-end' style={{width:'97%'}}>
-              <select className='ml-24 w-full border-0 bg-black cursor-pointer' name="region" id="region"  style={{fontSize: '5rem',borderBottom: 'solid 0.7rem rgb(255, 255, 255)', borderBottomLeftRadius:'0.2rem',borderBottomRightRadius:'0.2rem'}}>
-                <option value="" defaultChecked>ADDRESS</option>
-                <option value="">1</option>
-                <option value="">2</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className=" w-full " style={{height:'27%'}}>
-          <div className='flex-col h-full'>
-            <div className='' style={{height: '25%'}}></div>
-            <div className='flex justify-center items-center rounded-3xl cursor-pointer btn' style={{height:'50%',fontSize: '5rem', border: 'solid 0.7rem white'}}>
-              회원가입
-            </div>
-            <div style={{height: '25%'}}></div>
-          </div>
-        </div>
-        {/* <div className="border-4 border-white" style={{height:''}}>4</div> */}
       </div>
-      <div className="" style={{width: '11%'}}>빈칸</div>
     </div>
   )
 }
