@@ -114,7 +114,10 @@ public class PochaController {
     @PutMapping("/talk/ssul/{pocha_id}")
     public ResponseEntity<Map<String, Object>> pochaSsul(@PathParam(value = "pocha_id") Long pochaId, @RequestBody SsulReqeustDto reqeustDto){
         Map<String, Object> response = new HashMap<>();
+
         pochaService.pochaSsul(pochaId, reqeustDto);
+        // 포인트 사용
+
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
