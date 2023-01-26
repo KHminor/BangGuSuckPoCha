@@ -6,7 +6,7 @@ import MainCreateRoom from "./MainCreateRoom";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
-  // const [createRoom, setCreateRoom] = useState(false);
+  const [isCreateRoom, setIsCreateRoom] = useState(false);
 
   const checkMenuState: any = useSelector((state: any) => {
     return state.menuClickCheck;
