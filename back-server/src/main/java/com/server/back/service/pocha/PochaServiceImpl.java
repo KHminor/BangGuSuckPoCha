@@ -119,12 +119,9 @@ public class PochaServiceImpl implements PochaService{
     public List<PochaParticipantResponseDto> pochaParticipantList(Long pochaId) {
         Pocha pocha = pochaRepository.findByPochaId(pochaId);
 
-        List<PochaParticipantResponseDto> responseDtoList = new ArrayList<>();
-        pocha.getParticipant().forEach(entity -> {
-           if(entity.getExitAt() == null){
-               responseDtoList.add(new PochaParticipantResponseDto(entity));
-           }
-        });
+        List<PochaParticipantResponseDto> responseDtoList = pocha.getParticipant().stream()
+                        .map(e -> new PochaParticipantResponseDto(e))
+                        .collect(Collectors.toList());
 
         return responseDtoList;
     }
