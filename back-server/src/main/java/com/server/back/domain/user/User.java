@@ -1,5 +1,6 @@
 package com.server.back.domain.user;
 
+import com.server.back.dto.user.UserRequestDto;
 import com.server.back.jwt.refreshToken.RefreshToken;
 import lombok.Builder;
 import lombok.Data;
@@ -19,18 +20,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="user_id")
     private Long userId;//우리 pk
-
+    @Column(length = 250, nullable = false)
     private String username; //네이버 id pk
+    @Column(length = 250, nullable = false)
     private String password;
+    @Column(length = 20, nullable = false)
     private String nickname;
+    @Column(length = 200, nullable = false)
     private String profile;
+    @Column(length = 200)
     private String comment;
+    @Column(length = 2, nullable = false)
     private String gender;
+    @Column(length = 30, nullable = false)
     private String birth;
+    @Column(nullable = false)
     private Double manner;
+    @Column(nullable = false)
     private Integer point;
-    private Integer is_ban;
+    @Column(nullable = false)
+    private Boolean is_ban;
+    @Column(nullable = false)
     private Integer report_point;
+    @Column(length = 15, nullable = false)
     private String role; //USER,ADMIN 게 넣을것이다.
     private LocalDateTime time;
 
@@ -40,12 +52,12 @@ public class User {
     private RefreshToken jwtRefreshToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region", nullable = true)
+    @JoinColumn(name = "region", nullable = false)
     private Region region;
 
     @Builder
     public User(Long userId, String username, String password, String nickname, String profile, String comment,
-                String gender, String birth, Double manner, Integer point, Integer is_ban, Integer report_point,
+                String gender, String birth, Double manner, Integer point, Boolean is_ban, Integer report_point,
                 String role, LocalDateTime time, Region region, RefreshToken jwtRefreshToken) {
         this.userId = userId;
         this.username = username;
@@ -85,4 +97,11 @@ public class User {
         }
         return new ArrayList<>();
     }
+    public void update(UserRequestDto requestDto){
+        this.nickname = requestDto.getNickname();
+        this.profile = requestDto.getProfile();
+        this.comment = requestDto.getComment();
+        this.region = requestDto.getRegion();
+    }
+
 }
