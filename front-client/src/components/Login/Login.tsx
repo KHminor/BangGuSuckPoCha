@@ -40,7 +40,6 @@ function Login(): React.ReactElement {
         </div>
       </div>
     </div>
-    //연습용 주석 추가
   );
 }
 
