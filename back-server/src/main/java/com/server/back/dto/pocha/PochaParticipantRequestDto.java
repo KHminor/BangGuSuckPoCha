@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class PochaParticipantRequestDto {
     private Long pochaId;
     private Long userId;
-    private Integer isHost;
-    private Integer waiting;
+    private Boolean isHost;
+    private Boolean waiting;
 }

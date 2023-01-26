@@ -20,8 +20,8 @@ public class PochaParticipantResponseDto {
     private String nickname;
     private LocalDateTime createAt;
     private LocalDateTime exitAt;
-    private Integer isHost;
-    private Integer waiting;
+    private Boolean isHost;
+    private Boolean waiting;
 
     public PochaParticipantResponseDto(Participant e) {
         this.pochaId = e.getPocha().getPochaId();
