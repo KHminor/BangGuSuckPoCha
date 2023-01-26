@@ -26,3 +26,10 @@ select:focus {
 .btn:hover {
   box-shadow: 0 0 1px rgb(68, 51, 96), 0 0 0px rgb(59, 26, 116), 0 0 50px rgb(34, 7, 87), 0 0 70px rgb(13, 0, 39);
 }
+
+.bgImg {
+  background-image: url('../../assets/img/backgroundImg.png');
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+}
