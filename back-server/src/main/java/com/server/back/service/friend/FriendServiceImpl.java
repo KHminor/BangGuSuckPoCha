@@ -11,6 +11,8 @@ import com.server.back.domain.friend.FRequest;
 import com.server.back.domain.friend.FRequestRepository;
 import com.server.back.domain.friend.Friend;
 import com.server.back.domain.friend.FriendRepository;
+import com.server.back.domain.user.User;
+import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
@@ -26,45 +28,45 @@ public class FriendServiceImpl implements FriendService {
 	
 	 private final FriendRepository friendRepository;
 	 private final FRequestRepository fRequestRepository;
+	 private final UserRepository userRepository;
 
 	@Override
 	public List<FriendResponseDto> friendList(Long userId) {
-		List<Friend> entity =friendRepository.findByMyId(userId);
+		List<Friend> entity =friendRepository.findByMyId_userId(userId);
 		List<FriendResponseDto> friends = entity.stream()
 				.map(m -> new FriendResponseDto(m)).collect(Collectors.toList());
 		return friends;
 	}
 
 	@Override
-	public void deleteFriend(String username, Long you_id) {
-		// Long MyId = userRepository.findByUsername(username).getUserId();
-		// Long MyFriendId = friendRepository.findByMyIdAndYourId(MyId, you_id).getFriendId();
-		// Long YourFriendId = friendRepository.findByMyIdAndYourId(you_id, MyId).getFriendId();
+	public void deleteFriend(Long my_id, Long you_id) {
+		Long MyFriendId = friendRepository.findByMyId_userIdAndYourId_userId(my_id, you_id).getFriendId();
+		Long YourFriendId = friendRepository.findByMyId_userIdAndYourId_userId(you_id, my_id).getFriendId();
+		friendRepository.deleteByFriendId(MyFriendId);
+		friendRepository.deleteByFriendId(YourFriendId);
 		
 	}
 
 	@Override
-	public void bestFriend(String username, Long you_id) {
-//		Long MyId = userRepository.findByUsername(username).getUserId();
-//		FriendEntity friend = friendRepository.findByMyIdAndYourId(MyId, you_id);
-//		friend.update();
-		
+	public void bestFriend(Long my_id, Long you_id) {
+		Friend friend = friendRepository.findByMyId_userIdAndYourId_userId(my_id, you_id);
+		friend.update();
 	}
 
 	@Override
-	public List<FRequestResponseDto> frequestList(String username) {
-		//Long userId = userRepository.findByUsername(username).getUserId();
-		//List<FRequestEntity> entity = fRequestRepository.findByToId(userId);
-		//List<FRequestResponseDto> requestFriend = entity.stream()
-		//		.map(m -> new FRequestResponseDto(m))
-		//				.collect(Collectors.toList());
-		//return requestFriend;
-		return null;
+	public List<FRequestResponseDto> frequestList(Long my_id) {
+		List<FRequest> entity = fRequestRepository.findByToId_userId(my_id);
+		List<FRequestResponseDto> requestFriend = entity.stream()
+				.map(m -> new FRequestResponseDto(m))
+						.collect(Collectors.toList());
+		return requestFriend;
 	}
 
 	@Override
 	public void requestFriend(FRequestDto requestDto) {
-		fRequestRepository.save(requestDto.toEntity()).getFriendRequestId();
+		User toId = userRepository.findByUserId(requestDto.getTo_id());
+		User fromId = userRepository.findByUserId(requestDto.getFrom_id());
+		fRequestRepository.save(requestDto.toEntity(toId, fromId));
 	}
 
 	@Override
@@ -100,15 +102,15 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public List<FriendResponseDto> searchFriend(Long userId, String fNickname) {
-		List<Friend> entity =friendRepository.findByMyId(userId);
+		List<Friend> entity =friendRepository.findByMyId_userId(userId);
 		List<FriendResponseDto> search = new ArrayList<>();
 	
 		for(Friend f : entity) {
-			/*
-			 if(f.getYour().getNickname.contains(fNickname)) {
+			
+			 if(f.getYourId().getNickname().contains(fNickname)) {
 			 	search.add(new FriendResponseDto(f));
 			 }
-			 */
+			 
 		}
 		return search;
 	}
