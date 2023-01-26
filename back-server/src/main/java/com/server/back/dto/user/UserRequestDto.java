@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 @ApiModel(value = "UserRequestDto")
