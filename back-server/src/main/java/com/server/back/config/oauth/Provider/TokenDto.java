@@ -3,7 +3,7 @@ package com.server.back.config.oauth.Provider;
 import lombok.Data;
 
 @Data
-public class NaverToken {
+public class TokenDto {
     private String access_token;
     private String refresh_token;
     private String token_type;
