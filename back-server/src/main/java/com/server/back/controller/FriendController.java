@@ -9,13 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
 import com.server.back.service.friend.FriendService;
+import com.server.back.service.user.UserService;
 
-import javax.websocket.server.PathParam;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class FriendController {
 	private FriendService friendService;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	
 	
     @ApiOperation(value = "친구 목록")
@@ -39,8 +38,7 @@ public class FriendController {
     // FriendResponseDto 추가하면 [Map -> FriendResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> friendList(@PathVariable(value = "username") String username){
     	Map<String, Object> response = new HashMap<>();
-    	//
-    	Long userId = userRepository.findByUsername(username).getUserId();
+    	Long userId = userService.findByUsername(username);
     	List<FriendResponseDto> friendResponseDto = friendService.friendList(userId);
     	response.put("data",friendResponseDto);
     	response.put("message", "success");
@@ -53,8 +51,7 @@ public class FriendController {
     // FriendResponseDto 추가하면 [Map -> FriendResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> friendSearchList(@PathVariable(value = "username") String username, @PathVariable(value = "f_nickname") String fNickname){
     	Map<String, Object> response = new HashMap<>();
-    	//
-    	Long userId = userRepository.findByUsername(username).getUserId();
+    	Long userId = userService.findByUsername(username);
     	List<FriendResponseDto> friendResponseDto = friendService.searchFriend(userId, fNickname);
     	response.put("data",friendResponseDto);
     	response.put("message", "success");
@@ -65,7 +62,7 @@ public class FriendController {
     @DeleteMapping("/{username}/{you_id}")
     public ResponseEntity<Map<String, Object>> friendDelete(@PathVariable(value = "username") String username, @PathVariable(value = "you_id") Long you_id){
     	Map<String, Object> response = new HashMap<>();
-    	Long my_id = userRepository.findByUsername(username).getUserId();
+    	Long my_id = userService.findByUsername(username);
     	friendService.deleteFriend(my_id, you_id);
     	response.put("message", "success");
     	return new ResponseEntity<>(response, HttpStatus.OK);
@@ -77,7 +74,7 @@ public class FriendController {
     public ResponseEntity<Map<String, Object>> friendUpdate(@PathVariable(value = "username") String username, @PathVariable(value = "you_id") Long you_id){
     	Map<String, Object> response = new HashMap<>();
     	//
-    	Long my_id = userRepository.findByUsername(username).getUserId();
+    	Long my_id = userService.findByUsername(username);
     	friendService.bestFriend(my_id, you_id);
     	response.put("message", "success");
     	return new ResponseEntity<>(response, HttpStatus.OK);
@@ -89,7 +86,7 @@ public class FriendController {
     public ResponseEntity<Map<String, Object>> friendRequestList(@PathVariable(value = "username") String username){
     	Map<String, Object> response = new HashMap<>();
     	//
-    	Long my_id = userRepository.findByUsername(username).getUserId();
+    	Long my_id = userService.findByUsername(username);
     	System.out.println(my_id);
         List<FRequestResponseDto> fRequestResponseDto = friendService.frequestList(my_id);
         response.put("data", fRequestResponseDto);

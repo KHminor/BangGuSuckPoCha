@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface PochaRepository extends JpaRepository<Pocha, Long> {
     Pocha findByPochaId(Long pochaId);
-    List<Pocha> findByAgeAndRegionAndThemeContaining(Integer age, String region, String theme);
+
+    List<Pocha> findByAgeAndRegion(Integer age, String region);
 }
