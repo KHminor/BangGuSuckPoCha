@@ -36,8 +36,8 @@ public class PochaServiceImpl implements PochaService{
 
         int tagSize = tagSet.size();
         // 모든 포차 확인.
-        for(Pocha p : pochaRepository.findByAgeAndRegionAndThemeContaining(age, region, theme)){
-            if(p.getIsEnd()) continue;
+        for(Pocha p : pochaRepository.findByAgeAndRegion(age, region)){
+            if(p.getIsEnd() || !p.getTheme().getThemeId().substring(0, 2).equals(theme)) continue;
 
             // 지정한 태그가 모두 포함된 경우만 반환.
             int validTag = 0;
@@ -53,8 +53,11 @@ public class PochaServiceImpl implements PochaService{
     @Override
     public void pochaUpdate(Long pochaId, PochaRequestDto requestDto) {
         Pocha entity = pochaRepository.findByPochaId(pochaId);
+        System.out.println(">>>>>>>>>" + requestDto.getThemeId());
         Theme theme = themeRepository.findByThemeId(requestDto.getThemeId());
+        System.out.println(theme.getThemeId());
 
+        System.out.println(entity.getPochaId()+"<<<<<<<<<<<<<<");
         // 포차 업데이트.
         entity.update(requestDto, theme);
 
@@ -116,12 +119,9 @@ public class PochaServiceImpl implements PochaService{
     public List<PochaParticipantResponseDto> pochaParticipantList(Long pochaId) {
         Pocha pocha = pochaRepository.findByPochaId(pochaId);
 
-        List<PochaParticipantResponseDto> responseDtoList = new ArrayList<>();
-        pocha.getParticipant().forEach(entity -> {
-           if(entity.getExitAt() == null){
-               responseDtoList.add(new PochaParticipantResponseDto(entity));
-           }
-        });
+        List<PochaParticipantResponseDto> responseDtoList = pocha.getParticipant().stream()
+                        .map(e -> new PochaParticipantResponseDto(e))
+                        .collect(Collectors.toList());
 
         return responseDtoList;
     }

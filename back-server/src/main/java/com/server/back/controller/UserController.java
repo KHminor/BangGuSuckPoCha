@@ -16,7 +16,7 @@ import com.server.back.dto.user.*;
 
 
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class UserController {
     }
 //    @PostMapping("/auth/refresh/{username}")
 //    // TokenRequestDto, TokenDto 추가하면 [Map -> TokenDto]로 변경
-//    public ResponseEntity<Map<String, Object>> userRefresh(@PathParam (value = "username") String username/*, @RequestBody TokenRequestDto*/){
+//    public ResponseEntity<Map<String, Object>> userRefresh(@PathVariable (value = "username") String username/*, @RequestBody TokenRequestDto*/){
 //        Map<String, Object> tokenDto = new HashMap<>();
 //        tokenDto.put("accessToken", "accessToken 테스트!");
 //        tokenDto.put("refreshToken", "refreshToken 테스트!");
@@ -59,7 +59,7 @@ public class UserController {
 //    }
     @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
     @GetMapping("/auth/check/nickname/{nickname}")
-    public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathParam(value = "nickname") String nickname){
+    public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathVariable(value = "nickname") String nickname){
         Map<String, Object> response = new HashMap<>();
 
         Boolean nicknamecheck = userService.userNicknameCheck(nickname);
@@ -71,12 +71,12 @@ public class UserController {
     }
     @ApiOperation(value = "로그아웃")
     @PutMapping("/auth/logout/{username}")
-    public ResponseEntity<String> uesrLogout(@PathParam(value = "username") String username){
+    public ResponseEntity<String> uesrLogout(@PathVariable(value = "username") String username){
         return new ResponseEntity<>("로그아웃 성공!", HttpStatus.OK);
     }
     @ApiOperation(value = "정보 수정")
     @PutMapping("/{username}")
-    public ResponseEntity<Map<String, Object>> userUpdate(@PathParam(value = "username") String username , @RequestBody UserRequestDto requestDto){
+    public ResponseEntity<Map<String, Object>> userUpdate(@PathVariable(value = "username") String username , @RequestBody UserRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
         userService.userUpdate(username, requestDto);
         response.put("message", "success");
@@ -84,17 +84,15 @@ public class UserController {
     }
     @ApiOperation(value = "회원 탈퇴")
     @DeleteMapping("/{username}")
-    public ResponseEntity<String> userDelete(@PathParam(value = "username") String username){
+    public ResponseEntity<String> userDelete(@PathVariable(value = "username") String username){
         return new ResponseEntity<>("회원 탈퇴 완료", HttpStatus.OK);
     }
     @ApiOperation(value = "내 정보 조회.")
     @GetMapping("/myinfo/{username}")
     // UserResponseDto 추가 후 [Map -> UserResponseDto]로 변경
-    public ResponseEntity<Map<String, Object>> userMyInfo(@PathParam(value = "username") String username){
+    public ResponseEntity<Map<String, Object>> userMyInfo(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
-
         UserResponseDto responseDto = userService.userInfo(username);
-
         response.put("data", responseDto);
         response.put("message", "success");
 
@@ -102,20 +100,17 @@ public class UserController {
     }
     @ApiOperation(value = "회원 정보 조회.")
     @GetMapping("/info/{username}")
-    public ResponseEntity<Map<String, Object>> userInfo(@PathParam(value = "username") String username){
+    public ResponseEntity<Map<String, Object>> userInfo(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
-
         UserResponseDto responseDto = userService.userInfo(username);
-
         response.put("data", responseDto);
         response.put("message", "success");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포인트 사용 목록")
     @GetMapping("/point/{username}")
     // PointResponseDto 추가 후 [Map -> PointResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> userPointList(@PathParam(value = "username") String username){
+    public ResponseEntity<List<Map<String, Object>>> userPointList(@PathVariable(value = "username") String username){
         List<Map<String, Object>> pointResponseDto = new ArrayList<>();
         pointResponseDto.add(new HashMap<>());
         pointResponseDto.get(0).put("point_id", "포인트 식별자");
@@ -130,13 +125,13 @@ public class UserController {
     }
     @ApiOperation(value = "포인트 획득, 사용")
     @PutMapping("/point/{username}")
-    public ResponseEntity<String> userUsePoint(@PathParam(value = "username") String username/*, @RequestBody PointRequestDto requestDto*/){
+    public ResponseEntity<String> userUsePoint(@PathVariable(value = "username") String username/*, @RequestBody PointRequestDto requestDto*/){
         return new ResponseEntity<>("포인트 사용 성공", HttpStatus.OK);
     }
     @ApiOperation(value = "평가 목록 요청")
     @GetMapping("/review/{username}")
     // ReviewResponseDto 추가 후 [Map -> ReviewResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> userReviewList(@PathParam(value = "username") String username){
+    public ResponseEntity<List<Map<String, Object>>> userReviewList(@PathVariable(value = "username") String username){
         List<Map<String, Object>> reviewResponseDto = new ArrayList<>();
         reviewResponseDto.add(new HashMap<>());
         reviewResponseDto.get(0).put("review_id", 700);
@@ -157,7 +152,7 @@ public class UserController {
     @ApiOperation(value = "보유 아이템 목록")
     @GetMapping("/item/{username}")
     // ItemResponseDto 추가 후 [Map -> ReviewResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> userItemList(@PathParam(value = "username") String username){
+    public ResponseEntity<List<Map<String, Object>>> userItemList(@PathVariable(value = "username") String username){
         List<Map<String, Object>> itemResponseDto = new ArrayList<>();
         itemResponseDto.add(new HashMap<>());
         itemResponseDto.get(0).put("user_id", 700);

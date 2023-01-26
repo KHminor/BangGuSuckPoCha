@@ -44,4 +44,10 @@ public class UserServiceImpl implements UserService{
         User entity = userRepository.findByUsername(username);
         entity.update(requestDto);
     }
+    
+	@Override
+	public Long findByUsername(String username) {
+		return userRepository.findByUsername(username).getUserId();
+	}
+    
 }

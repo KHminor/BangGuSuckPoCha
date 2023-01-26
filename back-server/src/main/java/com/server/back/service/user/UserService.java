@@ -1,5 +1,6 @@
 package com.server.back.service.user;
 
+import com.server.back.domain.user.User;
 import com.server.back.dto.user.*;
 
 
@@ -9,4 +10,5 @@ public interface UserService {
 
     boolean userNicknameCheck(String nickname);
     void userUpdate(String username, UserRequestDto requestDto);
+	Long findByUsername(String username);
 }

@@ -110,10 +110,10 @@ public class NaverService {
 
         //처음이용자 강제 회원가입
         if(user == null) {
-//            Region region = regionRepository.findAll().get(0);
+            Region region = regionRepository.findAll().get(0);
             user = User.builder()
                     .username(profile.response.id)
-                    .password(null)
+                    .password("0")
                     .nickname(profile.response.id)
                     .profile("._.")
                     .comment(null)
@@ -125,7 +125,7 @@ public class NaverService {
                     .report_point(0)
                     .role("USER")
                     .time(LocalDateTime.now())
-                    .region(null)
+                    .region(region)
                     .build();
 
             userRepository.save(user);

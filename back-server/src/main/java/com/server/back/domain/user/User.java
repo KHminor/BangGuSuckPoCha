@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity @Data
+@Entity
+@Data
 @NoArgsConstructor
 public class User {
 
@@ -24,7 +25,7 @@ public class User {
     private String username; //네이버 id pk
     @Column(length = 250, nullable = false)
     private String password;
-    @Column(length = 20, nullable = false)
+    @Column(length = 250, nullable = false)
     private String nickname;
     @Column(length = 200, nullable = false)
     private String profile;
