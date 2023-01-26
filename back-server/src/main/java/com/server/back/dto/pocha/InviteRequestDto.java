@@ -16,7 +16,7 @@ public class InviteRequestDto {
     @ApiModelProperty(value = "포차 번호")
     Long pochaId;
     @ApiModelProperty(value = "발신자")
-    Long fromId;
+    String fromUsername;
     @ApiModelProperty(value = "수신자")
-    Long toId;
+    String toUsername;
 }

@@ -1,5 +1,6 @@
 package com.server.back.domain.pocha;
 
+import com.server.back.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,14 +21,14 @@ public class Participant extends BaseTimeEntity{
     @JoinColumn(name = "pocah_id")
     private Pocha pocha;
     // 이용자 식별자
-    /*@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;*/
+    private User user;
     @Column(nullable = false)
-    private Integer isHost;
+    private Boolean isHost;
     private LocalDateTime exitAt;
     @Column(nullable = false)
-    private Integer waiting;
+    private Boolean waiting;
 
     public void updateExit() {
         this.exitAt = LocalDateTime.now();

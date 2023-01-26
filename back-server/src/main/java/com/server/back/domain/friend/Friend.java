@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.server.back.domain.user.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +22,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @Getter
+@Builder
 @NoArgsConstructor
 @Entity(name="friend")
 public class Friend {
@@ -29,30 +32,18 @@ public class Friend {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long friendId;
 	
-//	@ManyToOne(targetEntity=UserEntity.class, fetch=FetchType.LAZY)
-//	@JoinColumn(name="your_id", insertable = false, updatable = false)
-//	private UserEntity your;
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="your_id")
+	private User yourId;
+
 	
-	@Column(nullable=false, name="your_id")
-	private Long yourId;
-	
-//	@ManyToOne(targetEntity=UserEntity.class, fetch=FetchType.LAZY)
-//	@JoinColumn(name="my_id", insertable = false, updatable = false)
-//	private UserEntity my;
-	
-	@Column(nullable=false, name = "my_id")
-	private Long myId;
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="my_id")
+	private User myId;
 	
 	@Column(nullable=false, name = "best_friend")
 	@ColumnDefault("false")
 	private Boolean bestFriend;
-	
-	@Builder
-	public Friend(Long yourId, Long myId, Boolean bestFriend) {
-		this.yourId = yourId;
-		this.myId = myId;
-		this.bestFriend = bestFriend;
-	}
 	
 	public void update() {
 		this.bestFriend = !bestFriend;

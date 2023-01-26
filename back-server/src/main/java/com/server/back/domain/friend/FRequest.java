@@ -9,17 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
+import com.server.back.domain.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,23 +31,12 @@ public class FRequest {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long friendRequestId;
 	
-//	@ManyToOne(targetEntity=UserEntity.class, fetch=FetchType.LAZY)
-//	@JoinColumn(name="from_id", insertable = false, updatable = false)
-//	private UserEntity from;
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="from_id")
+	private User fromId;
 	
-	@Column(name="from_id", nullable=false)
-	private Long fromId;
+	@ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="to_id")
+	private User toId;
 	
-//	@ManyToOne(targetEntity=UserEntity.class, fetch=FetchType.LAZY)
-//	@JoinColumn(name="to_id", insertable = false, updatable = false)
-//	private UserEntity to;
-	
-	@Column(name="to_id", nullable=false)
-	private Long toId;
-	
-	@Builder
-	public FRequest(Long fromId,Long toId ) {
-		this.fromId = fromId;
-		this.toId = toId;
-	}
 }

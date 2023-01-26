@@ -16,17 +16,17 @@ import java.time.LocalDateTime;
 @ApiModel(value = "PochaParticipantResponseDto", description = "포차 참가 인원 응답을 위한 데이터 타입")
 public class PochaParticipantResponseDto {
     private Long pochaId;
-    private Long userId;
+    private String username;
     private String nickname;
     private LocalDateTime createAt;
     private LocalDateTime exitAt;
-    private Integer isHost;
-    private Integer waiting;
+    private Boolean isHost;
+    private Boolean waiting;
 
     public PochaParticipantResponseDto(Participant e) {
         this.pochaId = e.getPocha().getPochaId();
-        this.userId = 700L;
-        this.nickname = "닉네임";
+        this.username = e.getUser().getUsername();
+        this.nickname = e.getUser().getNickname();
         this.createAt = e.getCreateAt();
         this.exitAt = e.getExitAt();
         this.isHost = e.getIsHost();
