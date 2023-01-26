@@ -5,12 +5,15 @@ import com.server.back.config.oauth.Provider.NaverToken;
 import com.server.back.domain.user.User;
 import com.server.back.jwt.service.JwtService;
 import com.server.back.service.user.NaverService;
+import com.server.back.service.user.UserService;
 import com.server.back.jwt.JwtToken;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.server.back.dto.user.*;
+
 
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
@@ -24,8 +27,10 @@ import java.util.Map;
 @RequestMapping("/user")
 @RestController
 public class UserController {
+    private final UserService userService;
     private final NaverService naverService;
     private final JwtService jwtService;
+
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
     @GetMapping("/api/oauth2/token/naver")
     public Map<String, String> NaverLogin(@RequestParam("code") String code) {
@@ -52,10 +57,17 @@ public class UserController {
 //        tokenDto.put("refreshToken", "refreshToken 테스트!");
 //        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
 //    }
-    @ApiOperation(value = "닉네임 중복 체크")
+    @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
     @GetMapping("/auth/check/nickname/{nickname}")
-    public ResponseEntity<Boolean> userNicknameCheck(@PathParam(value = "nickname") String nickname){
-        return new ResponseEntity<>(false, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathParam(value = "nickname") String nickname){
+        Map<String, Object> response = new HashMap<>();
+
+        Boolean nicknamecheck = userService.userNicknameCheck(nickname);
+
+        response.put("data", nicknamecheck);
+        response.put("message", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "로그아웃")
     @PutMapping("/auth/logout/{username}")
@@ -64,9 +76,11 @@ public class UserController {
     }
     @ApiOperation(value = "정보 수정")
     @PutMapping("/{username}")
-    // UserRequestDto 추가 후 주석 해제.
-    public ResponseEntity<String> userUpdate(@PathParam(value = "username") String username /*, @RequestBody UserRequestDto requestDto*/){
-        return new ResponseEntity<>("정보 수정 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userUpdate(@PathParam(value = "username") String username , @RequestBody UserRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        userService.userUpdate(username, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "회원 탈퇴")
     @DeleteMapping("/{username}")
@@ -77,38 +91,27 @@ public class UserController {
     @GetMapping("/myinfo/{username}")
     // UserResponseDto 추가 후 [Map -> UserResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userMyInfo(@PathParam(value = "username") String username){
-        Map<String, Object> userResponseDto = new HashMap<>();
-        userResponseDto.put("username", "유저명");
-        userResponseDto.put("nickname", "닉네임");
-        userResponseDto.put("gender", "성별");
-        userResponseDto.put("birth", "생일");
-        userResponseDto.put("region", "지역");
-        userResponseDto.put("profile", "프로필");
-        userResponseDto.put("manner", 700);
-        userResponseDto.put("comment", "자기소개");
-        userResponseDto.put("point", 700);
+        Map<String, Object> response = new HashMap<>();
 
-        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+        UserResponseDto responseDto = userService.userInfo(username);
+
+        response.put("data", responseDto);
+        response.put("message", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     @ApiOperation(value = "회원 정보 조회.")
     @GetMapping("/info/{username}")
-    // UserResponseDto 추가 후 [Map -> UserResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userInfo(@PathParam(value = "username") String username){
-        Map<String, Object> userResponseDto = new HashMap<>();
-        userResponseDto.put("username", "유저명");
-        userResponseDto.put("nickname", "닉네임");
-        userResponseDto.put("gender", "성별");
-        userResponseDto.put("birth", "생일");
-        userResponseDto.put("region", "지역");
-        userResponseDto.put("profile", "프로필");
-        userResponseDto.put("manner", 700);
-        userResponseDto.put("comment", "자기소개");
-        userResponseDto.put("point", 0);
+        Map<String, Object> response = new HashMap<>();
 
-        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+        UserResponseDto responseDto = userService.userInfo(username);
+
+        response.put("data", responseDto);
+        response.put("message", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     @ApiOperation(value = "포인트 사용 목록")
     @GetMapping("/point/{username}")
     // PointResponseDto 추가 후 [Map -> PointResponseDto]로 변경

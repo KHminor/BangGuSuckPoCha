@@ -121,7 +121,7 @@ public class NaverService {
                     .birth(profile.response.birthyear+"."+profile.response.birthday.replace("-","."))
                     .manner(36.5)
                     .point(1000)
-                    .is_ban(0)
+                    .is_ban(false)
                     .report_point(0)
                     .role("USER")
                     .time(LocalDateTime.now())
