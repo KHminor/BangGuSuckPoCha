@@ -28,7 +28,7 @@ select:focus {
 }
 
 .bgImg {
-  background-image: url('../../assets/img/backgroundImg.png');
+  background-image: url('../../assets/img/backgroundImg.jpg');
   height: 100vh;
   width: 100vw;
   background-size: cover;

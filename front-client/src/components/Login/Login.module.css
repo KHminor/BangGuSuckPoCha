@@ -1,5 +1,17 @@
-.container > .bgimg {
-  height: 1300px;
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
+html {
+  scroll-behavior: smooth;
+}
+
+.fontHanSans {
+  font-family: "Black Han Sans";
+}
+
+.bgImg {
+  background-image: url('../../assets/img/backgroundImg.jpg');
+  background-size: contain;
+  /* height: 100vh;
+  width: 100vw; */
 }
 
 .hideScroll::-webkit-scrollbar {
