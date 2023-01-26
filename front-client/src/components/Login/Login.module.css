@@ -18,11 +18,11 @@ html {
   display: none; /* Chrome, Safari, Opera*/
 }
 
-/* .back{
-  width: 100%;
-  height: 100%;
-  background-image: url("../../assets/img/background_Login.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-} */
+.trans {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.neonTitle {
+  text-shadow: 5px 5px 10px #960f4e;
+}
