@@ -1,5 +1,6 @@
 package com.server.back.dto.user;
 
+import com.server.back.domain.user.Region;
 import com.server.back.domain.user.User;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class UserResponseDto {
     private String nickname;
     private String gender;
     private String birth;
-    private String region;
+    private Region region;
     private String profile;
     private Double manner;
     private String comment;
@@ -28,9 +29,10 @@ public class UserResponseDto {
         this.nickname = e.getNickname();
         this.gender = e.getGender();
         this.birth = e.getBirth();
-        String sidoName = e.getRegion().getSidoName();
-        String gugunName = e.getRegion().getGugunName();
-        this.region = (sidoName + " " + (gugunName != null ? gugunName : "")).trim();
+//        String sidoName = e.getRegion().getSidoName();
+//        String gugunName = e.getRegion().getGugunName();
+//        this.region = (sidoName + " " + (gugunName != null ? gugunName : "")).trim();
+        this.region = e.getRegion();
         this.profile = e.getProfile();
         this.manner = e.getManner().doubleValue();
         this.comment = e.getComment();
