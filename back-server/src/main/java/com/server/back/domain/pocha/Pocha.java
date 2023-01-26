@@ -2,7 +2,6 @@ package com.server.back.domain.pocha;
 
 import com.server.back.dto.pocha.PochaRequestDto;
 import com.server.back.dto.pocha.SsulReqeustDto;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

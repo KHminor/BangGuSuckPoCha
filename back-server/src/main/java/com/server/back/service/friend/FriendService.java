@@ -10,11 +10,11 @@ public interface FriendService  {
 
 	List<FriendResponseDto> friendList(Long userId);
 
-	void deleteFriend(String username, Long you_id);
+	void deleteFriend(Long my_id, Long you_id);
 
-	void bestFriend(String username, Long you_id);
+	void bestFriend(Long my_id, Long you_id);
 
-	List<FRequestResponseDto> frequestList(String username);
+	List<FRequestResponseDto> frequestList(Long my_id);
 
 	void requestFriend(FRequestDto requestDto);
 

@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity @Data
+@Entity
+@Data
 @NoArgsConstructor
 public class User {
 

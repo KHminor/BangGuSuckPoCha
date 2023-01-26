@@ -2,10 +2,12 @@ package com.server.back.dto.friend;
 
 
 import com.server.back.domain.friend.FRequest;
+import com.server.back.domain.user.User;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -20,10 +22,11 @@ public class FRequestDto {
 		this.from_id = from_id;
 	}
 	
-	public FRequest toEntity() {
+	public FRequest toEntity(User toId, User fromId) {
+		System.out.println(toId);
 		return FRequest.builder()
-				.toId(to_id)
-				.fromId(from_id)
+				.toId(toId)
+				.fromId(fromId)
 				.build();
 	}
 }
