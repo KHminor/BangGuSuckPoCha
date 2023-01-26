@@ -46,10 +46,12 @@ public class PochaResponseDto {
         this.themeId = e.getTheme().getThemeId();
         this.region = e.getRegion();
         this.tagList = e.getTag().stream().map(o -> o.getTag()).collect(Collectors.toList());
+        this.maleCount = 0;
+        this.femaleCount = 0;
         for(Participant p : e.getParticipant()){
             if(p.getExitAt() == null) {
-                this.maleCount += 1;
-                this.femaleCount += 1;
+                if(p.getUser().getGender().equals("M")) this.maleCount++;
+                else this.femaleCount += 1;
             }
         }
         this.totalCount = this.maleCount + this.femaleCount;

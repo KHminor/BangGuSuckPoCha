@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @ApiModel(value = "SsulReqeustDto", description = "썰 요청을 위한 데이터 타입")
 public class SsulReqeustDto {
-    private Long userId;
+    private String username;
     private String ssulTitle;
 }

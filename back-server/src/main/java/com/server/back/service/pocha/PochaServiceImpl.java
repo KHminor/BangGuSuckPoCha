@@ -37,6 +37,8 @@ public class PochaServiceImpl implements PochaService{
         int tagSize = tagSet.size();
         // 모든 포차 확인.
         for(Pocha p : pochaRepository.findByAgeAndRegionAndThemeContaining(age, region, theme)){
+            if(p.getIsEnd()) continue;
+
             // 지정한 태그가 모두 포함된 경우만 반환.
             int validTag = 0;
             for(Tag tag : p.getTag()){
@@ -112,11 +114,16 @@ public class PochaServiceImpl implements PochaService{
 
     @Override
     public List<PochaParticipantResponseDto> pochaParticipantList(Long pochaId) {
-        Pocha entity = pochaRepository.findByPochaId(pochaId);
+        Pocha pocha = pochaRepository.findByPochaId(pochaId);
 
-        return entity.getParticipant().stream()
-                .map(e -> new PochaParticipantResponseDto(e))
-                .collect(Collectors.toList());
+        List<PochaParticipantResponseDto> responseDtoList = new ArrayList<>();
+        pocha.getParticipant().forEach(entity -> {
+           if(entity.getExitAt() == null){
+               responseDtoList.add(new PochaParticipantResponseDto(entity));
+           }
+        });
+
+        return responseDtoList;
     }
 
     @Override
@@ -128,8 +135,10 @@ public class PochaServiceImpl implements PochaService{
     @Override
     public void pochaEnter(PochaParticipantRequestDto requestDto) {
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
+        User user = userRepository.findByUsername(requestDto.getUsername());
         Participant participant = Participant.builder()
                 .pocha(pocha)
+                .user(user)
                 .isHost(requestDto.getIsHost())
                 .waiting(requestDto.getWaiting())
                 .build();
@@ -139,10 +148,10 @@ public class PochaServiceImpl implements PochaService{
     @Override
     public void pochaExit(PochaParticipantRequestDto requestDto) {
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
-        /*User user = userRepository.findByUserId(requestDto.getUserId());
+        User user = userRepository.findByUsername(requestDto.getUsername());
 
         Participant entity = participantRepository.findByPochaAndUser(pocha, user);
-        entity.updateExit();*/
+        entity.updateExit();
 
         // 유저 평가 추가!!!
     }
@@ -163,9 +172,8 @@ public class PochaServiceImpl implements PochaService{
 
     @Override
     public void pochaSsul(Long pochaId, SsulReqeustDto reqeustDto) {
-        Pocha entity = pochaRepository.findByPochaId(pochaId);
-        entity.updateSsul(reqeustDto);
-        // 유저 포인트 차감.
+        Pocha pocha = pochaRepository.findByPochaId(pochaId);
+        pocha.updateSsul(reqeustDto);
     }
 
     @Override
@@ -174,7 +182,7 @@ public class PochaServiceImpl implements PochaService{
         List<InviteResponseDto> responseDtoList = new ArrayList<>();
         // 유효한 포차인지 확인하여 추가.
         inviteRepository.findByToUserOrderByCreateAtDesc(user).forEach(invite -> {
-            if(invite.getPocha().getIsEnd()){
+            if(!invite.getPocha().getIsEnd()){
                 responseDtoList.add(new InviteResponseDto(invite));
             }
         });

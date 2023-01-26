@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "PochaParticipantRequestDto", description = "포차 참가 인원 요청을 위한 데이터 타입")
 public class PochaParticipantRequestDto {
     private Long pochaId;
-    private Long userId;
+    private String username;
     private Boolean isHost;
     private Boolean waiting;
 }
