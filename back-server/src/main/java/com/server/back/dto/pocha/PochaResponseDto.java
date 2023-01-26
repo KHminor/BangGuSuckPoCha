@@ -22,8 +22,8 @@ public class PochaResponseDto {
     private Integer age;
     private Integer limitUser;
     private Integer alcohol;
-    private Integer isSsul;
-    private Integer isPrivate;
+    private Boolean isSsul;
+    private Boolean isPrivate;
     private String ssulTitle;
     private String themeId;
     private String region;
@@ -31,7 +31,7 @@ public class PochaResponseDto {
     private Integer totalCount;
     private Integer maleCount;
     private Integer femaleCount;
-    private Integer isEnd;
+    private Boolean isEnd;
     private LocalDateTime createAt;
     private LocalDateTime endAt;
 

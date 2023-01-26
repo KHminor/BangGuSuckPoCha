@@ -18,6 +18,6 @@ public class PochaRequestDto {
     private Integer age;
     private String region;
     private List<String> tagList;
-    private Integer isPrivate;
+    private Boolean isPrivate;
     private Integer limitUser;
 }

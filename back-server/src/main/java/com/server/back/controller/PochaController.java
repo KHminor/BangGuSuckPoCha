@@ -139,22 +139,23 @@ public class PochaController {
     }
     @ApiOperation(value = "포차 초대 거절")
     @DeleteMapping("/invite/refuse/{invite_id}")
-    public ResponseEntity<String> pochaInviteRefuse(@PathParam(value = "invite_id") Long inviteId){
+    public ResponseEntity<Map<String, Object>> pochaInviteRefuse(@PathParam(value = "invite_id") Long inviteId){
         Map<String, Object> response = new HashMap<>();
         pochaService.pochaInviteRefuse(inviteId);
         response.put("message", "success");
-        return new ResponseEntity<>("초대 거절 완료", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포차 초대 수락")
     @PostMapping("/invite/accept/{invite_id}/{pocha_id}")
-    public ResponseEntity<String> pochaInviteAccept(@PathParam(value = "invite_id") Long inviteId, @PathParam(value = "pocha_id") Long pochaId){
+    public ResponseEntity<Map<String, Object>> pochaInviteAccept(@PathParam(value = "invite_id") Long inviteId, @PathParam(value = "pocha_id") Long pochaId){
         Map<String, Object> response = new HashMap<>();
 
         if(pochaService.pochaInviteAccept(inviteId, pochaId)){
-
+            response.put("message", "success");
+        }else{
+            response.put("message", "fail");
         }
 
-        response.put("message", "success");
-        return new ResponseEntity<>("초대 수락 완료", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
