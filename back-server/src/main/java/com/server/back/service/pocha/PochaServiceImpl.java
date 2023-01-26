@@ -1,6 +1,8 @@
 package com.server.back.service.pocha;
 
 import com.server.back.domain.pocha.*;
+import com.server.back.domain.user.User;
+import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.pocha.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class PochaServiceImpl implements PochaService{
     private final PochaRepository pochaRepository;
     private final TagRepository tagRepository;
     private final ThemeRepository themeRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<PochaResponseDto> pochaList(PochaRequestDto requestDto) {
@@ -74,9 +77,9 @@ public class PochaServiceImpl implements PochaService{
                 .isPrivate(requestDto.getIsPrivate())
                 .limitUser(requestDto.getLimitUser())
                 .endAt(LocalDateTime.now().plusHours(2))
-                .isSsul(0)
+                .isSsul(false)
                 .alcohol(0)
-                .isEnd(0)
+                .isEnd(false)
                 .build();
 
         // 포차 추가.
@@ -167,19 +170,30 @@ public class PochaServiceImpl implements PochaService{
 
     @Override
     public List<InviteResponseDto> pochaInviteList(String username) {
-        // User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username);
         List<InviteResponseDto> responseDtoList = new ArrayList<>();
         // 유효한 포차인지 확인하여 추가.
+        inviteRepository.findByToUserOrderByCreateAtDesc(user).forEach(invite -> {
+            if(invite.getPocha().getIsEnd()){
+                responseDtoList.add(new InviteResponseDto(invite));
+            }
+        });
 
         return responseDtoList;
     }
 
     @Override
     public void pochaInvite(InviteRequestDto requestDto) {
+        User fromUser = userRepository.findByUsername(requestDto.getFromUsername());
+        User toUser = userRepository.findByUsername(requestDto.getToUsername());
+        Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
+
         Invite invite = Invite.builder()
-                // fromId, toId 추가!!!
-                .pocha(pochaRepository.findByPochaId(requestDto.getPochaId()))
+                .fromUser(fromUser)
+                .toUser(toUser)
+                .pocha(pocha)
                 .build();
+
         // 초대 추가.
         Invite entity = inviteRepository.save(invite);
     }
@@ -194,10 +208,15 @@ public class PochaServiceImpl implements PochaService{
     public boolean pochaInviteAccept(Long inviteId, Long pochaId) {
         Invite invite = inviteRepository.findById(inviteId).orElse(null);
 
+        inviteRepository.deleteById(invite.getInviteId());
         if(invite != null) {
-            // User user = invite.getTo();
+            User user = invite.getToUser();
             Pocha pocha = invite.getPocha();
-            
+
+            if(pocha.getIsEnd()){
+                return false;
+            }
+
             // 참여 인원 수 계산
             int participantToal = 0;
             for(Participant p : pocha.getParticipant()){
@@ -207,8 +226,9 @@ public class PochaServiceImpl implements PochaService{
             if(pocha.getLimitUser() > participantToal) {
                 Participant entity = participantRepository.save(Participant.builder()
                         .pocha(pocha)
-                        .isHost(0)
-                        .waiting(0)
+                        .user(user)
+                        .isHost(false)
+                        .waiting(false)
                         .build());
                 return true;
             }
