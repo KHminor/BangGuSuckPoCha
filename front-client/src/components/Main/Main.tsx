@@ -47,9 +47,9 @@ export default Main;
 
 function Room():JSX.Element {
   let [hoverCheck, setHoverCheck] = useState(false) 
-  let cards: JSX.Element[] = [1, 1, 1, 1,1,1,1,1,1,1,1,1].map((e, idx) => {
+  let cards: JSX.Element[] = [1,1,1,1,1,1,1,1,1,1,1,1].map((e, idx) => {
     return (
-      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] my-8" >
+      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8" >
         <div className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]" style={{gridTemplateColumns: '2.5rem 1fr 2.5rem'}}>
         <div className="" style={{backgroundColor: "rgb(25, 25, 25)"}}></div>
           {/* 카드 내부 */}
@@ -90,7 +90,7 @@ function Room():JSX.Element {
   });
   return (
 
-    <div className="grid w-full min-w-[75rem] sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 " >
+    <div className="grid w-full min-w-[75rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 " >
       {cards}
     </div>
 
