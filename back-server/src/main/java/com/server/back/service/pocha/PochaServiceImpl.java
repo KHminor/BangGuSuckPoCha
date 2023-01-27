@@ -232,12 +232,8 @@ public class PochaServiceImpl implements PochaService{
             }
             // 참여가 가능하다면 참여.
             if(pocha.getLimitUser() > participantToal) {
-                Participant entity = participantRepository.save(Participant.builder()
-                        .pocha(pocha)
-                        .user(user)
-                        .isHost(false)
-                        .waiting(false)
-                        .build());
+                pochaEnter(PochaParticipantRequestDto.builder().pochaId(pocha.getPochaId()).username(user.getUsername()).isHost(false).waiting(false).build());
+
                 return true;
             }
         }
