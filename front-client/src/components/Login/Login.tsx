@@ -65,7 +65,7 @@ function Login(): React.ReactElement {
           <div className="transition opacity-0 duration-1000 delay-1000" ref={wordThird}>생겼다?!</div>
           <div className="transition opacity-0 duration-1000 delay-[1500ms] w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
           <div className="transition opacity-0 duration-1000 delay-[1500ms] text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
-            Feat : 침대 밖은 위험해
+            Feat : 방 밖은 위험해
           </div>
         </div>
         <div

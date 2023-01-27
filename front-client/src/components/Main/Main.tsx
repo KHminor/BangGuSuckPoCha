@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../Common/Navbar";
 import styles from "./Main.module.css";
@@ -7,6 +7,8 @@ import Tag from "./Tag";
 
 function Main(): JSX.Element {
   const [isCreateRoom, setIsCreateRoom] = useState(false);
+  const menuIcon = useRef<any>(null);
+  const alarmIcon = useRef<any>(null);
 
   const checkMenuState: any = useSelector((state: any) => {
     return state.menuClickCheck;
@@ -15,26 +17,17 @@ function Main(): JSX.Element {
     return state.alarmClickCheck;
   });
 
-  console.log(checkMenuState);
-  console.log(alarmClickCheck);
+  // 메뉴 1, 알람 2
 
-  if (checkMenuState === true) {
-    document.getElementById("menu")?.classList.remove("hidden");
-    if (alarmClickCheck === true) {
-      document.getElementById("alarm")?.classList.add("hidden");
-    }
-  } else {
-    document.getElementById("menu")?.classList.add("hidden");
-  }
+  useEffect(() => {
+    menuIcon.current.classList.toggle("hidden");
+    alarmIcon.current.classList.add("hidden");
+  }, [checkMenuState]);
 
-  if (alarmClickCheck === true) {
-    document.getElementById("alarm")?.classList.remove("hidden");
-    if (checkMenuState === true) {
-      document.getElementById("menu")?.classList.add("hidden");
-    }
-  } else {
-    document.getElementById("alarm")?.classList.add("hidden");
-  }
+  useEffect(() => {
+    alarmIcon.current.classList.toggle("hidden");
+    menuIcon.current.classList.add("hidden");
+  }, [alarmClickCheck]);
 
   return (
     <div
@@ -77,7 +70,7 @@ function Main(): JSX.Element {
       </div>
       {/* 메뉴 클릭시 보이기 */}
       <div
-        id="menu"
+        ref={menuIcon}
         className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden ${styles.neonDefault}`}
         style={{ right: "6.5rem", top: "11.7rem" }}
       >
@@ -118,7 +111,7 @@ function Main(): JSX.Element {
       </div>
       {/* 알림 클릭시 보이기 */}
       <div
-        id="alarm"
+        ref={alarmIcon}
         className={`grid grid-rows-12 absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
         style={{ right: "3.7rem", top: "11.5rem", height: "22rem" }}
       >
