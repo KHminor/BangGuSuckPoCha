@@ -1,7 +1,6 @@
 package com.server.back.dto.user;
 
 import com.server.back.domain.user.Point;
-import com.server.back.domain.user.User;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @ApiModel(value = "PointResponseDto")
 public class PointResponseDto {
-   private Long point_id;
+   private Long pointId;
    private String username;
    private String nickname;
    private String content;
@@ -20,7 +19,7 @@ public class PointResponseDto {
    private Integer current_point;
    private LocalDateTime create_at;
    public PointResponseDto(Point p) {
-      this.point_id = p.getPointId();
+      this.pointId = p.getPointId();
       this.username = p.getUser().getUsername();
       this.nickname = p.getUser().getNickname();
       this.content = p.getContent();
