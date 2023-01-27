@@ -20,7 +20,7 @@ public class PochaController {
 
     @ApiOperation(value = "포차 목록")
     @GetMapping
-    public ResponseEntity<Map<String, Object>> pochaList(@RequestParam(value = "age") Integer age, @RequestParam(value = "region") String region, @RequestParam(value = "themeId") String themeId, @RequestParam(value = "tag") List<String> tagList){
+    public ResponseEntity<Map<String, Object>> pochaList(@RequestParam(value = "age") Integer age, @RequestParam(value = "region") String region, @RequestParam(value = "themeId", required = false) String themeId, @RequestParam(value = "tag", required = false) List<String> tagList){
         Map<String, Object> response = new HashMap<>();
 
         PochaRequestDto requestDto = PochaRequestDto.builder()
