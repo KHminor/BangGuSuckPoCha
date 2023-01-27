@@ -106,18 +106,20 @@ public class UserController {
     }
     @ApiOperation(value = "포인트 사용 목록")
     @GetMapping("/point/{username}")
-    // PointResponseDto 추가 후 [Map -> PointResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userPointList(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
-        List<PochaParticipantResponseDto> responseDtoList = userService.userPointList(username);
+        List<PointResponseDto> responseDtoList = userService.userPointList(username);
         response.put("data", responseDtoList);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포인트 획득, 사용")
     @PutMapping("/point/{username}")
-    public ResponseEntity<String> userUsePoint(@PathVariable(value = "username") String username/*, @RequestBody PointRequestDto requestDto*/){
-        return new ResponseEntity<>("포인트 사용 성공", HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> userUsePoint(@PathVariable(value = "username") String username, @RequestBody PointRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        userService.usePoint(username, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "평가 목록 요청")
     @GetMapping("/review/{username}")

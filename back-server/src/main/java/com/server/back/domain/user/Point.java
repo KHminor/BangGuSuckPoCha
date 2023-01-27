@@ -1,5 +1,7 @@
 package com.server.back.domain.user;
 
+import com.server.back.dto.user.PointRequestDto;
+import com.server.back.dto.user.UserRequestDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
