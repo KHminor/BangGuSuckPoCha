@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Login.module.css";
+import axios from "axios";
 
 function Login(): React.ReactElement {
-  // const [scrollTop, setScrollY] = useState(0);
-  // const [deltaY, setDeltaValue] = useState(0);
   // 아래 처럼 하면 되는데.. 중간에 오류저거 못고치겠어서 우선 any
   // const scrollDivRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +15,7 @@ function Login(): React.ReactElement {
   const wordThird = useRef<any>(null);
   const wordFourth = useRef<any>(null);
   const wordFifth = useRef<any>(null);
-
+  const elements = [wordFourth, wordFifth];
 
   // 마우스 윌 이벤트 발생시
   const onWheelScroll = (event: any) => {
@@ -29,18 +28,32 @@ function Login(): React.ReactElement {
     if (deltaY > 0) {
       // console.log("123", deltaY, scrollTop, pageHeight);
       secondDiv.current.scrollIntoView({ behavior: "smooth" });
+      secondDiv.current.classList.toggle(`delay-300`);
+      wordSecond.current.classList.toggle(`delay-500`);
+      wordThird.current.classList.toggle(`delay-1000`);
+      elements.forEach((element) => {
+        element.current.classList.toggle(`delay-[1300ms]`)
+      })
+
     } else if (deltaY < 0) {
       // console.log("456", deltaY, scrollTop, pageHeight);
       firstDiv.current.scrollIntoView({ behavior: "smooth" });
+      wordSecond.current.classList.toggle(`delay-500`);
+      secondDiv.current.classList.toggle(`delay-300`);
+      wordThird.current.classList.toggle(`delay-1000`);
+      elements.forEach((element) => {
+        element.current.classList.toggle(`delay-[1300ms]`)
+      })
     }
   };
 
+  // Intersection Observer 세팅
   useEffect(() => {
     const elements = [secondDiv, wordFirst, wordSecond, wordThird, wordFourth, wordFifth];
     let observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         entry.target.classList.toggle(`${styles.trans}`, entry.isIntersecting);
-        // entry.target.classList.toggle(`delay-1000`, entry.isIntersecting);
+
       });
     }, {threshold: 0.5});
   
@@ -48,6 +61,7 @@ function Login(): React.ReactElement {
       observer.observe(element.current);
     })
   }, [])
+
 
   return (
     <div
@@ -60,26 +74,26 @@ function Login(): React.ReactElement {
           ref={firstDiv}
           className="text-[10rem] leading-none text-white flex flex-col items-start justify-center ml-28 tracking-wide h-screen"
         >
-          <div className="transition opacity-0 duration-1000 delay-100" ref={wordFirst}>내 방에</div>
-          <div className="transition opacity-0 duration-1000 delay-500" ref={wordSecond}>포장마차가</div>
-          <div className="transition opacity-0 duration-1000 delay-1000" ref={wordThird}>생겼다?!</div>
-          <div className="transition opacity-0 duration-1000 delay-[1500ms] w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
-          <div className="transition opacity-0 duration-1000 delay-[1500ms] text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
+          <div className="transition opacity-0 duration-1000 delay-100 -translate-x-40" ref={wordFirst}>내 방에</div>
+          <div className="transition opacity-0 duration-1000 delay-500 -translate-x-40" ref={wordSecond}>포장마차가</div>
+          <div className="transition opacity-0 duration-1000 delay-1000 -translate-x-40" ref={wordThird}>생겼다?!</div>
+          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
+          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
             Feat : 침대 밖은 위험해
           </div>
         </div>
         <div
           ref={secondDiv}
-          className="flex flex-col items-center justify-center h-screen transition opacity-0 duration-1000 delay-300 -translate-x-40"
+          className="flex flex-col items-center justify-center h-screen opacity-0 transition duration-1000 -translate-x-40"
         >
-          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white`}>
+          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white `}>
             방구석포차
           </div>
-          <img
-            className="w-2/12 mt-10"
+          <a className="w-2/12 mt-10" href="https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=http://34.207.167.96:8080/user/api/oauth2/token/naver&response_type=code"><img
             src={require("../../assets/loginIcon/naver.png")}
             alt="login-naver"
-          />
+          /></a>
+          
         </div>
       </div>
     </div>
