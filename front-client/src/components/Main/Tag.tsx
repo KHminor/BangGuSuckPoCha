@@ -1,22 +1,5 @@
-import { useAppSelector } from "../../store/hooks"
-
 function Tag(): JSX.Element {
-  const useSelector = useAppSelector
-  const checkMenuState:any = useSelector((state:any)=> {return state.menuClickCheck})
-  const alarmClickCheck:any = useSelector((state:any)=> {return state.alarmClickCheck})
   
-  
-  if (checkMenuState === true) {
-    document.getElementById('menu')?.classList.remove('hidden')
-  } else {
-    document.getElementById('menu')?.classList.add('hidden')
-  }
-
-  if (alarmClickCheck === true) {
-    document.getElementById('alarm')?.classList.remove('hidden')
-  } else {
-    document.getElementById('alarm')?.classList.add('hidden')
-  }
   return (
     <div className="grid w-full min-w-[75rem] h-full " style={{gridTemplateColumns:'7fr 4fr', backgroundColor: "rgb(25, 25, 25)"}}>
       <div className="grid items-center w-full text-white " style={{gridTemplateColumns:'2.5rem 0.6fr 1fr 1fr 1fr 1fr 1fr'}}>

@@ -29,10 +29,10 @@ function MenuOption():JSX.Element {
   return (
     <div className="flex w-full">
       <div style={{width: '20%'}}></div>
-      <div className="flex justify-evenly" style={{width: '60%'}}>
+      <div className="flex justify-evenly" style={{width: '70%'}}>
         <div className="flex justify-center items-end mb-2">
-          <div className="cursor-pointer">
-            <img className="w-full" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/shop.png')} alt="shop" />
+          <div className="cursor-pointer ">
+            <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/shop.png')} alt="shop" />
             <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">상점</p>
           </div>
         </div>
@@ -40,7 +40,7 @@ function MenuOption():JSX.Element {
           <div className="cursor-pointer" onClick={()=> {
             dispatch(changeAlarmState())
           }}>
-            <img className="w-full" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
+            <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
             <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">알림</p>
           </div>
         </div>
@@ -48,7 +48,7 @@ function MenuOption():JSX.Element {
           <div className="cursor-pointer" onClick={()=> {
             dispatch(changeMenuState())
           }}>
-            <img className="w-full" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/menu.png')} alt="menu" />
+            <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/menu.png')} alt="menu" />
             <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">메뉴</p>
           </div>
         </div>

@@ -4,14 +4,22 @@
 
 .neonDefault {
   color: #fff;
-  box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+  box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px;
+  z-index: 50;
 }
 
 .neon:hover {
   color: #fff;
-  box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
-  z-index: 100;
+  box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
+  z-index: 20;
 }
+
+/* 
+.neon:hover {
+  color: #fff;
+  box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
+  z-index: 20;
+} */
 
 /* .neon1:hover {
   color: #fff;
@@ -24,4 +32,13 @@ img {
 
 .radiusbottom {
   border-radius: 0px 0px 16px 16px;
+}
+
+.cancelBtn {
+  /* background: rgba(248, 248, 248, 0.185); */
+  color: rgb(255, 124, 190);
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.5),
+              0 0 10px rgba(255, 51, 51, 0.5),
+              0 0 15px rgba(255, 51, 51, 0.5),
+              0 0 20px rgba(255, 51, 51, 0.5);
 }
