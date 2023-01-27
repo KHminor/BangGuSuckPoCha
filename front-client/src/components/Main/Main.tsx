@@ -26,7 +26,7 @@ function Main(): JSX.Element {
   });
 
   // 메뉴 1, 알람 2
-
+  
   useEffect(() => {
     menuIcon.current.classList.toggle("hidden");
     alarmIcon.current.classList.add("hidden");
@@ -100,6 +100,7 @@ function Main(): JSX.Element {
             <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/mypage.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%", border: "solid 1px white" }}
               />
@@ -108,6 +109,7 @@ function Main(): JSX.Element {
             <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/friend.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%" }}
               />
@@ -116,6 +118,7 @@ function Main(): JSX.Element {
             <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/logout.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%" }}
               />
