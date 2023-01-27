@@ -8,15 +8,17 @@ import Tag from "./Tag";
 function Main(): JSX.Element {
   // 방 생성 관련
   const [isCreateRoom, setIsCreateRoom] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
   const menuIcon = useRef<any>(null);
   const alarmIcon = useRef<any>(null);
   // 방 생성 관련
   const createBtn = useRef<any>(null);
 
   const onClickCreateRoom = () => {
-    createBtn.current.classList.toggle("hidden")
-    setIsCreateRoom((prev) => !prev)};
-
+    createBtn.current.classList.toggle("hidden");
+    setIsCreateRoom((prev) => !prev);
+  };
 
   const checkMenuState: any = useSelector((state: any) => {
     return state.menuClickCheck;
@@ -25,8 +27,7 @@ function Main(): JSX.Element {
     return state.alarmClickCheck;
   });
 
-  // 메뉴 1, 알람 2
-  
+  // 알림, 메뉴 버튼 클릭 로직
   useEffect(() => {
     menuIcon.current.classList.toggle("hidden");
     alarmIcon.current.classList.add("hidden");
@@ -37,11 +38,17 @@ function Main(): JSX.Element {
     menuIcon.current.classList.add("hidden");
   }, [alarmClickCheck]);
 
+  useEffect(() => {
+    menuIcon.current.classList.add("hidden");
+    alarmIcon.current.classList.add("hidden");
+  }, []);
+
   return (
     <>
-    {isCreateRoom ? <MainCreateRoom onClickCreateRoom={onClickCreateRoom} /> : null}
-    <div
-
+      {isCreateRoom ? (
+        <MainCreateRoom onClickCreateRoom={onClickCreateRoom} />
+      ) : null}
+      <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
           backgroundColor: "rgb(25, 25, 25)",
@@ -68,7 +75,7 @@ function Main(): JSX.Element {
             <Room />
           </div>
         </div>
-       {/* 방 생성 버튼 */}
+        {/* 방 생성 버튼 */}
 
         <div
           ref={createBtn}
@@ -129,41 +136,44 @@ function Main(): JSX.Element {
         {/* 알림 클릭시 보이기 */}
         <div
           ref={alarmIcon}
-
-          className={`grid grid-rows-12 absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
-          style={{ right: "3.7rem", top: "11.5rem", height: "22rem" }}
+          className={`absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
+          style={{ right: "5rem", top: "11.5rem", height: "22rem" }}
         >
-          <div className="grid grid-cols-12 row-span-1 items-center">
-            <div className="col-span-5"></div>
-            <div className="col-span-2 opacity-50 text-white">알림</div>
-            <div className="col-span-5"></div>
-          </div>
-          <div className="grid grid-cols-12 row-span-1 items-start">
-            <div className="col-span-1"></div>
-            <div className="col-span-3 text-xl text-white">요청</div>
-            <div className="col-span-4"></div>
-            <div className="col-span-3 text-xl opacity-50 text-white">리뷰</div>
-            <div className="col-span-1"></div>
-          </div>
-          <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
-            <div
-              className="my-2 cursor-pointer text-white"
-              style={{ height: "20%" }}
-              onClick={() => {}}
-            >
-              한상현 바보
+          <div className={`grid grid-rows-12 w-56 `}>
+            <div className="grid grid-cols-12 row-span-1 items-center">
+              <div className="col-span-5"></div>
+              <div className="col-span-2 opacity-50 text-white">알림</div>
+              <div className="col-span-5"></div>
             </div>
-            <div
-              className="my-2 cursor-pointer text-white"
-              style={{ height: "20%" }}
-            >
-              한상현 바보
+            <div className="grid grid-cols-12 row-span-1 items-start">
+              <div className="col-span-1"></div>
+              <div className="col-span-3 text-xl text-white">요청</div>
+              <div className="col-span-4"></div>
+              <div className="col-span-3 text-xl opacity-50 text-white">
+                리뷰
+              </div>
+              <div className="col-span-1"></div>
             </div>
-            <div
-              className="my-2 cursor-pointer text-white"
-              style={{ height: "20%" }}
-            >
-              한상현 바보
+            <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
+              <div
+                className="my-2 cursor-pointer text-white"
+                style={{ height: "20%" }}
+                onClick={() => {}}
+              >
+                한상현 바보
+              </div>
+              <div
+                className="my-2 cursor-pointer text-white"
+                style={{ height: "20%" }}
+              >
+                한상현 바보
+              </div>
+              <div
+                className="my-2 cursor-pointer text-white"
+                style={{ height: "20%" }}
+              >
+                한상현 바보
+              </div>
             </div>
           </div>
         </div>
