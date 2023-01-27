@@ -1,8 +1,8 @@
-import style from "./MainCreateRoom.module.css";
+import style from './MainCreateRoom.module.css'
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
 
-const MainCreateRoom = (): React.ReactElement => {
+const MainCreateRoom = ({onClickCreateRoom} : { onClickCreateRoom : Function}): React.ReactElement => {
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
@@ -24,6 +24,12 @@ const MainCreateRoom = (): React.ReactElement => {
     "똥",
   ];
 
+  // 전달받아온 함수를 실행해서 창 끄기
+  const closeModal = () => {
+    onClickCreateRoom();
+  }
+
+  // 태그 선택 기능
   const onSelectTag = (
     index: number,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -64,7 +70,7 @@ const MainCreateRoom = (): React.ReactElement => {
             type="submit"
             value="방만들기"
           />
-          <input className={`${style.cancelBtn} cursor-pointer`} type="submit" value="취소" />
+          <input onClick={closeModal} className={`${style.cancelBtn} cursor-pointer`} type="submit" value="취소" />
         </div>
       </div>
     </div>

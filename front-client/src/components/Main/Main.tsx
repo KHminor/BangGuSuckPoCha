@@ -9,6 +9,12 @@ function Main(): JSX.Element {
   const [isCreateRoom, setIsCreateRoom] = useState(false);
   const menuIcon = useRef<any>(null);
   const alarmIcon = useRef<any>(null);
+  // 방 생성 관련
+  const createBtn = useRef<any>(null);
+
+  const onClickCreateRoom = () => {
+    createBtn.current.classList.toggle("hidden")
+    setIsCreateRoom((prev) => !prev)};
 
   const checkMenuState: any = useSelector((state: any) => {
     return state.menuClickCheck;
@@ -30,126 +36,131 @@ function Main(): JSX.Element {
   }, [alarmClickCheck]);
 
   return (
+    <>
+    {isCreateRoom ? <MainCreateRoom onClickCreateRoom={onClickCreateRoom} /> : null}
     <div
-      className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
-      style={{
-        backgroundColor: "rgb(25, 25, 25)",
-        gridTemplateRows: "11rem 1fr",
-        overflow: "auto",
-      }}
-    >
-      <Navbar />
-
-      <div
-        className="grid container mx-auto min-w-[75rem] "
+        className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
-          gridTemplateRows: "8rem 1fr 3rem",
           backgroundColor: "rgb(25, 25, 25)",
+          gridTemplateRows: "11rem 1fr",
+          overflow: "auto",
         }}
       >
-        {/* 태그 */}
-        <Tag />
-        {/* 방 보이기 */}
+        <Navbar />
+
         <div
-          className="grid grid-cols-1 w-full min-w-[75rem] "
-          style={{ backgroundColor: "rgb(25, 25, 25)" }}
+          className="grid container mx-auto min-w-[75rem] "
+          style={{
+            gridTemplateRows: "8rem 1fr 3rem",
+            backgroundColor: "rgb(25, 25, 25)",
+          }}
         >
-          <Room />
+          {/* 태그 */}
+          <Tag />
+          {/* 방 보이기 */}
+          <div
+            className="grid grid-cols-1 w-full min-w-[75rem] "
+            style={{ backgroundColor: "rgb(25, 25, 25)" }}
+          >
+            <Room />
+          </div>
         </div>
-      </div>
-      {/* 방 생성 버튼 */}
-      <div
-        className={`w-[6rem] min-w-[6rem] h-[3.5rem] min-h-[3.5rem] rounded-full flex justify-center items-center  fixed bottom-5 right-20 cursor-pointer z-50 bg-black ${styles.cancelBtn}`}
-      >
-        <span className="mr-1 text-[1.3rem] font-bold text-white">포차</span>
-        <img
-          src={require("../../assets/roomIcon/plus.png")}
-          alt=""
-          className="w-1/6 min-w-1/6"
-        />
-      </div>
-      {/* 메뉴 클릭시 보이기 */}
-      <div
-        ref={menuIcon}
-        className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden ${styles.neonDefault}`}
-        style={{ right: "6.5rem", top: "11.7rem" }}
-      >
-        <img
-          src={require("../../assets/logoIcon/menuBground.png")}
-          className="bg-inherit h-full w-full"
-          alt=""
-        />
+       {/* 방 생성 버튼 */}
         <div
-          className="flex justify-center items-center absolute   w-48 h-16"
-          style={{ right: "-1%", top: "-9%" }}
+          ref={createBtn}
+          onClick={onClickCreateRoom}
+          className={`w-[6rem] min-w-[6rem] h-[3.5rem] min-h-[3.5rem] rounded-full flex justify-center items-center  fixed bottom-5 right-20 cursor-pointer z-50 bg-black ${styles.cancelBtn}`}
         >
-          <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
-            <img
-              src={require("../../assets/logoIcon/mypage.png")}
-              className="bg-white bg-cover rounded-full"
-              style={{ height: "90%", border: "solid 1px white" }}
-            />
-            <p className="text-stone-200 text-xs">My</p>
+          <span className="mr-1 text-[1.3rem] font-bold text-white">포차</span>
+          <img
+            src={require("../../assets/roomIcon/plus.png")}
+            alt=""
+            className="w-1/6 min-w-1/6"
+          />
+        </div>
+        {/* 메뉴 클릭시 보이기 */}
+        <div
+          ref={menuIcon}
+          className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden ${styles.neonDefault}`}
+          style={{ right: "6.5rem", top: "11.7rem" }}
+        >
+          <img
+            src={require("../../assets/logoIcon/menuBground.png")}
+            className="bg-inherit h-full w-full"
+            alt=""
+          />
+          <div
+            className="flex justify-center items-center absolute   w-48 h-16"
+            style={{ right: "-1%", top: "-9%" }}
+          >
+            <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
+              <img
+                src={require("../../assets/logoIcon/mypage.png")}
+                className="bg-white bg-cover rounded-full"
+                style={{ height: "90%", border: "solid 1px white" }}
+              />
+              <p className="text-stone-200 text-xs">My</p>
+            </div>
+            <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
+              <img
+                src={require("../../assets/logoIcon/friend.png")}
+                className="bg-white bg-cover rounded-full"
+                style={{ height: "90%" }}
+              />
+              <p className="text-stone-200 text-xs">friend</p>
+            </div>
+            <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
+              <img
+                src={require("../../assets/logoIcon/logout.png")}
+                className="bg-white bg-cover rounded-full"
+                style={{ height: "90%" }}
+              />
+              <p className="text-stone-200 text-xs">logout</p>
+            </div>
           </div>
-          <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
-            <img
-              src={require("../../assets/logoIcon/friend.png")}
-              className="bg-white bg-cover rounded-full"
-              style={{ height: "90%" }}
-            />
-            <p className="text-stone-200 text-xs">friend</p>
+        </div>
+        {/* 알림 클릭시 보이기 */}
+        <div
+          ref={alarmIcon}
+          className={`grid grid-rows-12 absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
+          style={{ right: "3.7rem", top: "11.5rem", height: "22rem" }}
+        >
+          <div className="grid grid-cols-12 row-span-1 items-center">
+            <div className="col-span-5"></div>
+            <div className="col-span-2 opacity-50 text-white">알림</div>
+            <div className="col-span-5"></div>
           </div>
-          <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
-            <img
-              src={require("../../assets/logoIcon/logout.png")}
-              className="bg-white bg-cover rounded-full"
-              style={{ height: "90%" }}
-            />
-            <p className="text-stone-200 text-xs">logout</p>
+          <div className="grid grid-cols-12 row-span-1 items-start">
+            <div className="col-span-1"></div>
+            <div className="col-span-3 text-xl text-white">요청</div>
+            <div className="col-span-4"></div>
+            <div className="col-span-3 text-xl opacity-50 text-white">리뷰</div>
+            <div className="col-span-1"></div>
+          </div>
+          <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
+            <div
+              className="my-2 cursor-pointer text-white"
+              style={{ height: "20%" }}
+              onClick={() => {}}
+            >
+              한상현 바보
+            </div>
+            <div
+              className="my-2 cursor-pointer text-white"
+              style={{ height: "20%" }}
+            >
+              한상현 바보
+            </div>
+            <div
+              className="my-2 cursor-pointer text-white"
+              style={{ height: "20%" }}
+            >
+              한상현 바보
+            </div>
           </div>
         </div>
       </div>
-      {/* 알림 클릭시 보이기 */}
-      <div
-        ref={alarmIcon}
-        className={`grid grid-rows-12 absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
-        style={{ right: "3.7rem", top: "11.5rem", height: "22rem" }}
-      >
-        <div className="grid grid-cols-12 row-span-1 items-center">
-          <div className="col-span-5"></div>
-          <div className="col-span-2 opacity-50 text-white">알림</div>
-          <div className="col-span-5"></div>
-        </div>
-        <div className="grid grid-cols-12 row-span-1 items-start">
-          <div className="col-span-1"></div>
-          <div className="col-span-3 text-xl text-white">요청</div>
-          <div className="col-span-4"></div>
-          <div className="col-span-3 text-xl opacity-50 text-white">리뷰</div>
-          <div className="col-span-1"></div>
-        </div>
-        <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-            onClick={() => {}}
-          >
-            한상현 바보
-          </div>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-          >
-            한상현 바보
-          </div>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-          >
-            한상현 바보
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 export default Main;

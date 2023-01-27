@@ -60,12 +60,12 @@ function Login(): React.ReactElement {
           ref={firstDiv}
           className="text-[10rem] leading-none text-white flex flex-col items-start justify-center ml-28 tracking-wide h-screen"
         >
-          <div className="transition opacity-0 duration-1000 delay-100" ref={wordFirst}>내 방에</div>
-          <div className="transition opacity-0 duration-1000 delay-500" ref={wordSecond}>포장마차가</div>
-          <div className="transition opacity-0 duration-1000 delay-1000" ref={wordThird}>생겼다?!</div>
-          <div className="transition opacity-0 duration-1000 delay-[1500ms] w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
-          <div className="transition opacity-0 duration-1000 delay-[1500ms] text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
-            Feat : 방 밖은 위험해
+          <div className="transition opacity-0 duration-1000 delay-100 -translate-x-40" ref={wordFirst}>내 방에</div>
+          <div className="transition opacity-0 duration-1000 delay-500 -translate-x-40" ref={wordSecond}>포장마차가</div>
+          <div className="transition opacity-0 duration-1000 delay-1000 -translate-x-40" ref={wordThird}>생겼다?!</div>
+          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
+          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
+            Feat : 침대 밖은 위험해
           </div>
         </div>
         <div
