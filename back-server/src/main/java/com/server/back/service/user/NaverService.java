@@ -26,14 +26,14 @@ public class NaverService {
     private final UserRepository userRepository;
     private final RegionRepository regionRepository;
 
-    private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
-    private final String client_secret = "ZGtXcgsvcR";
-    private final String redirect_uri = "http://localhost:8080/login/oauth2/code/naver";
+    private final String client_id = "ZQnQO8XghTL7eTyln27j";
+    private final String client_secret = "E_N2HQiJc4";
+    private final String redirect_uri = "http://34.207.167.96:8080/login/oauth2/code/naver";
     private final String accessTokenUri = "https://nid.naver.com/oauth2.0/token";
     private final String UserInfoUri = "https://openapi.naver.com/v1/nid/me";
 
     /**
-     * 카카오로 부터 엑세스 토큰을 받는 함수
+     * 네이버로 부터 엑세스 토큰을 받는 함수
      */
     public TokenDto getAccessToken(String code) {
 
@@ -100,7 +100,7 @@ public class NaverService {
     }
 
     /**
-     * 카카오 로그인 사용자 강제 회원가입
+     * 네이버 로그인 사용자 강제 회원가입
      */
     @Transactional
     public User saveUser(String access_token) {
