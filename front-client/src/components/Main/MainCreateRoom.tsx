@@ -1,4 +1,4 @@
-import style from "./MainCreateRoom.module.css";
+import style from './MainCreateRoom.module.css'
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
 

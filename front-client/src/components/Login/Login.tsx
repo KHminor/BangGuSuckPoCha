@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
 import axios from "axios";
 
 function Login(): React.ReactElement {
+  const navigate = useNavigate()
   // 아래 처럼 하면 되는데.. 중간에 오류저거 못고치겠어서 우선 any
   // const scrollDivRef = useRef<HTMLDivElement>(null);
 
@@ -89,10 +91,12 @@ function Login(): React.ReactElement {
           <div className={`${styles.neonTitle} text-[10rem] leading-none text-white font-nanum`}>
             방구석포차
           </div>
-          <a className="w-2/12 mt-10" href="https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=http://34.207.167.96:8080/user/api/oauth2/token/naver&response_type=code"><img
+          <div className="w-2/12 mt-10 cursor-pointer" onClick={()=> {
+            navigate('/main')
+          }} ><img
             src={require("../../assets/loginIcon/naver.png")}
             alt="login-naver"
-          /></a>
+          /></div>
           
         </div>
       </div>
