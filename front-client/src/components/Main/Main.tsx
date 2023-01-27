@@ -6,6 +6,7 @@ import MainCreateRoom from "./MainCreateRoom";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
+  // 방 생성 관련
   const [isCreateRoom, setIsCreateRoom] = useState(false);
   const menuIcon = useRef<any>(null);
   const alarmIcon = useRef<any>(null);
@@ -16,6 +17,7 @@ function Main(): JSX.Element {
     createBtn.current.classList.toggle("hidden")
     setIsCreateRoom((prev) => !prev)};
 
+
   const checkMenuState: any = useSelector((state: any) => {
     return state.menuClickCheck;
   });
@@ -24,7 +26,7 @@ function Main(): JSX.Element {
   });
 
   // 메뉴 1, 알람 2
-
+  
   useEffect(() => {
     menuIcon.current.classList.toggle("hidden");
     alarmIcon.current.classList.add("hidden");
@@ -39,6 +41,7 @@ function Main(): JSX.Element {
     <>
     {isCreateRoom ? <MainCreateRoom onClickCreateRoom={onClickCreateRoom} /> : null}
     <div
+
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
           backgroundColor: "rgb(25, 25, 25)",
@@ -66,6 +69,7 @@ function Main(): JSX.Element {
           </div>
         </div>
        {/* 방 생성 버튼 */}
+
         <div
           ref={createBtn}
           onClick={onClickCreateRoom}
@@ -96,6 +100,7 @@ function Main(): JSX.Element {
             <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/mypage.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%", border: "solid 1px white" }}
               />
@@ -104,6 +109,7 @@ function Main(): JSX.Element {
             <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/friend.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%" }}
               />
@@ -112,6 +118,7 @@ function Main(): JSX.Element {
             <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
               <img
                 src={require("../../assets/logoIcon/logout.png")}
+                alt=""
                 className="bg-white bg-cover rounded-full"
                 style={{ height: "90%" }}
               />
@@ -122,6 +129,7 @@ function Main(): JSX.Element {
         {/* 알림 클릭시 보이기 */}
         <div
           ref={alarmIcon}
+
           className={`grid grid-rows-12 absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
           style={{ right: "3.7rem", top: "11.5rem", height: "22rem" }}
         >

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
+import axios from "axios";
 
 function Login(): React.ReactElement {
-  // const [scrollTop, setScrollY] = useState(0);
-  // const [deltaY, setDeltaValue] = useState(0);
+  const navigate = useNavigate()
   // 아래 처럼 하면 되는데.. 중간에 오류저거 못고치겠어서 우선 any
   // const scrollDivRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +17,7 @@ function Login(): React.ReactElement {
   const wordThird = useRef<any>(null);
   const wordFourth = useRef<any>(null);
   const wordFifth = useRef<any>(null);
-
+  const elements = [wordFourth, wordFifth];
 
   // 마우스 윌 이벤트 발생시
   const onWheelScroll = (event: any) => {
@@ -29,18 +30,32 @@ function Login(): React.ReactElement {
     if (deltaY > 0) {
       // console.log("123", deltaY, scrollTop, pageHeight);
       secondDiv.current.scrollIntoView({ behavior: "smooth" });
+      secondDiv.current.classList.toggle(`delay-300`);
+      wordSecond.current.classList.toggle(`delay-500`);
+      wordThird.current.classList.toggle(`delay-1000`);
+      elements.forEach((element) => {
+        element.current.classList.toggle(`delay-[1300ms]`)
+      })
+
     } else if (deltaY < 0) {
       // console.log("456", deltaY, scrollTop, pageHeight);
       firstDiv.current.scrollIntoView({ behavior: "smooth" });
+      wordSecond.current.classList.toggle(`delay-500`);
+      secondDiv.current.classList.toggle(`delay-300`);
+      wordThird.current.classList.toggle(`delay-1000`);
+      elements.forEach((element) => {
+        element.current.classList.toggle(`delay-[1300ms]`)
+      })
     }
   };
 
+  // Intersection Observer 세팅
   useEffect(() => {
     const elements = [secondDiv, wordFirst, wordSecond, wordThird, wordFourth, wordFifth];
     let observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         entry.target.classList.toggle(`${styles.trans}`, entry.isIntersecting);
-        // entry.target.classList.toggle(`delay-1000`, entry.isIntersecting);
+
       });
     }, {threshold: 0.5});
   
@@ -48,6 +63,7 @@ function Login(): React.ReactElement {
       observer.observe(element.current);
     })
   }, [])
+
 
   return (
     <div
@@ -70,16 +86,18 @@ function Login(): React.ReactElement {
         </div>
         <div
           ref={secondDiv}
-          className="flex flex-col items-center justify-center h-screen transition opacity-0 duration-1000 delay-300 -translate-x-40"
+          className="flex flex-col items-center justify-center h-screen opacity-0 transition duration-1000 -translate-x-40"
         >
-          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white`}>
+          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white `}>
             방구석포차
           </div>
-          <img
-            className="w-2/12 mt-10"
+          <div className="w-2/12 mt-10 cursor-pointer" onClick={()=> {
+            navigate('/main')
+          }} ><img
             src={require("../../assets/loginIcon/naver.png")}
             alt="login-naver"
-          />
+          /></div>
+          
         </div>
       </div>
     </div>
