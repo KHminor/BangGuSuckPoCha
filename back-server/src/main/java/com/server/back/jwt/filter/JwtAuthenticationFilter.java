@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.back.config.auth.PrincipalDetails;
 import com.server.back.domain.user.User;
 import com.server.back.jwt.JwtProperties;
-import com.server.back.jwt.JwtToken;
+import com.server.back.jwt.TokenRequestDto;
 import com.server.back.jwt.service.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -84,11 +84,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         //token 생성
-        JwtToken jwtToken = jwtService.joinJwtToken(principalDetails.getUser().getUsername());
+        TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(principalDetails.getUser().getUsername());
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, String> jsonResponse = jwtService.successLoginResponse(jwtToken);
+        Map<String, String> jsonResponse = jwtService.successLoginResponse(tokenRequestDto);
         String result = objectMapper.writeValueAsString(jsonResponse);
 //        response.setStatus(HttpStatus.OK.value());
         //response 응답
@@ -96,6 +96,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);
 
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + tokenRequestDto);
     }
 }
