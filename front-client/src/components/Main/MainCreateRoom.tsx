@@ -1,8 +1,11 @@
 import style from './MainCreateRoom.module.css'
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
+import { useAppDispatch } from '../../store/hooks';
+import { changeThemeRoomState } from '../../store/store';
 
 const MainCreateRoom = ({onClickCreateRoom} : { onClickCreateRoom : Function}): React.ReactElement => {
+  const dispatch = useAppDispatch()
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
@@ -27,6 +30,7 @@ const MainCreateRoom = ({onClickCreateRoom} : { onClickCreateRoom : Function}): 
   // 전달받아온 함수를 실행해서 창 끄기
   const closeModal = () => {
     onClickCreateRoom();
+    dispatch(changeThemeRoomState(0))
   }
 
   // 태그 선택 기능

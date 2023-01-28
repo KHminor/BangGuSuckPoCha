@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('../../assets/font/NanumGothic.ttf');
+}
+.NanumGothic {
+  font-family: "NanumGothic";
+}
+
 .hideScroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
@@ -17,17 +25,6 @@
 .hidden {
   display: none;
 }
-/* 
-.neon:hover {
-  color: #fff;
-  box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
-  z-index: 20;
-} */
-
-/* .neon1:hover {
-  color: #fff;
-  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
-} */
 
 img {
   border-radius: 16px 16px 0px 0px;
@@ -44,4 +41,15 @@ img {
               0 0 10px rgba(255, 51, 51, 0.5),
               0 0 15px rgba(255, 51, 51, 0.5),
               0 0 20px rgba(255, 51, 51, 0.5);
+}
+
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
 }
