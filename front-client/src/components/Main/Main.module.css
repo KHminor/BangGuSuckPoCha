@@ -1,10 +1,10 @@
-@font-face {
+/* @font-face {
   font-family: 'NanumGothic';
   src: url('../../assets/font/NanumGothic.ttf');
 }
 .NanumGothic {
   font-family: "NanumGothic";
-}
+} */
 
 .hideScroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
@@ -55,6 +55,6 @@ img {
 }
 
 img:hover {
-  transform: scale(1.2);
+  transform: scale(1.18);
   z-index: 100;
 }
