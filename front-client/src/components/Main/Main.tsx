@@ -1,29 +1,45 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { changeCarouselState } from "../../store/store";
 import Navbar from "../Common/Navbar";
 import styles from "./Main.module.css";
 import MainCreateRoom from "./MainCreateRoom";
+import ThemeChoiceCarousel from "./MainCreateRoomCarousel";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
-  // 방 생성 관련
-  const [isCreateRoom, setIsCreateRoom] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-
-  const menuIcon = useRef<any>(null);
-  const alarmIcon = useRef<any>(null);
+  let dispatch = useAppDispatch();
+  
   // 방 생성 관련
   const createBtn = useRef<any>(null);
+  const [isCreateRoom, setIsCreateRoom] = useState(false);
+  // 포차 종류 캐러셀
+  const mainCreateRoomCarouselCheck: any = useAppSelector(
+    (state: any) => state.mainCreateRoomCarouselCheck
+  );
+  console.log(mainCreateRoomCarouselCheck);
+  
+
+  // 선택한 포차 테마 체크
+  const createThemeRoomCheck: any = useAppSelector((state)=> {
+    return state.createThemeRoomCheck
+  })
+    
+  const menuIcon = useRef<any>(null);
+  const alarmIcon = useRef<any>(null);
+  
 
   const onClickCreateRoom = () => {
     createBtn.current.classList.toggle("hidden");
     setIsCreateRoom((prev) => !prev);
   };
-
-  const checkMenuState: any = useSelector((state: any) => {
+  
+  // 메뉴 클릭 상태
+  const checkMenuState: any = useAppSelector((state: any) => {
     return state.menuClickCheck;
   });
-  const alarmClickCheck: any = useSelector((state: any) => {
+  // 알람 클릭 상태
+  const alarmClickCheck: any = useAppSelector((state: any) => {
     return state.alarmClickCheck;
   });
 
@@ -45,9 +61,15 @@ function Main(): JSX.Element {
 
   return (
     <>
-      {isCreateRoom ? (
+      {mainCreateRoomCarouselCheck ? <ThemeChoiceCarousel /> : null}
+      
+      {createThemeRoomCheck !== 0 ? (
         <MainCreateRoom onClickCreateRoom={onClickCreateRoom} />
       ) : null}
+
+      {/* {isCreateRoom ? (
+        <MainCreateRoom onClickCreateRoom={onClickCreateRoom} />
+      ) : null} */}
       <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
@@ -79,7 +101,12 @@ function Main(): JSX.Element {
 
         <div
           ref={createBtn}
-          onClick={onClickCreateRoom}
+          onClick={() => {
+            dispatch(changeCarouselState());
+            menuIcon.current.classList.add("hidden");
+            alarmIcon.current.classList.add("hidden");
+            onClickCreateRoom();
+          }}
           className={`w-[6rem] min-w-[6rem] h-[3.5rem] min-h-[3.5rem] rounded-full flex justify-center items-center  fixed bottom-5 right-20 cursor-pointer z-50 bg-black ${styles.cancelBtn}`}
         >
           <span className="mr-1 text-[1.3rem] font-bold text-white">포차</span>
