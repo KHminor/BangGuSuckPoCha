@@ -24,6 +24,7 @@ function Main(): JSX.Element {
   const createThemeRoomCheck: any = useAppSelector((state)=> {
     return state.createThemeRoomCheck
   })
+    console.log(createThemeRoomCheck);
     
   const menuIcon = useRef<any>(null);
   const alarmIcon = useRef<any>(null);

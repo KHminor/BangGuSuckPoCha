@@ -53,3 +53,8 @@ img {
   font-weight: bold;
   color: #fff;
 }
+
+img:hover {
+  transform: scale(1.2);
+  z-index: 100;
+}
