@@ -47,7 +47,7 @@ function ThemeChoiceCarousel() {
           }}
         >
           <img
-            className="transition-all duration-300"
+            className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
             src={require("../../assets/img/HuntingCard.png")}
             alt=""
@@ -65,7 +65,7 @@ function ThemeChoiceCarousel() {
           }}
         >
           <img
-            className="transition-all duration-300"
+            className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
             src={require("../../assets/img/HuntingCard.png")}
             alt=""
@@ -83,7 +83,7 @@ function ThemeChoiceCarousel() {
           }}
         >
           <img
-            className="transition-all duration-300"
+            className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
             src={require("../../assets/img/HuntingCard.png")}
             alt=""

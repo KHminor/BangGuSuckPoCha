@@ -54,7 +54,7 @@ img {
   color: #fff;
 }
 
-img:hover {
+.carouselImg:hover {
   transform: scale(1.18);
   z-index: 100;
 }
