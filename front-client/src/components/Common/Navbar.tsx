@@ -1,5 +1,6 @@
 import { changeAlarmState, changeMenuState } from "../../store/store";
 import { useDispatch } from "react-redux";
+import styles from '../Main/Main.module.css'
 
 function Navbar(): JSX.Element {
   return (
@@ -33,7 +34,7 @@ function MenuOption():JSX.Element {
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer ">
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/shop.png')} alt="shop" />
-            <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">상점</p>
+            <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>상점</p>
           </div>
         </div>
         <div className="flex justify-center items-end mb-2">
@@ -41,7 +42,7 @@ function MenuOption():JSX.Element {
             dispatch(changeAlarmState())
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
-            <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">알림</p>
+            <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>알림</p>
           </div>
         </div>
         <div className="flex justify-center items-end mb-2 ">
@@ -49,7 +50,7 @@ function MenuOption():JSX.Element {
             dispatch(changeMenuState())
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/menu.png')} alt="menu" />
-            <p className="text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs">메뉴</p>
+            <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>메뉴</p>
           </div>
         </div>
       </div>
