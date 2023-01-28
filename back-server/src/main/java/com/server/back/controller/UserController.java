@@ -1,12 +1,13 @@
 package com.server.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.server.back.config.oauth.Provider.NaverToken;
+import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.User;
+import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.jwt.service.JwtService;
 import com.server.back.service.user.NaverService;
 import com.server.back.service.user.UserService;
-import com.server.back.jwt.JwtToken;
+import com.server.back.jwt.TokenRequestDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,10 +35,10 @@ public class UserController {
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
     @GetMapping("/api/oauth2/token/naver")
     public Map<String, String> NaverLogin(@RequestParam("code") String code) {
-        NaverToken oauthToken = naverService.getAccessToken(code);
+        TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
-        JwtToken jwtToken = jwtService.joinJwtToken(saveUser.getUsername());
-        return jwtService.successLoginResponse(jwtToken);
+        TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
+        return jwtService.successLoginResponse(tokenRequestDto);
     }
     @ApiOperation(value = "토큰 갱신", notes = "accessToken, refreshToken을 갱신하여 전달.")
     @GetMapping("/auth/refresh/{username}")
@@ -45,8 +46,8 @@ public class UserController {
                                            HttpServletResponse response) throws JsonProcessingException {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        JwtToken jwtToken = jwtService.validRefreshToken(username, refreshToken);
-        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(jwtToken);
+        TokenRequestDto tokenRequestDto = jwtService.validRefreshToken(username, refreshToken);
+        Map<String, String> jsonResponse = jwtService.recreateTokenResponse(tokenRequestDto);
         return jsonResponse;
     }
 //    @PostMapping("/auth/refresh/{username}")
@@ -61,12 +62,9 @@ public class UserController {
     @GetMapping("/auth/check/nickname/{nickname}")
     public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathVariable(value = "nickname") String nickname){
         Map<String, Object> response = new HashMap<>();
-
         Boolean nicknamecheck = userService.userNicknameCheck(nickname);
-
         response.put("data", nicknamecheck);
         response.put("message", "success");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "로그아웃")
@@ -95,7 +93,6 @@ public class UserController {
         UserResponseDto responseDto = userService.userInfo(username);
         response.put("data", responseDto);
         response.put("message", "success");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "회원 정보 조회.")
@@ -109,24 +106,20 @@ public class UserController {
     }
     @ApiOperation(value = "포인트 사용 목록")
     @GetMapping("/point/{username}")
-    // PointResponseDto 추가 후 [Map -> PointResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> userPointList(@PathVariable(value = "username") String username){
-        List<Map<String, Object>> pointResponseDto = new ArrayList<>();
-        pointResponseDto.add(new HashMap<>());
-        pointResponseDto.get(0).put("point_id", "포인트 식별자");
-        pointResponseDto.get(0).put("user_id", "회원 식별자");
-        pointResponseDto.get(0).put("nickname", "닉네임");
-        pointResponseDto.get(0).put("content", "사용 내역");
-        pointResponseDto.get(0).put("amount", 700);
-        pointResponseDto.get(0).put("current_point", 7000);
-        pointResponseDto.get(0).put("create_at", "프로필");
-
-        return new ResponseEntity<>(pointResponseDto, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userPointList(@PathVariable(value = "username") String username){
+        Map<String, Object> response = new HashMap<>();
+        List<PointResponseDto> responseDtoList = userService.userPointList(username);
+        response.put("data", responseDtoList);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포인트 획득, 사용")
     @PutMapping("/point/{username}")
-    public ResponseEntity<String> userUsePoint(@PathVariable(value = "username") String username/*, @RequestBody PointRequestDto requestDto*/){
-        return new ResponseEntity<>("포인트 사용 성공", HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> userUsePoint(@PathVariable(value = "username") String username, @RequestBody PointRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        userService.usePoint(username, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "평가 목록 요청")
     @GetMapping("/review/{username}")

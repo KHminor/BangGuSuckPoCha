@@ -6,7 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.server.back.domain.user.User;
 import com.server.back.domain.user.UserRepository;
 import com.server.back.jwt.JwtProperties;
-import com.server.back.jwt.JwtToken;
+import com.server.back.jwt.TokenRequestDto;
 import com.server.back.jwt.refreshToken.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class JwtService {
      * access, refresh 토큰 생성
      */
     @Transactional
-    public JwtToken joinJwtToken(String username) {
+    public TokenRequestDto joinJwtToken(String username) {
 
         User user = userRepository.findByUsername(username);
         RefreshToken userRefreshToken = user.getJwtRefreshToken();
@@ -40,15 +40,15 @@ public class JwtService {
         if(userRefreshToken == null) {
 
             //access, refresh 토큰 생성
-            JwtToken jwtToken = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
+            TokenRequestDto tokenRequestDto = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
 
             //refreshToken 생성
-            RefreshToken refreshToken = new RefreshToken(jwtToken.getRefreshToken());
+            RefreshToken refreshToken = new RefreshToken(tokenRequestDto.getRefreshToken());
 
             //DB에 저장(refresh 토큰 저장)
             user.createRefreshToken(refreshToken);
 
-            return jwtToken;
+            return tokenRequestDto;
         }
         //refresh 토큰이 있는 사용자(기존 사용자)
         else {
@@ -57,14 +57,14 @@ public class JwtService {
 
             //refresh 토큰 기간이 유효
             if(accessToken !=null) {
-                return new JwtToken(accessToken, userRefreshToken.getRefreshToken());
+                return new TokenRequestDto(accessToken, userRefreshToken.getRefreshToken());
             }
             else { //refresh 토큰 기간만료
                 //새로운 access, refresh 토큰 생성
-                JwtToken newJwtToken = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
+                TokenRequestDto newTokenRequestDto = jwtProviderService.createJwtToken(user.getUserId(), user.getUsername());
 
-                user.SetRefreshToken(newJwtToken.getRefreshToken());
-                return newJwtToken;
+                user.SetRefreshToken(newTokenRequestDto.getRefreshToken());
+                return newTokenRequestDto;
             }
 
         }
@@ -96,7 +96,7 @@ public class JwtService {
      * refresh 토큰 validate
      */
     @Transactional
-    public JwtToken validRefreshToken(String username, String refreshToken) {
+    public TokenRequestDto validRefreshToken(String username, String refreshToken) {
 
         User findUser = userRepository.findByUsername(username);
 
@@ -108,13 +108,13 @@ public class JwtService {
 
         //refresh 토큰의 유효기간이 남아 access 토큰만 생성
         if(accessToken!=null) {
-            return new JwtToken(accessToken, refreshToken);
+            return new TokenRequestDto(accessToken, refreshToken);
         }
         //refresh 토큰이 만료됨 -> access, refresh 토큰 모두 재발급
         else {
-            JwtToken newJwtToken = jwtProviderService.createJwtToken(findUser.getUserId(), findUser.getUsername());
-            findUser.SetRefreshToken(newJwtToken.getRefreshToken());
-            return newJwtToken;
+            TokenRequestDto newTokenRequestDto = jwtProviderService.createJwtToken(findUser.getUserId(), findUser.getUsername());
+            findUser.SetRefreshToken(newTokenRequestDto.getRefreshToken());
+            return newTokenRequestDto;
         }
 
     }
@@ -135,12 +135,12 @@ public class JwtService {
      * json response 부분 따로 분리하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     //로그인시 응답 json response
-    public Map<String , String> successLoginResponse(JwtToken jwtToken) {
+    public Map<String , String> successLoginResponse(TokenRequestDto tokenRequestDto) {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
-        map.put("accessToken", jwtToken.getAccessToken());
-        map.put("refreshToken", jwtToken.getRefreshToken());
+        map.put("accessToken", tokenRequestDto.getAccessToken());
+        map.put("refreshToken", tokenRequestDto.getRefreshToken());
         return map;
     }
 
@@ -161,12 +161,12 @@ public class JwtService {
     }
 
     //refresh 토큰 재발급 response
-    public Map<String, String> recreateTokenResponse(JwtToken jwtToken) {
+    public Map<String, String> recreateTokenResponse(TokenRequestDto tokenRequestDto) {
         Map<String ,String > map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "refresh, access 토큰이 재발급되었습니다.");
-        map.put("accessToken", jwtToken.getAccessToken());
-        map.put("refreshToken", jwtToken.getRefreshToken());
+        map.put("accessToken", tokenRequestDto.getAccessToken());
+        map.put("refreshToken", tokenRequestDto.getRefreshToken());
         return map;
     }
 

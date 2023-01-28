@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.server.back.jwt.JwtProperties;
-import com.server.back.jwt.JwtToken;
+import com.server.back.jwt.TokenRequestDto;
 import com.server.back.jwt.refreshToken.RefreshToken;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class JwtProviderService {
     /**
      * accessToken, refreshToken 생성
      */
-    public JwtToken createJwtToken(Long userId, String username) {
+    public TokenRequestDto createJwtToken(Long userId, String username) {
 
         //Access token 생성
         String accessToken = JWT.create()
@@ -37,7 +37,7 @@ public class JwtProviderService {
                 .withClaim("username", username)
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
-        return JwtToken.builder()
+        return TokenRequestDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
