@@ -1,12 +1,31 @@
+import { useEffect, useRef } from 'react';
 import styles from './SignUp.module.css'
 
 function SignUp():JSX.Element {
+
+  const signupDiv = useRef<any>(null);
+
+  // Intersection Observer 세팅
+  useEffect(() => {
+    const elements = [signupDiv];
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {        
+        entry.target.classList.toggle(`${styles.trans}`, entry.isIntersecting);
+
+      });
+    }, {threshold: 0.5});
+  
+    elements.forEach((element) => {
+      observer.observe(element.current);
+    })
+  }, [])
+
   return (
-    <div className={`${styles.bgImg} h-screen w-screen min-w-[100vw] min-h-[100vh]  `}>
+    <div className={`${styles.bgImg} ${styles.nonDrag} font-nanum h-screen w-screen min-w-[100vw] min-h-[100vh]  `}>
       {/* <div className=' bg-black   opacity-20 z-0'></div> */}
       {/* signup 박스 */}
       <div className='flex justify-center items-center absolute w-screen h-screen min-w-[100vw] min-h-[100vh] z-20' >
-        <div className='grid relative w-[44rem] min-w-[44rem] h-[27rem] min-h-[27rem] bg-black rounded-[1.2rem]' style={{gridTemplateColumns: '0.15fr 1fr 0.15fr'}}>
+        <div ref={signupDiv} className='transition opacity-0 duration-1000 delay-100 -translate-y-28 grid relative w-[44rem] min-w-[44rem] h-[27rem] min-h-[27rem] bg-black rounded-[1.2rem]' style={{gridTemplateColumns: '0.15fr 1fr 0.15fr'}}>
           <div></div>
           <div className='grid ' style={{gridTemplateRows: '0.05fr 1fr 1fr 1fr 1.5fr'}}>
             <div className='bg-black'></div>

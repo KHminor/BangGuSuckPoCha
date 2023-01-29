@@ -43,8 +43,13 @@ select:focus {
   box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
   z-index: 100;
 } */
-.neonDefault {
+.neonDefault{
   color: #fff;
+  transition: all 0.45s ;
+  border: solid 1px rgba(255,255,255,0.1);
+}
+
+.neonDefault:hover {
   box-shadow: 0 0 5px rgba(93, 0, 255, 0.5), 0 0 10px rgba(93, 0, 255, 0.5),
     0 0 15px rgba(85, 4, 143, 0.5), 0 0 25px rgba(65, 4, 109, 0.5);
   z-index: 100;
@@ -55,4 +60,16 @@ select:focus {
   box-shadow: 0 0 5px rgb(0, 0, 0), 0 0 10px rgb(0, 0, 0), 0 0 20px #ff0080,
     0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
   z-index: 100;
+}
+
+.trans {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.nonDrag {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }

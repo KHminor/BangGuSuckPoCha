@@ -227,7 +227,7 @@ function Room(): JSX.Element {
             ></div>
             {/* 카드 내부 */}
             <div
-              className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%] border-blue-300 ${styles.neon}`}
+              className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon}`}
               style={{ gridTemplateRows: "7fr 3fr" }}
             >
               <div className="h-full min-h-[100%] w-full min-w-[100%] ">
