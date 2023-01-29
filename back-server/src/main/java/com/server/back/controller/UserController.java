@@ -3,10 +3,11 @@ package com.server.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.User;
-import com.server.back.dto.pocha.PochaParticipantResponseDto;
+import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.review.ReviewRequestDto;
 import com.server.back.dto.review.ReviewResponseDto;
 import com.server.back.jwt.service.JwtService;
+import com.server.back.service.report.ReportService;
 import com.server.back.service.review.ReviewService;
 import com.server.back.service.user.NaverService;
 import com.server.back.service.user.UserService;
@@ -21,7 +22,6 @@ import com.server.back.dto.user.*;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +34,7 @@ public class UserController {
     private final UserService userService;
     private final NaverService naverService;
     private final ReviewService reviewService;
+    private final ReportService reportService;
     private final JwtService jwtService;
 
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
@@ -159,7 +160,10 @@ public class UserController {
     }
     @ApiOperation(value = "유저 신고")
     @PostMapping("/report")
-    public ResponseEntity<String> userItemList(/*@RequestBody ReportRequestDto requestDto*/){
-        return new ResponseEntity<>("신고 완료.", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userReport(@RequestBody ReportRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        reportService.userReport(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
