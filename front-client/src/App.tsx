@@ -5,12 +5,11 @@ import SignUp from "./components/SignUp/Signup";
 import Login from "./components/Login/Login";
 import Loading from "./components/Common/Loading";
 import GameRoom from "./components/GameRoom/GameRoom";
-import StoryRoom from "./components/StoryRoom/StoryRoom";
 function App() {
   return (
     <div className="App bg-black">
       <Routes>
-        <Route path="/" element={<Login />} />       
+        <Route path="/" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />       
