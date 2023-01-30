@@ -4,7 +4,7 @@ import { changeCarouselState } from "../../store/store";
 import Navbar from "../Common/Navbar";
 import styles from "./Main.module.css";
 import MainCreateRoom from "./MainCreateRoom";
-import ThemeChoiceCarousel from "./MainCreateRoomCarousel";
+import MainCreateRoomCarousel from "./MainCreateRoomCarousel";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
@@ -12,7 +12,6 @@ function Main(): JSX.Element {
   
   // 방 생성 관련
   const createBtn = useRef<any>(null);
-  const [isCreateRoom, setIsCreateRoom] = useState(false);
   // 포차 종류 캐러셀
   const mainCreateRoomCarouselCheck: any = useAppSelector(
     (state: any) => state.mainCreateRoomCarouselCheck
@@ -21,7 +20,7 @@ function Main(): JSX.Element {
   
 
   // 선택한 포차 테마 체크
-  const createThemeRoomCheck: any = useAppSelector((state)=> {
+  const createThemeRoomCheck: number = useAppSelector((state)=> {
     return state.createThemeRoomCheck
   })
     console.log(createThemeRoomCheck);
@@ -30,9 +29,8 @@ function Main(): JSX.Element {
   const alarmIcon = useRef<any>(null);
   
 
-  const onClickCreateRoom = () => {
+  const onClickHiddenBtn = () => {
     createBtn.current.classList.toggle("hidden");
-    setIsCreateRoom((prev) => !prev);
   };
   
   // 메뉴 클릭 상태
@@ -62,10 +60,10 @@ function Main(): JSX.Element {
 
   return (
     <>
-      {mainCreateRoomCarouselCheck ? <ThemeChoiceCarousel /> : null}
+      {mainCreateRoomCarouselCheck ? <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn}/> : null}
       
       {createThemeRoomCheck !== 0 ? (
-        <MainCreateRoom onClickCreateRoom={onClickCreateRoom} />
+        <MainCreateRoom onClickHiddenBtn={onClickHiddenBtn} roomTheme={createThemeRoomCheck} />
       ) : null}
 
       {/* {isCreateRoom ? (
@@ -106,7 +104,7 @@ function Main(): JSX.Element {
             dispatch(changeCarouselState());
             menuIcon.current.classList.add("hidden");
             alarmIcon.current.classList.add("hidden");
-            onClickCreateRoom();
+            onClickHiddenBtn();
           }}
           className={`w-[6rem] min-w-[6rem] h-[3.5rem] min-h-[3.5rem] rounded-full flex justify-center items-center  fixed bottom-5 right-20 cursor-pointer z-50 bg-black ${styles.cancelBtn}`}
         >
