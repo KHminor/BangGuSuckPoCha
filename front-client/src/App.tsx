@@ -1,11 +1,8 @@
-import React from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Main from "./components/Main/Main";
 import SignUp from "./components/SignUp/Signup";
 import Login from "./components/Login/Login";
-import MainCreateRoom from "./components/Main/MainCreateRoom";
-import LayoutPage from "./components/Common/LayoutPage";
 import Loading from "./components/Common/Loading";
 import MainCreateRoomCarousel from "./components/Main/MainCreateRoomCarousel";
 import GameRoom from "./components/GameRoom/GameRoom";

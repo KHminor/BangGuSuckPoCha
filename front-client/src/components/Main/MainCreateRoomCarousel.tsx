@@ -8,12 +8,29 @@ import "swiper/css/pagination";
 import "swiper/css/controller";
 import { useAppDispatch } from "../../store/hooks";
 import { changeCarouselState, changeThemeRoomState } from "../../store/store";
+import { useRef } from "react";
 
-function ThemeChoiceCarousel() {
+
+
+function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
   let dispatch = useAppDispatch();
+  const bgDiv = useRef<any>();
+
+  function CloseCarouselModal(event : any ) {
+    if(event.target === bgDiv.current) {
+      console.log("cliiick")
+      dispatch(changeCarouselState())
+      onClickHiddenBtn();
+    } else {
+      console.log("여기아님");
+    }
+    
+  }
 
   return (
     <div
+      ref={bgDiv}
+      onClick={CloseCarouselModal}
       className="bg-black bg-opacity-90 absolute h-screen w-screen grid"
       style={{ gridTemplateRows: "1fr 5fr 1fr" }}
     >
@@ -99,4 +116,4 @@ function ThemeChoiceCarousel() {
   );
 }
 
-export default ThemeChoiceCarousel;
+export default MainCreateRoomCarousel;
