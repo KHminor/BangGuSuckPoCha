@@ -8,6 +8,7 @@ import MainCreateRoom from "./components/Main/MainCreateRoom";
 import LayoutPage from "./components/Common/LayoutPage";
 import Loading from "./components/Common/Loading";
 import MainCreateRoomCarousel from "./components/Main/MainCreateRoomCarousel";
+import GameRoom from "./components/GameRoom/GameRoom";
 function App() {
   return (
     <div className="App bg-black">
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />       
         <Route path="/loading" element={<Loading />} />       
         <Route path="/carousel" element={<MainCreateRoomCarousel />} />       
+        <Route path="/gameroom" element={<GameRoom />} />       
       </Routes>
     </div>
   );
