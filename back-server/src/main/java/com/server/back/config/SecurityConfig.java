@@ -28,7 +28,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .antMatchers("/join","/", "/home","/refresh/**")
-                .antMatchers("/login/oauth2/code/naver", "/api/user/oauth2/token/naver",
+                .antMatchers("/login/oauth2/code/naver", "/user/oauth2/token/naver",
                         "/swagger/**","/swagger-ui/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs");
 
     }
@@ -49,7 +49,6 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .antMatchers("**").permitAll()
                     .antMatchers("user/**").hasAuthority("USER")
-                    .antMatchers("/swagger-ui/**").hasAuthority("USER")
                     .antMatchers("/api/v1/manager/**").hasAuthority("MANAGER")
                     .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                     .anyRequest().permitAll()
