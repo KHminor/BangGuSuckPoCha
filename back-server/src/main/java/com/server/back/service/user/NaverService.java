@@ -28,7 +28,7 @@ public class NaverService {
 
     private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
     private final String client_secret = "ZGtXcgsvcR";
-    private final String redirect_uri = "http://34.207.167.96:8080/login/oauth2/code/naver";
+    private final String redirect_uri = "http://i8e201.p.ssafy.io/api/login/oauth2/code/naver";
     private final String accessTokenUri = "https://nid.naver.com/oauth2.0/token";
     private final String UserInfoUri = "https://openapi.naver.com/v1/nid/me";
 
