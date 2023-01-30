@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeCarouselState } from "../../store/store";
+import { changeCarouselState, changeMenuState, changeAlarmState } from "../../store/store";
 import Navbar from "../Common/Navbar";
+import NavbarAlarm from "../Common/NavbarAlarm";
+import NavbarMenu from "../Common/NavbarMenu";
 import styles from "./Main.module.css";
 import MainCreateRoom from "./MainCreateRoom";
 import MainCreateRoomCarousel from "./MainCreateRoomCarousel";
@@ -9,30 +11,23 @@ import Tag from "./Tag";
 
 function Main(): JSX.Element {
   let dispatch = useAppDispatch();
-  
+
   // 방 생성 관련
   const createBtn = useRef<any>(null);
   // 포차 종류 캐러셀
   const mainCreateRoomCarouselCheck: any = useAppSelector(
     (state: any) => state.mainCreateRoomCarouselCheck
   );
-  console.log(mainCreateRoomCarouselCheck);
-  
 
   // 선택한 포차 테마 체크
-  const createThemeRoomCheck: number = useAppSelector((state)=> {
-    return state.createThemeRoomCheck
-  })
-    console.log(createThemeRoomCheck);
-    
-  const menuIcon = useRef<any>(null);
-  const alarmIcon = useRef<any>(null);
-  
+  const createThemeRoomCheck: number = useAppSelector((state) => {
+    return state.createThemeRoomCheck;
+  });
 
   const onClickHiddenBtn = () => {
     createBtn.current.classList.toggle("hidden");
   };
-  
+
   // 메뉴 클릭 상태
   const checkMenuState: any = useAppSelector((state: any) => {
     return state.menuClickCheck;
@@ -42,33 +37,30 @@ function Main(): JSX.Element {
     return state.alarmClickCheck;
   });
 
-  // 알림, 메뉴 버튼 클릭 로직
-  useEffect(() => {
-    menuIcon.current.classList.toggle("hidden");
-    alarmIcon.current.classList.add("hidden");
-  }, [checkMenuState]);
-
-  useEffect(() => {
-    alarmIcon.current.classList.toggle("hidden");
-    menuIcon.current.classList.add("hidden");
-  }, [alarmClickCheck]);
-
-  useEffect(() => {
-    menuIcon.current.classList.add("hidden");
-    alarmIcon.current.classList.add("hidden");
-  }, []);
+  // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
+  if (mainCreateRoomCarouselCheck) {
+    if (checkMenuState) {
+      dispatch(changeMenuState())
+    } else if (alarmClickCheck) {
+      dispatch(changeAlarmState())
+    }
+  }
 
   return (
     <>
-      {mainCreateRoomCarouselCheck ? <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn}/> : null}
-      
-      {createThemeRoomCheck !== 0 ? (
-        <MainCreateRoom onClickHiddenBtn={onClickHiddenBtn} roomTheme={createThemeRoomCheck} />
+      {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
+      {mainCreateRoomCarouselCheck ? (
+        <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
       ) : null}
 
-      {/* {isCreateRoom ? (
-        <MainCreateRoom onClickCreateRoom={onClickCreateRoom} />
-      ) : null} */}
+      {/* 선택한 테마에 따른 방만들기 셋팅    */}
+      {createThemeRoomCheck !== 0 ? (
+        <MainCreateRoom
+          onClickHiddenBtn={onClickHiddenBtn}
+          roomTheme={createThemeRoomCheck}
+        />
+      ) : null}
+
       <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
@@ -97,13 +89,10 @@ function Main(): JSX.Element {
           </div>
         </div>
         {/* 방 생성 버튼 */}
-
         <div
           ref={createBtn}
           onClick={() => {
             dispatch(changeCarouselState());
-            menuIcon.current.classList.add("hidden");
-            alarmIcon.current.classList.add("hidden");
             onClickHiddenBtn();
           }}
           className={`w-[6rem] min-w-[6rem] h-[3.5rem] min-h-[3.5rem] rounded-full flex justify-center items-center  fixed bottom-5 right-20 cursor-pointer z-50 bg-black ${styles.cancelBtn}`}
@@ -115,94 +104,11 @@ function Main(): JSX.Element {
             className="w-1/6 min-w-1/6"
           />
         </div>
+
         {/* 메뉴 클릭시 보이기 */}
-        <div
-          ref={menuIcon}
-          className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden ${styles.neonDefault}`}
-          style={{ right: "6.5rem", top: "11.7rem" }}
-        >
-          <img
-            src={require("../../assets/logoIcon/menuBground.png")}
-            className="bg-inherit h-full w-full"
-            alt=""
-          />
-          <div
-            className="flex justify-center items-center absolute   w-48 h-16"
-            style={{ right: "-1%", top: "-9%" }}
-          >
-            <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
-              <img
-                src={require("../../assets/logoIcon/mypage.png")}
-                alt=""
-                className="bg-white bg-cover rounded-full"
-                style={{ height: "90%", border: "solid 1px white" }}
-              />
-              <p className="text-stone-200 text-xs">My</p>
-            </div>
-            <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
-              <img
-                src={require("../../assets/logoIcon/friend.png")}
-                alt=""
-                className="bg-white bg-cover rounded-full"
-                style={{ height: "90%" }}
-              />
-              <p className="text-stone-200 text-xs">friend</p>
-            </div>
-            <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
-              <img
-                src={require("../../assets/logoIcon/logout.png")}
-                alt=""
-                className="bg-white bg-cover rounded-full"
-                style={{ height: "90%" }}
-              />
-              <p className="text-stone-200 text-xs">logout</p>
-            </div>
-          </div>
-        </div>
+          <NavbarMenu/>
         {/* 알림 클릭시 보이기 */}
-        <div
-          ref={alarmIcon}
-          className={`absolute w-56 bg-black rounded-3xl hidden ${styles.neonDefault}`}
-          style={{ right: "5rem", top: "11.5rem", height: "22rem" }}
-        >
-          <div className={`grid grid-rows-12 w-56 `}>
-            <div className="grid grid-cols-12 row-span-1 items-center">
-              <div className="col-span-5"></div>
-              <div className="col-span-2 opacity-50 text-white">알림</div>
-              <div className="col-span-5"></div>
-            </div>
-            <div className="grid grid-cols-12 row-span-1 items-start">
-              <div className="col-span-1"></div>
-              <div className="col-span-3 text-xl text-white">요청</div>
-              <div className="col-span-4"></div>
-              <div className="col-span-3 text-xl opacity-50 text-white">
-                리뷰
-              </div>
-              <div className="col-span-1"></div>
-            </div>
-            <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
-              <div
-                className="my-2 cursor-pointer text-white"
-                style={{ height: "20%" }}
-                onClick={() => {}}
-              >
-                한상현 바보
-              </div>
-              <div
-                className="my-2 cursor-pointer text-white"
-                style={{ height: "20%" }}
-              >
-                한상현 바보
-              </div>
-              <div
-                className="my-2 cursor-pointer text-white"
-                style={{ height: "20%" }}
-              >
-                한상현 바보
-              </div>
-            </div>
-          </div>
-        </div>
+          <NavbarAlarm/>
       </div>
     </>
   );
