@@ -92,7 +92,6 @@ public class UserController {
     }
     @ApiOperation(value = "내 정보 조회.")
     @GetMapping("/myinfo/{username}")
-    // UserResponseDto 추가 후 [Map -> UserResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userMyInfo(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
         UserResponseDto responseDto = userService.userInfo(username);
@@ -128,7 +127,6 @@ public class UserController {
     }
     @ApiOperation(value = "평가 목록 요청")
     @GetMapping("/review/{username}")
-    // ReviewResponseDto 추가 후 [Map -> ReviewResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userReviewList(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
         List<ReviewResponseDto> responseDtoList = reviewService.userReviewList(username);

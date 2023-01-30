@@ -9,6 +9,7 @@ import com.server.back.dto.report.ReportRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,13 +19,16 @@ public class ReportServiceImpl implements ReportService {
     private final UserRepository userRepository;
     @Override
     public void userReport(ReportRequestDto requestDto){
-        User repoterId = userRepository.findByUserId(requestDto.getReporterId());
-        User attackerId = userRepository.findByUserId(requestDto.getAttackerId());
+        User repoter = userRepository.findByUserId(requestDto.getReporterId());
+        User attacker = userRepository.findByUserId(requestDto.getAttackerId());
         Report report = Report.builder()
-                .repoterId(repoterId)
                 .reportType(requestDto.getReportType())
                 .reportReason(requestDto.getReportReason())
-                .attackerId(attackerId)
+                .report_at(LocalDateTime.now())
+                .reportResult(false)
+                .demerit(0)
+                .attackerId(attacker)
+                .repoterId(repoter)
                 .build();
         reportRepository.save(report);
     }
