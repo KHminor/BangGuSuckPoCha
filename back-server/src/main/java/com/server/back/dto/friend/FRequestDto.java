@@ -23,7 +23,6 @@ public class FRequestDto {
 	}
 	
 	public FRequest toEntity(User toId, User fromId) {
-		System.out.println(toId);
 		return FRequest.builder()
 				.toId(toId)
 				.fromId(fromId)

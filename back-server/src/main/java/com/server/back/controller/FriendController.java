@@ -7,11 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import com.server.back.domain.friend.ChatRepository;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
+import com.server.back.dto.friend.MessageRequestDto;
+import com.server.back.dto.friend.MessageResponseDto;
 import com.server.back.service.friend.FriendService;
 import com.server.back.service.user.UserService;
 
@@ -22,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RequestMapping("/user/friend")
+@RequestMapping("/api/user/friend")
 @RestController
 public class FriendController {
 	
@@ -85,9 +90,7 @@ public class FriendController {
     @GetMapping("/request/{username}")
     public ResponseEntity<Map<String, Object>> friendRequestList(@PathVariable(value = "username") String username){
     	Map<String, Object> response = new HashMap<>();
-    	//
     	Long my_id = userService.findByUsername(username);
-    	System.out.println(my_id);
         List<FRequestResponseDto> fRequestResponseDto = friendService.frequestList(my_id);
         response.put("data", fRequestResponseDto);
         response.put("message","success");
@@ -125,24 +128,20 @@ public class FriendController {
     }
     
     /* API 구현 X */
-    @ApiOperation(value = "채팅 전송")
-    @PostMapping("/request/chat")
-    public ResponseEntity<String> friendChat(/*@RequestBody MessageRequestDto requestDto*/){
-        return new ResponseEntity<>("채팅 전송 완료", HttpStatus.OK);
-    }
-    
-    
-    @ApiOperation(value = "채팅 전송")
-    @GetMapping("/request/chat/{chat_id}")
-    // MessageResponseDto 추가후 [Map -> MessageResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> friendChatList(@PathVariable(value = "chat_id") String chatId){
-        List<Map<String, Object>> messageResponseDto = new ArrayList<>();
-        messageResponseDto.add(new HashMap<>());
-        messageResponseDto.get(0).put("message_id", 700);
-        messageResponseDto.get(0).put("user_id", 700);
-        messageResponseDto.get(0).put("user_nickname", "닉네임");
-        messageResponseDto.get(0).put("content", "채팅 내용");
-        messageResponseDto.get(0).put("create_at", LocalDateTime.now());
-        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
-    }
+//    @ApiOperation(value = "채팅 전송")
+//    @MessageMapping("/chat/message")
+//    public ResponseEntity<String> friendChat(@RequestBody MessageRequestDto requestDto){
+//        return new ResponseEntity<>("채팅 전송 완료", HttpStatus.OK);
+//    }
+//    
+//    
+//    @ApiOperation(value = "채팅방 입장 / 메시지 내역 불러오기")
+//    @MessageMapping(value = "/chat/{chat_id}")
+//    public ResponseEntity<Map<String, Object>> friendChatList(@PathVariable(value = "chat_id") Long chatId){
+//    	Map<String, Object> response = new HashMap<>();
+//        List<MessageResponseDto> messageResponseDto = friendService.getChatLog(chatId);
+//        response.put("data", messageResponseDto);
+//        response.put("message","success");
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }

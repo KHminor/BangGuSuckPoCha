@@ -5,6 +5,7 @@ import java.util.List;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
+import com.server.back.dto.friend.MessageResponseDto;
 
 public interface FriendService  {
 

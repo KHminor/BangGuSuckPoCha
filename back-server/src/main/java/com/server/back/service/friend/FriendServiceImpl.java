@@ -18,6 +18,7 @@ import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
+import com.server.back.dto.friend.MessageResponseDto;
 import com.server.back.dto.pocha.PochaResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,6 @@ public class FriendServiceImpl implements FriendService {
 			 if(f.getYourId().getNickname().contains(fNickname)) {
 			 	search.add(new FriendResponseDto(f));
 			 }
-			 
 		}
 		return search;
 	}
@@ -137,10 +137,5 @@ public class FriendServiceImpl implements FriendService {
 		fRequestRepository.deleteByFriendRequestId(fRequestId);
 	
 	}
-	
-	// 채팅 불러오기
-
-
-	// 채팅 보내기
 	
 }

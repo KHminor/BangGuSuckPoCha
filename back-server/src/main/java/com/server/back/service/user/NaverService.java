@@ -26,9 +26,12 @@ public class NaverService {
     private final UserRepository userRepository;
     private final RegionRepository regionRepository;
 
-    private final String client_id = "ZQnQO8XghTL7eTyln27j";
-    private final String client_secret = "E_N2HQiJc4";
-    private final String redirect_uri = "http://34.207.167.96:8080/login/oauth2/code/naver";
+//    private final String client_id = "ZQnQO8XghTL7eTyln27j";
+//    private final String client_secret = "E_N2HQiJc4";
+    private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
+    private final String client_secret = "ZGtXcgsvcR";
+//    private final String redirect_uri = "http://34.207.167.96:8080/login/oauth2/code/naver";
+    private final String redirect_uri = "http://localhost:8080/login/oauth2/code/naver";
     private final String accessTokenUri = "https://nid.naver.com/oauth2.0/token";
     private final String UserInfoUri = "https://openapi.naver.com/v1/nid/me";
 
@@ -59,15 +62,15 @@ public class NaverService {
 
         //json형태로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        NaverToken naverToken =null;
+        NaverToken tokenDto =null;
 
         try {
-            naverToken = objectMapper.readValue(response, NaverToken.class);
+            tokenDto = objectMapper.readValue(response, NaverToken.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        return naverToken;
+        return tokenDto;
     }
 
     /**
@@ -91,7 +94,6 @@ public class NaverService {
         try {
             naverProfile = objectMapper.readValue(response, NaverProfile.class);
         } catch (JsonProcessingException e) {
-            System.out.printf("얍");
             e.printStackTrace();
         }
 

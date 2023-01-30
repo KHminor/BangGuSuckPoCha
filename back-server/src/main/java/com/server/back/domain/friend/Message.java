@@ -15,7 +15,15 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.server.back.domain.user.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name="message")
 public class Message {
 	
@@ -30,17 +38,6 @@ public class Message {
 	@ManyToOne(targetEntity=Chat.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="chat_id")
 	private Chat chatId;
-	
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name="create_at")
-//	private java.util.Date timestampField;
-	
-//	@CreationTimestamp
-//	@Column(name="create_at")
-//	private LocalDateTime time;
-	
-//	@Column(name = "create_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//	public Timestamp createAt;
 
 	@CreationTimestamp
 	@Column(name = "create_at")
