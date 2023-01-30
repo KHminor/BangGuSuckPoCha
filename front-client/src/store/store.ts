@@ -7,7 +7,7 @@ const menuClickCheck = createSlice({
   reducers: {
     changeMenuState(state) {
       return !state
-    } 
+    }
   }
 })
 
@@ -17,7 +17,7 @@ const alarmClickCheck = createSlice({
   reducers: {
     changeAlarmState(state) {
       return !state
-    } 
+    }
   }
 })
 
@@ -44,6 +44,70 @@ const createThemeRoomCheck = createSlice({
   }
 })
 
+const adminreport = createSlice({
+  name: 'adminreport',
+  initialState: [
+    {
+      reportnum: 1,
+      reporter: "한상현",
+      reported: "장꾸",
+      type: "욕설/협박",
+      reason: "술 마시다가 갑자기 저보고 한상현 닮았다고 함",
+      date: "2023-01-18",
+      result: "O",
+      point: 10,
+    },
+    {
+      reportnum: 1,
+      reporter: "한상현",
+      reported: "장꾸",
+      type: "욕설/협박",
+      reason: "술 마시다가 갑자기 저보고 한상현 닮았다고 함",
+      date: "2023-01-18",
+      result: "X",
+      point: 0,
+    }
+
+  ],
+  reducers: {
+
+  }
+})
+
+const adminUser = createSlice({
+  name: 'user',
+  initialState: [
+    {
+      nickname: "장난꾸러기",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    },
+  ],
+  reducers: {
+    findDetail(state, action) {
+      const select = state.findIndex((num) => {
+        return num.nickname === action.payload;
+      });
+
+    },
+    deleteUser(state, action) {
+      const select = state.findIndex((num) => {
+        return num.nickname === action.payload;
+      });
+      state.pop();
+    }
+  }
+})
+
 
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -52,14 +116,19 @@ export const store = configureStore({
     alarmClickCheck: alarmClickCheck.reducer,
     mainCreateRoomCarouselCheck: mainCreateRoomCarouselCheck.reducer,
     createThemeRoomCheck: createThemeRoomCheck.reducer,
+    adminUser: adminUser.reducer,
+    adminreport: adminreport.reducer,
   },
 })
 
+
 // createSlice의 reducers 에서 만든 state 변경 함수를 export 하기
-export const {changeMenuState} = menuClickCheck.actions
-export const {changeAlarmState} = alarmClickCheck.actions
-export const {changeCarouselState} = mainCreateRoomCarouselCheck.actions
-export const {changeThemeRoomState} = createThemeRoomCheck.actions
+export const { changeMenuState } = menuClickCheck.actions
+export const { changeAlarmState } = alarmClickCheck.actions
+export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions
+export const { changeThemeRoomState } = createThemeRoomCheck.actions
+export const { findDetail, deleteUser } = adminUser.actions
+
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>
