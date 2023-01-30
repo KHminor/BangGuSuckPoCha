@@ -2,6 +2,7 @@ package com.server.back.domain.review;
 
 import com.server.back.domain.pocha.Pocha;
 import com.server.back.domain.user.User;
+import com.server.back.dto.review.ReviewRequestDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Review {
     @ManyToOne(targetEntity=User.class, fetch=FetchType.LAZY)
     @JoinColumn(name="from_id")
     private User fromId;
+
     @ManyToOne(targetEntity = Pocha.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "web_id")
     private Pocha pocha;
@@ -45,5 +47,9 @@ public class Review {
         this.pocha = pocha;
         this.toId = toId;
         this.fromId = fromId;
+    }
+    public void update(ReviewRequestDto requestDto){
+        this.reviewScore = requestDto.getReviewScore();
+        this.review_at = LocalDateTime.now();
     }
 }

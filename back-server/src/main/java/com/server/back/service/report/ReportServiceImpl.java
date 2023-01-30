@@ -2,7 +2,6 @@ package com.server.back.service.report;
 
 import com.server.back.domain.report.Report;
 import com.server.back.domain.report.ReportRepository;
-import com.server.back.domain.review.Review;
 
 import com.server.back.domain.user.User;
 import com.server.back.domain.user.UserRepository;

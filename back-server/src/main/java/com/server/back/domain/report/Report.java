@@ -1,6 +1,5 @@
 package com.server.back.domain.report;
 
-import com.server.back.domain.pocha.Pocha;
 import com.server.back.domain.user.User;
 import lombok.Builder;
 import lombok.Data;

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -38,7 +38,7 @@ public class UserController {
     private final JwtService jwtService;
 
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
-    @GetMapping("/api/oauth2/token/naver")
+    @GetMapping("/oauth2/token/naver")
     public Map<String, String> NaverLogin(@RequestParam("code") String code) {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
