@@ -7,6 +7,8 @@ import Loading from "./components/Common/Loading";
 import GameRoom from "./components/GameRoom/GameRoom";
 import StoryRoom from "./components/StoryRoom/StoryRoom";
 import Mypage from "./components/MyPage/Mypage";
+import RoomUserProfile from "./components/Common/RoomUserProfile";
+
 function App() {
   return (
     <div className="App bg-black">
@@ -19,6 +21,7 @@ function App() {
         <Route path="/gameroom" element={<GameRoom />} />       
         <Route path="/storyroom" element={<StoryRoom />} />       
         <Route path="/mypage" element={<Mypage />} />       
+        <Route path="/userprofile" element={<RoomUserProfile />} />       
       </Routes>
     </div>
   );

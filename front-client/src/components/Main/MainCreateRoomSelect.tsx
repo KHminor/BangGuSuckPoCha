@@ -24,14 +24,14 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
       <div
         onClick={onSelectRegion}
         ref={selectRegionAll}
-        className={`${style.selectHover} border border-white bg-white w-28 h-full text-black text-lg flex justify-center items-center cursor-pointer`}
+        className={`${style.selectHover} border border-white bg-white w-[6.5rem] h-full text-black text-lg flex justify-center items-center cursor-pointer`}
       >
         <span>{selectAge}</span>
       </div>
       <div
         onClick={onSelectRegion}
         ref={selectRegionCity}
-        className={`${style.selectHover} border border-white w-28 h-full text-lg flex justify-center items-center cursor-pointer`}
+        className={`${style.selectHover} border border-white w-[6.5rem] h-full text-lg flex justify-center items-center cursor-pointer`}
       >
         <span>{selectRegion}</span>
       </div>
