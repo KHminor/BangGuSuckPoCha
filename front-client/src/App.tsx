@@ -8,7 +8,7 @@ import MainCreateRoom from "./components/Main/MainCreateRoom";
 import LayoutPage from "./components/Common/LayoutPage";
 import Loading from "./components/Common/Loading";
 import MainCreateRoomCarousel from "./components/Main/MainCreateRoomCarousel";
-// import AdminMain from "./components/Admin/AdminMain";
+import AdminMain from "./components/Admin/AdminMain";
 import AdminLogin from "./components/Admin/AdminLogin";
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/carousel" element={<MainCreateRoomCarousel />} />
         <Route path="/adminlogin" element={<AdminLogin />} />        
-        {/* <Route path="/adminmain" element={<AdminMain />} />         */}
+        <Route path="/adminmain" element={<AdminMain />} />        
       </Routes>
     </div>
   );
