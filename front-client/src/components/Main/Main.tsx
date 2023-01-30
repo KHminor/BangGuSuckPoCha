@@ -82,7 +82,7 @@ function Main(): JSX.Element {
         <Navbar />
 
         <div
-          className="grid container mx-auto min-w-[75rem] "
+          className="grid container mx-auto min-w-[75rem]"
           style={{
             gridTemplateRows: "8rem 1fr 3rem",
             backgroundColor: "rgb(25, 25, 25)",

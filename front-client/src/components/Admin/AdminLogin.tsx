@@ -3,42 +3,53 @@ import { useNavigate } from "react-router-dom";
 function AdminLogin(): React.ReactElement {
   const navigate = useNavigate();
   return (
-    <div className="inline-block align-baseline text-white h-screen w-screen">
-      <div className="text-7xl">ADMIN PAGE</div>
-      <div className="border-4 border-white relative top-44 left-40 h-96 w-4/5">
-        <div className="inline-block align-baseline text-5xl">AdminLogin</div>
-
-        <div className="absolute top-[40%] left-[20%] w-[60%]">
-          <table className="w-full">
-            <div className="relative text-4xl p-2 w-[80%] h-3/4">
-              <>
-                <div className="absolute">ID : </div>
-                <input
-                  className="border-2 border-white bg-black text-white"
-                  type="text"
-                  placeholder="아이디를 입력해주세요"
-                />
-              </>
-              <>
-                <div className="absolute ">PW : </div>
-                <input
-                  className="border-2 border-white bg-black text-white"
-                  placeholder="패스워드를 입력해주세요"
-                ></input>
-              </>
-              <button
-                type="submit"
-                onClick={() => {
-                  navigate("/adminmain");
-                }}
-                className="absolute right-2 top-[100%] border-2 border-white"
-              >
-                로그인
-              </button>
-            </div>
-          </table>
-        </div>
+    <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
+      <div>
+        <div></div>
       </div>
+      <form className="col-span-3 grid grid-rows-5 gap-5">
+        <div className="text-8xl">AdminPage</div>
+        <div className="row-span-3 border-2 border-white grid grid-rows-6 gap-2">
+          <div className="row-span-2 text-6xl"> Admin Login </div>
+          <div className="grid grid-cols-6 gap-2">
+            <div className="text-justify pl-9 text-4xl">ID :</div>
+            <input
+              type="text"
+              className="col-span-4 bg-black border-2"
+              placeholder="ID를 입력하세요"
+            />
+            <div></div>
+          </div>
+          <div className="grid grid-cols-6 gap-2">
+            <div className="text-justify pl-9 text-4xl">PW : </div>
+            <input
+              type="text"
+              className="col-span-4 bg-black border-2"
+              placeholder="PW를 입력하세요"
+            />
+          </div>
+          <div className="grid grid-cols-6 gap-2">
+            <div className="col-span-4"></div>
+            <button
+              onClick={() => {
+                navigate("/adminmain");
+              }}
+            >
+              Login
+            </button>
+            <div></div>
+          </div>
+          <div> </div>
+        </div>
+        <div></div>
+      </form>
+      <div>
+        <div></div>
+      </div>
+
+      {/* <div className="border-4 border-white relative top-44 left-40 h-96 w-4/5">
+        <div className="inline-block align-baseline text-5xl">AdminLogin</div>
+      </div> */}
     </div>
   );
 }

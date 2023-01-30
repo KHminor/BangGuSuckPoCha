@@ -1,14 +1,29 @@
-function AdminMain() {
+import { useNavigate } from "react-router-dom";
+
+function AdminMain(): React.ReactElement {
+  const navigate = useNavigate();
   return (
-    <div className="text-white relative h-screen w-screen">
-      <div className="text-7xl" >ADMIN PAGE</div>
-      <div className="text-white text-3xl border-4 border-white relative top-44 left-40 h-96 w-4/5">        
-        <div className="p-5">userlist</div>
-        <div className="p-5">roomlist</div>
-        <div className="p-5">reportlist</div>
-        <div className="p-5"></div>
+    <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
+      <div>
+        <div></div>
+      </div>
+      <form className="col-span-3 grid grid-rows-5 gap-5">
+        <div className="text-8xl">AdminPage</div>
+        <div className="row-span-3 border-2 border-white grid grid-rows-6 gap-2">
+          <div className="empty"> </div>
+          <div className="">user list</div>
+          <div className="">room list</div>
+          <div className="">report list</div>
+          <div className="">Default Item list</div>
+          <div className="">test2</div>
+        </div>
+        <div></div>
+      </form>
+      <div>
+        <div></div>
       </div>
     </div>
   );
 }
+
 export default AdminMain;
