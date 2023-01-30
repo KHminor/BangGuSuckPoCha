@@ -3,7 +3,7 @@ package com.server.back.service.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.back.config.oauth.Provider.NaverProfile;
-import com.server.back.config.oauth.Provider.NaverToken;
+import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.Region;
 import com.server.back.domain.user.RegionRepository;
 import com.server.back.domain.user.User;
@@ -26,16 +26,16 @@ public class NaverService {
     private final UserRepository userRepository;
     private final RegionRepository regionRepository;
 
-    private final String client_id = "ZQnQO8XghTL7eTyln27j";
-    private final String client_secret = "E_N2HQiJc4";
-    private final String redirect_uri = "http://localhost:8080/login/oauth2/code/naver";
+    private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
+    private final String client_secret = "ZGtXcgsvcR";
+    private final String redirect_uri = "http://34.207.167.96:8080/login/oauth2/code/naver";
     private final String accessTokenUri = "https://nid.naver.com/oauth2.0/token";
     private final String UserInfoUri = "https://openapi.naver.com/v1/nid/me";
 
     /**
-     * 카카오로 부터 엑세스 토큰을 받는 함수
+     * 네이버로 부터 엑세스 토큰을 받는 함수
      */
-    public NaverToken getAccessToken(String code) {
+    public TokenDto getAccessToken(String code) {
 
         //요청 param (body)
         MultiValueMap<String , String> params = new LinkedMultiValueMap<>();
@@ -59,15 +59,15 @@ public class NaverService {
 
         //json형태로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        NaverToken naverToken =null;
+        TokenDto tokenDto =null;
 
         try {
-            naverToken = objectMapper.readValue(response, NaverToken.class);
+            tokenDto = objectMapper.readValue(response, TokenDto.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        return naverToken;
+        return tokenDto;
     }
 
     /**
@@ -91,7 +91,6 @@ public class NaverService {
         try {
             naverProfile = objectMapper.readValue(response, NaverProfile.class);
         } catch (JsonProcessingException e) {
-            System.out.printf("얍");
             e.printStackTrace();
         }
 
@@ -101,7 +100,7 @@ public class NaverService {
     }
 
     /**
-     * 카카오 로그인 사용자 강제 회원가입
+     * 네이버 로그인 사용자 강제 회원가입
      */
     @Transactional
     public User saveUser(String access_token) {
@@ -110,10 +109,10 @@ public class NaverService {
 
         //처음이용자 강제 회원가입
         if(user == null) {
-//            Region region = regionRepository.findAll().get(0);
+            Region region = regionRepository.findAll().get(0);
             user = User.builder()
                     .username(profile.response.id)
-                    .password(null)
+                    .password("0")
                     .nickname(profile.response.id)
                     .profile("._.")
                     .comment(null)
@@ -121,11 +120,11 @@ public class NaverService {
                     .birth(profile.response.birthyear+"."+profile.response.birthday.replace("-","."))
                     .manner(36.5)
                     .point(1000)
-                    .is_ban(0)
+                    .is_ban(false)
                     .report_point(0)
                     .role("USER")
                     .time(LocalDateTime.now())
-                    .region(null)
+                    .region(region)
                     .build();
 
             userRepository.save(user);

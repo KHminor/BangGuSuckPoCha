@@ -18,11 +18,10 @@ public class FriendResponseDto {
 	@Builder
 	public FriendResponseDto(Friend friend) {
 		this.friend_id=friend.getFriendId();
-		//this.you_id=friend.getYour().getUserId();
+		this.you_id=friend.getYourId().getUserId();
 		this.best_friend=friend.getBestFriend();
-		//this.f_nickname=friend.getYour().getNickname();
+		this.f_nickname=friend.getYourId().getNickname();
 		
 	}
-	
 
 }

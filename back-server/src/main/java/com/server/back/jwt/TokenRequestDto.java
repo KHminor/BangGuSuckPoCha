@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtToken {
-
+public class TokenRequestDto {
     private String accessToken;
     private String refreshToken;
 }

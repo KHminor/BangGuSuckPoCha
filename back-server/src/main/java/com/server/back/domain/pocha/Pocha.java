@@ -25,7 +25,7 @@ public class Pocha extends BaseTimeEntity{
     @Column(nullable = false)
     private Integer limitUser;
     @Column(nullable = false)
-    private Integer isPrivate;
+    private Boolean isPrivate;
     @ManyToOne(targetEntity = Theme.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
@@ -34,13 +34,13 @@ public class Pocha extends BaseTimeEntity{
     @Column(nullable = false)
     private Integer alcohol;
     @Column(nullable = false)
-    private Integer isSsul;
+    private Boolean isSsul;
     @Column(length = 40)
     private String ssulTitle;
     @Column(nullable = false)
     private LocalDateTime endAt;
     @Column(nullable = false)
-    private Integer isEnd;
+    private Boolean isEnd;
 
     // 포차 태그
     @OneToMany(mappedBy = "pocha", fetch = FetchType.LAZY)
@@ -66,7 +66,7 @@ public class Pocha extends BaseTimeEntity{
     }
 
     public void updateEnd() {
-        this.isEnd = 1;
+        this.isEnd = true;
         this.endAt = LocalDateTime.now();
     }
 
@@ -79,7 +79,7 @@ public class Pocha extends BaseTimeEntity{
     }
 
     public void updateSsul(SsulReqeustDto reqeustDto) {
-        this.isSsul = 1;
+        this.isSsul = true;
         this.ssulTitle = reqeustDto.getSsulTitle();
     }
 }
