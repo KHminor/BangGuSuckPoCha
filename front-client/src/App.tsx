@@ -4,7 +4,6 @@ import Main from "./components/Main/Main";
 import SignUp from "./components/SignUp/Signup";
 import Login from "./components/Login/Login";
 import Loading from "./components/Common/Loading";
-import MainCreateRoomCarousel from "./components/Main/MainCreateRoomCarousel";
 import GameRoom from "./components/GameRoom/GameRoom";
 import StoryRoom from "./components/StoryRoom/StoryRoom";
 function App() {
@@ -16,7 +15,6 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />       
         <Route path="/loading" element={<Loading />} />       
-        <Route path="/carousel" element={<MainCreateRoomCarousel />} />       
         <Route path="/gameroom" element={<GameRoom />} />       
         <Route path="/storyroom" element={<StoryRoom />} />       
       </Routes>
