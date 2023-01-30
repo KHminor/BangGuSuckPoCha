@@ -3,8 +3,12 @@ package com.server.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.User;
-import com.server.back.dto.pocha.PochaParticipantResponseDto;
+import com.server.back.dto.report.ReportRequestDto;
+import com.server.back.dto.review.ReviewRequestDto;
+import com.server.back.dto.review.ReviewResponseDto;
 import com.server.back.jwt.service.JwtService;
+import com.server.back.service.report.ReportService;
+import com.server.back.service.review.ReviewService;
 import com.server.back.service.user.NaverService;
 import com.server.back.service.user.UserService;
 import com.server.back.jwt.TokenRequestDto;
@@ -18,22 +22,23 @@ import com.server.back.dto.user.*;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 public class UserController {
     private final UserService userService;
     private final NaverService naverService;
+    private final ReviewService reviewService;
+    private final ReportService reportService;
     private final JwtService jwtService;
 
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
-    @GetMapping("/api/oauth2/token/naver")
+    @GetMapping("/oauth2/token/naver")
     public Map<String, String> NaverLogin(@RequestParam("code") String code) {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
@@ -87,7 +92,6 @@ public class UserController {
     }
     @ApiOperation(value = "내 정보 조회.")
     @GetMapping("/myinfo/{username}")
-    // UserResponseDto 추가 후 [Map -> UserResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> userMyInfo(@PathVariable(value = "username") String username){
         Map<String, Object> response = new HashMap<>();
         UserResponseDto responseDto = userService.userInfo(username);
@@ -123,24 +127,20 @@ public class UserController {
     }
     @ApiOperation(value = "평가 목록 요청")
     @GetMapping("/review/{username}")
-    // ReviewResponseDto 추가 후 [Map -> ReviewResponseDto]로 변경
-    public ResponseEntity<List<Map<String, Object>>> userReviewList(@PathVariable(value = "username") String username){
-        List<Map<String, Object>> reviewResponseDto = new ArrayList<>();
-        reviewResponseDto.add(new HashMap<>());
-        reviewResponseDto.get(0).put("review_id", 700);
-        reviewResponseDto.get(0).put("to_id", "평가 대상 회원 식별자");
-        reviewResponseDto.get(0).put("nickname", "평가 대상 닉네임");
-        reviewResponseDto.get(0).put("profile", "평가 대상 프로필");
-        reviewResponseDto.get(0).put("review_score", 4);
-        reviewResponseDto.get(0).put("create_at", LocalDateTime.now());
-        reviewResponseDto.get(0).put("review_at", LocalDateTime.now().plusHours(2));
-        
-        return new ResponseEntity<>(reviewResponseDto, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userReviewList(@PathVariable(value = "username") String username){
+        Map<String, Object> response = new HashMap<>();
+        List<ReviewResponseDto> responseDtoList = reviewService.userReviewList(username);
+        response.put("data", responseDtoList);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "유저 평가")
     @PutMapping("/review")
-    public ResponseEntity<String> userReview(/*@RequestBody ReviewRequestDto requestDto*/){
-        return new ResponseEntity<>("유저 평가 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userReview(@RequestBody ReviewRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        reviewService.userReview(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "보유 아이템 목록")
     @GetMapping("/item/{username}")
@@ -158,7 +158,10 @@ public class UserController {
     }
     @ApiOperation(value = "유저 신고")
     @PostMapping("/report")
-    public ResponseEntity<String> userItemList(/*@RequestBody ReportRequestDto requestDto*/){
-        return new ResponseEntity<>("신고 완료.", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userReport(@RequestBody ReportRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        reportService.userReport(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
