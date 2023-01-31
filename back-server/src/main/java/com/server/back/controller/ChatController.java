@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.server.back.domain.friend.Chat;
@@ -35,7 +37,7 @@ public class ChatController {
 	// Client가 send 할 수 있는 경로
 	// 입장
 	@MessageMapping("/chat/{chat_id}")
-	public void message(@DestinationVariable Long chat_id) {
+	public void message(@DestinationVariable("chat_id") Long chat_id) {
 		
 		List<Message> message = messageRepository.findByChatId_chatId(chat_id);
 		if(message != null) {

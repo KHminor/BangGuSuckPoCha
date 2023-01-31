@@ -29,7 +29,8 @@ public class SecurityConfig {
         return web -> web.ignoring()
                 .antMatchers("/join","/", "/home","/refresh/**")
                 .antMatchers("/login/oauth2/code/naver", "/user/oauth2/token/naver",
-                        "/swagger/**","/swagger-ui/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs");
+                        "/swagger/**","/swagger-ui/**","/swagger-ui.html","/swagger-resources/**","/webjars/**","/v2/api-docs")
+                .antMatchers("/**");
 
     }
 

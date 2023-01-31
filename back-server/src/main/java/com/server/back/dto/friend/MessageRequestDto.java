@@ -6,9 +6,10 @@ import com.server.back.domain.user.User;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class MessageRequestDto {
 
 	private Long chat_id;

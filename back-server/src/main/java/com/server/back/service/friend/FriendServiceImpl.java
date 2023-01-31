@@ -105,8 +105,7 @@ public class FriendServiceImpl implements FriendService {
 					.userId(entity.getToId())
 					.user2Id(entity.getFromId())
 					.build();
-		
-		chatRepository.save(chat);
+		chatRepository.save(chat).getChatId();
 		
 		Friend my =  Friend.builder()
 				.myId(entity.getToId())

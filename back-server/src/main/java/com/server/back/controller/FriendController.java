@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/user/friend")
+@RequestMapping("/user/friend")
 @RestController
 public class FriendController {
 	
