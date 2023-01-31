@@ -6,6 +6,7 @@ import com.server.back.domain.user.User;
 import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.review.ReviewRequestDto;
 import com.server.back.dto.review.ReviewResponseDto;
+import com.server.back.jwt.refreshToken.RefreshTokenRepository;
 import com.server.back.jwt.service.JwtService;
 import com.server.back.service.report.ReportService;
 import com.server.back.service.review.ReviewService;
@@ -86,9 +87,12 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "로그아웃")
-    @PutMapping("/auth/logout/{username}")
-    public ResponseEntity<String> uesrLogout(@PathVariable(value = "username") String username){
-        return new ResponseEntity<>("로그아웃 성공!", HttpStatus.OK);
+    @PutMapping("/logout/{username}")
+    public ResponseEntity<Map<String, Object>> uesrLogout(@PathVariable(value = "username") String username) {
+        Map<String, Object> response = new HashMap<>();
+        userService.uesrLogout(username);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "정보 수정")
     @PutMapping("/{username}")
