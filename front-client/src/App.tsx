@@ -14,6 +14,7 @@ import UserReportWait from "./components/Admin/UserReportWait";
 import Mypage from "./components/MyPage/Mypage";
 import RoomUserProfile from "./components/Common/RoomUserProfile";
 import RoomList from "./components/Admin/RoomList";
+import AlarmRequest from "./components/Common/AlarmRequest";
 
 function App() {
   return (

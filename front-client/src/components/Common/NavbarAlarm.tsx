@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeMenuState } from "../../store/store";
+import AlarmRequest from "./AlarmRequest";
 
 function NavbarAlarm(): JSX.Element {
   let dispatch = useAppDispatch();
@@ -27,15 +28,27 @@ function NavbarAlarm(): JSX.Element {
   }, [alarmClickCheck])
   
   return (
-    <div
-      ref={alarmIcon}
-      className={`grid absolute w-[16rem] bg-white rounded-3xl hidden `}
-      style={{ right: "3rem", top: "11.5rem", height: "22rem", gridTemplateRows: '0.8fr 1fr 4fr 0.2fr' }}
-    >
-      <div className="border-2 border-red-300">1</div>
-      <div className="border-2 border-green-300">2</div>
-      <div className="border-2 border-blue-300">3</div>
-      <div className="border-2 border-yellow-300">4</div>
+    <div ref={alarmIcon} className={`absolute w-[16rem] `} style={{ right: "3rem", top: "11.5rem", height: "35.2rem"}}>
+      <div className="grid h-full w-full rounded-3xl bg-black text-white" style={{gridTemplateRows: '0.5fr 0.5fr 5fr' }}>
+        <div className="grid" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr'}}>
+          <div></div>
+          <div className="flex justify-center items-center ">알람</div>
+          <div></div>
+          {/* 새로고침 */}
+          <div className="flex justify-center items-center">
+            <img className="h-[40%]" src={require('../../assets/NavIcon/reset.png')} alt="" />
+          </div>
+        </div>
+        {/* 요청 */}
+        <div className="grid" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+          <div className="flex justify-center items-center">요청</div>
+          <div className="flex justify-center items-center">초대</div>
+          <div className="flex justify-center items-center">리뷰</div>
+        </div>
+        <AlarmRequest />
+        {/* <div>hi</div> */}
+      </div>
+      
     </div>
   );
 }
