@@ -6,19 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Configuration
 @EnableSwagger2
@@ -29,7 +23,11 @@ public class SwaggerConfig {
     //	http://localhost:8080/{your-app-root}/swagger-ui/index.html
     @Bean
     public Docket pochaApi() {
+        Server serverLocal = new Server("local", "http://localhost:9999", "for local usages", Collections.emptyList(), Collections.emptyList());
+        Server testServer = new Server("test", "https://i8e201.p.ssafy.io/api", "for testing", Collections.emptyList(), Collections.emptyList());
+
         return new Docket(DocumentationType.SWAGGER_2)
+                .servers(serverLocal, testServer)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .apiInfo(apiInfo())
