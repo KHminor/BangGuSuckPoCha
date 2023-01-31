@@ -124,7 +124,7 @@ public class NaverService {
                     .point(1000)
                     .is_ban(false)
                     .report_point(0)
-                    .role("USER")
+                    .role("NEWBIE")
                     .time(LocalDateTime.now())
                     .region(region)
                     .build();

@@ -88,7 +88,11 @@ public class UserServiceImpl implements UserService{
             .user(entity)
             .build();
         pointRepository.save(point);
-
+    }
+    @Override
+    public void roleChange(String username){
+        User entity = userRepository.findByUsername(username);
+        entity.setRole("USER");
     }
 	@Override
 	public Long findByUsername(String username) {
