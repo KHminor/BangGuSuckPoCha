@@ -10,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -86,16 +88,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //token 생성
         TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(principalDetails.getUser().getUsername());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        Map<String, String> jsonResponse = jwtService.successLoginResponse(tokenRequestDto);
-        String result = objectMapper.writeValueAsString(jsonResponse);
-//        response.setStatus(HttpStatus.OK.value());
-        //response 응답
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(result);
-
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + tokenRequestDto);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        Map<String, String> jsonResponse = jwtService.successLoginResponse(tokenRequestDto);
+//        String result = objectMapper.writeValueAsString(jsonResponse);
+////        response.setStatus(HttpStatus.OK.value());
+//        //response 응답
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("utf-8");
+//        response.getWriter().write(result);
+//
+//        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + tokenRequestDto);
+        String target = "https://i8e201.p.ssafy.io/oauth?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
+        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+        redirectStrategy.sendRedirect(request, response, target);
     }
 }
