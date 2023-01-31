@@ -6,6 +6,11 @@ import Login from "./components/Login/Login";
 import Loading from "./components/Common/Loading";
 import GameRoom from "./components/GameRoom/GameRoom";
 import StoryRoom from "./components/StoryRoom/StoryRoom";
+import AdminLogin from "./components/Admin/AdminLogin";
+import AdminMain from "./components/Admin/AdminMain";
+import UserList from "./components/Admin/UserList";
+import UserReport from "./components/Admin/UserReport";
+import UserReportWait from "./components/Admin/UserReportWait";
 import Mypage from "./components/MyPage/Mypage";
 import RoomUserProfile from "./components/Common/RoomUserProfile";
 
@@ -16,14 +21,19 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />       
-        <Route path="/loading" element={<Loading />} />       
-        <Route path="/gameroom" element={<GameRoom />} />       
-        <Route path="/storyroom" element={<StoryRoom />} />       
+        <Route path="/login" element={<Login />} />
+        <Route path="/loading" element={<Loading />} />
+        <Route path="/gameroom" element={<GameRoom />} />
+        <Route path="/storyroom" element={<StoryRoom />} />
         <Route path="/mypage" element={<Mypage />} />       
-        <Route path="/userprofile" element={<RoomUserProfile />} />       
-      </Routes>
-    </div>
+        <Route path="/userprofile" element={<RoomUserProfile />} />    
+        <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="/adminmain" element={<AdminMain />} />
+        <Route path="/userlist" element={<UserList />} />
+        <Route path="/userreport" element={<UserReport />} />
+        <Route path="/userreport/wait" element={<UserReportWait />} />
+      </Routes >
+    </div >
   );
 }
 

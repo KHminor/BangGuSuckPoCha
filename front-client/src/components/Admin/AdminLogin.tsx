@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 function AdminLogin(): React.ReactElement {
   const navigate = useNavigate();
   return (
-    <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
+    <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5 ">
       <div>
         <div></div>
       </div>
@@ -46,10 +46,6 @@ function AdminLogin(): React.ReactElement {
       <div>
         <div></div>
       </div>
-
-      {/* <div className="border-4 border-white relative top-44 left-40 h-96 w-4/5">
-        <div className="inline-block align-baseline text-5xl">AdminLogin</div>
-      </div> */}
     </div>
   );
 }
