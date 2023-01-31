@@ -18,7 +18,7 @@ function NavbarMenu(): JSX.Element {
     return state.menuFriendClickCheck
   })
     
-  console.log('친구 클릭 해따',menuFriendClickCheck);
+  // console.log('친구 클릭 해따',menuFriendClickCheck);
   // 메뉴 클릭시 조건 분기
   useEffect(()=> {
     if ((checkMenuState)&&(alarmClickCheck)) {
