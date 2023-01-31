@@ -1,14 +1,19 @@
 package com.server.back.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,19 +41,20 @@ public class ChatController {
 
 	// Client가 send 할 수 있는 경로
 	// 입장
-	@MessageMapping("/chat/{chat_id}")
-	public void message(@DestinationVariable("chat_id") Long chat_id) {
-		
-		List<Message> message = messageRepository.findByChatId_chatId(chat_id);
-		if(message != null) {
-			List<MessageResponseDto> messageResponseDto = message.stream().map(m -> new MessageResponseDto(m)).collect(Collectors.toList());
-			template.convertAndSend("/sub/chat/room/" + chat_id , messageResponseDto);
-		}
-		
-	}
+	@GetMapping("/chat/{chat_id}")
+	public ResponseEntity<Map<String, Object>> friendList(@PathVariable(value = "chat_id") Long chat_id){
+    	Map<String, Object> response = new HashMap<>();
+    	List<Message> message = messageRepository.findByChatId_chatId(chat_id);
+    	List<MessageResponseDto> messageResponseDto = message.stream().map(m -> new MessageResponseDto(m)).collect(Collectors.toList());
+    	response.put("data",messageResponseDto);
+    	response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 	
 	@MessageMapping(value = "/chat/message")
 	public void message(MessageRequestDto requestDto) {
+		System.out.println("###################################");
+		System.out.println(requestDto.getChat_id().TYPE);
 		
 		//DB에 채팅내용 저장
 		Chat chat = chatRepository.findByChatId(requestDto.getChat_id());
@@ -58,8 +64,7 @@ public class ChatController {
 		
 		MessageResponseDto responseDto = MessageResponseDto.builder().message(message).build();
 		
-		
-		template.convertAndSend("/sub/chat/room/" + message.getChatId().getChatId(), message);
+		template.convertAndSend("/sub/chat/" + chat.getChatId(), responseDto);
 	}
 	
 	

@@ -20,6 +20,7 @@ public class MessageResponseDto {
 		this.message_id = message.getMessageId();
 		this.user_id = message.getUserId().getUserId();
 		this.user_nickname = message.getUserId().getNickname();
+		this.content = message.getContent();
 		this.create_at = message.getCreateAt();
 	}
 }
