@@ -104,5 +104,10 @@ public class User {
         this.comment = requestDto.getComment();
         this.region = region;
     }
-
+    public void logout(){
+        this.jwtRefreshToken = null;
+    }
+    public void userdelete(){
+        this.role = "SECESSION";
+    }
 }

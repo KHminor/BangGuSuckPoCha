@@ -29,9 +29,11 @@ public class NaverService {
     private final String client_id = "ZQnQO8XghTL7eTyln27j";
     private final String client_secret = "E_N2HQiJc4";
     private final String redirect_uri = "http://i8e201.p.ssafy.io/api/login/oauth2/code/naver";
+//    private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
+//    private final String client_secret = "ZGtXcgsvcR";
+//    private final String redirect_uri = "http://localhost:9999/api/login/oauth2/code/naver";
     private final String accessTokenUri = "https://nid.naver.com/oauth2.0/token";
     private final String UserInfoUri = "https://openapi.naver.com/v1/nid/me";
-
     /**
      * 네이버로 부터 엑세스 토큰을 받는 함수
      */
