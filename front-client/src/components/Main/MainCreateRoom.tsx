@@ -2,7 +2,7 @@ import style from "./MainCreateRoom.module.css";
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
 import { useAppDispatch } from "../../store/hooks";
-import { changeThemeRoomState } from "../../store/store";
+import { changeCarouselState, changeThemeRoomState } from "../../store/store";
 import MainCreateRoomTheme from "./MainCreateRoomTheme";
 
 const MainCreateRoom = ({
@@ -37,10 +37,11 @@ const MainCreateRoom = ({
     "똥",
   ];
 
-  // 전달받아온 함수를 실행해서 창끄고 사라졌던 버튼 다시 살리기
+  // 전달받아온 함수를 실행해서 창끄고 캐러셀로 되돌리기
   const closeModal = () => {
-    onClickHiddenBtn();
+    // onClickHiddenBtn();
     dispatch(changeThemeRoomState(0));
+    dispatch(changeCarouselState());
   };
 
   // 태그 선택 기능

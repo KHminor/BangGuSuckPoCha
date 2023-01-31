@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeAlarmState } from "../../store/store";
+import { changeAlarmState, changeMenuFriendState, changeMenuState } from "../../store/store";
 
 function NavbarMenu(): JSX.Element {
   let dispatch = useAppDispatch();
@@ -13,7 +13,12 @@ function NavbarMenu(): JSX.Element {
   const alarmClickCheck: any = useAppSelector((state: any) => {
     return state.alarmClickCheck;
   });
-
+  //  메뉴 -> 친구 클릭 상태
+  const menuFriendClickCheck: any = useAppSelector((state: any) => {
+    return state.menuFriendClickCheck
+  })
+    
+  console.log('친구 클릭 해따',menuFriendClickCheck);
   // 메뉴 클릭시 조건 분기
   useEffect(()=> {
     if ((checkMenuState)&&(alarmClickCheck)) {
@@ -26,11 +31,19 @@ function NavbarMenu(): JSX.Element {
     }
   }, [checkMenuState])
 
+  // 메뉴 -> 친구 클릭시 메뉴 버튼 사라지기
+  useEffect(()=> {
+    if (menuFriendClickCheck) {
+      dispatch(changeMenuState())
+      menuIcon.current.classList.remove("hidden");
+    }
+  },[menuFriendClickCheck])
+
   return (
     <div
       ref={menuIcon}
       className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden`}
-      style={{ right: "6.5rem", top: "11.7rem" }}
+      style={{ right: "6.5rem", top: "11.1rem" }}
     >
       <img
         src={require("../../assets/logoIcon/menuBground.png")}
@@ -50,7 +63,9 @@ function NavbarMenu(): JSX.Element {
           />
           <p className="text-stone-200 text-xs">My</p>
         </div>
-        <div className="mx-5 cursor-pointer" style={{ height: "52%" }}>
+        <div className="mx-5 cursor-pointer" style={{ height: "52%" }} onClick={()=> {
+          dispatch(changeMenuFriendState())
+        }}>
           <img
             src={require("../../assets/logoIcon/friend.png")}
             alt=""
