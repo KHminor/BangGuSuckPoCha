@@ -16,16 +16,17 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.web.bind.annotation.*;
 import com.server.back.dto.user.*;
 
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PathVariable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.io.IOException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -39,11 +40,23 @@ public class UserController {
 
     @ApiOperation(value = "로그인", notes = "client_id, redirect_uri, response_type 전달.")
     @GetMapping("/oauth2/token/naver")
-    public Map<String, String> NaverLogin(@RequestParam("code") String code) {
+    public void NaverLogin(@RequestParam("code") String code,
+            HttpServletRequest request
+            , HttpServletResponse response) throws IOException {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-        return jwtService.successLoginResponse(tokenRequestDto);
+        String target = "http://i8e201.p.ssafy.io?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
+        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+        redirectStrategy.sendRedirect(request, response, target);
+    }
+    @GetMapping("/check")
+    public Map<String, String> checkcheck(){
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("status", "200");
+        map.put("message", "accessToken, refreshToken이 생성되었습니다.");
+        System.out.println("????????????????????????"+map);
+        return map;
     }
     @ApiOperation(value = "토큰 갱신", notes = "accessToken, refreshToken을 갱신하여 전달.")
     @GetMapping("/auth/refresh/{username}")
