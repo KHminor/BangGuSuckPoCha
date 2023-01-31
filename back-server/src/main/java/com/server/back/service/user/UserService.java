@@ -16,4 +16,5 @@ public interface UserService {
     void usePoint(String username, PointRequestDto requestDto);
     void uesrLogout(String username);
     void userDelete(String username);
+    void roleChange(String username);
 }
