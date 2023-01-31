@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import axios from "axios";
 
 function Login(): React.ReactElement {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // 아래 처럼 하면 되는데.. 중간에 오류저거 못고치겠어서 우선 any
   // const scrollDivRef = useRef<HTMLDivElement>(null);
 
@@ -34,9 +34,8 @@ function Login(): React.ReactElement {
       wordSecond.current.classList.toggle(`delay-500`);
       wordThird.current.classList.toggle(`delay-1000`);
       elements.forEach((element) => {
-        element.current.classList.toggle(`delay-[1300ms]`)
-      })
-
+        element.current.classList.toggle(`delay-[1300ms]`);
+      });
     } else if (deltaY < 0) {
       // console.log("456", deltaY, scrollTop, pageHeight);
       firstDiv.current.scrollIntoView({ behavior: "smooth" });
@@ -44,26 +43,37 @@ function Login(): React.ReactElement {
       secondDiv.current.classList.toggle(`delay-300`);
       wordThird.current.classList.toggle(`delay-1000`);
       elements.forEach((element) => {
-        element.current.classList.toggle(`delay-[1300ms]`)
-      })
+        element.current.classList.toggle(`delay-[1300ms]`);
+      });
     }
   };
 
   // Intersection Observer 세팅
   useEffect(() => {
-    const elements = [secondDiv, wordFirst, wordSecond, wordThird, wordFourth, wordFifth];
-    let observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle(`${styles.trans}`, entry.isIntersecting);
+    const elements = [
+      secondDiv,
+      wordFirst,
+      wordSecond,
+      wordThird,
+      wordFourth,
+      wordFifth,
+    ];
+    let observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle(
+            `${styles.trans}`,
+            entry.isIntersecting
+          );
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-      });
-    }, {threshold: 0.5});
-  
     elements.forEach((element) => {
       observer.observe(element.current);
-    })
-  }, [])
-
+    });
+  }, []);
 
   return (
     <div
@@ -91,13 +101,17 @@ function Login(): React.ReactElement {
           <div className={`${styles.neonTitle} text-[10rem] leading-none text-white font-light `}>
             방구석포차
           </div>
-          <div className="w-2/12 mt-10 cursor-pointer" onClick={()=> {
-            navigate('/main')
-          }} ><img
-            src={require("../../assets/loginIcon/naver.png")}
-            alt="login-naver"
-          /></div>
-          
+          <div
+            className="w-2/12 mt-10 cursor-pointer"
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <img
+              src={require("../../assets/loginIcon/naver.png")}
+              alt="login-naver"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -14,15 +14,29 @@ function AdminMain(): React.ReactElement {
         <div className="w-full row-span-3 border-2 border-white grid grid-rows-6 gap-5">
           <div className="empty"> </div>
           <div
-            className=""
+            className="cursor-pointer "
             onClick={() => {
               navigate("/userList");
             }}
           >
             user list
           </div>
-          <div className="">room list</div>
-          <div className="">report list</div>
+          <div
+            className="cursor-pointer "
+            onClick={() => {
+              navigate("/roomlist");
+            }}
+          >
+            room list
+          </div>
+          <div
+            className="cursor-pointer "
+            onClick={() => {
+              navigate("/userreport");
+            }}
+          >
+            report list
+          </div>
           <div className="">Default Item list</div>
           <div className="">test2</div>
         </div>
@@ -34,8 +48,5 @@ function AdminMain(): React.ReactElement {
     </div>
   );
 }
-
-
-
 
 export default AdminMain;

@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import reportdata from "./reportdata";
 function UserReport(): React.ReactElement {
   const navigate = useNavigate();
 
-  let [report, setReport] = useState(reportdata);
   const reporttemp: any = useAppSelector((state: any) => {
     console.log(state.adminreport[0]);
     return state.adminreport[0];
@@ -53,11 +51,30 @@ function UserReport(): React.ReactElement {
                 <td className="w-[10%]">{reporttemp.result}</td>
                 <td className="w-[7%]">{reporttemp.point}</td>
               </tr>
+              <tr className="border border-slate-300">
+                <td className="w-[7%]">{reporttemp.reportnum}</td>
+                <td className="w-[12%]">{reporttemp.reporter}</td>
+                <td className="w-[12%]">{reporttemp.reported}</td>
+                <td className="w-[12%]">{reporttemp.type}</td>
+                <td className="w-[30%]">{reporttemp.reason}</td>
+                <td className="w-[10%]">{reporttemp.date}</td>
+                <td className="w-[10%]">{reporttemp.result}</td>
+                <td className="w-[7%]">{reporttemp.point}</td>
+              </tr>
             </tbody>
           </table>
         </div>
         <div className="grid grid-cols-4">
-          <div className="col-span-3"></div>
+          <div
+            className=""
+            onClick={() => {
+              navigate("/adminmain");
+            }}
+          >
+            admin main으로
+          </div>
+
+          <div className="col-span-2"></div>
           <div
             onClick={() => {
               navigate("/userreport/wait");
