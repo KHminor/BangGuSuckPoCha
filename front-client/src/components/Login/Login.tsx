@@ -90,7 +90,7 @@ function Login(): React.ReactElement {
           <div className="transition opacity-0 duration-1000 delay-500 -translate-x-40" ref={wordSecond}>포장마차가</div>
           <div className="transition opacity-0 duration-1000 delay-1000 -translate-x-40" ref={wordThird}>생겼다?!</div>
           <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
-          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-mono font-bold tracking-tighter" ref={wordFifth}>
+          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-nanum font-bold tracking-tighter" ref={wordFifth}>
             Feat : 방 밖은 위험해
           </div>
         </div>
@@ -98,9 +98,7 @@ function Login(): React.ReactElement {
           ref={secondDiv}
           className="flex flex-col items-center justify-center h-screen opacity-0 transition duration-1000 -translate-x-40"
         >
-          <div
-            className={`${styles.neonTitle} text-[10rem] leading-none text-white font-nanum`}
-          >
+          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white font-light `}>
             방구석포차
           </div>
           <div
