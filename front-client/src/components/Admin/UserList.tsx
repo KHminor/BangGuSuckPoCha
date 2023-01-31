@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
@@ -98,11 +100,19 @@ function UserSelect(user: UserInfo) {
   );
 }
 function UserList() {
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "https://i8e201.p.ssafy.io/api/admin/user",
+    }).then((r) => {
+      console.log(r.data);
+    });
+  }, []);
   const navigate = useNavigate();
   const usertemp: any = useAppSelector((state: any) => {
     return state.adminUser[0];
   });
-  console.log(usertemp);
+  // console.log(usertemp);
 
   /* 
   - **이용자 식별자(PK)**
