@@ -20,6 +20,8 @@ public class CorsConfig {
         config.addAllowedHeader("*");
         // 모든 Method(get, post, put, delete) 허용
         config.addAllowedMethod("*");
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
