@@ -29,43 +29,13 @@ function NavbarAlarm(): JSX.Element {
   return (
     <div
       ref={alarmIcon}
-      className={`absolute w-56 bg-black rounded-3xl hidden `}
-      style={{ right: "5rem", top: "11.5rem", height: "22rem" }}
+      className={`grid absolute w-[16rem] bg-white rounded-3xl hidden `}
+      style={{ right: "3rem", top: "11.5rem", height: "22rem", gridTemplateRows: '0.8fr 1fr 4fr 0.2fr' }}
     >
-      <div className={`grid grid-rows-12 w-56 `}>
-        <div className="grid grid-cols-12 row-span-1 items-center">
-          <div className="col-span-5"></div>
-          <div className="col-span-2 opacity-50 text-white">알림</div>
-          <div className="col-span-5"></div>
-        </div>
-        <div className="grid grid-cols-12 row-span-1 items-start">
-          <div className="col-span-1"></div>
-          <div className="col-span-3 text-xl text-white">요청</div>
-          <div className="col-span-4"></div>
-          <div className="col-span-3 text-xl opacity-50 text-white">리뷰</div>
-          <div className="col-span-1"></div>
-        </div>
-        <div className="row-span-6 hideScroll" style={{ overflow: "auto" }}>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-          >
-            한상현 바보
-          </div>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-          >
-            한상현 바보
-          </div>
-          <div
-            className="my-2 cursor-pointer text-white"
-            style={{ height: "20%" }}
-          >
-            한상현 바보
-          </div>
-        </div>
-      </div>
+      <div className="border-2 border-red-300">1</div>
+      <div className="border-2 border-green-300">2</div>
+      <div className="border-2 border-blue-300">3</div>
+      <div className="border-2 border-yellow-300">4</div>
     </div>
   );
 }

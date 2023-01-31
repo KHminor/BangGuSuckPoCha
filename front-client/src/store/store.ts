@@ -166,7 +166,28 @@ const adminRoom = createSlice({
   }
 })
 
+// Nav의 menu에 있는 friend 클릭 여부
+const menuFriendClickCheck = createSlice({
+  name: 'menuFriendClick',
+  initialState: false,
+  reducers: {
+    changeMenuFriendState(state) {
+      return !state
+    }
+  }
+})
 
+// Nav의 menu에 있는 friend의 친구 목록 클릭 여부
+const menuFriendChatClickCheck = createSlice({
+  name: 'menuFriendChatClick',
+  initialState: false,
+  reducers: {
+    // 추후 action.payload로 채팅방 번호를 받아서 보여줘야 할듯?
+    changeMenuFriendChatState(state) {
+      return !state
+    }
+  }
+})
 
 
 //----------------API요청---------------------- 
@@ -187,6 +208,8 @@ export const store = configureStore({
     adminUser: adminUser.reducer,
     adminreport: adminreport.reducer,
     adminRoom: adminRoom.reducer,
+    menuFriendClickCheck: menuFriendClickCheck.reducer,
+    menuFriendChatClickCheck: menuFriendChatClickCheck.reducer,
   },
 })
 
@@ -197,6 +220,8 @@ export const { changeAlarmState } = alarmClickCheck.actions
 export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions
 export const { changeThemeRoomState } = createThemeRoomCheck.actions
 export const { findDetail, deleteUser } = adminUser.actions
+export const { changeMenuFriendState } = menuFriendClickCheck.actions
+export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
 
 
 // store의 타입 미리 export 해둔 것.
