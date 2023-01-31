@@ -2,13 +2,11 @@ import { useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
 
-import reportdata from "./reportdata";
 function UserReportWait(): React.ReactElement {
-  let [report, setReport] = useState(reportdata);
   const navigate = useNavigate();
 
   const reprottemp: any = useAppSelector((state) => {
-    console.log(state.adminreport[1]);
+    // console.log(state.adminreport[1]);
     return state.adminreport[1];
   });
   return (
@@ -29,8 +27,8 @@ function UserReportWait(): React.ReactElement {
                 <td className="w-[12%]">신고유형</td>
                 <td className="w-[30%]">사유</td>
                 <td className="w-[10%]">신고날짜</td>
-                <td className="w-[10%]">처리결과</td>
-                <td className="w-[7%]">벌점</td>
+                <td className="w-[10%]"></td>
+                <td className="w-[7%]"></td>
               </tr>
             </thead>
             <tbody>
@@ -41,25 +39,49 @@ function UserReportWait(): React.ReactElement {
                 <td className="w-[12%]">{reprottemp.type}</td>
                 <td className="w-[30%]">{reprottemp.reason}</td>
                 <td className="w-[10%]">{reprottemp.date}</td>
-                <td className="w-[10%]">{reprottemp.result}</td>
-                <td className="w-[7%]">{reprottemp.point}</td>
+                <td className="w-[10%]">O</td>
+                <td className="w-[7%]">X</td>
               </tr>
               <tr className="border border-slate-300">
-                <td className="w-[7%]">{report[1].reportnum}</td>
-                <td className="w-[12%]">{report[1].reporter}</td>
-                <td className="w-[12%]">{report[1].reported}</td>
-                <td className="w-[12%]">{report[1].type}</td>
-                <td className="w-[30%]">{report[1].reason}</td>
-                <td className="w-[10%]">{report[1].date}</td>
-                <td className="w-[10%]">{report[1].result}</td>
-                <td className="w-[7%]">{report[1].point}</td>
+                <td className="w-[7%]">{reprottemp.reportnum}</td>
+                <td className="w-[12%]">{reprottemp.reporter}</td>
+                <td className="w-[12%]">{reprottemp.reported}</td>
+                <td className="w-[12%]">{reprottemp.type}</td>
+                <td className="w-[30%]">{reprottemp.reason}</td>
+                <td className="w-[10%]">{reprottemp.date}</td>
+                <td className="w-[10%]">O</td>
+                <td className="w-[7%]">X</td>
+              </tr>
+              <tr className="border border-slate-300">
+                <td className="w-[7%]">{reprottemp.reportnum}</td>
+                <td className="w-[12%]">{reprottemp.reporter}</td>
+                <td className="w-[12%]">{reprottemp.reported}</td>
+                <td className="w-[12%]">{reprottemp.type}</td>
+                <td className="w-[30%]">{reprottemp.reason}</td>
+                <td className="w-[10%]">{reprottemp.date}</td>
+                <td className="w-[10%]">O</td>
+                <td className="w-[7%]">X</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="grid grid-cols-4">
-          <div className="col-span-3"></div>
-          <div onClick={() => {navigate("/userreport")}}>처리목록</div>
+          <div
+            className=""
+            onClick={() => {
+              navigate("/adminmain");
+            }}
+          >
+            admin main으로
+          </div>
+          <div className="col-span-2"></div>
+          <div
+            onClick={() => {
+              navigate("/userreport");
+            }}
+          >
+            처리목록
+          </div>
         </div>
       </form>
       <div>

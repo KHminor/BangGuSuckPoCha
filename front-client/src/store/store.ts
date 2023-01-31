@@ -1,5 +1,5 @@
 // createSlice: store state 생성 (name: state 변수 이름, initialState: 초기 데이터, reducers: state 변경 함수)
-import { createSlice ,configureStore, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit'
 
 
 //----------------일반데이터---------------------- 
@@ -46,6 +46,7 @@ const createThemeRoomCheck = createSlice({
   }
 })
 
+//admin페이지 Reprot 데이터
 const adminreport = createSlice({
   name: 'adminreport',
   initialState: [
@@ -66,7 +67,7 @@ const adminreport = createSlice({
       type: "욕설/협박",
       reason: "술 마시다가 갑자기 저보고 한상현 닮았다고 함",
       date: "2023-01-18",
-      result: "X",
+      result: "",
       point: 0,
     }
 
@@ -76,6 +77,7 @@ const adminreport = createSlice({
   }
 })
 
+//admin페이지 UserList 데이터
 const adminUser = createSlice({
   name: 'user',
   initialState: [
@@ -110,6 +112,60 @@ const adminUser = createSlice({
   }
 })
 
+const adminRoom = createSlice({
+  name: 'room',
+  initialState: [
+    {
+      num: 1,
+      theme: "소통",
+      lock: "X",
+      sull: "O",
+      title: "나는 이런것까지 먹어본적 있다",
+      startdate: "2023-01-18",
+      starttime: "20:22:08",
+    },
+    {
+      num: 2,
+      theme: "게임",
+      lock: "O",
+      sull: "X",
+      title: "",
+      startdate: "2023-01-18",
+      starttime: "20:25:08",
+    },
+    {
+      num: 3,
+      theme: "게임",
+      lock: "O",
+      sull: "X",
+      title: "",
+      startdate: "2023-01-18",
+      starttime: "20:25:08",
+    },
+    {
+      num: 4,
+      theme: "게임",
+      lock: "X",
+      sull: "X",
+      title: "",
+      startdate: "2023-01-18",
+      starttime: "20:25:08",
+    },
+    {
+      num: 5,
+      theme: "소통",
+      lock: "O",
+      sull: "O",
+      title: "니가 그렇게 싸움을 잘해?",
+      startdate: "2023-01-18",
+      starttime: "20:25:08",
+    },
+  ],
+  reducers: {
+
+  }
+})
+
 
 
 
@@ -130,6 +186,7 @@ export const store = configureStore({
     createThemeRoomCheck: createThemeRoomCheck.reducer,
     adminUser: adminUser.reducer,
     adminreport: adminreport.reducer,
+    adminRoom: adminRoom.reducer,
   },
 })
 
