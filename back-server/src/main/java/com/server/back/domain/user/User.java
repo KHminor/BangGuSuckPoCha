@@ -98,11 +98,11 @@ public class User {
         }
         return new ArrayList<>();
     }
-    public void update(UserRequestDto requestDto){
+    public void update(UserRequestDto requestDto, Region region){
         this.nickname = requestDto.getNickname();
         this.profile = requestDto.getProfile();
         this.comment = requestDto.getComment();
-        this.region = requestDto.getRegion();
+        this.region = region;
     }
 
 }

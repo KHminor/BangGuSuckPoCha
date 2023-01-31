@@ -1,13 +1,14 @@
 package com.server.back.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +17,15 @@ import java.util.Map;
 @RequestMapping("/item")
 @RestController
 public class ItemController {
+//    private final ItemService itemService;
+
+    @ApiOperation(value = "보유 아이템 목록")
     @GetMapping
-    public ResponseEntity<List<Map<String,Object>>> itemList(){
-        List<Map<String,Object>> itemResponseDtoList = new ArrayList<>();
-        itemResponseDtoList.add(new HashMap<>());
-        itemResponseDtoList.get(0).put("item_id", 700);
-        itemResponseDtoList.get(0).put("item_name", "아이템명");
-        itemResponseDtoList.get(0).put("item_detail", "아이템명");
-        itemResponseDtoList.get(0).put("item_type", 0);
-        return new ResponseEntity<>(itemResponseDtoList, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> itemList(@PathVariable(value = "username") String username){
+        Map<String, Object> response = new HashMap<>();
+//        List<ItemResponseDto> responseDtoList = itemService.itemList(username);
+//        response.put("data", responseDtoList);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

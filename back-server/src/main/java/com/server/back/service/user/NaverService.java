@@ -3,7 +3,7 @@ package com.server.back.service.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.back.config.oauth.Provider.NaverProfile;
-import com.server.back.config.oauth.Provider.NaverToken;
+import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.Region;
 import com.server.back.domain.user.RegionRepository;
 import com.server.back.domain.user.User;
@@ -38,7 +38,7 @@ public class NaverService {
     /**
      * 네이버로 부터 엑세스 토큰을 받는 함수
      */
-    public NaverToken getAccessToken(String code) {
+    public TokenDto getAccessToken(String code) {
 
         //요청 param (body)
         MultiValueMap<String , String> params = new LinkedMultiValueMap<>();
@@ -62,10 +62,10 @@ public class NaverService {
 
         //json형태로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        NaverToken tokenDto =null;
+        TokenDto tokenDto =null;
 
         try {
-            tokenDto = objectMapper.readValue(response, NaverToken.class);
+            tokenDto = objectMapper.readValue(response, TokenDto.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

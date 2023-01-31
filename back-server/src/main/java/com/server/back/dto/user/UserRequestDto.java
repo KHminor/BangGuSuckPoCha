@@ -12,7 +12,7 @@ import lombok.*;
 @ApiModel(value = "UserRequestDto")
 public class UserRequestDto {
     private String nickname;
-    private Region region;
+    private String regionCode;
     private String profile;
     private String comment;
 }
