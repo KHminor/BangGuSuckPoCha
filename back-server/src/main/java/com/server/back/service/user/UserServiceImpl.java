@@ -1,11 +1,12 @@
 package com.server.back.service.user;
 
-import com.server.back.domain.pocha.Pocha;
 import com.server.back.domain.user.*;
 import com.server.back.dto.user.PointRequestDto;
 import com.server.back.dto.user.PointResponseDto;
 import com.server.back.dto.user.UserRequestDto;
 import com.server.back.dto.user.UserResponseDto;
+import com.server.back.jwt.refreshToken.RefreshToken;
+import com.server.back.jwt.refreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final RegionRepository regionRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public UserResponseDto userInfo(String username) {
@@ -52,6 +54,14 @@ public class UserServiceImpl implements UserService{
                 regionRepository.findAll().get(0)
         );
         entity.update(requestDto, region);
+    }
+    @Override
+    public void uesrLogout(String username){
+        User entity = userRepository.findByUsername(username);
+        RefreshToken token = refreshTokenRepository.findRefreshTokenById(entity.getJwtRefreshToken().getId());
+        refreshTokenRepository.delete(token);
+        entity.logout();
+
     }
     @Override
     public List<PointResponseDto> userPointList(String username){
