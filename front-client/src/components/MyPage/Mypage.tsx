@@ -1,13 +1,15 @@
 import Navbar from "../Common/Navbar"
+import NavbarAlarm from "../Common/NavbarAlarm"
+import NavbarMenu from "../Common/NavbarMenu"
 
 function Mypage():JSX.Element {
   return (
-    <div className="grid w-screen h-screen font-nanum" style={{gridTemplateRows: '11rem 1fr 0.05fr', backgroundColor: 'rgb(41,41,41)'}}>
+    <div className="grid w-screen h-screen font-nanum" style={{gridTemplateRows: '11rem 1fr 0.1fr', }}>
       <Navbar />
-      <div className="grid h-full w-full " style={{gridTemplateColumns: '1fr 1.8fr 1fr'}}>
+      <div className="grid h-full w-full " style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
         <div className="bg-black "></div>
         {/* 회원 정보 */}
-        <div className="grid h-full" style={{gridTemplateRows: '2fr 1fr 4.2fr 0.9fr 1.3fr' ,  borderRadius:'24px 24px 24px 24px'}}>
+        <div className="grid h-full border-white border-4 border-opacity-40" style={{gridTemplateRows: '1.7fr 0.7fr 4.2fr 0.9fr 1.3fr' ,  borderRadius:'24px 24px 24px 24px'}}>
           {/* 이모지 및 변경 아이콘 */}
           <div className="flex justify-center items-end h-full" >
             <img className="h-[9rem] w-[9rem] ml-6" style={{objectFit: 'contain'}} src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
@@ -86,7 +88,7 @@ function Mypage():JSX.Element {
           </div>
           {/* 자기소개 */}
           <div className="grid w-full h-[100%] " style={{gridTemplateColumns:'0.45fr 2fr'}}>
-            <div className="flex justify-start items-center text-white text-[1.4rem] font-bold  h-[100%] w-full pl-[2.5rem]">자기소개</div>
+            <div className="flex justify-start items-center text-white text-[1.4rem] font-bold  h-[100%] w-full pl-[1rem]">자기소개</div>
             <input className="flex justify-start items-center text-white text-[1rem] text-center my-auto bg-black h-[70%] w-[95.8%] border-2 " placeholder="#INFJ #20대 #아메리카노 #부산 #소주" type="text" />
           </div>
           {/* Navfooter */}
@@ -105,7 +107,10 @@ function Mypage():JSX.Element {
         </div>
         <div className="bg-black ">3</div>
       </div>
-      <div className="bg-black">3</div>
+      {/* 메뉴 클릭시 보이기 */}
+          <NavbarMenu/>
+      {/* 알림 클릭시 보이기 */}
+          <NavbarAlarm/>
     </div>
   )
 }
