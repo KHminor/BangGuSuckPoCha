@@ -30,7 +30,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
   return (
     <div
       ref={bgDiv}
-      onClick={CloseCarouselModal}
+      onMouseDown={CloseCarouselModal}
       className="bg-black bg-opacity-90 absolute h-screen w-screen grid"
       style={{ gridTemplateRows: "1fr 5fr 1fr" }}
     >
@@ -42,6 +42,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
       <Swiper
         effect={"cards"}
         grabCursor={true}
+        speed={800}
         modules={[EffectCards, Navigation]}
         className="mySwiper"
         style={{
