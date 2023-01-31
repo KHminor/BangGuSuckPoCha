@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
 export type UserInfo = {
@@ -25,7 +25,7 @@ function UserSelect(user: UserInfo) {
   return (
     <div className="row-span-6 w-full h-[100%]">
       <div>
-        <table className="border-collapse border border-slate-400 w-full overflow-auto">
+        <table className="border-collapse border border-slate-400 w-full">
           <thead>
             <tr>
               <th className="border border-slate-200 w-[35%]">닉네임</th>
@@ -98,7 +98,7 @@ function UserSelect(user: UserInfo) {
   );
 }
 function UserList() {
-  
+  const navigate = useNavigate();
   const usertemp: any = useAppSelector((state: any) => {
     return state.adminUser[0];
   });
@@ -127,11 +127,21 @@ function UserList() {
       </div>
       <div className="col-span-3 grid grid-rows-5 gap-5">
         <div className="text-8xl">AdminPage</div>
-        <div className="w-full row-span-3 border-2 border-white grid grid-cols-2">
+        <div className="w-full row-span-3 border-2 border-white grid grid-cols-2 overflow-auto">
           <UserSelect {...usertemp} />
           <div>{isDetail === true ? <UserDetail /> : null}</div>
         </div>
-        <div></div>
+        <div className="grid grid-cols-4">
+          <div
+            className=""
+            onClick={() => {
+              navigate("/adminmain");
+            }}
+          >
+            admin main으로
+          </div>
+          <div className="row-span-3"></div>
+        </div>
       </div>
       <div>
         <div></div>
