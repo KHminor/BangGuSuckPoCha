@@ -43,14 +43,22 @@ public class ChatController {
 			template.convertAndSend("/sub/chat/room/" + chat_id , messageResponseDto);
 		}
 		
-		//DB에 채팅내용 저장
-//		Chat chat = chatRepository.findByChatId(chat_id);
-//		User user = userRepository.findByUserId(requestDto.getUser_id());
-//		messageRepository.save(requestDto.toEntity(chat, user, requestDto.getContent()));
 	}
 	
 	@MessageMapping(value = "/chat/message")
-	public void message()
+	public void message(MessageRequestDto requestDto) {
+		
+		//DB에 채팅내용 저장
+		Chat chat = chatRepository.findByChatId(requestDto.getChat_id());
+		User user = userRepository.findByUserId(requestDto.getUser_id());
+		Message message = requestDto.toEntity(chat, user, requestDto.getContent());
+		messageRepository.save(message);
+		
+		MessageResponseDto responseDto = MessageResponseDto.builder().message(message).build();
+		
+		
+		template.convertAndSend("/sub/chat/room/" + message.getChatId().getChatId(), message);
+	}
 	
 	
 

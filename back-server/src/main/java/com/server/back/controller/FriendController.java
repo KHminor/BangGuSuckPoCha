@@ -40,7 +40,6 @@ public class FriendController {
 	
     @ApiOperation(value = "친구 목록")
     @GetMapping("/{username}")
-    // FriendResponseDto 추가하면 [Map -> FriendResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> friendList(@PathVariable(value = "username") String username){
     	Map<String, Object> response = new HashMap<>();
     	Long userId = userService.findByUsername(username);
@@ -53,7 +52,6 @@ public class FriendController {
     
     @ApiOperation(value = "친구 목록 검색")
     @GetMapping("/{username}/{f_nickname}")
-    // FriendResponseDto 추가하면 [Map -> FriendResponseDto]로 변경
     public ResponseEntity<Map<String, Object>> friendSearchList(@PathVariable(value = "username") String username, @PathVariable(value = "f_nickname") String fNickname){
     	Map<String, Object> response = new HashMap<>();
     	Long userId = userService.findByUsername(username);
