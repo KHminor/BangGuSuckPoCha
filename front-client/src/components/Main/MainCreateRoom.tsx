@@ -56,7 +56,7 @@ const MainCreateRoom = ({
   return (
     <>
       {roomTheme === 1 ? (
-        <div className={`bg-black bg-opacity-90 absolute h-screen text-white`}>
+        <div className={`bg-black bg-opacity-90 fixed h-screen text-white`}>
           <div
             className={`${style.tagListbox} ${style.boxShadow} min-w-[44rem] bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}
           >

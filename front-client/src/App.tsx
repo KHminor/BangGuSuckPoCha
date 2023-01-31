@@ -11,6 +11,9 @@ import AdminMain from "./components/Admin/AdminMain";
 import UserList from "./components/Admin/UserList";
 import UserReport from "./components/Admin/UserReport";
 import UserReportWait from "./components/Admin/UserReportWait";
+import Mypage from "./components/MyPage/Mypage";
+import RoomUserProfile from "./components/Common/RoomUserProfile";
+
 function App() {
   return (
     <div className="App bg-black">
@@ -22,13 +25,15 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/gameroom" element={<GameRoom />} />
         <Route path="/storyroom" element={<StoryRoom />} />
+        <Route path="/mypage" element={<Mypage />} />       
+        <Route path="/userprofile" element={<RoomUserProfile />} />    
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
         <Route path="/userlist" element={<UserList />} />
         <Route path="/userreport" element={<UserReport />} />
         <Route path="/userreport/wait" element={<UserReportWait />} />
-      </Routes>
-    </div>
+      </Routes >
+    </div >
   );
 }
 
