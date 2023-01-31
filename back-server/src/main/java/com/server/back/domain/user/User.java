@@ -107,4 +107,7 @@ public class User {
     public void logout(){
         this.jwtRefreshToken = null;
     }
+    public void userdelete(){
+        this.role = "SECESSION";
+    }
 }

@@ -61,7 +61,11 @@ public class UserServiceImpl implements UserService{
         RefreshToken token = refreshTokenRepository.findRefreshTokenById(entity.getJwtRefreshToken().getId());
         refreshTokenRepository.delete(token);
         entity.logout();
-
+    }
+    @Override
+    public void userDelete(String username){
+        User entity = userRepository.findByUsername(username);
+        entity.userdelete();
     }
     @Override
     public List<PointResponseDto> userPointList(String username){

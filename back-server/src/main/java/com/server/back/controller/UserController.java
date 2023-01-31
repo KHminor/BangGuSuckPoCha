@@ -46,17 +46,22 @@ public class UserController {
             , HttpServletResponse response) throws IOException {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
-        TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-        String target = "http://i8e201.p.ssafy.io?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
-        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-        redirectStrategy.sendRedirect(request, response, target);
+        if (saveUser.getRole().equals("SECESSION")){
+            String target = "http://i8e201.p.ssafy.io?Auth=secession_user";
+            RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+            redirectStrategy.sendRedirect(request, response, target);
+        } else {
+            TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
+            String target = "http://i8e201.p.ssafy.io?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
+            RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+            redirectStrategy.sendRedirect(request, response, target);
+        }
     }
     @GetMapping("/check")
     public Map<String, String> checkcheck(){
         Map<String, String> map = new LinkedHashMap<>();
         map.put("status", "200");
         map.put("message", "accessToken, refreshToken이 생성되었습니다.");
-        System.out.println("????????????????????????"+map);
         return map;
     }
     @ApiOperation(value = "토큰 갱신", notes = "accessToken, refreshToken을 갱신하여 전달.")
@@ -69,14 +74,6 @@ public class UserController {
         Map<String, String> jsonResponse = jwtService.recreateTokenResponse(tokenRequestDto);
         return jsonResponse;
     }
-//    @PostMapping("/auth/refresh/{username}")
-//    // TokenRequestDto, TokenDto 추가하면 [Map -> TokenDto]로 변경
-//    public ResponseEntity<Map<String, Object>> userRefresh(@PathVariable (value = "username") String username/*, @RequestBody TokenRequestDto*/){
-//        Map<String, Object> tokenDto = new HashMap<>();
-//        tokenDto.put("accessToken", "accessToken 테스트!");
-//        tokenDto.put("refreshToken", "refreshToken 테스트!");
-//        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
-//    }
     @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
     @GetMapping("/auth/check/nickname/{nickname}")
     public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathVariable(value = "nickname") String nickname){
@@ -104,8 +101,11 @@ public class UserController {
     }
     @ApiOperation(value = "회원 탈퇴")
     @DeleteMapping("/{username}")
-    public ResponseEntity<String> userDelete(@PathVariable(value = "username") String username){
-        return new ResponseEntity<>("회원 탈퇴 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> userDelete(@PathVariable(value = "username") String username){
+        Map<String, Object> response = new HashMap<>();
+        userService.userDelete(username);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "내 정보 조회.")
     @GetMapping("/myinfo/{username}")

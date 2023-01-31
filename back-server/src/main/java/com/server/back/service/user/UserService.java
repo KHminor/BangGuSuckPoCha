@@ -15,4 +15,5 @@ public interface UserService {
 	Long findByUsername(String username);
     void usePoint(String username, PointRequestDto requestDto);
     void uesrLogout(String username);
+    void userDelete(String username);
 }
