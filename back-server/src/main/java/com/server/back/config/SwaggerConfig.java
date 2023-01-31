@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .groupName("BangGusuck Pocha")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.server.back.controller"))
-                .paths(PathSelectors.ant("/**"))
+                .paths(PathSelectors.ant("/api/**"))
                 .build()
                 .useDefaultResponseMessages(false)
                 .securityContexts(Arrays.asList(securityContext()))
