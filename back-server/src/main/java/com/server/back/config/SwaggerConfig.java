@@ -26,7 +26,7 @@ public class SwaggerConfig {
         Server serverLocal = new Server("local", "http://localhost:9999", "for local usages", Collections.emptyList(), Collections.emptyList());
         Server testServer = new Server("test", "https://i8e201.p.ssafy.io/api", "for testing", Collections.emptyList(), Collections.emptyList());
 
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal, testServer)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
