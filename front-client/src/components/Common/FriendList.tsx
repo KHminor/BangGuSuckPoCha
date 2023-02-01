@@ -16,6 +16,12 @@ function FriendList():JSX.Element {
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck
   })
+  //  메뉴 -> 친구 리스트
+  const menuFriendListApiData: any = useAppSelector((state: any) => {
+    return state.menuFriendListApiData
+  })
+  console.log('친구 리스트: ',menuFriendListApiData);
+  
 
   useEffect(()=> {
     if (menuFriendClickCheck) {
@@ -26,17 +32,17 @@ function FriendList():JSX.Element {
   },[menuFriendClickCheck])
   
   const emoji = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Noto_Emoji_KitKat_263a.svg/220px-Noto_Emoji_KitKat_263a.svg.png'
-  const nickname = '라면왕 한통깨'
+  // const nickname = '라면왕 한통깨'
   const logState = 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png'
-  const friendPkList = [0,1,2,3,4,5,6,7,8,9,10,1,1,1,1]
+  // const friendPkList = [0,1,2,3,4,5,6,7,8,9,10,1,1,1,1]
   
-  const friendList = friendPkList.map((e)=> {
+  const friendList = menuFriendListApiData.map((e:any)=> {
     return (
       <div className=" grid my-2 " style={{gridTemplateColumns: '1fr 3fr 1fr'}} onClick={()=> {
         dispatch(changeMenuFriendChatState())
       }}>
         <div className="flex justify-center items-center h-full pl-2"><img className="object-contain h-[80%] " src={emoji} alt="" /></div>
-        <div className="flex justify-start items-center pl-3 text-base font-semibold h-full">{nickname}</div>
+        <div className="flex justify-start items-center pl-3 text-base font-semibold h-full">{e.f_nickname}</div>
         <div className="flex justify-center items-center h-full"><img className="h-[20%] w-[20%]" src={logState} alt="" /></div>
       </div>
     )
@@ -68,7 +74,7 @@ function FriendList():JSX.Element {
               <div className="flex justify-start items-center h-full text-white text-xs pl-2">친한친구</div>
               <div className={`h-full overflow-scroll ${styles.hideScroll}`}>
                 {
-                  friendPkList ? friendList:null
+                  friendList 
                 }
               </div>
               <div className=""></div>

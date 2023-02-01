@@ -1,9 +1,13 @@
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeAlarmState, changeMenuFriendState, changeMenuState } from "../../store/store";
+import { changeAlarmState, changeMenuFriendListApiDataState, changeMenuFriendState, changeMenuState } from "../../store/store";
 
 function NavbarMenu(): JSX.Element {
   let dispatch = useAppDispatch();
+  // username (현재는 내꺼)
+  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
+
   const menuIcon = useRef<any>(null);
   // 메뉴 클릭 상태
   const checkMenuState: any = useAppSelector((state: any) => {
@@ -43,7 +47,7 @@ function NavbarMenu(): JSX.Element {
     <div
       ref={menuIcon}
       className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden`}
-      style={{ right: "6.5rem", top: "11.1rem" }}
+      style={{ right: "6rem", top: "11.1rem" }}
     >
       <img
         src={require("../../assets/logoIcon/menuBground.png")}
@@ -64,7 +68,15 @@ function NavbarMenu(): JSX.Element {
           <p className="text-stone-200 text-xs">My</p>
         </div>
         <div className="mx-5 cursor-pointer" style={{ height: "52%" }} onClick={()=> {
-          dispatch(changeMenuFriendState())
+          axios({
+            method: 'get',
+            url:`https://i8e201.p.ssafy.io/api/user/friend/${username}`
+          })
+          .then((r)=> {            
+            dispatch(changeMenuFriendState())
+            dispatch(changeMenuFriendListApiDataState(r.data.data))
+          })
+          
         }}>
           <img
             src={require("../../assets/logoIcon/friend.png")}
