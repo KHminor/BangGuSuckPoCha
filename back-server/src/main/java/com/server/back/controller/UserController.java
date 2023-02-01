@@ -47,12 +47,18 @@ public class UserController {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         if (saveUser.getRole().equals("SECESSION")){
-            String target = "http://i8e201.p.ssafy.io?Auth=secession_user";
+            String target = "https://localhost:3000?Role=SECESSION";
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
-        } else {
+        } else if (saveUser.getRole().equals("NEWBIE")){
             TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-            String target = "http://i8e201.p.ssafy.io?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
+            String target = "https://localhost:3000?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
+            userService.roleChange(saveUser.getUsername());
+            RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+            redirectStrategy.sendRedirect(request, response, target);
+        } else{
+            TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
+            String target = "https://localhost:3000?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
         }

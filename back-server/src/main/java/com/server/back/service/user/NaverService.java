@@ -28,7 +28,7 @@ public class NaverService {
 
     private final String client_id = "ZQnQO8XghTL7eTyln27j";
     private final String client_secret = "E_N2HQiJc4";
-    private final String redirect_uri = "http://i8e201.p.ssafy.io/api/login/oauth2/code/naver";
+    private final String redirect_uri = "http://localhost:3000/api/login/oauth2/code/naver";
 //    private final String client_id = "Pi2zJMcupNEz5EsZRzh6";
 //    private final String client_secret = "ZGtXcgsvcR";
 //    private final String redirect_uri = "http://localhost:9999/api/login/oauth2/code/naver";
@@ -124,7 +124,7 @@ public class NaverService {
                     .point(1000)
                     .is_ban(false)
                     .report_point(0)
-                    .role("USER")
+                    .role("NEWBIE")
                     .time(LocalDateTime.now())
                     .region(region)
                     .build();
