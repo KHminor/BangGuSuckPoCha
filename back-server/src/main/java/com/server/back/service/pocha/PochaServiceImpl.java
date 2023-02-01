@@ -1,6 +1,8 @@
 package com.server.back.service.pocha;
 
 import com.server.back.domain.pocha.*;
+import com.server.back.domain.review.Review;
+import com.server.back.domain.review.ReviewRepository;
 import com.server.back.domain.user.User;
 import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.pocha.*;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class PochaServiceImpl implements PochaService{
     private final TagRepository tagRepository;
     private final ThemeRepository themeRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public List<PochaResponseDto> pochaList(PochaRequestDto requestDto) {
@@ -32,7 +36,10 @@ public class PochaServiceImpl implements PochaService{
         Integer age = requestDto.getAge();
         String region = requestDto.getRegion();
         String theme = requestDto.getThemeId().substring(0, 2);
-        Set<String> tagSet = requestDto.getTagList().stream().collect(Collectors.toSet());
+        Set<String> tagSet = null;
+        if(requestDto.getTagList() != null){
+            tagSet = requestDto.getTagList().stream().collect(Collectors.toSet());
+        }
 
         int tagSize = tagSet.size();
         // 모든 포차 확인.
@@ -154,6 +161,34 @@ public class PochaServiceImpl implements PochaService{
         entity.updateExit();
 
         // 유저 평가 추가!!!
+        LocalDateTime start = entity.getCreateAt();
+        LocalDateTime exit = LocalDateTime.now();
+        for(Participant participant : pocha.getParticipant()){
+            if(participant.getExitAt() == null){
+                LocalDateTime dt = null;
+                if(start.isAfter(participant.getCreateAt()))    dt = start;
+                else dt = participant.getCreateAt();
+
+                Duration diff = Duration.between(dt, exit);
+                if(diff.getSeconds() > 1800){
+                    reviewRepository.save(Review.builder()
+                            .pocha(pocha)
+                            .fromId(participant.getUser())
+                            .toId(entity.getUser())
+                            .reviewScore(3)
+                            .create_at(LocalDateTime.now())
+                            .build());
+                    reviewRepository.save(Review.builder()
+                            .pocha(pocha)
+                            .fromId(entity.getUser())
+                            .toId(participant.getUser())
+                            .reviewScore(3)
+                            .create_at(LocalDateTime.now())
+                            .build());
+                }
+            }
+        }
+
     }
 
     @Override

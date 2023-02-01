@@ -1,7 +1,9 @@
 package com.server.back.controller;
 
 import com.server.back.dto.pocha.*;
+import com.server.back.dto.user.PointRequestDto;
 import com.server.back.service.pocha.PochaService;
+import com.server.back.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.Map;
 @RestController
 public class PochaController {
     private final PochaService pochaService;
+    private final UserService userService;
 
     @ApiOperation(value = "포차 목록")
     @GetMapping
@@ -122,6 +125,11 @@ public class PochaController {
 
         pochaService.pochaSsul(pochaId, reqeustDto);
         // 포인트 사용
+        userService.usePoint(reqeustDto.getUsername(), PointRequestDto.builder()
+                .amount(-500)
+                .content("썰 변경-"+reqeustDto.getSsulTitle())
+                .build()
+        );
 
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
