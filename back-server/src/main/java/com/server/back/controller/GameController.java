@@ -25,7 +25,7 @@ public class GameController {
 
     @ApiOperation(value = "양세찬 게임 데이터")
     @GetMapping("/ysc")
-    public ResponseEntity<?> gameYsc(){
+    public ResponseEntity<Map<String,Object>> gameYsc(){
         Map<String, Object> response = new HashMap<>();
 
         List<YscResponseDto> responseDtoList = gameService.gameYsc();
@@ -36,7 +36,7 @@ public class GameController {
     }
     @ApiOperation(value = "라이어 게임 데이터")
     @GetMapping("/liar")
-    public ResponseEntity<?> gameLiar(){
+    public ResponseEntity<Map<String,Object>> gameLiar(){
         Map<String,Object> response = new HashMap<>();
 
         List<LiarResponseDto> responseDtoList = gameService.gameLiar();
@@ -46,8 +46,8 @@ public class GameController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "밸런스 게임 데이터")
-    @GetMapping("/balance/{type}")
-    public ResponseEntity<?> gameBalance(@PathVariable(value = "type") Integer type){
+    @GetMapping("/ysc/{type}")
+    public ResponseEntity<Map<String,Object>> gameBalance(@PathVariable(value = "type") Long type){
         Map<String,Object> response = new HashMap<>();
 
         List<BalanceResponseDto> responseDtoList = gameService.gameBalance(type);
