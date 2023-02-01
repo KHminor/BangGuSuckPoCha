@@ -11,7 +11,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import com.server.back.domain.friend.Chat;
 import com.server.back.domain.friend.ChatRepository;
+import com.server.back.domain.friend.Message;
+import com.server.back.domain.user.User;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/user/friend")
@@ -36,6 +40,8 @@ public class FriendController {
 	
 	@Autowired
 	private UserService userService;
+	
+	private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 	
 	
     @ApiOperation(value = "친구 목록")
@@ -125,21 +131,23 @@ public class FriendController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    /* API 구현 X */
-//    @ApiOperation(value = "채팅 전송")
-//    @MessageMapping("/chat/message")
-//    public ResponseEntity<String> friendChat(@RequestBody MessageRequestDto requestDto){
-//        return new ResponseEntity<>("채팅 전송 완료", HttpStatus.OK);
-//    }
-//    
-//    
-//    @ApiOperation(value = "채팅방 입장 / 메시지 내역 불러오기")
-//    @MessageMapping(value = "/chat/{chat_id}")
-//    public ResponseEntity<Map<String, Object>> friendChatList(@PathVariable(value = "chat_id") Long chatId){
-//    	Map<String, Object> response = new HashMap<>();
-//        List<MessageResponseDto> messageResponseDto = friendService.getChatLog(chatId);
-//        response.put("data", messageResponseDto);
-//        response.put("message","success");
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @ApiOperation(value = "채팅방 입장 및 채팅 내역 불러오기")
+    @GetMapping("/chat/{chat_id}")
+	public ResponseEntity<Map<String, Object>> friendList(@PathVariable(value = "chat_id") Long chat_id){
+    	Map<String, Object> response = new HashMap<>();
+    	List<Message> message = friendService.findChat(chat_id);
+    	List<MessageResponseDto> messageResponseDto = message.stream().map(m -> new MessageResponseDto(m)).collect(Collectors.toList());
+    	response.put("data",messageResponseDto);
+    	response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @ApiOperation(value = "채팅입력")
+	@MessageMapping(value = "/chat/message")
+	public void message(MessageRequestDto requestDto) {
+		//DB에 채팅내용 저장
+		Message message = friendService.saveMessage(requestDto);
+		MessageResponseDto responseDto = MessageResponseDto.builder().message(message).build();
+		template.convertAndSend("/sub/chat/" + requestDto.getChat_id(), responseDto);
+	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +14,14 @@ import com.server.back.domain.friend.FRequest;
 import com.server.back.domain.friend.FRequestRepository;
 import com.server.back.domain.friend.Friend;
 import com.server.back.domain.friend.FriendRepository;
+import com.server.back.domain.friend.Message;
+import com.server.back.domain.friend.MessageRepository;
 import com.server.back.domain.user.User;
 import com.server.back.domain.user.UserRepository;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
+import com.server.back.dto.friend.MessageRequestDto;
 import com.server.back.dto.friend.MessageResponseDto;
 import com.server.back.dto.pocha.PochaResponseDto;
 
@@ -33,6 +37,7 @@ public class FriendServiceImpl implements FriendService {
 	private final FRequestRepository fRequestRepository;
 	private final UserRepository userRepository;
 	private final ChatRepository chatRepository;
+	private final MessageRepository messageRepository;
 	
 	// 친구 목록
 	@Override
@@ -135,6 +140,23 @@ public class FriendServiceImpl implements FriendService {
 	public void refuseFriend(Long fRequestId) {
 		fRequestRepository.deleteByFriendRequestId(fRequestId);
 	
+	}
+
+	// 채팅 내역
+	@Override
+	public List<Message> findChat(Long chat_id) {
+		return messageRepository.findByChatId_chatId(chat_id);
+	}
+	
+
+	// 채팅 메시지 저장
+	@Override
+	public Message saveMessage(MessageRequestDto requestDto) {
+		Chat chat = chatRepository.findByChatId(requestDto.getChat_id());
+		User user = userRepository.findByUserId(requestDto.getUser_id());
+		Message message = requestDto.toEntity(chat, user, requestDto.getContent());
+		messageRepository.save(message);
+		return message;
 	}
 	
 }
