@@ -3,6 +3,13 @@ package com.server.back.controller;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.dto.pocha.PochaRequestDto;
 import com.server.back.dto.pocha.PochaResponseDto;
+import com.server.back.dto.review.ReviewResponseDto;
+import com.server.back.dto.user.UserResponseDto;
+import com.server.back.jwt.service.JwtService;
+import com.server.back.service.report.ReportService;
+import com.server.back.service.review.ReviewService;
+import com.server.back.service.user.NaverService;
+import com.server.back.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +27,12 @@ import java.util.Map;
 @RequestMapping("/admin")
 @RestController
 public class AdminController {
+    private final UserService userService;
+    private final NaverService naverService;
+    private final ReviewService reviewService;
+    private final ReportService reportService;
+    private final JwtService jwtService;
+
     // 로그인, 로그아웃
     @ApiOperation(value = "관리자 로그인")
     @PostMapping("/auth/login")
@@ -42,18 +55,11 @@ public class AdminController {
     @ApiOperation(value = "전체 회원 목록")
     @GetMapping("/user")
     public ResponseEntity<?> adminUserList(){
-        List<Map<String,Object>> userResponseDtoList = new ArrayList<>();
-        userResponseDtoList.add(new HashMap<>());
-        userResponseDtoList.get(0).put("username", "유저명");
-        userResponseDtoList.get(0).put("nickname", "닉네임");
-        userResponseDtoList.get(0).put("gender", "성별");
-        userResponseDtoList.get(0).put("birth", "생일");
-        userResponseDtoList.get(0).put("region", "지역");
-        userResponseDtoList.get(0).put("profile", "프로필");
-        userResponseDtoList.get(0).put("manner", 700);
-        userResponseDtoList.get(0).put("comment", "자기소개");
-        userResponseDtoList.get(0).put("point", 0);
-        return new ResponseEntity<>(userResponseDtoList, HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+        List<UserResponseDto> userResponseDtoList = userService.userInfoList();
+        response.put("data", userResponseDtoList);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "회원 목록 검색")
     @GetMapping("/user/{nickname}")
