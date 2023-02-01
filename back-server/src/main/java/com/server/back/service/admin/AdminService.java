@@ -38,4 +38,8 @@ public interface AdminService {
     void adminYscDelete(Long yscId);
     void adminLiarDelete(Long liarId);
     void adminBalanceDelete(Long balanceId);
+    void adminYscUpdate(Long yscId, YscRequestDto requestDto);
+    void adminLiarUpdate(Long liarId,LiarRequestDto requestDto);
+    void adminBalanceUpdate(Long balanceId, BalanceRequestDto requestDto);
+
 }

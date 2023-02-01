@@ -188,18 +188,27 @@ public class AdminController {
     // 게임 기능
     @ApiOperation(value = "양세찬 게임 데이터 수정")
     @PutMapping("/game/ysc/{ysc_id}")
-    public ResponseEntity<?> adminYscUpdate(@PathVariable(value = "ysc_id")Long ysc_id/*, @RequestBody YscRequestDto requestDto*/){
-        return new ResponseEntity<>("양세찬 게임 데이터 수정 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> adminYscUpdate(@PathVariable(value = "ysc_id")Long ysc_id, @RequestBody YscRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminYscUpdate(ysc_id, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "라이어 게임 데이터 수정")
     @PutMapping("/game/liar/{liar_id}")
-    public ResponseEntity<?> adminLiarUpdate(@PathVariable(value = "liar_id")Long liar_id/*, @RequestBody LiarRequestDto requestDto*/){
-        return new ResponseEntity<>("라이어 게임 데이터 수정 완료", HttpStatus.OK);
+    public ResponseEntity<?> adminLiarUpdate(@PathVariable(value = "liar_id")Long liar_id, @RequestBody LiarRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminLiarUpdate(liar_id, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "밸런스 게임 데이터 수정")
     @PutMapping("/game/balance/{balance_id}")
-    public ResponseEntity<?> adminBalanceUpdate(@PathVariable(value = "balance_id")Long balance_id/*, @RequestBody BalanceRequestDto requestDto*/){
-        return new ResponseEntity<>("밸런스 게임 데이터 수정 완료", HttpStatus.OK);
+    public ResponseEntity<?> adminBalanceUpdate(@PathVariable(value = "balance_id")Long balance_id, @RequestBody BalanceRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminBalanceUpdate(balance_id, requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "양세찬 게임 데이터 삭제")
     @DeleteMapping("/game/ysc/{ysc_id}")

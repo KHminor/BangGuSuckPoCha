@@ -158,5 +158,23 @@ public class AdminServiceImpl implements AdminService {
         Balance balance = balanceRepository.findById(balanceId).get();
         balanceRepository.delete(balance);
     }
-
+    @Override
+    public void adminYscUpdate(Long yscId, YscRequestDto requestDto) {
+        Ysc ysc = yscRepository.findById(yscId).get();
+        ysc.setType(requestDto.getType());
+        ysc.setWord(requestDto.getWord());
+    }
+    @Override
+    public void adminLiarUpdate(Long liarId,LiarRequestDto requestDto) {
+        Liar liar = liarRepository.findById(liarId).get();
+        liar.setType(requestDto.getType());
+        liar.setWord(requestDto.getWord());
+    }
+    @Override
+    public void adminBalanceUpdate(Long balanceId, BalanceRequestDto requestDto) {
+        Balance balance = balanceRepository.findById(balanceId).get();
+        balance.setType(requestDto.getType());
+        balance.setQuestion1(requestDto.getQuestion1());
+        balance.setQuestion2(requestDto.getQuestion2());
+    }
 }
