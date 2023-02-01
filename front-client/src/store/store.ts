@@ -189,6 +189,16 @@ const menuFriendChatClickCheck = createSlice({
   }
 })
 
+// Room에 있는 유저들 프로필 클릭 여부
+const RoomUserProfileClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserProfile(state) {
+      return !state
+    }
+  }
+})
 
 //----------------API요청---------------------- 
 
@@ -210,6 +220,7 @@ export const store = configureStore({
     adminRoom: adminRoom.reducer,
     menuFriendClickCheck: menuFriendClickCheck.reducer,
     menuFriendChatClickCheck: menuFriendChatClickCheck.reducer,
+    RoomUserProfileClickCheck: RoomUserProfileClickCheck.reducer,
   },
 })
 
@@ -222,6 +233,7 @@ export const { changeThemeRoomState } = createThemeRoomCheck.actions
 export const { findDetail, deleteUser } = adminUser.actions
 export const { changeMenuFriendState } = menuFriendClickCheck.actions
 export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
+export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
 
 
 // store의 타입 미리 export 해둔 것.
