@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { visitLexicalEnvironment } from "typescript";
 
 function LoginLoading(): React.ReactElement {
   const navigate = useNavigate();
