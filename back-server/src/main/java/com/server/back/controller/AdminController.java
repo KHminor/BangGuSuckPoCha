@@ -1,6 +1,9 @@
 package com.server.back.controller;
 
 import com.server.back.dto.admin.UpdateReportDto;
+import com.server.back.dto.game.BalanceRequestDto;
+import com.server.back.dto.game.LiarRequestDto;
+import com.server.back.dto.game.YscRequestDto;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.dto.pocha.PochaRequestDto;
 import com.server.back.dto.pocha.PochaResponseDto;
@@ -132,55 +135,55 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 구매 기능
-    @ApiOperation(value = "구매 목록")
-    @GetMapping("/purchase/{nickname}")
-    public ResponseEntity<?> adminPurchaseList(@PathVariable(value = "nickname") String nickname){
-        List<Map<String, Object>> purchaseResponseDtoList = new ArrayList<>();
-        purchaseResponseDtoList.add(new HashMap<>());
-        purchaseResponseDtoList.get(0).put("pur_id", 700);
-        purchaseResponseDtoList.get(0).put("item_id", 700);
-        purchaseResponseDtoList.get(0).put("item_name", "아이템명");
-        purchaseResponseDtoList.get(0).put("item_type", 0);
-        purchaseResponseDtoList.get(0).put("item_price", 70000);
-        purchaseResponseDtoList.get(0).put("user_id", 700);
-        purchaseResponseDtoList.get(0).put("nickname", "닉네임");
-        purchaseResponseDtoList.get(0).put("create_at", LocalDateTime.now());
-        return new ResponseEntity<>(purchaseResponseDtoList, HttpStatus.OK);
-    }
-    @ApiOperation(value = "구매 삭제(환불)")
-    @DeleteMapping("/purchase/{pur_id}")
-    public ResponseEntity<?> adminPurchaseDelete(@PathVariable(value = "pur_id") Long purId){
-        return new ResponseEntity<>("환불 완료!", HttpStatus.OK);
-    }
-
-    // 아이템 기능
-    @ApiOperation(value = "전체 아이템 목록")
-    @GetMapping("/item")
-    public ResponseEntity<?> adminItemList(){
-        List<Map<String,Object>> itemResponseDtoList = new ArrayList<>();
-        itemResponseDtoList.add(new HashMap<>());
-        itemResponseDtoList.get(0).put("item_id", 700);
-        itemResponseDtoList.get(0).put("item_name", "아이템명");
-        itemResponseDtoList.get(0).put("item_detail", "아이템명");
-        itemResponseDtoList.get(0).put("item_type", 0);
-        return new ResponseEntity<>(itemResponseDtoList, HttpStatus.OK);
-    }
-    @ApiOperation(value = "아이템 수정")
-    @PutMapping("/item/{item_id}")
-    public ResponseEntity<?> adminItemUpdate(@PathVariable(value = "item_id")Long item_id/*, @RequestBody ItemRequestDto requestDto*/){
-        return new ResponseEntity<>("아이템 수정 완료", HttpStatus.OK);
-    }
-    @ApiOperation(value = "아이템 삭제")
-    @DeleteMapping("/item/{item_id}")
-    public ResponseEntity<?> adminItemDelete(@PathVariable(value = "item_id")Long item_id){
-        return new ResponseEntity<>("아이템 삭제 완료", HttpStatus.OK);
-    }
-    @ApiOperation(value = "아이템 추가")
-    @PostMapping("/item")
-    public ResponseEntity<?> adminItemInsert(/*@RequestBody ItemRequestDto requestDto*/){
-        return new ResponseEntity<>("아이템 추가 완료", HttpStatus.OK);
-    }
+//    // 구매 기능
+//    @ApiOperation(value = "구매 목록")
+//    @GetMapping("/purchase/{nickname}")
+//    public ResponseEntity<?> adminPurchaseList(@PathVariable(value = "nickname") String nickname){
+//        List<Map<String, Object>> purchaseResponseDtoList = new ArrayList<>();
+//        purchaseResponseDtoList.add(new HashMap<>());
+//        purchaseResponseDtoList.get(0).put("pur_id", 700);
+//        purchaseResponseDtoList.get(0).put("item_id", 700);
+//        purchaseResponseDtoList.get(0).put("item_name", "아이템명");
+//        purchaseResponseDtoList.get(0).put("item_type", 0);
+//        purchaseResponseDtoList.get(0).put("item_price", 70000);
+//        purchaseResponseDtoList.get(0).put("user_id", 700);
+//        purchaseResponseDtoList.get(0).put("nickname", "닉네임");
+//        purchaseResponseDtoList.get(0).put("create_at", LocalDateTime.now());
+//        return new ResponseEntity<>(purchaseResponseDtoList, HttpStatus.OK);
+//    }
+//    @ApiOperation(value = "구매 삭제(환불)")
+//    @DeleteMapping("/purchase/{pur_id}")
+//    public ResponseEntity<?> adminPurchaseDelete(@PathVariable(value = "pur_id") Long purId){
+//        return new ResponseEntity<>("환불 완료!", HttpStatus.OK);
+//    }
+//
+//    // 아이템 기능
+//    @ApiOperation(value = "전체 아이템 목록")
+//    @GetMapping("/item")
+//    public ResponseEntity<?> adminItemList(){
+//        List<Map<String,Object>> itemResponseDtoList = new ArrayList<>();
+//        itemResponseDtoList.add(new HashMap<>());
+//        itemResponseDtoList.get(0).put("item_id", 700);
+//        itemResponseDtoList.get(0).put("item_name", "아이템명");
+//        itemResponseDtoList.get(0).put("item_detail", "아이템명");
+//        itemResponseDtoList.get(0).put("item_type", 0);
+//        return new ResponseEntity<>(itemResponseDtoList, HttpStatus.OK);
+//    }
+//    @ApiOperation(value = "아이템 수정")
+//    @PutMapping("/item/{item_id}")
+//    public ResponseEntity<?> adminItemUpdate(@PathVariable(value = "item_id")Long item_id/*, @RequestBody ItemRequestDto requestDto*/){
+//        return new ResponseEntity<>("아이템 수정 완료", HttpStatus.OK);
+//    }
+//    @ApiOperation(value = "아이템 삭제")
+//    @DeleteMapping("/item/{item_id}")
+//    public ResponseEntity<?> adminItemDelete(@PathVariable(value = "item_id")Long item_id){
+//        return new ResponseEntity<>("아이템 삭제 완료", HttpStatus.OK);
+//    }
+//    @ApiOperation(value = "아이템 추가")
+//    @PostMapping("/item")
+//    public ResponseEntity<?> adminItemInsert(/*@RequestBody ItemRequestDto requestDto*/){
+//        return new ResponseEntity<>("아이템 추가 완료", HttpStatus.OK);
+//    }
 
     // 게임 기능
     @ApiOperation(value = "양세찬 게임 데이터 수정")
@@ -215,18 +218,27 @@ public class AdminController {
     }
     @ApiOperation(value = "양세찬 게임 데이터 추가")
     @PostMapping("/game/ysc")
-    public ResponseEntity<?> adminYscInsert(/*, @RequestBody YscRequestDto requestDto*/){
-        return new ResponseEntity<>("양세찬 게임 데이터 추가 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> adminYscInsert(@RequestBody YscRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminYscInsert(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "라이어 게임 데이터 추가")
     @PostMapping("/game/liar")
-    public ResponseEntity<?> adminLiarInsert(/*, @RequestBody LiarRequestDto requestDto*/){
-        return new ResponseEntity<>("라이어 게임 데이터 추가 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> adminLiarInsert(@RequestBody LiarRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminLiarInsert(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "밸런스 게임 데이터 추가")
     @PostMapping("/game/balance")
-    public ResponseEntity<?> adminBalanceInsert(/*, @RequestBody BalanceRequestDto requestDto*/){
-        return new ResponseEntity<>("밸런스 게임 데이터 추가 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> adminBalanceInsert(@RequestBody BalanceRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminBalanceInsert(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 신고 기능

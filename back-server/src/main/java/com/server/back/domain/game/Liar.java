@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 public class Liar {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long yscId;
+    private Long liarId;
     @Column(length = 30, nullable = false)
     private String type;
     @Column(length = 30, nullable = false)

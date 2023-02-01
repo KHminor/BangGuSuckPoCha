@@ -1,5 +1,6 @@
 package com.server.back.service.admin;
 
+import com.server.back.domain.game.*;
 import com.server.back.domain.pocha.Participant;
 import com.server.back.domain.pocha.Pocha;
 import com.server.back.domain.pocha.PochaRepository;
@@ -7,6 +8,9 @@ import com.server.back.domain.report.Report;
 import com.server.back.domain.report.ReportRepository;
 import com.server.back.domain.user.*;
 import com.server.back.dto.admin.UpdateReportDto;
+import com.server.back.dto.game.BalanceRequestDto;
+import com.server.back.dto.game.LiarRequestDto;
+import com.server.back.dto.game.YscRequestDto;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.dto.pocha.PochaResponseDto;
 import com.server.back.dto.report.ReportResponseDto;
@@ -16,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +34,9 @@ public class AdminServiceImpl implements AdminService {
     private final RegionRepository regionRepository;
     private final PochaRepository pochaRepository;
     private final ReportRepository reportRepository;
+    private final YscRepository yscRepository;
+    private final LiarRepository liarRepository;
+    private final BalanceRepository balanceRepository;
 
     @Override
     public List<UserResponseDto> userInfoList() {
@@ -110,4 +118,30 @@ public class AdminServiceImpl implements AdminService {
         attacker.setReport_point(attacker.getReport_point()+requestDto.getDemerit());
         report.adminReportUpdate();
     }
+    @Override
+    public void adminYscInsert(YscRequestDto requestDto) {
+        Ysc ysc = Ysc.builder()
+                .type(requestDto.getType())
+                .word(requestDto.getWord())
+                .build();
+        yscRepository.save(ysc);
+    }
+    @Override
+    public void adminLiarInsert(LiarRequestDto requestDto) {
+        Liar liar = Liar.builder()
+                .type(requestDto.getType())
+                .word(requestDto.getWord())
+                .build();
+        liarRepository.save(liar);
+    }
+    @Override
+    public void adminBalanceInsert(BalanceRequestDto requestDto) {
+        Balance balance = Balance.builder()
+                .type(requestDto.getType())
+                .question1(requestDto.getQuestion1())
+                .question2(requestDto.getQuestion2())
+                .build();
+        balanceRepository.save(balance);
+    }
+
 }
