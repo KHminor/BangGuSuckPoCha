@@ -35,4 +35,7 @@ public interface AdminService {
     void adminYscInsert(YscRequestDto requestDto);
     void adminLiarInsert(LiarRequestDto requestDto);
     void adminBalanceInsert(BalanceRequestDto requestDto);
+    void adminYscDelete(Long yscId);
+    void adminLiarDelete(Long liarId);
+    void adminBalanceDelete(Long balanceId);
 }

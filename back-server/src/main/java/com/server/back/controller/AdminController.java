@@ -203,18 +203,27 @@ public class AdminController {
     }
     @ApiOperation(value = "양세찬 게임 데이터 삭제")
     @DeleteMapping("/game/ysc/{ysc_id}")
-    public ResponseEntity<?> adminYscDelte(@PathVariable(value = "ysc_id")Long ysc_id){
-        return new ResponseEntity<>("양세찬 게임 데이터 삭제 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> adminYscDelete(@PathVariable(value = "ysc_id")Long ysc_id){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminYscDelete(ysc_id);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "라이어 게임 데이터 삭제")
     @DeleteMapping("/game/liar/{liar_id}")
-    public ResponseEntity<?> adminLiarDelte(@PathVariable(value = "liar_id")Long liar_id){
-        return new ResponseEntity<>("라이어 게임 데이터 삭제 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> adminLiarDelete(@PathVariable(value = "liar_id")Long liar_id){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminLiarDelete(liar_id);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "밸런스 게임 데이터 삭제")
     @DeleteMapping("/game/balance/{balance_id}")
-    public ResponseEntity<?> adminBalanceDelte(@PathVariable(value = "balance_id")Long balance_id){
-        return new ResponseEntity<>("밸런스 게임 데이터 삭제 완료", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> adminBalanceDelete(@PathVariable(value = "balance_id")Long balance_id){
+        Map<String, Object> response = new HashMap<>();
+        adminService.adminBalanceDelete(balance_id);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "양세찬 게임 데이터 추가")
     @PostMapping("/game/ysc")

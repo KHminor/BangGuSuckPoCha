@@ -143,5 +143,20 @@ public class AdminServiceImpl implements AdminService {
                 .build();
         balanceRepository.save(balance);
     }
+    @Override
+    public void adminYscDelete(Long yscId) {
+        Ysc ysc = yscRepository.findById(yscId).get();
+        yscRepository.delete(ysc);
+    }
+    @Override
+    public void adminLiarDelete(Long liarId) {
+        Liar liar = liarRepository.findById(liarId).get();
+        liarRepository.delete(liar);
+    }
+    @Override
+    public void adminBalanceDelete(Long balanceId) {
+        Balance balance = balanceRepository.findById(balanceId).get();
+        balanceRepository.delete(balance);
+    }
 
 }
