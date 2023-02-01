@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeCarouselState, changeMenuState, changeAlarmState } from "../../store/store";
+import {
+  changeCarouselState,
+  changeMenuState,
+  changeAlarmState,
+} from "../../store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
 import Navbar from "../Common/Navbar";
@@ -40,23 +44,21 @@ function Main(): JSX.Element {
   });
   //  메뉴 -> 친구 클릭 상태
   const menuFriendClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendClickCheck
-  })
-  //  메뉴 -> 친구 클릭 -> 챗팅
+    return state.menuFriendClickCheck;
+  });
+  //  메뉴 -> 친구 클릭 상태
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendChatClickCheck
-  })
-  
+    return state.menuFriendChatClickCheck;
+  });
 
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
     if (checkMenuState) {
-      dispatch(changeMenuState())
+      dispatch(changeMenuState());
     } else if (alarmClickCheck) {
-      dispatch(changeAlarmState())
+      dispatch(changeAlarmState());
     }
   }
-
 
   return (
     <>
@@ -65,9 +67,7 @@ function Main(): JSX.Element {
       {/* nav의 메뉴 -> friend 클릭 시 채팅 보이기 : 지금은 우선 띄우는 거만 해놓음 코드 수정해야함
           같은 유저 클릭 시 채팅 닫고 이런식으로?
       */}
-      {
-        menuFriendChatClickCheck? <FriendChat/> : null
-      }
+      {/* {menuFriendChatClickCheck ? <FriendChat /> : null} */}
       {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
       {mainCreateRoomCarouselCheck ? (
         <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
@@ -126,9 +126,9 @@ function Main(): JSX.Element {
         </div>
 
         {/* 메뉴 클릭시 보이기 */}
-          <NavbarMenu/>
+        <NavbarMenu />
         {/* 알림 클릭시 보이기 */}
-          <NavbarAlarm/>
+        <NavbarAlarm />
       </div>
     </>
   );

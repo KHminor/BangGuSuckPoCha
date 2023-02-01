@@ -12,9 +12,8 @@ import UserList from "./components/Admin/UserList";
 import UserReport from "./components/Admin/UserReport";
 import UserReportWait from "./components/Admin/UserReportWait";
 import Mypage from "./components/MyPage/Mypage";
-import RoomUserProfile from "./components/Common/RoomUserProfile";
 import RoomList from "./components/Admin/RoomList";
-import AlarmRequest from "./components/Common/AlarmRequest";
+import LoginLoading from "./components/Login/LoginLoading";
 
 function App() {
   return (
@@ -34,6 +33,7 @@ function App() {
         <Route path="/userreport" element={<UserReport />} />
         <Route path="/userreport/wait" element={<UserReportWait />} />
         <Route path="/roomlist" element={<RoomList />} />
+        <Route path="/loginloading" element={<LoginLoading />} />
       </Routes>
     </div>
   );

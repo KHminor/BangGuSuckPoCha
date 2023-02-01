@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
@@ -21,88 +23,60 @@ function UserDetail() {
 }
 let isDetail = false;
 
-function UserSelect(user: UserInfo) {
+function UserSelect(usertemp: any) {
+  // console.log(Object.keys(usertemp));
+  console.log(usertemp);
   return (
-    <div className="row-span-6 w-full h-[100%]">
-      <div>
-        <table className="border-collapse border border-slate-400 w-full">
-          <thead>
-            <tr>
-              <th className="border border-slate-200 w-[35%]">닉네임</th>
-              <th className="border border-slate-300 w-[20%]">나이</th>
-              <th className="border border-slate-300 w-[20%]">벌점</th>
-              <th className="border border-slate-300 w-[25%]">test</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="h-10">
-              <td className="border border-slate-300  " onClick={() => {}}>
-                {user.nickname}
-              </td>
-              <td className="border border-slate-300  ">{user.age}</td>
-              <td className="border border-slate-300  ">{user.age}</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            <tr className="h-10">
-              <td className="border border-slate-300 ">User1</td>
-              <td className="border border-slate-300  ">20</td>
-              <td className="border border-slate-300  ">4</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div className="row-span-6 w-full overflow-x-auto  max-h-[26.3rem]">
+      <table className="border-collapse border border-slate-400 w-full">
+        <thead>
+          <tr>
+            <th className="border border-slate-200 w-[35%]">닉네임</th>
+            <th className="border border-slate-300 w-[20%]">나이</th>
+            <th className="border border-slate-300 w-[20%]">벌점</th>
+            <th className="border border-slate-300 w-[25%]">test</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* {usertemp.map(function (a: any, i: number) {
+            return (
+              <tr className="h-10">
+                <td className="border border-slate-300  " onClick={() => {}}>
+                  {usertemp[i].nickname}
+                </td>
+                <td className="border border-slate-300  ">{usertemp[i].age}</td>
+                <td className="border border-slate-300  ">
+                  {usertemp[i].demerit}
+                </td>
+                <td className="border border-slate-300  ">❌Delete</td>
+              </tr>
+            );
+          })} */}
+        </tbody>
+      </table>
     </div>
   );
 }
 function UserList() {
+  //실행되자마자 요청해서 받아오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "https://i8e201.p.ssafy.io/api/admin/user",
+    }).then((r) => {
+      // console.log(r.data);
+    });
+  }, []);
+
+  //일단 지금은 유지해보자
   const navigate = useNavigate();
   const usertemp: any = useAppSelector((state: any) => {
-    return state.adminUser[0];
+    return state.adminUser;
   });
-  console.log(usertemp);
+
+  // const test = Array.from(usertemp);
+  // console.log(test);
+  // console.log(usertemp);
 
   /* 
   - **이용자 식별자(PK)**
