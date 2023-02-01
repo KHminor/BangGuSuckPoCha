@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .httpFirewall(new DefaultHttpFirewall())
                 .ignoring()
-                .antMatchers( "/swagger-ui/**");
+                .antMatchers( "/swagger-ui/**")
+                .antMatchers("/**");
     }
 
     @Override

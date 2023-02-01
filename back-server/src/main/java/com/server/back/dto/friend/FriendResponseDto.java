@@ -20,6 +20,7 @@ public class FriendResponseDto {
 		this.friend_id=friend.getFriendId();
 		this.you_id=friend.getYourId().getUserId();
 		this.best_friend=friend.getBestFriend();
+		this.chat_id = friend.getChatId().getChatId();
 		this.f_nickname=friend.getYourId().getNickname();
 		
 	}
