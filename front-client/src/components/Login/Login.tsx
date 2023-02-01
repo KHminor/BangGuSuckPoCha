@@ -109,7 +109,7 @@ function Login(): React.ReactElement {
             onClick={() => {
               axios({
                 method: "get",
-                url: "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code",
+                url: "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=http://localhost:3000/api/user/oauth2/token/naver&response_type=code",
               }).then((r) => {
                 console.log(r.data);
               });
