@@ -349,12 +349,51 @@ const menuFriendChatClickCheck = createSlice({
 ===============================================================================================================================
 */
 
-const myInfo = createSlice({
-  name: 'myInfo',
-  initialState: {
-
-  },
+// Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
+// 요청:0(default), 초대:1, 리뷰:2
+const alarmClickState = createSlice({
+  name: 'alarmClickState',
+  initialState: 0,
   reducers: {
+    changeAlarmClickState(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
+
+// Nav의 alarm을 클릭 후 요청, 초대, 리뷰에 따른 api 데이터 변경
+const alarmApiData = createSlice({
+  name: 'alarmApiData',
+  initialState: [],
+  reducers: {
+    changeAlarmApiDataState(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
+// Nav의 menu 클릭 후 friend list 요청 api 데이터
+const menuFriendListApiData = createSlice({
+  name: 'enuFriendListApiData',
+  initialState: [],
+  reducers: {
+    changeMenuFriendListApiDataState(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
+// Room에 있는 유저들 프로필 클릭 여부
+  const RoomUserProfileClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserProfile(state) {
+      return !state
+    }
+  }
+})
 
   }
 })
@@ -418,7 +457,6 @@ export const store = configureStore({
     adminRoom: adminRoom.reducer,
     menuFriendClickCheck: menuFriendClickCheck.reducer,
     menuFriendChatClickCheck: menuFriendChatClickCheck.reducer,
-    userName: userName.reducer,
     alarmClickState: alarmClickState.reducer,
     alarmApiData: alarmApiData.reducer,
     menuFriendListApiData: menuFriendListApiData.reducer,
@@ -427,13 +465,13 @@ export const store = configureStore({
 });
 
 // createSlice의 reducers 에서 만든 state 변경 함수를 export 하기
-export const { changeMenuState } = menuClickCheck.actions;
-export const { changeAlarmState } = alarmClickCheck.actions;
-export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions;
-export const { changeThemeRoomState } = createThemeRoomCheck.actions;
-export const { findDetail, deleteUser } = adminUser.actions;
-export const { changeMenuFriendState } = menuFriendClickCheck.actions;
-export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions;
+export const { changeMenuState } = menuClickCheck.actions
+export const { changeAlarmState } = alarmClickCheck.actions
+export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions
+export const { changeThemeRoomState } = createThemeRoomCheck.actions
+export const { findDetail, deleteUser } = adminUser.actions
+export const { changeMenuFriendState } = menuFriendClickCheck.actions
+export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
 export const { changeAlarmApiDataState } = alarmApiData.actions
 export const { changeAlarmClickState } = alarmClickState.actions
 export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
@@ -444,4 +482,3 @@ export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
 export type RootState = ReturnType<typeof store.getState>;
 // dispatch 타입을 store에서 가져와서 export해주기
 export type AppDispatch = typeof store.dispatch;
-
