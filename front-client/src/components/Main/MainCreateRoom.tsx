@@ -1,9 +1,10 @@
 import style from "./MainCreateRoom.module.css";
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeCarouselState, changeThemeRoomState } from "../../store/store";
 import MainCreateRoomTheme from "./MainCreateRoomTheme";
+import axios from "axios";
 
 const MainCreateRoom = ({
   onClickHiddenBtn,
@@ -44,6 +45,8 @@ const MainCreateRoom = ({
     dispatch(changeCarouselState());
   };
 
+  let choiceTagList: string[] = []
+
   // 태그 선택 기능
   const onSelectTag = (
     index: number,
@@ -52,7 +55,14 @@ const MainCreateRoom = ({
     // console.log(event.target);
     // selectTags.current[index].classList.toggle(`${style.selectBtn}`)
     (event.target as Element).classList.toggle(`${style.selectBtn}`);
+    const data = event.target as HTMLElement;
+    console.log('선택한 태그: ', data);
+    
   };
+  
+  const createRoomChoicePeople = useAppSelector((state)=> {return state.createRoomChoicePeople})
+  const createRoomChoiceAge = useAppSelector((state)=> {return state.createRoomChoiceAge})
+  const createRoomChoiceRegion = useAppSelector((state)=> {return state.createRoomChoiceRegion})
 
   return (
     <>
@@ -96,6 +106,19 @@ const MainCreateRoom = ({
                 className={`${style.createBtn} cursor-pointer`}
                 type="submit"
                 value="방만들기"
+                onClick={()=> {
+                  console.log('현재 인원수',createRoomChoicePeople);
+                  console.log('방 허용 나이',createRoomChoiceAge);
+                  console.log('방 허용 지역',createRoomChoiceRegion);
+
+                  // axios({
+                  //   method: 'post',
+                  //   url: 'https://i8e201.p.ssafy.io/api/pocha',
+                  //   headers: {
+                  //     limitUser: createRoomChoicePeople
+                  //   }
+                  // })
+                }}
               />
               <input
                 onClick={closeModal}

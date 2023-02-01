@@ -395,6 +395,39 @@ const RoomUserProfileClickCheck = createSlice({
   }
 })
 
+// 방 만들때 인원 체크 
+const createRoomChoicePeople = createSlice({
+  name: 'createRoomChoicePeople',
+  initialState: false,
+  reducers: {
+    changeCreateRoomChoicePeople(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 나이 체크 
+const createRoomChoiceAge = createSlice({
+  name: 'createRoomChoiceAge',
+  initialState: false,
+  reducers: {
+    changeCreateRoomChoiceAge(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 지역 체크 
+const createRoomChoiceRegion = createSlice({
+  name: 'createRoomChoiceAge',
+  initialState: false,
+  reducers: {
+    changecreateRoomChoiceRegion(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -412,6 +445,9 @@ export const store = configureStore({
     alarmApiData: alarmApiData.reducer,
     menuFriendListApiData: menuFriendListApiData.reducer,
     RoomUserProfileClickCheck: RoomUserProfileClickCheck.reducer,
+    createRoomChoicePeople: createRoomChoicePeople.reducer,
+    createRoomChoiceAge: createRoomChoiceAge.reducer,
+    createRoomChoiceRegion: createRoomChoiceRegion.reducer,
   },
 });
 
@@ -427,6 +463,9 @@ export const { changeAlarmApiDataState } = alarmApiData.actions
 export const { changeAlarmClickState } = alarmClickState.actions
 export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
 export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
+export const { changeCreateRoomChoicePeople } = createRoomChoicePeople.actions
+export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions
+export const { changecreateRoomChoiceRegion } = createRoomChoiceRegion.actions
 
 
 // store의 타입 미리 export 해둔 것.
