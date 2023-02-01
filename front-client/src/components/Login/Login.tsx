@@ -87,13 +87,32 @@ function Login(): React.ReactElement {
           ref={firstDiv}
           className="text-[10rem] leading-none text-white flex flex-col items-start justify-center ml-28 tracking-wide h-screen"
         >
-
-          <div className="transition opacity-0 duration-1000 delay-100 -translate-x-40" ref={wordFirst}>내 방에</div>
-          <div className="transition opacity-0 duration-1000 delay-500 -translate-x-40" ref={wordSecond}>포장마차가</div>
-          <div className="transition opacity-0 duration-1000 delay-1000 -translate-x-40" ref={wordThird}>생겼다?!</div>
-          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 w-[33rem] h-3 bg-white mt-3" ref={wordFourth} ></div>
-          <div className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-nanum font-bold tracking-tighter" ref={wordFifth}>
-
+          <div
+            className="transition opacity-0 duration-1000 delay-100 -translate-x-40"
+            ref={wordFirst}
+          >
+            내 방에
+          </div>
+          <div
+            className="transition opacity-0 duration-1000 delay-500 -translate-x-40"
+            ref={wordSecond}
+          >
+            포장마차가
+          </div>
+          <div
+            className="transition opacity-0 duration-1000 delay-1000 -translate-x-40"
+            ref={wordThird}
+          >
+            생겼다?!
+          </div>
+          <div
+            className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 w-[33rem] h-3 bg-white mt-3"
+            ref={wordFourth}
+          ></div>
+          <div
+            className="transition opacity-0 duration-1000 delay-[1300ms] -translate-x-40 text-4xl mt-5 font-nanum font-bold tracking-tighter"
+            ref={wordFifth}
+          >
             Feat : 방 밖은 위험해
           </div>
         </div>
@@ -101,18 +120,18 @@ function Login(): React.ReactElement {
           ref={secondDiv}
           className="flex flex-col items-center justify-center h-screen opacity-0 transition duration-1000 -translate-x-40"
         >
-          <div className={`${styles.neonTitle} text-[10rem] leading-none text-white font-light `}>
+          <div
+            className={`${styles.neonTitle} text-[10rem] leading-none text-white font-light `}
+          >
             방구석포차
           </div>
           <div
             className="w-2/12 mt-10 cursor-pointer"
+            // 밑 주석 지우지 말 것
             onClick={() => {
-              axios({
-                method: "get",
-                url: "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=http://localhost:3000/api/user/oauth2/token/naver&response_type=code",
-              }).then((r) => {
-                console.log(r.data);
-              });
+              // eslint-disable-next-line no-restricted-globals
+              location.href =
+                "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code";
             }}
           >
             <img
