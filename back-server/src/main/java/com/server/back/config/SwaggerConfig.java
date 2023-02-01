@@ -30,14 +30,13 @@ public class SwaggerConfig {
     @Bean
     public Docket pochaApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .host("i8e201.p.ssafy.io")
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .apiInfo(apiInfo())
                 .groupName("BangGusuck Pocha")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.server.back.controller"))
-                .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.ant("/**"))
                 .build()
                 .useDefaultResponseMessages(false)
                 .securityContexts(Arrays.asList(securityContext()))
