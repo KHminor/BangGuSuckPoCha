@@ -398,7 +398,7 @@ const RoomUserProfileClickCheck = createSlice({
 // 방 만들때 인원 체크 
 const createRoomChoicePeople = createSlice({
   name: 'createRoomChoicePeople',
-  initialState: false,
+  initialState: 2,
   reducers: {
     changeCreateRoomChoicePeople(state,action) {
       return state = action.payload
@@ -409,7 +409,7 @@ const createRoomChoicePeople = createSlice({
 // 방 만들때 나이 체크 
 const createRoomChoiceAge = createSlice({
   name: 'createRoomChoiceAge',
-  initialState: false,
+  initialState: 'ALL',
   reducers: {
     changeCreateRoomChoiceAge(state,action) {
       return state = action.payload
@@ -420,9 +420,53 @@ const createRoomChoiceAge = createSlice({
 // 방 만들때 지역 체크 
 const createRoomChoiceRegion = createSlice({
   name: 'createRoomChoiceAge',
-  initialState: false,
+  initialState: '전국',
   reducers: {
-    changecreateRoomChoiceRegion(state,action) {
+    changeCreateRoomChoiceRegion(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 태그 체크 
+const createRoomChoiceTag = createSlice({
+  name: 'createRoomChoiceTag',
+  initialState: [],
+  reducers: {
+    // 클릭 후 추가하는 함수
+    changeCreateRoomChoiceAddTag(state:any,action:any):any {
+      state.push(action.payload)
+    },
+    changeCreateRoomChoiceRemoveTag(state:any,action:any):any {
+      const newState = state.filter((e:any)=> {
+        return e != action.payload
+      })
+      return state = newState
+    },
+    // 태그 초기화하는 함수
+    changeCreateRoomChoiceTagReset(state:any):any {
+      return state = []
+    },
+  }
+})
+
+// 방 만들때 테마Id 체크 
+const createRoomThemeCheck = createSlice({
+  name: 'createRoomThemeCheck',
+  initialState: 'T0B0',
+  reducers: {
+    changeCreateRoomThemeCheck(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 만들어진 방 리스트 (관리자 controller Api) 
+const mainCreateRoomList = createSlice({
+  name: 'mainCreateRoomList',
+  initialState: [],
+  reducers: {
+    changeMainCreateRoomList(state,action) {
       return state = action.payload
     }
   }
@@ -448,6 +492,10 @@ export const store = configureStore({
     createRoomChoicePeople: createRoomChoicePeople.reducer,
     createRoomChoiceAge: createRoomChoiceAge.reducer,
     createRoomChoiceRegion: createRoomChoiceRegion.reducer,
+    createRoomChoiceTag: createRoomChoiceTag.reducer,
+    createRoomThemeCheck: createRoomThemeCheck.reducer,
+    // 관리자
+    mainCreateRoomList: mainCreateRoomList.reducer,
   },
 });
 
@@ -465,7 +513,11 @@ export const { changeMenuFriendListApiDataState } = menuFriendListApiData.action
 export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
 export const { changeCreateRoomChoicePeople } = createRoomChoicePeople.actions
 export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions
-export const { changecreateRoomChoiceRegion } = createRoomChoiceRegion.actions
+export const { changeCreateRoomChoiceRegion } = createRoomChoiceRegion.actions
+export const { changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, changeCreateRoomChoiceTagReset } = createRoomChoiceTag.actions
+export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
+// 관리자
+export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 
 
 // store의 타입 미리 export 해둔 것.

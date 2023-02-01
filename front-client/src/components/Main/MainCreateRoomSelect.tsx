@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useAppDispatch } from "../../store/hooks";
-import { changeCreateRoomChoiceAge, changecreateRoomChoiceRegion } from "../../store/store";
+import { changeCreateRoomChoiceAge, changeCreateRoomChoiceRegion } from "../../store/store";
 import style from "./MainCreateRoom.module.css";
 
 const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => { 
@@ -19,7 +19,12 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
     selectRegionCity.current.classList.toggle("text-black");
     selectRegionCity.current.classList.toggle("bg-white");
     const chlickAge = event.target as HTMLElement;
-    dispatch(changeCreateRoomChoiceAge(chlickAge.innerText))
+    if (chlickAge.innerText[-1] === '대') {
+      const sendData = (chlickAge.innerText).substring(0,2)
+      dispatch(changeCreateRoomChoiceAge(sendData))
+    } else {
+      dispatch(changeCreateRoomChoiceAge(chlickAge.innerText))
+    }
   };
 
   // 선택한 지역에 따른 state 변경
@@ -31,7 +36,7 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
     selectRegionCity.current.classList.toggle("text-black");
     selectRegionCity.current.classList.toggle("bg-white");
     const clickRegion = event.target as HTMLElement;
-    dispatch(changecreateRoomChoiceRegion(clickRegion.innerText))
+    dispatch(changeCreateRoomChoiceRegion(clickRegion.innerText))
   };
 
   return (
