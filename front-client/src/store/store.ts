@@ -224,6 +224,17 @@ const menuFriendListApiData = createSlice({
   }
 })
 
+// Room에 있는 유저들 프로필 클릭 여부
+  const RoomUserProfileClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserProfile(state) {
+      return !state
+    }
+  }
+})
+
 //----------------API요청---------------------- 
 
 
@@ -247,6 +258,7 @@ export const store = configureStore({
     alarmClickState: alarmClickState.reducer,
     alarmApiData: alarmApiData.reducer,
     menuFriendListApiData: menuFriendListApiData.reducer,
+    RoomUserProfileClickCheck: RoomUserProfileClickCheck.reducer,
   },
 })
 
@@ -262,10 +274,10 @@ export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
 export const { changeAlarmApiDataState } = alarmApiData.actions
 export const { changeAlarmClickState } = alarmClickState.actions
 export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
+export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
 
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>
 // dispatch 타입을 store에서 가져와서 export해주기
-export type AppDispatch = typeof store.dispatch
-
+export type AppDispatch = typeof store.dispatch;

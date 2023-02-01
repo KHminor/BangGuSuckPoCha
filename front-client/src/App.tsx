@@ -28,7 +28,6 @@ function App() {
         <Route path="/gameroom" element={<GameRoom />} />
         <Route path="/storyroom" element={<StoryRoom />} />
         <Route path="/mypage" element={<Mypage />} />
-        <Route path="/userprofile" element={<RoomUserProfile />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
         <Route path="/userlist" element={<UserList />} />
