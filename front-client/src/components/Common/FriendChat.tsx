@@ -1,6 +1,23 @@
+import { useEffect, useRef } from "react";
+import { useAppSelector } from "../../store/hooks";
+
 function FriendChat():JSX.Element {
+  const friendChat = useRef<any>(null);
+  //  메뉴 -> 친구 클릭 -> 챗팅
+  const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
+    return state.menuFriendChatClickCheck
+  })
+  
+  useEffect(()=> {
+    if (menuFriendChatClickCheck) {
+      friendChat.current.classList.remove("hidden");
+    } else {
+      friendChat.current.classList.add("hidden");
+    }
+  },[menuFriendChatClickCheck])
+
   return (
-    <div className="absolute  w-[33rem] h-[35rem] top-[11.6rem] right-[19rem]">
+    <div ref={friendChat} className="absolute  w-[33rem] h-[35rem] top-[11.6rem] right-[19rem] hidden">
       <div className=" h-full w-full ">
         <div className="grid w-full h-full border-2 border-white " style={{gridTemplateColumns: '2fr', borderRadius:'24px' }}>
           <div className="grid h-full rounded-[24px] bg-black text-white" style={{gridTemplateRows: '0.5fr 0.7fr 7fr 1fr'}}>

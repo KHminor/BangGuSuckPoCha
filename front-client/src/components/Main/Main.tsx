@@ -5,8 +5,8 @@ import {
   changeMenuState,
   changeAlarmState,
 } from "../../store/store";
-// import FriendChat from "../Common/FriendChat";
-// import FriendList from "../Common/FriendList";
+import FriendChat from "../Common/FriendChat";
+import FriendList from "../Common/FriendList";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
@@ -63,7 +63,7 @@ function Main(): JSX.Element {
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
-      {/* {menuFriendClickCheck ? <FriendList /> : null} */}
+      <FriendList/>
       {/* nav의 메뉴 -> friend 클릭 시 채팅 보이기 : 지금은 우선 띄우는 거만 해놓음 코드 수정해야함
           같은 유저 클릭 시 채팅 닫고 이런식으로?
       */}
