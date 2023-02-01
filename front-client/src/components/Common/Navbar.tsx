@@ -1,6 +1,7 @@
-import { changeAlarmState, changeMenuState } from "../../store/store";
-import { useDispatch } from "react-redux";
+import { changeAlarmApiDataState, changeAlarmState, changeMenuState } from "../../store/store";
 import styles from '../Main/Main.module.css'
+import axios from "axios";
+import { useAppDispatch } from "../../store/hooks";
 
 function Navbar(): JSX.Element {
   return (
@@ -26,7 +27,8 @@ function Navbar(): JSX.Element {
 
 // menu component
 function MenuOption():JSX.Element {
-  let dispatch = useDispatch()
+  let dispatch = useAppDispatch()
+  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
   return (
     <div className="flex w-full">
       <div style={{width: '20%'}}></div>
@@ -39,7 +41,14 @@ function MenuOption():JSX.Element {
         </div>
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer" onClick={()=> {
-            dispatch(changeAlarmState())
+            axios({
+              method:'get',
+              url: `https://i8e201.p.ssafy.io/api/user/friend/request/${username}`
+            })
+            .then((r)=> {
+              dispatch(changeAlarmState())
+              dispatch(changeAlarmApiDataState(r.data.data))
+            })
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
             <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>알림</p>
@@ -59,12 +68,5 @@ function MenuOption():JSX.Element {
   );
 }
 
-function Test():JSX.Element {
-  return (
-    <div className="absolute bg-slate-100">
-      hi
-    </div>
-  )
-}
 
 export default Navbar;

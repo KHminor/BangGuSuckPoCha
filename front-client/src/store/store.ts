@@ -189,6 +189,40 @@ const menuFriendChatClickCheck = createSlice({
   }
 })
 
+// Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
+// 요청:0(default), 초대:1, 리뷰:2
+const alarmClickState = createSlice({
+  name: 'alarmClickState',
+  initialState: 0,
+  reducers: {
+    changeAlarmClickState(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
+
+// Nav의 alarm을 클릭 후 요청, 초대, 리뷰에 따른 api 데이터 변경
+const alarmApiData = createSlice({
+  name: 'alarmApiData',
+  initialState: [],
+  reducers: {
+    changeAlarmApiDataState(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
+// Nav의 menu 클릭 후 friend list 요청 api 데이터
+const menuFriendListApiData = createSlice({
+  name: 'enuFriendListApiData',
+  initialState: [],
+  reducers: {
+    changeMenuFriendListApiDataState(state, action) {
+      return state = action.payload
+    }
+  }
+})
 
 //----------------API요청---------------------- 
 
@@ -210,6 +244,9 @@ export const store = configureStore({
     adminRoom: adminRoom.reducer,
     menuFriendClickCheck: menuFriendClickCheck.reducer,
     menuFriendChatClickCheck: menuFriendChatClickCheck.reducer,
+    alarmClickState: alarmClickState.reducer,
+    alarmApiData: alarmApiData.reducer,
+    menuFriendListApiData: menuFriendListApiData.reducer,
   },
 })
 
@@ -222,6 +259,9 @@ export const { changeThemeRoomState } = createThemeRoomCheck.actions
 export const { findDetail, deleteUser } = adminUser.actions
 export const { changeMenuFriendState } = menuFriendClickCheck.actions
 export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
+export const { changeAlarmApiDataState } = alarmApiData.actions
+export const { changeAlarmClickState } = alarmClickState.actions
+export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
 
 
 // store의 타입 미리 export 해둔 것.

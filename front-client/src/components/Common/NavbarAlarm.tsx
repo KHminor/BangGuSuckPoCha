@@ -1,10 +1,16 @@
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeMenuState } from "../../store/store";
+import { changeMenuState, changeAlarmClickState, changeAlarmApiDataState } from "../../store/store";
 import AlarmRequest from "./AlarmRequest";
 
 function NavbarAlarm(): JSX.Element {
+  
   let dispatch = useAppDispatch();
+
+  // username (현재는 내꺼)
+  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
+
   const alarmIcon = useRef<any>(null);
   // 알람 클릭 상태
   const alarmClickCheck: any = useAppSelector((state: any) => {
@@ -32,7 +38,7 @@ function NavbarAlarm(): JSX.Element {
       <div className="grid h-full w-full rounded-3xl bg-black text-white" style={{gridTemplateRows: '0.5fr 0.5fr 5fr' }}>
         <div className="grid" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr'}}>
           <div></div>
-          <div className="flex justify-center items-center ">알람</div>
+          <div className="flex justify-center items-center">알람</div>
           <div></div>
           {/* 새로고침 */}
           <div className="flex justify-center items-center">
@@ -41,12 +47,33 @@ function NavbarAlarm(): JSX.Element {
         </div>
         {/* 요청 */}
         <div className="grid" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
-          <div className="flex justify-center items-center">요청</div>
-          <div className="flex justify-center items-center">초대</div>
-          <div className="flex justify-center items-center">리뷰</div>
+          <div className="flex justify-center items-center cursor-pointer" onClick={()=> {
+            axios({
+              method:'get',
+              url: `https://i8e201.p.ssafy.io/api/user/friend/request/${username}`
+            })
+            .then((r)=> {
+              dispatch(changeAlarmClickState(0))
+              dispatch(changeAlarmApiDataState(r.data.data))
+            })
+            
+          }}>요청</div>
+          <div className="flex justify-center items-center cursor-pointer" onClick={()=> {
+            axios({
+              method:'get',
+              url: `https://i8e201.p.ssafy.io/api/pocha/invite/${username}`
+            })
+            .then((r)=> {
+              dispatch(changeAlarmClickState(1))
+              dispatch(changeAlarmApiDataState(r.data.data))
+            })
+          }}>초대</div>
+          <div className="flex justify-center items-center cursor-pointer" onClick={()=> {
+            dispatch(changeAlarmClickState(2))
+          }}>리뷰</div>
         </div>
         <AlarmRequest />
-        {/* <div>hi</div> */}
+        <div></div>
       </div>
       
     </div>
