@@ -105,19 +105,16 @@ function Login(): React.ReactElement {
             방구석포차
           </div>
           <div
-            className="w-2/12 mt-10 cursor-pointer"
-            onClick={() => {
-              axios({
-                method: "get",
-                url: "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code",
-              }).then((r) => {
-                console.log(r.data);
-              });
-            }}
+            className="w-2/12 mt-10 cursor-pointer"          
+
+            // 밑 주석 지우지 말 것
+            // eslint-disable-next-line no-restricted-globals
+            onClick={()=>{location.href ="https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code"}}
+
           >
             <img
               src={require("../../assets/loginIcon/naver.png")}
-              alt="login-naver"
+              alt="login-naver"              
             />
           </div>
         </div>

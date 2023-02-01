@@ -1,7 +1,12 @@
 // createSlice: store state 생성 (name: state 변수 이름, initialState: 초기 데이터, reducers: state 변경 함수)
 import { createSlice, configureStore, PayloadAction } from "@reduxjs/toolkit";
+import { create } from "domain";
 
-//----------------일반데이터----------------------
+/*
+===============================================================================================================================
+==========================================================일반데이터===========================================================
+===============================================================================================================================
+*/
 const menuClickCheck = createSlice({
   name: "menuClick",
   initialState: false,
@@ -12,6 +17,7 @@ const menuClickCheck = createSlice({
   },
 });
 
+//유저이름
 const userName = createSlice({
   name: "userName",
   initialState: "",
@@ -21,6 +27,8 @@ const userName = createSlice({
     },
   },
 });
+
+
 
 const alarmClickCheck = createSlice({
   name: "alarmClick",
@@ -88,7 +96,150 @@ const adminUser = createSlice({
   name: "user",
   initialState: [
     {
-      nickname: "장난꾸러기",
+      nickname: "장난꾸러기1",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기2",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기3",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기4",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기5",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기6",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기7",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기8",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기9",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기10",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기11",
+      age: 28,
+      yymmdd: 960418,
+      birthday: "0418",
+      region: "부산광역시",
+      manner: 34,
+      report: 3,
+      demerit: 3,
+      age_group: "20대",
+      left_report: 2,
+      ban: false,
+      admin: false,
+    }, {
+      nickname: "장난꾸러기12",
       age: 28,
       yymmdd: 960418,
       birthday: "0418",
@@ -192,7 +343,22 @@ const menuFriendChatClickCheck = createSlice({
   },
 });
 
-//----------------API요청----------------------
+/*
+===============================================================================================================================
+============================================================API요청============================================================
+===============================================================================================================================
+*/
+
+const myInfo = createSlice({
+  name: 'myInfo',
+  initialState: {
+
+  },
+  reducers: {
+
+  }
+})
+
 
 //
 export const store = configureStore({
