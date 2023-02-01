@@ -47,18 +47,18 @@ public class UserController {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         if (saveUser.getRole().equals("SECESSION")){
-            String target = "http://localhost:3000/loginloading?Role=SECESSION";
+            String target = "https://i8e201.p.ssafy.io/loginloading?Role=SECESSION";
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
         } else if (saveUser.getRole().equals("NEWBIE")){
             TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-            String target = "http://localhost:3000/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
+            String target = "https://i8e201.p.ssafy.io/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
             userService.roleChange(saveUser.getUsername());
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
         } else{
             TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-            String target = "http://localhost:3000/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
+            String target = "https://i8e201.p.ssafy.io/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole();
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
         }
