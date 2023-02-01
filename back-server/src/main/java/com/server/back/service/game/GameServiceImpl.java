@@ -35,7 +35,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<BalanceResponseDto> gameBalance(Long type) {
+    public List<BalanceResponseDto> gameBalance(Integer type) {
         return balanceRepository.findByType(type).stream()
                 .map(e -> new BalanceResponseDto(e))
                 .collect(Collectors.toList());
