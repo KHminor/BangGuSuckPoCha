@@ -108,6 +108,12 @@ public class User {
         this.jwtRefreshToken = null;
     }
     public void userdelete(){
+        this.nickname = "delete" + this.getUserId();
         this.role = "SECESSION";
+    }
+
+    public void adminUserDelete() {
+        this.nickname = "delete" + this.getUserId();
+        this.role = "ADMINDELETE";
     }
 }

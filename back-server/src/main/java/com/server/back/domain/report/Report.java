@@ -1,6 +1,7 @@
 package com.server.back.domain.report;
 
 import com.server.back.domain.user.User;
+import com.server.back.dto.admin.UpdateReportDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,5 +47,9 @@ public class Report {
         this.demerit = demerit;
         this.attackerId = attackerId;
         this.repoterId = repoterId;
+    }
+
+    public void adminReportUpdate() {
+        this.reportResult = Boolean.TRUE;
     }
 }

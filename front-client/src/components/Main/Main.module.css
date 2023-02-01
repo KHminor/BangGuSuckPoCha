@@ -1,0 +1,61 @@
+/* @font-face {
+  font-family: 'NanumGothic';
+  src: url('../../assets/font/NanumGothic.ttf');
+}
+.NanumGothic {
+  font-family: "NanumGothic";
+} */
+
+.hideScroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+.neonDefault {
+  color: #fff;
+  box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px;
+  z-index: 50;
+}
+
+.neon {
+  color: #fff;
+  transition: all 0.4s ;
+}
+
+.neon:hover {
+  box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
+  z-index: 51;
+}
+
+.hidden {
+  display: none;
+}
+
+
+.radiusbottom {
+  border-radius: 0px 0px 16px 16px;
+}
+
+.cancelBtn {
+  /* background: rgba(248, 248, 248, 0.185); */
+  color: rgb(255, 124, 190);
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.5),
+              0 0 10px rgba(255, 51, 51, 0.5),
+              0 0 15px rgba(255, 51, 51, 0.5),
+              0 0 20px rgba(255, 51, 51, 0.5);
+}
+
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.carouselImg:hover {
+  transform: scale(1.18);
+  z-index: 100;
+}
