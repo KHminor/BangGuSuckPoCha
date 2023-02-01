@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/gameroom" element={<GameRoom />} />
-        <Route path="/storyroom" element={<StoryRoom />} />
+        <Route path="/storyroom/:PochaId" element={<StoryRoom />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />

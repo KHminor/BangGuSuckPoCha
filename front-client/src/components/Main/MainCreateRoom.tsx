@@ -142,19 +142,20 @@ const MainCreateRoom = ({
                     }
                   })
                   .then((r)=> {
-                    const createPochaId = r.data.data
+                    const PochaId = r.data.data
                     axios({
                       method: 'post',
                       url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
                       data: {
                         "isHost": true,
-                        "pochaId": createPochaId,
+                        "pochaId": PochaId,
                         "username": username,
                         "waiting": true
                       }
                     })
-                    .then(()=> {
-                      navigate('/storyroom')
+                    .then((r)=> {
+                      console.log(r.data);
+                      navigate(`/storyroom/:${PochaId}`)
                     })
                   })
                 }}
