@@ -37,6 +37,7 @@ wsServer.on("connection", (socket) => {
       const length = users[roomName].length;
       // 왜 안될까
       if (length == maximum) {
+        console.log("이거 되냐?");
         socket.to(socket.id).emit("room_full");
         return;
       }
@@ -52,7 +53,7 @@ wsServer.on("connection", (socket) => {
     socket.to(roomName).emit("welcome", socket.id, users[roomName]);
   });
   socket.on("offer", (offer, socketId, roomName) => {
-    socket.to(socketId).emit("offer", offer, socket.id, "data");
+    socket.to(socketId).emit("offer", offer, socket.id);
   });
   socket.on("answer", (answer, socketId, roomName) => {
     socket.to(socketId).emit("answer", answer, socket.id);
