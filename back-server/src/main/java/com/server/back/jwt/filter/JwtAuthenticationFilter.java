@@ -47,7 +47,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         User user = null;
         try {
             user = om.readValue(request.getInputStream(), User.class);
+            System.out.println("user찾았당!!!!  : "+user);
         } catch (IOException e) {
+            System.out.println("user 못받음");
             e.printStackTrace();
         }
 
@@ -68,10 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        /**
-         * 여기 왜 에러 뜨는지 알아보기 proxy 에러??!
-         */
-        //System.out.println("JwtAuthenticationFilter: " + principal.getUser());
+        System.out.println("JwtAuthenticationFilter: " + principal.getUser());
 
         return authentication;
     }
@@ -88,19 +87,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //token 생성
         TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(principalDetails.getUser().getUsername());
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        Map<String, String> jsonResponse = jwtService.successLoginResponse(tokenRequestDto);
-//        String result = objectMapper.writeValueAsString(jsonResponse);
-////        response.setStatus(HttpStatus.OK.value());
-//        //response 응답
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("utf-8");
-//        response.getWriter().write(result);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, String> jsonResponse = jwtService.successLoginResponse(tokenRequestDto);
+        String result = objectMapper.writeValueAsString(jsonResponse);
+//        response.setStatus(HttpStatus.OK.value());
+
+        //response 응답
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(result);
 //
 //        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.SECRET + tokenRequestDto);
-        String target = "https://i8e201.p.ssafy.io/oauth?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
-        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-        redirectStrategy.sendRedirect(request, response, target);
+//        String target = "https://i8e201.p.ssafy.io/oauth?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken();
+//        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+//        redirectStrategy.sendRedirect(request, response, target);
     }
 }
