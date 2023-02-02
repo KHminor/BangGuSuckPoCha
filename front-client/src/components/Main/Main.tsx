@@ -19,17 +19,18 @@ import Tag from "./Tag";
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
-  const mainCreateRoomList:any = useAppSelector((state)=> {return state.mainCreateRoomList})
+  const mainCreateRoomList: any = useAppSelector((state) => {
+    return state.mainCreateRoomList;
+  });
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
-  useEffect(()=> {
+  useEffect(() => {
     axios({
-      method: 'get',
-      url: 'https://i8e201.p.ssafy.io/api/admin/pocha'
-    })
-    .then((r)=> {
-      dispatch(changeMainCreateRoomList(r.data.data))
-    })
-  },[])
+      method: "get",
+      url: "https://i8e201.p.ssafy.io/api/admin/pocha",
+    }).then((r) => {
+      dispatch(changeMainCreateRoomList(r.data.data));
+    });
+  }, []);
 
   // 방 생성 관련
   const createBtn = useRef<any>(null);
@@ -76,7 +77,7 @@ function Main(): JSX.Element {
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
-      <FriendList/>
+      <FriendList />
       {/* nav의 메뉴 -> friend 클릭 시 채팅 보이기 : 지금은 우선 띄우는 거만 해놓음 코드 수정해야함
           같은 유저 클릭 시 채팅 닫고 이런식으로?
       */}
@@ -118,7 +119,7 @@ function Main(): JSX.Element {
             className="grid grid-cols-1 w-full min-w-[75rem] "
             style={{ backgroundColor: "rgb(25, 25, 25)" }}
           >
-            <Room  mainCreateRoomList={mainCreateRoomList}/>
+            <Room mainCreateRoomList={mainCreateRoomList} />
           </div>
         </div>
         {/* 방 생성 버튼 */}
@@ -148,82 +149,79 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-function Room({mainCreateRoomList}:any): JSX.Element {
+function Room({ mainCreateRoomList }: any): JSX.Element {
   let [hoverCheck, setHoverCheck] = useState(false);
   // console.log('방 목록: ',mainCreateRoomList);
-  
-  let cards: JSX.Element[] = mainCreateRoomList.map((e:any, idx:any) => {
+
+  let cards: JSX.Element[] = mainCreateRoomList.map((e: any, idx: any) => {
     // 태그 정렬하기
-    const TagList = e.tagList.map((tag:any)=> {
-      return `#${tag} `
-    })
-      return (
-        <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
+    const TagList = e.tagList.map((tag: any) => {
+      return `#${tag} `;
+    });
+    return (
+      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
+        <div
+          className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
+          style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
+        >
           <div
-            className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
-            style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
+            className=""
+            style={{ backgroundColor: "rgb(25, 25, 25)" }}
+          ></div>
+          {/* 카드 내부 */}
+          <div
+            className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon}`}
+            style={{ gridTemplateRows: "7fr 3fr" }}
           >
+            <div className="h-full min-h-[100%] w-full min-w-[100%] ">
+              <img
+                src="https://images.pexels.com/photos/5220092/pexels-photo-5220092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                alt=""
+                className="h-full min-h-[100%] w-full min-w-[] object-cover"
+              />
+            </div>
             <div
-              className=""
-              style={{ backgroundColor: "rgb(25, 25, 25)" }}
-            ></div>
-            {/* 카드 내부 */}
-            <div
-              className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon}`}
-              style={{ gridTemplateRows: "7fr 3fr" }}
+              className={`grid grid-rows-3 h-full min-h-[100%] w-full min-w-[100%] bg-black text-white ${styles.radiusbottom}`}
             >
-              <div className="h-full min-h-[100%] w-full min-w-[100%] ">
-                <img
-                  src="https://images.pexels.com/photos/5220092/pexels-photo-5220092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt=""
-                  className="h-full min-h-[100%] w-full min-w-[] object-cover"
-                />
+              <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
+                <div className="col-span-1 "></div>
+                <div
+                  className="w-full h-full col-span-4 rounded-full flex justify-center items-center text-base font-medium"
+                  style={{
+                    backgroundColor: "rgb(227, 114, 0)",
+                    height: "60%",
+                  }}
+                >
+                  Talk
+                </div>
+                <div className="col-span-7 "></div>
               </div>
-              <div
-                className={`grid grid-rows-3 h-full min-h-[100%] w-full min-w-[100%] bg-black text-white ${styles.radiusbottom}`}
-              >
+              <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
                 <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
                   <div className="col-span-1 "></div>
-                  <div
-                    className="w-full h-full col-span-4 rounded-full flex justify-center items-center text-base font-medium"
-                    style={{
-                      backgroundColor: "rgb(227, 114, 0)",
-                      height: "60%",
-                    }}
-                  >
-                    Talk
-                  </div>
-                  <div className="col-span-7 "></div>
-                </div>
-                <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
-                  <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
-                    <div className="col-span-1 "></div>
-                    <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
-                      즐겁게 웃으며 한잔😛
-                    </div>
+                  <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
+                    즐겁게 웃으며 한잔😛
                   </div>
                 </div>
-                <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
-                  <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
-                    <div className="col-span-1 "></div>
-                    <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
-                      {
-                        TagList
-                      }
-                    </div>
+              </div>
+              <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
+                <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
+                  <div className="col-span-1 "></div>
+                  <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
+                    {TagList}
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              className=""
-              style={{ backgroundColor: "rgb(25, 25, 25)" }}
-            ></div>
           </div>
+          <div
+            className=""
+            style={{ backgroundColor: "rgb(25, 25, 25)" }}
+          ></div>
         </div>
-      );
-    }
-  );
+      </div>
+    );
+  });
   return (
     <div className="grid w-full min-w-[75rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 ">
       {cards}

@@ -1,12 +1,19 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeAlarmState, changeMenuFriendListApiDataState, changeMenuFriendState, changeMenuState } from "../../store/store";
+import {
+  changeAlarmState,
+  changeMenuFriendListApiDataState,
+  changeMenuFriendState,
+  changeMenuState,
+} from "../../store/store";
 
 function NavbarMenu(): JSX.Element {
+  const navigate = useNavigate();
   let dispatch = useAppDispatch();
   // username (현재는 내꺼)
-  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
+  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`;
 
   const menuIcon = useRef<any>(null);
   // 메뉴 클릭 상태
@@ -19,29 +26,29 @@ function NavbarMenu(): JSX.Element {
   });
   //  메뉴 -> 친구 클릭 상태
   const menuFriendClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendClickCheck
-  })
-    
+    return state.menuFriendClickCheck;
+  });
+
   // console.log('친구 클릭 해따',menuFriendClickCheck);
   // 메뉴 클릭시 조건 분기
-  useEffect(()=> {
-    if ((checkMenuState)&&(alarmClickCheck)) {
-      dispatch(changeAlarmState())
+  useEffect(() => {
+    if (checkMenuState && alarmClickCheck) {
+      dispatch(changeAlarmState());
       menuIcon.current.classList.remove("hidden");
     } else if (checkMenuState) {
       menuIcon.current.classList.remove("hidden");
-    } else if (!(checkMenuState)) {
+    } else if (!checkMenuState) {
       menuIcon.current.classList.add("hidden");
     }
-  }, [checkMenuState])
+  }, [checkMenuState]);
 
   // 메뉴 -> 친구 클릭시 메뉴 버튼 사라지기
-  useEffect(()=> {
+  useEffect(() => {
     if (menuFriendClickCheck) {
-      dispatch(changeMenuState())
+      dispatch(changeMenuState());
       menuIcon.current.classList.remove("hidden");
     }
-  },[menuFriendClickCheck])
+  }, [menuFriendClickCheck]);
 
   return (
     <div
@@ -58,7 +65,13 @@ function NavbarMenu(): JSX.Element {
         className="flex justify-center items-center absolute   w-48 h-16"
         style={{ right: "-1%", top: "-9%" }}
       >
-        <div className="ml-5 cursor-pointer" style={{ height: "52%" }}>
+        <div
+          className="ml-5 cursor-pointer"
+          style={{ height: "52%" }}
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        >
           <img
             src={require("../../assets/logoIcon/mypage.png")}
             alt=""
@@ -67,17 +80,19 @@ function NavbarMenu(): JSX.Element {
           />
           <p className="text-stone-200 text-xs">My</p>
         </div>
-        <div className="mx-5 cursor-pointer" style={{ height: "52%" }} onClick={()=> {
-          axios({
-            method: 'get',
-            url:`https://i8e201.p.ssafy.io/api/user/friend/${username}`
-          })
-          .then((r)=> {            
-            dispatch(changeMenuFriendState())
-            dispatch(changeMenuFriendListApiDataState(r.data.data))
-          })
-          
-        }}>
+        <div
+          className="mx-5 cursor-pointer"
+          style={{ height: "52%" }}
+          onClick={() => {
+            axios({
+              method: "get",
+              url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
+            }).then((r) => {
+              dispatch(changeMenuFriendState());
+              dispatch(changeMenuFriendListApiDataState(r.data.data));
+            });
+          }}
+        >
           <img
             src={require("../../assets/logoIcon/friend.png")}
             alt=""
