@@ -1,20 +1,17 @@
 package com.server.back.domain.game;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Data
 @Builder
 @Entity
 public class Liar {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long yscId;
+    private Long liarId;
     @Column(length = 30, nullable = false)
     private String type;
     @Column(length = 30, nullable = false)
