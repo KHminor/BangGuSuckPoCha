@@ -23,7 +23,7 @@
 
 .neon:hover {
   box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
-  z-index: 51;
+  /* z-index: ; */
 }
 
 .hidden {
