@@ -11,7 +11,8 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
   const [reportType, setReportType] = useState<number>(0);
   const bgDiv = useRef<any>();
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const onChange = (event: React.ChangeEvent<any>) => {
     const { name, value } = event.target;
     switch (name) {
       case "사유":
@@ -38,6 +39,7 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
           reporterId: 0,
         },
       });
+
       console.log("report", rreport);
     } catch (error) {
       console.log(error);
@@ -57,50 +59,53 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
     >
       <div className="bg-black w-[22%] px-14 pt-14 pb-7 rounded-md text-center">
         <form onSubmit={reportUser}>
-          <div className="text-xl mb-4 font-bold text-white">
-            <span className="font-bold text-red-500">{`${nickname}`}</span>
-            님을 신고하시겠습니까?
+          <div className="text-2xl mb-6 font-bold text-white">
+            <span className="font-bold text-red-500">{`${nickname} `}</span>
+            신고하기
           </div>
           <div className="flex justify-center">
-            <div className="text-white w-1/2 flex-col justify-evenly">
-              <div className="text-start">
+            <div className="text-white w-3/4 flex-col">
+              <div className="text-start my-2">
                 <input onChange={onChange} type="radio" name="타입" value={0} />
-                <span className="text-lg pl-3">욕설</span>
+                <span className="text-lg pl-3">욕설/협박</span>
               </div>
-              <div className="text-start">
+              <div className="text-start my-2">
                 <input onChange={onChange} type="radio" name="타입" value={1} />
-                <span className="text-lg pl-3">성희롱</span>
+                <span className="text-lg pl-3">혐오발언</span>
               </div>
-              <div className="text-start">
+              <div className="text-start my-2">
                 <input onChange={onChange} type="radio" name="타입" value={2} />
                 <span className="text-lg pl-3">부적절한 닉네임</span>
               </div>
-              <div className="text-start">
+              <div className="text-start my-2">
                 <input onChange={onChange} type="radio" name="타입" value={3} />
-                <span className="text-lg pl-3">못생김</span>
+                <span className="text-lg pl-3">음란행위/성희롱</span>
+              </div>
+              <div className="text-start my-2">
+                <input onChange={onChange} type="radio" name="타입" value={4} />
+                <span className="text-lg pl-3">기타</span>
               </div>
               <div className="text-start mt-5">
-                <input
-                  className="p-1 w-full text-black"
+                <textarea
+                  className="p-1 w-full text-white border-2 border-white bg-black resize-none"
                   name="사유"
-                  type="text"
                   value={reportReason}
                   placeholder="신고사유"
                   onChange={onChange}
                   required
-                />
+                ></textarea>
               </div>
             </div>
           </div>
           <div className="mt-5">
             <input
-              className={`${styles.createBtn} cursor-pointer`}
+              className={`${styles.cancelBtn} cursor-pointer`}
               type="submit"
               value="신고"
             />
             <input
               onClick={closeReportModal}
-              className={`${styles.cancelBtn} cursor-pointer`}
+              className={`${styles.createBtn} cursor-pointer`}
               type="button"
               value="취소"
             />

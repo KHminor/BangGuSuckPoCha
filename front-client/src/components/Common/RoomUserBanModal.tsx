@@ -45,13 +45,13 @@ const RoomUserBanModal = ({ userData }: { userData: any }) => {
         </div>
         <input
           onClick={banUser}
-          className={`${styles.createBtn} cursor-pointer`}
+          className={`${styles.cancelBtn} cursor-pointer`}
           type="submit"
-          value="확인"
+          value="강퇴"
         />
         <input
           onClick={closeFriendModal}
-          className={`${styles.cancelBtn} cursor-pointer`}
+          className={`${styles.createBtn} cursor-pointer`}
           type="submit"
           value="취소"
         />
