@@ -1,3 +1,11 @@
 .hideScroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
+
+.shortBorder::after {
+  content: '';
+  display: block;
+  margin-left: 1rem;
+  width: 9.8rem;
+  border-bottom: solid 3px rgb(93, 138, 210);
+}

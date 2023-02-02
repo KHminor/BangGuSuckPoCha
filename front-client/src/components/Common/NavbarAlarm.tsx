@@ -58,6 +58,7 @@ function NavbarAlarm(): JSX.Element {
             })
             
           }}>요청</div>
+          {/* 초대 */}
           <div className="flex justify-center items-center cursor-pointer" onClick={()=> {
             axios({
               method:'get',
@@ -68,8 +69,17 @@ function NavbarAlarm(): JSX.Element {
               dispatch(changeAlarmApiDataState(r.data.data))
             })
           }}>초대</div>
+          {/* 리뷰 */}
           <div className="flex justify-center items-center cursor-pointer" onClick={()=> {
-            dispatch(changeAlarmClickState(2))
+            axios({
+              method: 'get',
+              url: `https://i8e201.p.ssafy.io/api/user/review/${username}`
+            })
+            .then((r)=> {
+              console.log(r.data);
+              dispatch(changeAlarmClickState(2))
+              dispatch(changeAlarmApiDataState(r.data.data))
+            })
           }}>리뷰</div>
         </div>
         <AlarmRequest />
