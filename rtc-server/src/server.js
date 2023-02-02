@@ -67,7 +67,7 @@ wsServer.on("connection", (socket) => {
     let room = users[roomID];
     socket.leave(roomID)
     if (room) {
-      room = room.filters((user) => user.id !== socket.id);
+      room = room.filter((user) => user.id !== socket.id);
       users[roomID] = room;
       if (room.length === 0) {
         delete users[roomID];
