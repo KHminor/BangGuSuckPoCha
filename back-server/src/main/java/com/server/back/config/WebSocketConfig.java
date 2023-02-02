@@ -22,7 +22,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // endpoint 설정 : /ws/chat
         // 이를 통해서 ws://localhost:8080/ws/chat 으로 요청이 들어오면 websocket 통신을 진행합니다.
         registry.addEndpoint("/ws/chat")
-        	.setAllowedOrigins("*")
         	.withSockJS()
         	.setClientLibraryUrl("https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js");
         
