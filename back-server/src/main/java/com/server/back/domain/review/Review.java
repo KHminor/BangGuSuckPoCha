@@ -38,12 +38,11 @@ public class Review {
 
 
     @Builder
-    public Review(Long reviewId, Integer reviewScore, LocalDateTime create_at, LocalDateTime review_at,
+    public Review(Long reviewId, Integer reviewScore, LocalDateTime create_at,
                   Pocha pocha, User toId, User fromId) {
         this.reviewId = reviewId;
         this.reviewScore = reviewScore;
-        this.create_at = create_at;
-        this.review_at = review_at.plusDays(3);
+        this.create_at = LocalDateTime.now();
         this.pocha = pocha;
         this.toId = toId;
         this.fromId = fromId;
