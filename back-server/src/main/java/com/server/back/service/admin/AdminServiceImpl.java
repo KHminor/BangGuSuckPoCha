@@ -7,6 +7,7 @@ import com.server.back.domain.pocha.PochaRepository;
 import com.server.back.domain.report.Report;
 import com.server.back.domain.report.ReportRepository;
 import com.server.back.domain.user.*;
+import com.server.back.dto.admin.LoginAdminRequestDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
@@ -17,6 +18,7 @@ import com.server.back.dto.report.ReportResponseDto;
 import com.server.back.dto.user.UserRequestDto;
 import com.server.back.dto.user.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,31 @@ public class AdminServiceImpl implements AdminService {
     private final YscRepository yscRepository;
     private final LiarRepository liarRepository;
     private final BalanceRepository balanceRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Override
+    public void adminjoin(LoginAdminRequestDto requestDto) {
+        Region region = regionRepository.findAll().get(1);
+        System.out.println(region);
+        User user = User.builder()
+                .username(requestDto.getUsername())
+                .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
+                .nickname("관리자" + requestDto.getNickname())
+                .profile("^_^")
+                .comment(null)
+                .gender("M")
+                .birth("2023.02.02")
+                .manner(36.5)
+                .point(1000)
+                .is_ban(false)
+                .report_point(0)
+                .role("ADMIN")
+                .time(LocalDateTime.now())
+                .region(region)
+                .build();
+
+        userRepository.save(user);
+
+    }
 
     @Override
     public List<UserResponseDto> userInfoList() {

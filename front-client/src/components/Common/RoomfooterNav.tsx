@@ -18,7 +18,7 @@ function RoomfooterNav():JSX.Element {
           <div></div>
           <div className="grid" style={{gridTemplateRows: '0.2fr 0.8fr'}}>
             <div></div>
-            <div className="grid  text-white" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr', border: 'solid 2px white', borderBottom: 'solid 0px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}>
+            <div className="grid  text-white" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr', border: 'solid 2px white', borderBottom: 'solid 0px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}>
               <div className="flex justify-center items-center text-[2rem] ">{currentDate}</div>
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
                 <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/time.png')} alt="" />
@@ -40,10 +40,6 @@ function RoomfooterNav():JSX.Element {
                 <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/exclamation-mark.png')} alt="" />
                 <span className="text-[0.7rem]">포차정보</span>
               </div>               
-              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/report.png')} alt="" />
-                <span className="text-[0.7rem]">신고하기</span>
-              </div>
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
                 <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/cancel.png')} alt="" />
                 <span className="text-[0.7rem]">나가기</span>

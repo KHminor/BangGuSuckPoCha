@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { changeCreateRoomChoicePeople } from "../../store/store";
 import style from "./MainCreateRoom.module.css";
 
 const MainCreateRoomPeople = ({ selectOption }: { selectOption: string[] }) => {
+  const dispatch = useAppDispatch()
   const [selectTitle, ...selectPeople] = selectOption;
   const selectHumans = useRef<any>([]);
   const [people, setPeople] = useState<any>(null);
@@ -12,10 +15,11 @@ const MainCreateRoomPeople = ({ selectOption }: { selectOption: string[] }) => {
     selectHumans.current[0].classList.toggle("text-black");
     selectHumans.current[0].classList.toggle("bg-white");
     setPeople(selectHumans.current[0]);
+    dispatch(changeCreateRoomChoicePeople(2))
   }, [])
 
 
-  const onSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {    
     // 선택한값이 다르면 기존꺼 끄고 새로운거 선택
     if (event.target !== people) {
       people?.classList.toggle("text-black");
@@ -23,7 +27,11 @@ const MainCreateRoomPeople = ({ selectOption }: { selectOption: string[] }) => {
       (event.target as Element).classList.toggle("text-black");
       (event.target as Element).classList.toggle("bg-white");
       setPeople(event.target);
+      const numPeople = event.target as HTMLElement;
+      dispatch(changeCreateRoomChoicePeople(numPeople.innerText))
     } 
+    
+    
   };
   return (
     <div className="flex w-full h-12 mb-10 font-bold items-center">
