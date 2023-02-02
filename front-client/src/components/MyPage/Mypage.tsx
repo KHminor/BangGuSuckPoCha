@@ -307,7 +307,7 @@ function Mypage(): JSX.Element {
                     },
                   }).then((r) => {
                     console.log("성공");
-                    navigate("/mypage");
+                    // navigate("/mypage");
                   });
                 }}
               >
