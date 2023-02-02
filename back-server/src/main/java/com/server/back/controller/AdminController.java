@@ -1,6 +1,6 @@
 package com.server.back.controller;
 
-import com.server.back.dto.admin.LoginAdminRequestDto;
+import com.server.back.dto.admin.SignupAdminRequestDto;
 import com.server.back.dto.admin.RegionResponseDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
@@ -43,7 +43,7 @@ public class AdminController {
 
     // 로그인, 로그아웃
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(@RequestPart(value = "requestDto") LoginAdminRequestDto requestDto){
+    public ResponseEntity<Map<String, Object>> join(@RequestPart(value = "requestDto") SignupAdminRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
         System.out.println(requestDto);
 
