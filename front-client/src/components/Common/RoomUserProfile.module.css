@@ -1,11 +1,11 @@
 
 .createBtn {
-	font-family: "maplestory";
-  font-size: 1.2rem;
+	/* font-family: "maplestory"; */
+  font-size: 1rem;
   position: relative;
   display: inline-block;
   /* color: #fff; */
-	font-weight: 100;
+	font-weight: bold;
   text-decoration: none;
   /* text-transform: uppercase; */
   /* overflow: hidden; */
@@ -37,12 +37,12 @@
 
 
 .cancelBtn {
-	font-family: "maplestory";
-  font-size: 1.2rem;
+	/* font-family: "maplestory"; */
+  font-size: 1rem;
   position: relative;
   display: inline-block;
   /* color: #fff; */
-	font-weight: 100;
+	font-weight: bold;
   text-decoration: none;
   /* text-transform: uppercase; */
   /* overflow: hidden; */

@@ -368,7 +368,7 @@ const roomAddFriendModalCheck = createSlice({
 
 // Room에 있는 유저 강퇴 클릭 여부
 const RoomUserBanClickCheck = createSlice({
-  name: 'RoomUserProfileCheck',
+  name: 'RoomUserBanCheck',
   initialState: false,
   reducers: {
     showRoomUserBanModal(state) {
@@ -376,6 +376,18 @@ const RoomUserBanClickCheck = createSlice({
     }
   }
 })
+
+// Room에 있는 유저 신고 클릭 여부
+const RoomUserReportClickCheck = createSlice({
+  name: 'RoomUserReportCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserReportModal(state) {
+      return !state
+    }
+  }
+})
+
 
 
 // Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
@@ -514,6 +526,7 @@ export const store = configureStore({
     createRoomThemeCheck: createRoomThemeCheck.reducer,
     roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
     RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
+    RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
   },
@@ -538,6 +551,7 @@ export const { changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, ch
 export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
+export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 
