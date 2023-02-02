@@ -101,7 +101,7 @@ public class UserController {
     @PutMapping("/{username}")
     public ResponseEntity<Map<String, Object>> userUpdate(@PathVariable(value = "username") String username , @RequestBody UserRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        userService.userUpdate(username, requestDto);
+        String data = userService.userUpdate(username, requestDto);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
