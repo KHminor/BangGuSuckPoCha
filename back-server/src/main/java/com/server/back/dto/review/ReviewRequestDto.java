@@ -17,5 +17,4 @@ public class ReviewRequestDto {
     private Long reviewId;
     private String toUsername;
     private Integer reviewScore;
-    private LocalDateTime review_at;
 }
