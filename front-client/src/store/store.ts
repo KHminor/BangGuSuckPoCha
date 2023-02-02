@@ -17,16 +17,24 @@ const menuClickCheck = createSlice({
   },
 });
 
-//유저이름
+//유저이름 지울예정
 const userName = createSlice({
   name: "userName",
-  initialState: "",
+  initialState: localStorage.getItem("Username"),
   reducers: {
     changeUserName(state, action) {
       return (state = action.payload);
     },
   },
 });
+
+const myInfo = createSlice({
+  name: "myInfo",
+  initialState: {},
+  reducers: {
+    // changeMyInfo(state, action)
+  },
+})
 
 
 
@@ -92,6 +100,7 @@ const adminreport = createSlice({
 });
 
 //admin페이지 UserList 데이터
+
 const adminUser = createSlice({
   name: "user",
   initialState: [
@@ -430,7 +439,7 @@ const createRoomChoicePeople = createSlice({
   name: 'createRoomChoicePeople',
   initialState: 2,
   reducers: {
-    changeCreateRoomChoicePeople(state,action) {
+    changeCreateRoomChoicePeople(state, action) {
       return state = action.payload
     }
   }
@@ -441,7 +450,7 @@ const createRoomChoiceAge = createSlice({
   name: 'createRoomChoiceAge',
   initialState: 'ALL',
   reducers: {
-    changeCreateRoomChoiceAge(state,action) {
+    changeCreateRoomChoiceAge(state, action) {
       return state = action.payload
     }
   }
@@ -452,7 +461,7 @@ const createRoomChoiceRegion = createSlice({
   name: 'createRoomChoiceAge',
   initialState: '전국',
   reducers: {
-    changeCreateRoomChoiceRegion(state,action) {
+    changeCreateRoomChoiceRegion(state, action) {
       return state = action.payload
     }
   }
@@ -464,17 +473,17 @@ const createRoomChoiceTag = createSlice({
   initialState: [],
   reducers: {
     // 클릭 후 추가하는 함수
-    changeCreateRoomChoiceAddTag(state:any,action:any):any {
+    changeCreateRoomChoiceAddTag(state: any, action: any): any {
       state.push(action.payload)
     },
-    changeCreateRoomChoiceRemoveTag(state:any,action:any):any {
-      const newState = state.filter((e:any)=> {
+    changeCreateRoomChoiceRemoveTag(state: any, action: any): any {
+      const newState = state.filter((e: any) => {
         return e != action.payload
       })
       return state = newState
     },
     // 태그 초기화하는 함수
-    changeCreateRoomChoiceTagReset(state:any):any {
+    changeCreateRoomChoiceTagReset(state: any): any {
       return state = []
     },
   }
@@ -485,7 +494,7 @@ const createRoomThemeCheck = createSlice({
   name: 'createRoomThemeCheck',
   initialState: 'T0B0',
   reducers: {
-    changeCreateRoomThemeCheck(state,action) {
+    changeCreateRoomThemeCheck(state, action) {
       return state = action.payload
     }
   }
@@ -496,7 +505,7 @@ const mainCreateRoomList = createSlice({
   name: 'mainCreateRoomList',
   initialState: [],
   reducers: {
-    changeMainCreateRoomList(state,action) {
+    changeMainCreateRoomList(state, action) {
       return state = action.payload
     }
   }
