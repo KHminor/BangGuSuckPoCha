@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useRef } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { roomAddFriendModalState } from "../../store/store";
 import { toast } from "react-toastify";
@@ -8,7 +7,6 @@ import styles from "./RoomUserProfile.module.css";
 const RoomUserFriendModal = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
   const { nickname } = userData.data;
-  const bgDiv = useRef<any>();
 
   // 친구신청 하는 함수
   const addFriend = async () => {
@@ -37,7 +35,6 @@ const RoomUserFriendModal = ({ userData }: { userData: any }) => {
 
   return (
     <div
-      ref={bgDiv}
       className="bg-slate-800 bg-opacity-50 flex justify-center z-10 items-center absolute top-0 right-0 bottom-0 left-0"
     >
       <div className="bg-black px-16 pt-14 pb-7 rounded-md text-center">

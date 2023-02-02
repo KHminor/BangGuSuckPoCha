@@ -511,6 +511,17 @@ const mainCreateRoomList = createSlice({
   }
 })
 
+// PublicModal 끄고 켜는 함수
+const PublicModal = createSlice({
+  name: 'PublicModal',
+  initialState: false,
+  reducers: {
+    showPublicModal(state) {
+      return !state
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -536,6 +547,7 @@ export const store = configureStore({
     roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
     RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
     RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
+    PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
   },
@@ -561,6 +573,7 @@ export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
 export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
+export const { showPublicModal } = PublicModal.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 
