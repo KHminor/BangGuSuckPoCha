@@ -46,7 +46,7 @@ public class GameController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "밸런스 게임 데이터")
-    @GetMapping("/ysc/{type}")
+    @GetMapping("/balance/{type}")
     public ResponseEntity<Map<String,Object>> gameBalance(@PathVariable(value = "type") Long type){
         Map<String,Object> response = new HashMap<>();
 
