@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-@ApiModel(value = "LoginAdminRequestDto")
-public class LoginAdminRequestDto {
+@ApiModel(value = "SignupAdminRequestDto")
+public class SignupAdminRequestDto {
     private String username;
     private String nickname;
     private String password;

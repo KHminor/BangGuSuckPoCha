@@ -3,6 +3,8 @@ package com.server.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.User;
+import com.server.back.dto.admin.RegionResponseDto;
+import com.server.back.dto.game.YscResponseDto;
 import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.review.ReviewRequestDto;
 import com.server.back.dto.review.ReviewResponseDto;
@@ -101,7 +103,7 @@ public class UserController {
     @PutMapping("/{username}")
     public ResponseEntity<Map<String, Object>> userUpdate(@PathVariable(value = "username") String username , @RequestBody UserRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        userService.userUpdate(username, requestDto);
+        String data = userService.userUpdate(username, requestDto);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

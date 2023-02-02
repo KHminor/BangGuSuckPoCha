@@ -1,6 +1,7 @@
 package com.server.back.controller;
 
-import com.server.back.dto.admin.LoginAdminRequestDto;
+import com.server.back.dto.admin.SignupAdminRequestDto;
+import com.server.back.dto.admin.RegionResponseDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
@@ -42,7 +43,7 @@ public class AdminController {
 
     // 로그인, 로그아웃
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> join(@RequestPart(value = "requestDto") LoginAdminRequestDto requestDto){
+    public ResponseEntity<Map<String, Object>> join(@RequestPart(value = "requestDto") SignupAdminRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
         System.out.println(requestDto);
 
@@ -279,6 +280,15 @@ public class AdminController {
     public ResponseEntity<Map<String,Object>> adminReportUpdate(@PathVariable(value = "report_id") Long report_id, @RequestBody UpdateReportDto requestDto){
         Map<String, Object> response = new HashMap<>();
         adminService.adminReportUpdate(report_id,requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @ApiOperation(value = "지역 데이터 목록")
+    @GetMapping("/region")
+    public ResponseEntity<Map<String, Object>> regionAll(){
+        Map<String, Object> response = new HashMap<>();
+        List<RegionResponseDto> responseDtoList = adminService.regionAll();
+        response.put("data", responseDtoList);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

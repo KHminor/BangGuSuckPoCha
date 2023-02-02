@@ -48,12 +48,18 @@ public class UserServiceImpl implements UserService{
         return entity == null;
     }
     @Override
-    public void userUpdate(String username, UserRequestDto requestDto){
+    public String userUpdate(String username, UserRequestDto requestDto){
         User entity = userRepository.findByUsername(username);
         Region region = regionRepository.findById(requestDto.getRegionCode()).orElse(
                 regionRepository.findAll().get(0)
         );
-        entity.update(requestDto, region);
+        User ifuser = userRepository.findByNickname(requestDto.getNickname());
+        if (ifuser == null){
+            entity.update(requestDto, region);
+            return "success";
+        }else{
+            return "fail : username overlap";
+        }
     }
     @Override
     public void uesrLogout(String username){
