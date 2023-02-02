@@ -19,6 +19,6 @@ public class FRequestResponseDto {
 		this.f_request_id=f_request.getFriendRequestId();
 		this.from_id=f_request.getFromId().getUserId();
 		this.from_nickname=f_request.getFromId().getNickname();
-		this.from_profile="user.getProfile()";
+		this.from_profile=f_request.getFromId().getProfile();
 	}
 }

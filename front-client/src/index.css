@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Nanum Gothic";
+  src: url("./assets/font/NanumGothic.ttf");
+}

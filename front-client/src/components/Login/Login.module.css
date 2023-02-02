@@ -1,16 +1,28 @@
-.container > .bgimg {
-  height: 1300px;
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
+html {
+  scroll-behavior: smooth;
+}
+
+.fontHanSans {
+  font-family: "Black Han Sans";
+}
+
+.bgImg {
+  background-image: url('../../assets/img/backgroundImg.jpg');
+  background-size: contain;
+  /* height: 100vh;
+  width: 100vw; */
 }
 
 .hideScroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
 
-/* .back{
-  width: 100%;
-  height: 100%;
-  background-image: url("../../assets/img/background_Login.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-} */
+.trans {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.neonTitle {
+  text-shadow: 5px 5px 10px #960f4e;
+}

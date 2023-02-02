@@ -45,6 +45,11 @@ public class Friend {
 	@ColumnDefault("false")
 	private Boolean bestFriend;
 	
+	@ManyToOne(targetEntity=Chat.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="chat_id")
+	private Chat chatId;
+	
+	
 	public void update() {
 		this.bestFriend = !bestFriend;
 	}

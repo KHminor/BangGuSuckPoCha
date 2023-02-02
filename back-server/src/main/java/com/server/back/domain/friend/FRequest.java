@@ -22,8 +22,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name="f_request")
+@Entity(name="f_request")
 public class FRequest {
 
 	@Id
