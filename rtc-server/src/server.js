@@ -50,7 +50,7 @@ wsServer.on("connection", (socket) => {
     socket.to(roomName).emit("welcome", socket.id);
   });
   socket.on("offer", (offer, socketId, roomName) => {
-    socket.to(socketId).emit("offer", offer, socket.id);
+    socket.to(socketId).emit("offer", offer, socket.id, "data");
   });
   socket.on("answer", (answer, socketId, roomName) => {
     socket.to(socketId).emit("answer", answer, socket.id);
@@ -60,7 +60,8 @@ wsServer.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const roomID = socketToRoom[socket.io];
+    const roomID = socketToRoom[socket.id];
+    delete socketToRoom[socket.id];
     let room = users[roomID];
     if (room) {
       room = room.filters((user) => user.id !== socket.id);
