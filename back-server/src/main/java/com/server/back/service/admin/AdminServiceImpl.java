@@ -8,6 +8,7 @@ import com.server.back.domain.report.Report;
 import com.server.back.domain.report.ReportRepository;
 import com.server.back.domain.user.*;
 import com.server.back.dto.admin.LoginAdminRequestDto;
+import com.server.back.dto.admin.RegionResponseDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
@@ -203,5 +204,13 @@ public class AdminServiceImpl implements AdminService {
         balance.setType(requestDto.getType());
         balance.setQuestion1(requestDto.getQuestion1());
         balance.setQuestion2(requestDto.getQuestion2());
+    }
+    @Override
+    public List<RegionResponseDto> regionAll() {
+        List<Region> region = regionRepository.findAll();
+        List<RegionResponseDto> responseDtoList = region.stream()
+                .map(r -> new RegionResponseDto(r))
+                .collect(Collectors.toList());
+        return responseDtoList;
     }
 }

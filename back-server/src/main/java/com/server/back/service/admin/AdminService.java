@@ -1,6 +1,7 @@
 package com.server.back.service.admin;
 
 import com.server.back.dto.admin.LoginAdminRequestDto;
+import com.server.back.dto.admin.RegionResponseDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
@@ -40,5 +41,5 @@ public interface AdminService {
     void adminYscUpdate(Long yscId, YscRequestDto requestDto);
     void adminLiarUpdate(Long liarId,LiarRequestDto requestDto);
     void adminBalanceUpdate(Long balanceId, BalanceRequestDto requestDto);
-
+    List<RegionResponseDto> regionAll();
 }

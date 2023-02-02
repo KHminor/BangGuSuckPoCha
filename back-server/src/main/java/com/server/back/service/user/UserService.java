@@ -10,7 +10,7 @@ public interface UserService {
     UserResponseDto userInfo(String username);
 
     boolean userNicknameCheck(String nickname);
-    void userUpdate(String username, UserRequestDto requestDto);
+    String userUpdate(String username, UserRequestDto requestDto);
     List<PointResponseDto> userPointList(String user);
 	Long findByUsername(String username);
     void usePoint(String username, PointRequestDto requestDto);
