@@ -3,6 +3,7 @@ package com.server.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.server.back.config.oauth.Provider.TokenDto;
 import com.server.back.domain.user.User;
+import com.server.back.dto.admin.RegionResponseDto;
 import com.server.back.dto.game.YscResponseDto;
 import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.review.ReviewRequestDto;
@@ -185,15 +186,6 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> userReport(@RequestBody ReportRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
         reportService.userReport(requestDto);
-        response.put("message", "success");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    @ApiOperation(value = "지역 데이터 리스트")
-    @GetMapping("/region")
-    public ResponseEntity<Map<String, Object>> regionAll(){
-        Map<String, Object> response = new HashMap<>();
-        List<RegionResponseDto> responseDtoList = userService.regionAll();
-        response.put("data", responseDtoList);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
