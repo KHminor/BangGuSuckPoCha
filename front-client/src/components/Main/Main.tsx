@@ -1,9 +1,11 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeCarouselState,
   changeMenuState,
   changeAlarmState,
+  changeMainCreateRoomList,
 } from "../../store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
@@ -16,7 +18,18 @@ import MainCreateRoomCarousel from "./MainCreateRoomCarousel";
 import Tag from "./Tag";
 
 function Main(): JSX.Element {
-  let dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const mainCreateRoomList:any = useAppSelector((state)=> {return state.mainCreateRoomList})
+  // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
+  useEffect(()=> {
+    axios({
+      method: 'get',
+      url: 'https://i8e201.p.ssafy.io/api/admin/pocha'
+    })
+    .then((r)=> {
+      dispatch(changeMainCreateRoomList(r.data.data))
+    })
+  },[])
 
   // 방 생성 관련
   const createBtn = useRef<any>(null);
@@ -105,7 +118,7 @@ function Main(): JSX.Element {
             className="grid grid-cols-1 w-full min-w-[75rem] "
             style={{ backgroundColor: "rgb(25, 25, 25)" }}
           >
-            <Room />
+            <Room  mainCreateRoomList={mainCreateRoomList}/>
           </div>
         </div>
         {/* 방 생성 버튼 */}
@@ -135,10 +148,15 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-function Room(): JSX.Element {
+function Room({mainCreateRoomList}:any): JSX.Element {
   let [hoverCheck, setHoverCheck] = useState(false);
-  let cards: JSX.Element[] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(
-    (e, idx) => {
+  // console.log('방 목록: ',mainCreateRoomList);
+  
+  let cards: JSX.Element[] = mainCreateRoomList.map((e:any, idx:any) => {
+    // 태그 정렬하기
+    const TagList = e.tagList.map((tag:any)=> {
+      return `#${tag} `
+    })
       return (
         <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
           <div
@@ -189,7 +207,9 @@ function Room(): JSX.Element {
                   <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
                     <div className="col-span-1 "></div>
                     <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
-                      #20대 #경남 #포차 #주정뱅이
+                      {
+                        TagList
+                      }
                     </div>
                   </div>
                 </div>

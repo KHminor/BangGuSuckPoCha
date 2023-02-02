@@ -343,11 +343,52 @@ const menuFriendChatClickCheck = createSlice({
   },
 });
 
-/*
-===============================================================================================================================
-============================================================API요청============================================================
-===============================================================================================================================
-*/
+// 룸에있는 유저 프로필 클릭 여부
+const RoomUserProfileClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserProfile(state) {
+      return !state
+    }
+  }
+})
+
+// Room에 있는 유저 친구 클릭 여부
+const roomAddFriendModalCheck = createSlice({
+  name: "roomAddFriendModalState",
+  initialState: false,
+  reducers: {
+    roomAddFriendModalState(state) {
+      return !state;
+    },
+  },
+});
+
+
+// Room에 있는 유저 강퇴 클릭 여부
+const RoomUserBanClickCheck = createSlice({
+  name: 'RoomUserBanCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserBanModal(state) {
+      return !state
+    }
+  }
+})
+
+// Room에 있는 유저 신고 클릭 여부
+const RoomUserReportClickCheck = createSlice({
+  name: 'RoomUserReportCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserReportModal(state) {
+      return !state
+    }
+  }
+})
+
+
 
 // Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
 // 요청:0(default), 초대:1, 리뷰:2
@@ -384,13 +425,79 @@ const menuFriendListApiData = createSlice({
   }
 })
 
-// Room에 있는 유저들 프로필 클릭 여부
-const RoomUserProfileClickCheck = createSlice({
-  name: 'RoomUserProfileCheck',
-  initialState: false,
+// 방 만들때 인원 체크 
+const createRoomChoicePeople = createSlice({
+  name: 'createRoomChoicePeople',
+  initialState: 2,
   reducers: {
-    showRoomUserProfile(state) {
-      return !state
+    changeCreateRoomChoicePeople(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 나이 체크 
+const createRoomChoiceAge = createSlice({
+  name: 'createRoomChoiceAge',
+  initialState: 'ALL',
+  reducers: {
+    changeCreateRoomChoiceAge(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 지역 체크 
+const createRoomChoiceRegion = createSlice({
+  name: 'createRoomChoiceAge',
+  initialState: '전국',
+  reducers: {
+    changeCreateRoomChoiceRegion(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 방 만들때 태그 체크 
+const createRoomChoiceTag = createSlice({
+  name: 'createRoomChoiceTag',
+  initialState: [],
+  reducers: {
+    // 클릭 후 추가하는 함수
+    changeCreateRoomChoiceAddTag(state:any,action:any):any {
+      state.push(action.payload)
+    },
+    changeCreateRoomChoiceRemoveTag(state:any,action:any):any {
+      const newState = state.filter((e:any)=> {
+        return e != action.payload
+      })
+      return state = newState
+    },
+    // 태그 초기화하는 함수
+    changeCreateRoomChoiceTagReset(state:any):any {
+      return state = []
+    },
+  }
+})
+
+// 방 만들때 테마Id 체크 
+const createRoomThemeCheck = createSlice({
+  name: 'createRoomThemeCheck',
+  initialState: 'T0B0',
+  reducers: {
+    changeCreateRoomThemeCheck(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
+// 만들어진 방 리스트 (관리자 controller Api) 
+const mainCreateRoomList = createSlice({
+  name: 'mainCreateRoomList',
+  initialState: [],
+  reducers: {
+    changeMainCreateRoomList(state,action) {
+      return state = action.payload
     }
   }
 })
@@ -412,6 +519,16 @@ export const store = configureStore({
     alarmApiData: alarmApiData.reducer,
     menuFriendListApiData: menuFriendListApiData.reducer,
     RoomUserProfileClickCheck: RoomUserProfileClickCheck.reducer,
+    createRoomChoicePeople: createRoomChoicePeople.reducer,
+    createRoomChoiceAge: createRoomChoiceAge.reducer,
+    createRoomChoiceRegion: createRoomChoiceRegion.reducer,
+    createRoomChoiceTag: createRoomChoiceTag.reducer,
+    createRoomThemeCheck: createRoomThemeCheck.reducer,
+    roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
+    RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
+    RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
+    // 관리자
+    mainCreateRoomList: mainCreateRoomList.reducer,
   },
 });
 
@@ -427,6 +544,16 @@ export const { changeAlarmApiDataState } = alarmApiData.actions
 export const { changeAlarmClickState } = alarmClickState.actions
 export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
 export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
+export const { changeCreateRoomChoicePeople } = createRoomChoicePeople.actions
+export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions
+export const { changeCreateRoomChoiceRegion } = createRoomChoiceRegion.actions
+export const { changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, changeCreateRoomChoiceTagReset } = createRoomChoiceTag.actions
+export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
+export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
+export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
+export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
+// 관리자
+export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 
 
 // store의 타입 미리 export 해둔 것.

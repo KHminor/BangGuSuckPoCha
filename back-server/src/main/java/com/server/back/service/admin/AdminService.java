@@ -1,6 +1,9 @@
 package com.server.back.service.admin;
 
 import com.server.back.dto.admin.UpdateReportDto;
+import com.server.back.dto.game.BalanceRequestDto;
+import com.server.back.dto.game.LiarRequestDto;
+import com.server.back.dto.game.YscRequestDto;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.dto.pocha.PochaResponseDto;
 import com.server.back.dto.report.ReportRequestDto;
@@ -29,4 +32,14 @@ public interface AdminService {
     void adminPochaDelete(Long pochaId);
     List<ReportResponseDto> adminReport();
     void adminReportUpdate(Long report_id, UpdateReportDto requestDto);
+    void adminYscInsert(YscRequestDto requestDto);
+    void adminLiarInsert(LiarRequestDto requestDto);
+    void adminBalanceInsert(BalanceRequestDto requestDto);
+    void adminYscDelete(Long yscId);
+    void adminLiarDelete(Long liarId);
+    void adminBalanceDelete(Long balanceId);
+    void adminYscUpdate(Long yscId, YscRequestDto requestDto);
+    void adminLiarUpdate(Long liarId,LiarRequestDto requestDto);
+    void adminBalanceUpdate(Long balanceId, BalanceRequestDto requestDto);
+
 }

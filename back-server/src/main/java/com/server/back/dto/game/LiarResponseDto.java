@@ -18,7 +18,7 @@ public class LiarResponseDto {
     String word;
 
     public LiarResponseDto(Liar e) {
-        this.liarId = e.getYscId();
+        this.liarId = e.getLiarId();
         this.type = e.getType();
         this.word = e.getWord();
     }

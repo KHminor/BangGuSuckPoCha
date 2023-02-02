@@ -1,8 +1,12 @@
 import { useState, useRef, useEffect } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { changeCreateRoomThemeCheck } from "../../store/store";
 import style from "./MainCreateRoom.module.css";
 
 const MainCreateRoomTheme = ({ selectOption }: { selectOption: string[] }) => {
+  const dispatch = useAppDispatch()
   const [selectTitle, ...selectPocha] = selectOption;
+  const themeIdList = ['T0B0', 'T0B1', 'T0B2']
   const selectTheme = useRef<any>([]);
   const themeImg = [
     require("../../assets/theme/izakaya.jpg"),
@@ -25,6 +29,9 @@ const MainCreateRoomTheme = ({ selectOption }: { selectOption: string[] }) => {
       theme?.classList.toggle("scale-125");
       (event.target as Element).classList.toggle("grayscale");
       (event.target as Element).classList.toggle("scale-125");
+      const data:any = event.target
+      // 클릭한 alt 값에 따른 테마 체크 값 변경 함수
+      dispatch(changeCreateRoomThemeCheck(data.getAttribute('alt')))
       setTheme(event.target);
     }
   };
@@ -42,7 +49,7 @@ const MainCreateRoomTheme = ({ selectOption }: { selectOption: string[] }) => {
               className={`grayscale w-32 h-24 cursor-pointer rounded-lg`}
               src={themeImg[index]}
               onClick={onSelect}
-              alt={`${selectPocha[index + 1]}`}
+              alt={`${themeIdList[index]}`}
             />
             <div
               className={`my-3 mr-4 rounded-fu w-full h-full text-lg flex justify-center items-center`}
