@@ -1,9 +1,9 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeAlarmApiDataState, changeAlarmClickState } from "../../store/store";
 import styles from './Common.module.css'
-import starStyles from './StarReview.module.css'
+import './StarReview.css'
 
 function AlarmRequest():JSX.Element {
   const alarmApiData = useAppSelector((state:any)=> {return state.alarmApiData})
@@ -156,21 +156,18 @@ function ReviewListComponent({to_nickname}:any):JSX.Element {
 // 별점 평가
 function StarReview():JSX.Element {
   const [starState,setStarState] = useState()
+  const star = useRef<any>(null)
+  
   return (
     <div className="flex justify-start items-center">
-      <form name="starReview" className={`grid ${starStyles.starReview}`} style={{gridTemplateColumns: '3fr 1fr 1.5fr'}}>
-        <fieldset onClick={(e:any)=> {
-          console.log('별 클릭: ',e.target.getAttribute('value'));
-          console.log('별: ',e.target);
-          setStarState(e.target.getAttribute('value'))
-          
-        }}>
-          <input type="radio" name="rating" value="5" id="rate1"/> <label htmlFor="rate1">⭐</label>
-          <input type="radio" name="rating" value="4" id="rate2"/> <label htmlFor="rate2">⭐</label>
-          <input type="radio" name="rating" value="3" id="rate3"/> <label htmlFor="rate3">⭐</label>
-          <input type="radio" name="rating" value="2" id="rate4"/> <label htmlFor="rate4">⭐</label>
-          <input type="radio" name="rating" value="1" id="rate5"/> <label htmlFor="rate5">⭐</label>
-        </fieldset>
+      <div className={`grid `} style={{gridTemplateColumns: '3fr 1fr 1.5fr'}}>
+        <span className="star">
+          ★★★★★
+          <span ref={star}>★★★★★</span>
+          <input type="range" value="1" step="1" min="0" max="10" onInput={()=> {
+            document.querySelector(`.star span`)
+          }} />
+        </span>
         <div></div>
         <div className="flex justify-center items-center cursor-pointer w-full h-ful">
           <input className="text-xs cursor-pointer" type="submit" value={'평가하기'} onClick={(e)=> {
@@ -179,7 +176,8 @@ function StarReview():JSX.Element {
             
           }}/>
         </div>
-      </form>
+      </div>
     </div>
   )
 }
+
