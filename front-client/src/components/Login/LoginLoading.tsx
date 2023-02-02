@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { visitLexicalEnvironment } from "typescript";
 
 function LoginLoading(): React.ReactElement {
   const navigate = useNavigate();
@@ -18,7 +17,9 @@ function LoginLoading(): React.ReactElement {
     // console.log("Refresh : " + Refresh);
 
     const Role: any = urlParams.get("Role");
-    // console.log("Role : " + Role);
+
+    const Username: any = urlParams.get("Username");
+    // console.log("Username : " + Username);
 
     // Auth : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxcnZ2d29Wb2h3T2xuOUpFbkdtd1lGNzBfOUt3LVprQk0xN2tpY3gzSGRZIiwiZXhwIjoxNjc1MTgxMTU3LCJ1c2VySWQiOjMsInVzZXJuYW1lIjoiMXJ2dndvVm9od09sbjlKRW5HbXdZRjcwXzlLdy1aa0JNMTdraWN4M0hkWSJ9.zk-eGoa1Q00e2HG3puEYN8-6v8S_KWXIDTJgFaBO2SXiYfg8yp5bBDetycTYkwDVpJSwVLpAGCDOracEbDhOOg
 
@@ -26,16 +27,18 @@ function LoginLoading(): React.ReactElement {
 
     // Role : NEWBIE/USER/SECESSION/ADMIN
 
+    // Username : "1rvvwoVohwOln9JEnGmwYF70_9Kw-ZkBM17kicx3HdY"
+
     //토큰을 로컬로 유지할 것인가 store에서 유지할 것인가 고민해봐야함
     if (Role === "NEWBIE") {
       localStorage.setItem("accessToken", Auth);
-      localStorage.setItem("refreshToken", Refresh);      
+      localStorage.setItem("refreshToken", Refresh);
+      localStorage.setItem("Username", Username);
       navigate("/signup");
-    } else if (Role === "USER") {      
+    } else if (Role === "USER") {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
-      //유저 정보 store에 저장
-
+      localStorage.setItem("Username", Username);
       navigate("/main");
     } else if (Role === "SECESSION") {
       alert("탈퇴된 회원입니다.");
@@ -43,8 +46,7 @@ function LoginLoading(): React.ReactElement {
     } else if (Role === "ADMIN") {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
-      //유저 정보 store에 저장
-
+      localStorage.setItem("Username", Username);
       navigate("/adminlogin");
     }
   }, []);

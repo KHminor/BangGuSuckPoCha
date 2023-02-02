@@ -1,8 +1,14 @@
 import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { roomAddFriendModalState, showRoomUserProfile, showRoomUserBanModal } from "../../store/store";
+import {
+  roomAddFriendModalState,
+  showRoomUserProfile,
+  showRoomUserBanModal,
+  showRoomUserReportModal,
+} from "../../store/store";
 import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
+import RoomUserReportModal from "./RoomUserReportModal";
 
 const RoomUserProfile = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
@@ -61,7 +67,7 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
   }
 
   // 프로필 모달 끄는 함수
-  function CloseProfileModal(event: any) {
+  function CloseProfileModal(event: React.MouseEvent<HTMLDivElement>) {
     if (event.target === bgDiv.current) {
       console.log("프로필꺼짐!");
       dispatch(showRoomUserProfile());
@@ -71,17 +77,15 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
   // 친추 묻는 모달 띄우기
   const clickAddFriend = () => {
     dispatch(roomAddFriendModalState());
-  }
+  };
   // 강퇴 묻는 모달 띄우기
   const clickBanUser = () => {
     dispatch(showRoomUserBanModal());
-  }
+  };
   // 신고창 모달 띄우기
   const clickReportUser = () => {
-  
-  }
-
-
+    dispatch(showRoomUserReportModal());
+  };
 
   // 이벤트핸들러들 [친추, 강퇴, 신고]
   const handlers = [clickAddFriend, clickBanUser, clickReportUser];
@@ -96,11 +100,18 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
     return state.RoomUserBanClickCheck;
   });
 
+  // 신고 확인 모달 상태 체크
+  const RoomUserReportClickCheck = useAppSelector((state) => {
+    return state.RoomUserReportClickCheck;
+  });
 
   return (
     <>
-      {roomAddFriendModalCheck ? <RoomUserFriendModal userData={userData}/> : null}
-      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData}/> : null}
+      {roomAddFriendModalCheck ? (
+        <RoomUserFriendModal userData={userData} />
+      ) : null}
+      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} /> : null}
+      {RoomUserReportClickCheck ? <RoomUserReportModal userData={userData} /> : null}
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}

@@ -10,17 +10,21 @@ const RoomUserBanModal = ({ userData }: { userData: any }) => {
   const bgDiv = useRef<any>();
   // 강퇴하는 함수
   const banUser = async () => {
-    const bban = await axios({
-      method: "PUT",
-      url: "https://i8e201.p.ssafy.io/api/pocha/exit",
-      data: {
-        isHost: true,
-        pochaId: 0,
-        username: "string",
-        waiting: true,
-      },
-    });
-    console.log("bban", bban);
+    try {
+      const bban = await axios({
+        method: "PUT",
+        url: "https://i8e201.p.ssafy.io/api/pocha/exit",
+        data: {
+          isHost: true,
+          pochaId: 0,
+          username: "string",
+          waiting: true,
+        },
+      });
+      console.log("bban", bban);
+    } catch (error) {
+      console.log(error);
+    }
     dispatch(showRoomUserBanModal());
   };
 
@@ -41,13 +45,13 @@ const RoomUserBanModal = ({ userData }: { userData: any }) => {
         </div>
         <input
           onClick={banUser}
-          className={`${styles.createBtn} cursor-pointer`}
+          className={`${styles.cancelBtn} cursor-pointer`}
           type="submit"
-          value="확인"
+          value="강퇴"
         />
         <input
           onClick={closeFriendModal}
-          className={`${styles.cancelBtn} cursor-pointer`}
+          className={`${styles.createBtn} cursor-pointer`}
           type="submit"
           value="취소"
         />
