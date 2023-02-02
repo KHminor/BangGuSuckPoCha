@@ -10,15 +10,19 @@ const RoomUserFriendModal = ({ userData }: { userData: any }) => {
   const bgDiv = useRef<any>();
   // 친구신청 하는 함수
   const addFriend = async () => {
-    const ffriend = await axios({
-      method: "POST",
-      url: "https://i8e201.p.ssafy.io/api/user/friend/request",
-      data: {
-        from_id: 0,
-        to_id: 0,
-      },
-    });
-    console.log("ffriend", ffriend);
+    try {
+      const ffriend = await axios({
+        method: "POST",
+        url: "https://i8e201.p.ssafy.io/api/user/friend/request",
+        data: {
+          from_id: 0,
+          to_id: 0,
+        },
+      });
+      console.log("친구요청", ffriend);
+    } catch (error) {
+      console.log(error);
+    }
     dispatch(roomAddFriendModalState());
   };
 
@@ -41,7 +45,7 @@ const RoomUserFriendModal = ({ userData }: { userData: any }) => {
           onClick={addFriend}
           className={`${styles.createBtn} cursor-pointer`}
           type="submit"
-          value="확인"
+          value="신청"
         />
         <input
           onClick={closeFriendModal}

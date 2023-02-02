@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ["Nanum Gothic"],
         nanum: ["Nanum Gothic"]
       }
     },
