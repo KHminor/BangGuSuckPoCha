@@ -1,15 +1,13 @@
 package com.server.back.controller;
 
+import com.server.back.dto.admin.LoginAdminRequestDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
 import com.server.back.dto.game.YscRequestDto;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
-import com.server.back.dto.pocha.PochaRequestDto;
 import com.server.back.dto.pocha.PochaResponseDto;
-import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.report.ReportResponseDto;
-import com.server.back.dto.review.ReviewResponseDto;
 import com.server.back.dto.user.UserRequestDto;
 import com.server.back.dto.user.UserResponseDto;
 import com.server.back.jwt.service.JwtService;
@@ -26,8 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +41,15 @@ public class AdminController {
     private final AdminService adminService;
 
     // 로그인, 로그아웃
+    @PostMapping("/join")
+    public ResponseEntity<Map<String, Object>> join(@RequestPart(value = "requestDto") LoginAdminRequestDto requestDto){
+        Map<String, Object> response = new HashMap<>();
+        System.out.println(requestDto);
+
+        adminService.adminjoin(requestDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     @ApiOperation(value = "관리자 로그인")
     @PostMapping("/auth/login")
     public ResponseEntity<?> adminLogin(/*@RequestParam LoginAdminRequestDto requestDto*/){

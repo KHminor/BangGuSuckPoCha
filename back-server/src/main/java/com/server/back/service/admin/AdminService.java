@@ -1,15 +1,13 @@
 package com.server.back.service.admin;
 
+import com.server.back.dto.admin.LoginAdminRequestDto;
 import com.server.back.dto.admin.UpdateReportDto;
 import com.server.back.dto.game.BalanceRequestDto;
 import com.server.back.dto.game.LiarRequestDto;
 import com.server.back.dto.game.YscRequestDto;
 import com.server.back.dto.pocha.PochaParticipantResponseDto;
 import com.server.back.dto.pocha.PochaResponseDto;
-import com.server.back.dto.report.ReportRequestDto;
 import com.server.back.dto.report.ReportResponseDto;
-import com.server.back.dto.user.PointRequestDto;
-import com.server.back.dto.user.PointResponseDto;
 import com.server.back.dto.user.UserRequestDto;
 import com.server.back.dto.user.UserResponseDto;
 
@@ -17,6 +15,7 @@ import java.util.List;
 
 
 public interface AdminService {
+    void adminjoin(LoginAdminRequestDto requestDto);
     List<UserResponseDto> userInfoList();
 
     UserResponseDto adminUserSearch(String nickname);
