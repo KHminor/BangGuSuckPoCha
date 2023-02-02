@@ -1,9 +1,11 @@
 import axios from "axios"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeAlarmApiDataState, changeAlarmClickState } from "../../store/store";
 import styles from './Common.module.css'
 import './StarReview.css'
+
+import { FaStar } from 'react-icons/fa'
 
 function AlarmRequest():JSX.Element {
   const alarmApiData = useAppSelector((state:any)=> {return state.alarmApiData})
@@ -27,9 +29,12 @@ function AlarmRequest():JSX.Element {
         )
       }))
     } else if (alarmClickState === 2) {
+      // 유저 리뷰를 하기 위한 컴포넌트
       setApiDataList(alarmApiData.map((e:any)=> {
+        console.log(e);
         return (
-          <ReviewListComponent to_nickname={e.to_nickname}/>
+          <ReviewListComponent to_nickname={e.to_nickname} reviewId={e.reviewId} toUsername={e.to_username}/>
+          // <StarRating/>
         )
       }))
     }
@@ -137,7 +142,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
 }
 
 // 리뷰리스트
-function ReviewListComponent({to_nickname}:any):JSX.Element {
+function ReviewListComponent({to_nickname, reviewId, toUsername}:any):JSX.Element {
   return (
     <div className="grid h-[4rem] w-full" style={{gridTemplateColumns: '0.25fr 1fr', border: 'solid 2px red'}}>
       {/* 유저 이모지 */}
@@ -147,32 +152,38 @@ function ReviewListComponent({to_nickname}:any):JSX.Element {
       {/* 별점 및 평가하기 */}
       <div className="grid" style={{gridTemplateRows: '1fr 1fr'}}>
         <div className="flex justify-start items-center text-base">{to_nickname}</div>
-        <StarReview />
+        <StarReview to_nickname={to_nickname} reviewId={reviewId} toUsername={toUsername}/>
       </div>
     </div>
   )
 }
 
 // 별점 평가
-function StarReview():JSX.Element {
+function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
   const [starState,setStarState] = useState()
-  const star = useRef<any>(null)
+  console.log(to_nickname, reviewId, toUsername,starState);
   
   return (
     <div className="flex justify-start items-center">
       <div className={`grid `} style={{gridTemplateColumns: '3fr 1fr 1.5fr'}}>
-        <span className="star">
-          ★★★★★
-          <span ref={star}>★★★★★</span>
-          <input type="range" value="1" step="1" min="0" max="10" onInput={()=> {
-            document.querySelector(`.star span`)
-          }} />
-        </span>
+        <StarRating to_nickname={to_nickname} setStarState={setStarState}/>
         <div></div>
         <div className="flex justify-center items-center cursor-pointer w-full h-ful">
           <input className="text-xs cursor-pointer" type="submit" value={'평가하기'} onClick={(e)=> {
             e.preventDefault()
-            console.log('제출해따!',starState);
+            axios({
+              method: 'put',
+              url: 'https://i8e201.p.ssafy.io/api/user/review',
+              data: {
+                "reviewId" : reviewId,
+                "reviewScore" : starState,
+                "toUsername" : toUsername
+              }
+            })
+            .then((r)=> {
+              console.log(r.data);
+              console.log('현재 변경된 score: ', starState);
+            })
             
           }}/>
         </div>
@@ -181,3 +192,30 @@ function StarReview():JSX.Element {
   )
 }
 
+function StarRating({to_nickname, setStarState}:any):JSX.Element {
+  const [rating, setRating] = useState(null) as any
+  const [hover, setHover] = useState(null) as any
+  setStarState(rating)
+  useEffect(()=> {
+    console.log(`${to_nickname}의 별점은 현재: `,rating);
+    
+  },[rating])
+  return (
+    <div className="flex">
+      {[...Array(5)].map((star, idx)=> {
+        const ratingValue = idx + 1
+        return (
+          <label>
+            <input type="radio" name="rating" value={ratingValue} 
+            onClick={()=> {setRating(ratingValue)}}
+            />
+            <FaStar className="star" color={ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'} size={15}
+              onMouseEnter={()=> {setHover(ratingValue)}}
+              onMouseLeave={()=> {setHover(null)}}
+            />
+          </label>
+        )
+      })}
+    </div>
+  )
+}
