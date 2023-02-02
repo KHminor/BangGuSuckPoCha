@@ -47,7 +47,7 @@ public class GameController {
     }
     @ApiOperation(value = "밸런스 게임 데이터")
     @GetMapping("/balance/{type}")
-    public ResponseEntity<Map<String,Object>> gameBalance(@PathVariable(value = "type") Long type){
+    public ResponseEntity<Map<String,Object>> gameBalance(@PathVariable(value = "type") Integer type){
         Map<String,Object> response = new HashMap<>();
 
         List<BalanceResponseDto> responseDtoList = gameService.gameBalance(type);
