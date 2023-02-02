@@ -9,5 +9,5 @@ import java.util.List;
 public interface GameService {
     List<YscResponseDto> gameYsc();
     List<LiarResponseDto> gameLiar();
-    List<BalanceResponseDto> gameBalance(Long type);
+    List<BalanceResponseDto> gameBalance(Integer type);
 }
