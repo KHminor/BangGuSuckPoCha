@@ -343,11 +343,40 @@ const menuFriendChatClickCheck = createSlice({
   },
 });
 
-/*
-===============================================================================================================================
-============================================================API요청============================================================
-===============================================================================================================================
-*/
+// 룸에있는 유저 프로필 클릭 여부
+const RoomUserProfileClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserProfile(state) {
+      return !state
+    }
+  }
+})
+
+// Room에 있는 유저 친구 클릭 여부
+const roomAddFriendModalCheck = createSlice({
+  name: "roomAddFriendModalState",
+  initialState: false,
+  reducers: {
+    roomAddFriendModalState(state) {
+      return !state;
+    },
+  },
+});
+
+
+// Room에 있는 유저 강퇴 클릭 여부
+const RoomUserBanClickCheck = createSlice({
+  name: 'RoomUserProfileCheck',
+  initialState: false,
+  reducers: {
+    showRoomUserBanModal(state) {
+      return !state
+    }
+  }
+})
+
 
 // Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
 // 요청:0(default), 초대:1, 리뷰:2
@@ -380,17 +409,6 @@ const menuFriendListApiData = createSlice({
   reducers: {
     changeMenuFriendListApiDataState(state, action) {
       return state = action.payload
-    }
-  }
-})
-
-// Room에 있는 유저들 프로필 클릭 여부
-const RoomUserProfileClickCheck = createSlice({
-  name: 'RoomUserProfileCheck',
-  initialState: false,
-  reducers: {
-    showRoomUserProfile(state) {
-      return !state
     }
   }
 })
@@ -494,6 +512,8 @@ export const store = configureStore({
     createRoomChoiceRegion: createRoomChoiceRegion.reducer,
     createRoomChoiceTag: createRoomChoiceTag.reducer,
     createRoomThemeCheck: createRoomThemeCheck.reducer,
+    roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
+    RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
   },
@@ -516,6 +536,8 @@ export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions
 export const { changeCreateRoomChoiceRegion } = createRoomChoiceRegion.actions
 export const { changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, changeCreateRoomChoiceTagReset } = createRoomChoiceTag.actions
 export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
+export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
+export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 
