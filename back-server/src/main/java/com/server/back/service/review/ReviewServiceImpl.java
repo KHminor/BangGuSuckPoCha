@@ -35,8 +35,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void userReview(ReviewRequestDto requestDto){
         User user = userRepository.findByUsername(requestDto.getToUsername());
-        user.setPoint(user.getPoint()+((requestDto.getReviewScore()-3)/10));
         Review review = reviewRepository.findByReviewId(requestDto.getReviewId());
+        user.setManner(user.getManner()+((requestDto.getReviewScore()-3)/10));
         review.update(requestDto);
     }
 }
