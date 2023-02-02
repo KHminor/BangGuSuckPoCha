@@ -1,9 +1,12 @@
 import style from "./MainCreateRoom.module.css";
 import MainCreateRoomSelect from "./MainCreateRoomSelect";
 import MainCreateRoomPeople from "./MainCreateRoomPeople";
-import { useAppDispatch } from "../../store/hooks";
-import { changeCarouselState, changeThemeRoomState } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { changeCarouselState, changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, changeCreateRoomChoiceTagReset, changeThemeRoomState } from "../../store/store";
 import MainCreateRoomTheme from "./MainCreateRoomTheme";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainCreateRoom = ({
   onClickHiddenBtn,
@@ -13,10 +16,15 @@ const MainCreateRoom = ({
   roomTheme: number;
 }): React.ReactElement => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
+  
+  // username (현재는 내꺼)
+  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
+
   const roomTitle = ["소통포차", "게임포차", "헌팅포차"];
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
-  const themeOption = ["테마", "이자카야", "포장마차", "호프"];
+  const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
   const huntingPeopleOption = ["인원", "2", "4", "6"];
   const tagList = [
@@ -44,16 +52,33 @@ const MainCreateRoom = ({
     dispatch(changeCarouselState());
   };
 
+  
+  const [choiceTagList, setChoiceTagList]:any = useState([])
+
   // 태그 선택 기능
   const onSelectTag = (
     index: number,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    // console.log(event.target);
-    // selectTags.current[index].classList.toggle(`${style.selectBtn}`)
+    
+    const data = event.target as HTMLElement;
+    let choiceText:any = data.innerText
+    
+    // 이미 클릭이 돼서 제거할 때
+    if (data.classList.contains(`${style.selectBtn}`)) {
+      dispatch(changeCreateRoomChoiceRemoveTag(choiceText))
+    } else {
+      // 추가할 때
+      dispatch(changeCreateRoomChoiceAddTag(choiceText))
+    }
     (event.target as Element).classList.toggle(`${style.selectBtn}`);
   };
-
+  
+  const createRoomChoicePeople = useAppSelector((state)=> {return state.createRoomChoicePeople})
+  const createRoomChoiceAge = useAppSelector((state)=> {return state.createRoomChoiceAge})
+  const createRoomChoiceRegion = useAppSelector((state)=> {return state.createRoomChoiceRegion})
+  const createRoomChoiceTag = useAppSelector((state)=> {return state.createRoomChoiceTag})
+  const createRoomThemeCheck = useAppSelector((state)=> {return state.createRoomThemeCheck})
   return (
     <>
       {roomTheme === 1 ? (
@@ -96,9 +121,51 @@ const MainCreateRoom = ({
                 className={`${style.createBtn} cursor-pointer`}
                 type="submit"
                 value="방만들기"
+                onClick={()=> {
+                  console.log('방 허용 나이',createRoomChoiceAge);
+                  console.log('현재 인원수',createRoomChoicePeople);
+                  console.log('방 허용 지역',createRoomChoiceRegion);
+                  console.log('클릭한 태그', createRoomChoiceTag);
+                  console.log('클릭한 테마Id', createRoomThemeCheck);
+                  
+                  
+                  axios({
+                    method: 'post',
+                    url: 'https://i8e201.p.ssafy.io/api/pocha',
+                    data: {
+                      "age": 20,
+                      "isPrivate": false,
+                      "limitUser": createRoomChoicePeople,
+                      "region": createRoomChoiceRegion,
+                      "tagList": createRoomChoiceTag,
+                      "themeId": createRoomThemeCheck
+                    }
+                  })
+                  .then((r)=> {
+                    const PochaId = r.data.data
+                    axios({
+                      method: 'post',
+                      url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+                      data: {
+                        "isHost": true,
+                        "pochaId": PochaId,
+                        "username": username,
+                        "waiting": true
+                      }
+                    })
+                    .then((r)=> {
+                      console.log(r.data);
+                      navigate(`/storyroom/:${PochaId}`)
+                    })
+                  })
+                }}
               />
               <input
-                onClick={closeModal}
+                onClick={()=> {
+                  closeModal()
+                  // 태그 선택 초기화 함수
+                  dispatch(changeCreateRoomChoiceTagReset())
+                }}
                 className={`${style.cancelBtn} cursor-pointer`}
                 type="submit"
                 value="취소"

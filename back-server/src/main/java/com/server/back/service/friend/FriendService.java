@@ -2,9 +2,12 @@ package com.server.back.service.friend;
 
 import java.util.List;
 
+import com.server.back.domain.friend.Message;
 import com.server.back.dto.friend.FRequestDto;
 import com.server.back.dto.friend.FRequestResponseDto;
 import com.server.back.dto.friend.FriendResponseDto;
+import com.server.back.dto.friend.MessageRequestDto;
+import com.server.back.dto.friend.MessageResponseDto;
 
 public interface FriendService  {
 
@@ -23,5 +26,9 @@ public interface FriendService  {
 	void refuseFriend(Long fRequestId);
 
 	List<FriendResponseDto> searchFriend(Long userId, String fNickname);
+
+	List<Message> findChat(Long chat_id);
+
+	Message saveMessage(MessageRequestDto requestDto);
 
 }
