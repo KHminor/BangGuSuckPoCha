@@ -26,11 +26,20 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
           dispatch(showRoomUserProfile())
         })
       }}>
-        <img className="w-[2rem] h-[2rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+        <img className="w-[2rem] h-[2rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
       </div>
       {/* 별점 및 평가하기 */}
       <div className="grid" style={{gridTemplateRows: '1fr 1fr'}}>
-        <div className="flex justify-start items-center text-base">{to_nickname}</div>
+        <div className="flex justify-start items-center text-base cursor-pointer" onClick={()=> {
+          axios({
+            method: 'get',
+            url: `https://i8e201.p.ssafy.io/api/user/info/${toUsername}`,
+          })
+          .then((r)=> {
+            dispatch(changeNavAlarmReviewEmojiUserData(r.data))
+            dispatch(showRoomUserProfile())
+          })
+        }}>{to_nickname}</div>
         <StarReview to_nickname={to_nickname} reviewId={reviewId} toUsername={toUsername}/>
       </div>
     </div>
