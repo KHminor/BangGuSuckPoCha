@@ -83,10 +83,10 @@ public class UserController {
         return jsonResponse;
     }
     @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
-    @GetMapping("/auth/check/nickname/{nickname}")
-    public ResponseEntity<Map<String, Object>> userNicknameCheck(@PathVariable(value = "nickname") String nickname){
+    @GetMapping("/auth/check/nickname")
+    public ResponseEntity<Map<String, Object>> userNicknameCheck(@RequestBody NicknameRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        Boolean nicknamecheck = userService.userNicknameCheck(nickname);
+        Boolean nicknamecheck = userService.userNicknameCheck(requestDto);
         response.put("data", nicknamecheck);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -103,7 +103,7 @@ public class UserController {
     @PutMapping("/{username}")
     public ResponseEntity<Map<String, Object>> userUpdate(@PathVariable(value = "username") String username , @RequestBody UserRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        String data = userService.userUpdate(username, requestDto);
+        userService.userUpdate(username, requestDto);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
