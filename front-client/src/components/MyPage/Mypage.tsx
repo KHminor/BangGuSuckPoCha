@@ -1,12 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import { changeMyPageCheck } from "src/store/store";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [modifydisplay, setModifydisplay] = useState(false);
+  // const modifydisplay: any = useAppSelector((state: any) => {
+  //   // console.log(state.myPageCheck);
+  //   return state.myPageCheck;
+  // });
   const [nickname, setNickname] = useState();
   const [nowName, setNowName] = useState();
   const [birth, setBirth] = useState<any | null>("0000.00.00");
@@ -53,9 +62,7 @@ function Mypage(): JSX.Element {
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-
       // console.log("age2 : " + age);
-
       setBirth(birth);
       setAge(age);
       setRegion(a.region);
@@ -66,7 +73,6 @@ function Mypage(): JSX.Element {
     });
   }, []);
   // console.log(birth);
-
   return (
     <div
       className="grid w-screen h-screen font-nanum"
@@ -89,9 +95,9 @@ function Mypage(): JSX.Element {
           {/* 이모지 및 변경 아이콘 */}
           <div className="flex justify-center items-end h-full">
             <img
-              className="h-[9rem] w-[9rem] ml-6"
+              className="h-[9rem] w-[9rem] ml-6 rounded-full"
               style={{ objectFit: "contain" }}
-              src={require("../../assets/myPage/sunglassEmoji.png")}
+              src={require("../../assets/myPage/png4.png")}
               alt=""
             />
             <img
@@ -102,15 +108,42 @@ function Mypage(): JSX.Element {
             />
           </div>
           {/* 닉네임 */}
-          {/* <div className="flex justify-center items-center "> */}
-          <div className="flex justify-items-end">
+          <div className="grid grid-cols-7 flex justify-center items-center ">
+            <div></div>
+            <div></div>
             <input
-              className="text-center rounded-lg text-lg w-[40%] h-[60%] mx-auto my-auto bg-black caret-white"
+              className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
               placeholder={nickname}
               type="text"
               onChange={onChangeNikename}
             />
-            <div className="right-7 w-[30%]">test</div>
+            <div
+              className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
+              onClick={() => {
+                console.log(nickname);
+                console.log(nowName);
+                axios({
+                  method: "post",
+                  url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
+                  data: {
+                    changeName: nickname,
+                    nowName: nowName,
+                  },
+                }).then((r) => {
+                  const isDouble = r.data.data;
+                  if (isDouble) {
+                    toast.success(`${nickname}(은)는 수정가능한 닉네임입니다`);
+                    setModifydisplay(isDouble);
+                  } else {
+                    toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
+                    setModifydisplay(isDouble);
+                  }
+                });
+              }}
+            >
+              중복확인
+            </div>
+            <div></div>
           </div>
           {/* 정보 */}
           <div className="grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
@@ -295,48 +328,52 @@ function Mypage(): JSX.Element {
                 />
                 <span className="text-white my-1">뒤로가기</span>
               </div>
-              <div
-                className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
-                onClick={() => {
-                  console.log(nickname);
-                  console.log(nowName);
-                  axios({
-                    method: "post",
-                    url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
-                    data: {
-                      changeName: nickname,
-                      nowName: nowName,
-                    },
-                  }).then((r) => {
-                    console.log(r.data.data);
-                    // if (r.data.data === "false") {
-                    //   console.log("nickname중복");
-                    //   // alert("닉네임이 중복되었습니다");
-                    // } else if (r.data.data === "true") {
-                    //   console.log("nickname중복 안됨");
-                    //   // axios({
-                    //   //   method: "put",
-                    //   //   url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
-                    //   //   data: {
-                    //   //     comment: comment,
-                    //   //     nickname: nickname,
-                    //   //     profile: profile,
-                    //   //     regionCode: "4111000000",
-                    //   //   },
-                    //   // }).then((r) => {
-                    //   //   console.log("성공");
-                    //   // });
-                    // }
-                  });
-                }}
-              >
-                <img
-                  className="h-[2.5rem]"
-                  src={require("../../assets/myPage/save.png")}
-                  alt=""
-                />
-                <span className="text-white my-1">저장</span>
-              </div>
+              {/*
+               수정버튼 
+               modifydisplay : true => display
+               modifydisplay : false => display
+                */}
+              {modifydisplay === true ? (
+                <div
+                  className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
+                  onClick={() => {
+                    console.log("modifydisplay : " + modifydisplay);
+                    console.log(nickname);
+                    console.log(nowName);
+                    //수정가능
+                    axios({
+                      method: "put",
+                      url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
+                      data: {
+                        comment: comment,
+                        nickname: nickname,
+                        profile: profile,
+                        regionCode: "4111000000",
+                      },
+                    }).then((r) => {
+                      console.log("성공");
+                      toast.success("수정에 성공하셨습니다");
+                      navigate("/main");
+                    });
+                  }}
+                >
+                  <img
+                    className="h-[2.5rem]"
+                    src={require("../../assets/myPage/save.png")}
+                    alt=""
+                  />
+                  <span className="text-white my-1">수정</span>
+                </div>
+              ) : (
+                <div className="opacity-50 flex flex-col justify-end items-center w-[80%] h-full mx-auto">
+                  <img
+                    className="h-[2.5rem]"
+                    src={require("../../assets/myPage/save.png")}
+                    alt=""
+                  />
+                  <span className="text-white my-1">수정</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
