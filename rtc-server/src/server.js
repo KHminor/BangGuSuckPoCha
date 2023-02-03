@@ -4,7 +4,7 @@ import http from "http";
 // import { instrument } from "@socket.io/admin-ui";
 import SocketIO from "socket.io";
 import express from "express";
-import cors from "cors";
+import cors from "cors"; 
 
 const app = express();
 
@@ -35,10 +35,8 @@ wsServer.on("connection", (socket) => {
   socket.on("join_room", ({ roomName, username }) => {
     if (users[roomName]) {
       const length = users[roomName].length;
-      // 왜 안될까
       if (length == maximum) {
-        console.log("이거 되냐?");
-        socket.to(socket.id).emit("room_full");
+        socket.emit("room_full");
         return;
       }
       users[roomName].push({ id: socket.id, user: username });
