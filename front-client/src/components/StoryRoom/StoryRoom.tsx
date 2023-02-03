@@ -1,4 +1,4 @@
-import RoomfooterNav from "../Common/RoomfooterNav";
+import RoomFooterNav from "../Common/RoomFooterNav";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { showRoomUserProfile } from "../../store/store";
 import RoomUserProfile from "../Common/RoomUserProfile";
@@ -69,7 +69,7 @@ function StoryRoom(): JSX.Element {
               </div>
             </div>
             {/* footerNav */}
-            <RoomfooterNav />
+            <RoomFooterNav />
           </div>
         </>
       )}

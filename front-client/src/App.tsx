@@ -46,7 +46,7 @@ function App() {
         style={
           {
             fontSize : "1rem",
-            width: "20%", 
+            minWidth: "fit-content",  
           }
         }
       />

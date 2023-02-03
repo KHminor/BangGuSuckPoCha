@@ -1,7 +1,8 @@
 import { useState } from "react"
 
-function RoomfooterNav():JSX.Element {
+function RoomFooterNav():JSX.Element {
 
+  // 현재 시간 관련
   const [currentDate,setCurrentDate] = useState()
   setInterval(()=> {
     const date = new Date();
@@ -21,27 +22,27 @@ function RoomfooterNav():JSX.Element {
             <div className="grid  text-white" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr', border: 'solid 2px white', borderBottom: 'solid 0px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}>
               <div className="flex justify-center items-center text-[2rem] ">{currentDate}</div>
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/time.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/time.png')} alt="" />
                 <span className="text-[0.7rem]">시간추가</span>
               </div>  
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/cheers.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/cheers.png')} alt="" />
                 <span className="text-[0.7rem]">짠</span>
               </div>  
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/add-user.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/add-user.png')} alt="" />
                 <span className="text-[0.7rem]">친구초대</span>
               </div>    
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/communication.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/communication.png')} alt="" />
                 <span className="text-[0.7rem]">썰</span>
               </div>            
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/exclamation-mark.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/exclamation-mark.png')} alt="" />
                 <span className="text-[0.7rem]">포차정보</span>
               </div>               
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-                <img className="h-[2.2rem] py-auto" src={require('../../assets/roomIcon/cancel.png')} alt="" />
+                <img className="h-[2.2rem] py-auto" src={require('src/assets/roomIcon/cancel.png')} alt="" />
                 <span className="text-[0.7rem]">나가기</span>
               </div>
             </div>
@@ -52,4 +53,4 @@ function RoomfooterNav():JSX.Element {
       </div>
   )
 }
-export default RoomfooterNav
+export default RoomFooterNav
