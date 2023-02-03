@@ -34,8 +34,10 @@ function LoginLoading(): React.ReactElement {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
       localStorage.setItem("Username", Username);
-      navigate("/signup");
+      //뉴비는 mypage로 가라!
+      navigate("/mypage");
     } else if (Role === "USER") {
+      //기존유저
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
       localStorage.setItem("Username", Username);
