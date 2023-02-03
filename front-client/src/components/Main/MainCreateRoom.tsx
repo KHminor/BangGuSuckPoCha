@@ -27,7 +27,7 @@ const MainCreateRoom = ({
   const navigate = useNavigate();
 
   // username (현재는 내꺼)
-  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`;
+  const username = localStorage.getItem('Username')
 
   const roomTitle = ["소통포차", "게임포차", "헌팅포차"];
   const regionOption = ["지역", "전국", "부산광역시"];

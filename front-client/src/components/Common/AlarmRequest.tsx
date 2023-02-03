@@ -12,6 +12,8 @@ function AlarmRequest():JSX.Element {
 
 
   useEffect(()=> {
+    console.log('변경된 api 데이터: ',alarmApiData);
+    
     if (alarmClickState === 0) {
       // 유저의 친구 요청 목록데이터를 담은 컴포넌트
       setApiDataList(alarmApiData.map((e:any)=> {
@@ -29,7 +31,6 @@ function AlarmRequest():JSX.Element {
     } else if (alarmClickState === 2) {
       // 유저 리뷰를 하기 위한 컴포넌트
       setApiDataList(alarmApiData.map((e:any)=> {
-        console.log(e);
         return (
           <AlarmBeforeReviewListComponent to_nickname={e.to_nickname} reviewId={e.reviewId} toUsername={e.to_username}/>
           // <StarRating/>

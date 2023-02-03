@@ -525,6 +525,17 @@ const PublicModal = createSlice({
   }
 })
 
+// nav -> alarm -> review에 있는 리뷰 목록에 있는 클릭한 유저 데이터
+const navAlarmReviewEmojiUserData = createSlice({
+  name: 'navAlarmReviewEmojiUserData',
+  initialState: 0,
+  reducers: {
+    changeNavAlarmReviewEmojiUserData(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -555,6 +566,9 @@ export const store = configureStore({
     mainCreateRoomList: mainCreateRoomList.reducer,
     // username
     userName: userName.reducer,
+    // EmojiClickUserData
+    navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
+
     myPageCheck: myPageCheck.reducer,
   },
 });
@@ -585,6 +599,8 @@ export const { showPublicModal } = PublicModal.actions
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 // username
 export const { changeUserName } = userName.actions
+// EmojiClickUserData
+export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
 export const { changeMyPageCheck } = myPageCheck.actions
 
 // store의 타입 미리 export 해둔 것.
