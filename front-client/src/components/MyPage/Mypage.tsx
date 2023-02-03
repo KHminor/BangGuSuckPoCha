@@ -19,11 +19,11 @@ function Mypage(): JSX.Element {
   const Username: any = localStorage.getItem("Username");
 
   const onChangeNikename = (event: any) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNickname(event.target.value);
   };
   const onChangeComment = (event: any) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setComment(event.target.value);
   };
 
@@ -33,7 +33,7 @@ function Mypage(): JSX.Element {
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
     }).then((r) => {
-      console.log(r.data.data);
+      // console.log(r.data.data);
       //data내용
       let a = r.data.data;
       setNickname(a.nickname);
@@ -295,19 +295,31 @@ function Mypage(): JSX.Element {
               <div
                 className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
                 onClick={() => {
-                  //저장하자 axios로
+                  console.log(nickname);
+
                   axios({
-                    method: "put",
-                    url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
-                    data: {
-                      comment: comment,
-                      nickname: nickname,
-                      profile: profile,
-                      regionCode: "4111000000",
-                    },
+                    method: "get",
+                    url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname/${nickname}`,
                   }).then((r) => {
-                    console.log("성공");
-                    // navigate("/mypage");
+                    console.log(r.data.data);
+                    if (r.data.data === "false") {
+                      console.log("nickname중복");
+                      // alert("닉네임이 중복되었습니다");
+                    } else if (r.data.data === "true") {
+                      console.log("nickname중복 안됨");
+                      // axios({
+                      //   method: "put",
+                      //   url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
+                      //   data: {
+                      //     comment: comment,
+                      //     nickname: nickname,
+                      //     profile: profile,
+                      //     regionCode: "4111000000",
+                      //   },
+                      // }).then((r) => {
+                      //   console.log("성공");
+                      // });
+                    }
                   });
                 }}
               >

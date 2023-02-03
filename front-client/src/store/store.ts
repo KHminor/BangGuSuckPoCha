@@ -17,13 +17,13 @@ const menuClickCheck = createSlice({
   },
 });
 
-//유저이름 지울예정
+//유저이름 
 const userName = createSlice({
   name: "userName",
-  initialState: localStorage.getItem("Username"),
+  initialState: "",
   reducers: {
     changeUserName(state, action) {
-      return (state = action.payload);
+      return state = action.payload
     },
   },
 });
@@ -550,6 +550,9 @@ export const store = configureStore({
     PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
+    // username
+    userName: userName.reducer,
+
   },
 });
 //주석추가
@@ -577,7 +580,8 @@ export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
 export const { showPublicModal } = PublicModal.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
-
+// username
+export const { changeUserName } = userName.actions
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
