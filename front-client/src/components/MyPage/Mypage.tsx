@@ -12,10 +12,6 @@ function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [modifydisplay, setModifydisplay] = useState(false);
-  // const modifydisplay: any = useAppSelector((state: any) => {
-  //   // console.log(state.myPageCheck);
-  //   return state.myPageCheck;
-  // });
   const [nickname, setNickname] = useState();
   const [nowName, setNowName] = useState();
   const [birth, setBirth] = useState<any | null>("0000.00.00");
@@ -70,6 +66,13 @@ function Mypage(): JSX.Element {
       setPoint(a.point);
       setManner(a.manner);
       setProfile(a.profile);
+    });
+
+    axios({
+      method: "get",
+      url: "https://i8e201.p.ssafy.io/api/admin/region",
+    }).then((r) => {
+      console.log(r.data.data);
     });
   }, []);
   // console.log(birth);
