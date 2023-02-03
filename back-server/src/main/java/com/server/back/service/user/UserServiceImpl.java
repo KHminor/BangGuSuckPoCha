@@ -39,19 +39,25 @@ public class UserServiceImpl implements UserService{
         return responseDto;
     }
     @Override
-    public boolean userNicknameCheck(NicknameRequestDto requestDto){
+    public boolean userNicknameCheck(NicknameRequestDto requestDto) {
         int count = 0;
-        for (User r : userRepository.findAll()){
-            if(r.getNickname() == requestDto.getChangeName()){
+        for (User r : userRepository.findAll()) {
+            if (r.getNickname().equals(requestDto.getChangeName())){
                 count += 1;
             }
         }
-        if ((count == 0)||(count == 1 && requestDto.getNowName() == requestDto.getChangeName())){
-            return true;
-        }else{
-            return false;
+        if (count == 0) {
+            if (requestDto.getNowName().equals(requestDto.getChangeName())==false) {
+                return true;
+            }
+        } else if (count == 1) {
+            if (requestDto.getNowName().equals(requestDto.getChangeName())) {
+                return true;
+            }
         }
+        return false;
     }
+
     @Override
     public void userUpdate(String username, UserRequestDto requestDto){
         User entity = userRepository.findByUsername(username);

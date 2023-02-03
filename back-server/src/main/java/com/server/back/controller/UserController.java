@@ -83,7 +83,7 @@ public class UserController {
         return jsonResponse;
     }
     @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
-    @GetMapping("/auth/check/nickname")
+    @PostMapping ("/auth/check/nickname")
     public ResponseEntity<Map<String, Object>> userNicknameCheck(@RequestBody NicknameRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
         Boolean nicknamecheck = userService.userNicknameCheck(requestDto);
