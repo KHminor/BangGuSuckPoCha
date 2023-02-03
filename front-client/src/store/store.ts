@@ -582,6 +582,7 @@ export const { showPublicModal } = PublicModal.actions
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 // username
 export const { changeUserName } = userName.actions
+//주석추가
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

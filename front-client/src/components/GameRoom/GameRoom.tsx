@@ -1,4 +1,4 @@
-import RoomfooterNav from "../Common/RoomfooterNav";
+import RoomFooterNav from "../Common/RoomFooterNav";
 import styles from './GameRoom.module.css'
 
 function GameRoom():JSX.Element {
@@ -28,7 +28,7 @@ function GameRoom():JSX.Element {
         </div>
       </div>
       {/* footerNav */}
-      <RoomfooterNav/>
+      <RoomFooterNav/>
     </div>
   )
 }
