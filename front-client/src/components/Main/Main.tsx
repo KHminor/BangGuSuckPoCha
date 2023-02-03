@@ -82,10 +82,9 @@ function Main(): JSX.Element {
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
       <FriendList />
-      {/* nav의 메뉴 -> friend 클릭 시 채팅 보이기 : 지금은 우선 띄우는 거만 해놓음 코드 수정해야함
-          같은 유저 클릭 시 채팅 닫고 이런식으로?
-      */}
-      {/* {menuFriendChatClickCheck ? <FriendChat /> : null} */}
+  
+      {menuFriendChatClickCheck ? <FriendChat /> : null}
+      
       {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
       {mainCreateRoomCarouselCheck ? (
         <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
