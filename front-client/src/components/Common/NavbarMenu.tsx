@@ -13,7 +13,7 @@ function NavbarMenu(): JSX.Element {
   const navigate = useNavigate();
   let dispatch = useAppDispatch();
   // username (현재는 내꺼)
-  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`;
+  const username = localStorage.getItem('Username')
 
   const menuIcon = useRef<any>(null);
   // 메뉴 클릭 상태

@@ -2,13 +2,30 @@ import axios from "axios";
 import { FaStar } from 'react-icons/fa'
 import styles from './Common.module.css'
 import { useEffect, useState } from "react";
+import { changeAlarmApiDataState, changeNavAlarmReviewEmojiUserData, showRoomUserProfile } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 // 리뷰 리스트
 function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any):JSX.Element {
+  // 이모지 클릭 여부
+  const dispatch = useAppDispatch()
+
   return (
+    <>
     <div className={`grid h-[4rem] w-full ${styles.shortBorder}`} style={{gridTemplateColumns: '0.25fr 1fr'}}>
+
       {/* 유저 이모지 */}
-      <div className="flex justify-center items-start">
+      <div className="flex justify-center items-start" onClick={()=> {
+        // 클릭한 유저 정보 조회
+        axios({
+          method: 'get',
+          url: `https://i8e201.p.ssafy.io/api/user/info/${toUsername}`,
+        })
+        .then((r)=> {
+          dispatch(changeNavAlarmReviewEmojiUserData(r.data))
+          dispatch(showRoomUserProfile())
+        })
+      }}>
         <img className="w-[2rem] h-[2rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
       </div>
       {/* 별점 및 평가하기 */}
@@ -17,14 +34,18 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
         <StarReview to_nickname={to_nickname} reviewId={reviewId} toUsername={toUsername}/>
       </div>
     </div>
+    </>
   )
 }
 // 리뷰 평가
 function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
+  const dispatch = useAppDispatch()
   const [starState,setStarState] = useState()
-  console.log(to_nickname, reviewId, toUsername,starState);
+  // username (현재는 내꺼)
+  const username = localStorage.getItem('Username')
   
   return (
+    
     <div className="flex justify-start items-center">
       <div className={`grid `} style={{gridTemplateColumns: '3fr 1fr 1.5fr'}}>
         <StarRating to_nickname={to_nickname} setStarState={setStarState}/>
@@ -42,8 +63,16 @@ function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
               }
             })
             .then((r)=> {
-              console.log(r.data);
-              console.log('현재 변경된 score: ', starState);
+              axios({
+                method: 'get',
+                url: `https://i8e201.p.ssafy.io/api/user/review/${username}`
+              })
+              .then((r:any)=> {
+                const allReviewList:any = r.data.data.filter((e:any)=> {                
+                  return typeof e.review_at !== "string" 
+                })
+                dispatch(changeAlarmApiDataState(allReviewList))
+              })
             })
             
           }}/>

@@ -28,7 +28,7 @@ function Navbar(): JSX.Element {
 // menu component
 function MenuOption():JSX.Element {
   let dispatch = useAppDispatch()
-  const username = `1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI`
+  const username = localStorage.getItem('Username')
   return (
     <div className="flex w-full">
       <div style={{width: '20%'}}></div>
