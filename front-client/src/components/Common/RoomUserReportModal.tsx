@@ -11,7 +11,7 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
   const [reportReason, setReportReason] = useState<string>("");
   const [reportType, setReportType] = useState<number>(0);
 
-
+  //주석추가
   const onChange = (event: React.ChangeEvent<any>) => {
     const { name, value } = event.target;
     switch (name) {

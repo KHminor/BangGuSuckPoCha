@@ -552,6 +552,7 @@ export const store = configureStore({
     mainCreateRoomList: mainCreateRoomList.reducer,
   },
 });
+//주석추가
 
 // createSlice의 reducers 에서 만든 state 변경 함수를 export 하기
 export const { changeMenuState } = menuClickCheck.actions
