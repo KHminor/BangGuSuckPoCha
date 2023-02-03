@@ -8,6 +8,7 @@ import NavbarMenu from "../Common/NavbarMenu";
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState();
+  const [nowName, setNowName] = useState();
   const [birth, setBirth] = useState<any | null>("0000.00.00");
   const [gender, setGender] = useState();
   const [age, setAge] = useState<any | null>();
@@ -17,7 +18,6 @@ function Mypage(): JSX.Element {
   const [manner, setManner] = useState();
   const [profile, setProfile] = useState("string");
   const Username: any = localStorage.getItem("Username");
-
   const onChangeNikename = (event: any) => {
     // console.log(event.target.value);
     setNickname(event.target.value);
@@ -37,6 +37,7 @@ function Mypage(): JSX.Element {
       //data내용
       let a = r.data.data;
       setNickname(a.nickname);
+      setNowName(a.nickname);
       const birth = a.birth;
       setGender(a.gender);
       const today = new Date();
@@ -101,13 +102,15 @@ function Mypage(): JSX.Element {
             />
           </div>
           {/* 닉네임 */}
-          <div className="flex justify-center items-center ">
+          {/* <div className="flex justify-center items-center "> */}
+          <div className="flex justify-items-end">
             <input
-              className="text-center rounded-lg text-lg w-[30%] h-[60%] mx-auto my-auto bg-black caret-white"
+              className="text-center rounded-lg text-lg w-[40%] h-[60%] mx-auto my-auto bg-black caret-white"
               placeholder={nickname}
               type="text"
               onChange={onChangeNikename}
             />
+            <div className="right-7 w-[30%]">test</div>
           </div>
           {/* 정보 */}
           <div className="grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
@@ -296,30 +299,34 @@ function Mypage(): JSX.Element {
                 className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
                 onClick={() => {
                   console.log(nickname);
-
+                  console.log(nowName);
                   axios({
-                    method: "get",
-                    url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname/${nickname}`,
+                    method: "post",
+                    url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
+                    data: {
+                      changeName: nickname,
+                      nowName: nowName,
+                    },
                   }).then((r) => {
                     console.log(r.data.data);
-                    if (r.data.data === "false") {
-                      console.log("nickname중복");
-                      // alert("닉네임이 중복되었습니다");
-                    } else if (r.data.data === "true") {
-                      console.log("nickname중복 안됨");
-                      // axios({
-                      //   method: "put",
-                      //   url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
-                      //   data: {
-                      //     comment: comment,
-                      //     nickname: nickname,
-                      //     profile: profile,
-                      //     regionCode: "4111000000",
-                      //   },
-                      // }).then((r) => {
-                      //   console.log("성공");
-                      // });
-                    }
+                    // if (r.data.data === "false") {
+                    //   console.log("nickname중복");
+                    //   // alert("닉네임이 중복되었습니다");
+                    // } else if (r.data.data === "true") {
+                    //   console.log("nickname중복 안됨");
+                    //   // axios({
+                    //   //   method: "put",
+                    //   //   url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
+                    //   //   data: {
+                    //   //     comment: comment,
+                    //   //     nickname: nickname,
+                    //   //     profile: profile,
+                    //   //     regionCode: "4111000000",
+                    //   //   },
+                    //   // }).then((r) => {
+                    //   //   console.log("성공");
+                    //   // });
+                    // }
                   });
                 }}
               >

@@ -32,7 +32,7 @@ function LoginLoading(): React.ReactElement {
 
     // Username : "1rvvwoVohwOln9JEnGmwYF70_9Kw-ZkBM17kicx3HdY"
 
-    //토큰을 로컬로 유지할 것인가 store에서 유지할 것인가 고민해봐야함
+    //로컬에 토큰 저장 / store에 Username 저장
     if (Role === "NEWBIE") {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
