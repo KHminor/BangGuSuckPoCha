@@ -296,27 +296,29 @@ function Mypage(): JSX.Element {
                 className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
                 onClick={() => {
                   console.log(nickname);
+
                   axios({
                     method: "get",
                     url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname/${nickname}`,
                   }).then((r) => {
+                    console.log(r.data.data);
                     if (r.data.data === "false") {
                       console.log("nickname중복");
-                      alert("닉네임이 중복되었습니다");
+                      // alert("닉네임이 중복되었습니다");
                     } else if (r.data.data === "true") {
                       console.log("nickname중복 안됨");
-                      axios({
-                        method: "put",
-                        url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
-                        data: {
-                          comment: comment,
-                          nickname: nickname,
-                          profile: profile,
-                          regionCode: "4111000000",
-                        },
-                      }).then((r) => {
-                        console.log("성공");
-                      });
+                      // axios({
+                      //   method: "put",
+                      //   url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
+                      //   data: {
+                      //     comment: comment,
+                      //     nickname: nickname,
+                      //     profile: profile,
+                      //     regionCode: "4111000000",
+                      //   },
+                      // }).then((r) => {
+                      //   console.log("성공");
+                      // });
                     }
                   });
                 }}
