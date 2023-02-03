@@ -12,6 +12,7 @@ import FriendList from "../Common/FriendList";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
+import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
 import styles from "./Main.module.css";
 import MainCreateRoom from "./MainCreateRoom";
 import MainCreateRoomCarousel from "./MainCreateRoomCarousel";
@@ -60,10 +61,13 @@ function Main(): JSX.Element {
   const menuFriendClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendClickCheck;
   });
-  //  메뉴 -> 친구 클릭 상태
+  //  메뉴 -> 친구 클릭 -> 채팅 상태
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck;
   });
+
+  const navAlarmReviewEmojiUserData: any = useAppSelector((state:any) => {return state.navAlarmReviewEmojiUserData})
+  const RoomUserProfileClickCheck : any = useAppSelector((state:any) => {return state.RoomUserProfileClickCheck})
 
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
@@ -94,6 +98,10 @@ function Main(): JSX.Element {
           roomTheme={createThemeRoomCheck}
         />
       ) : null}
+
+      {
+        RoomUserProfileClickCheck ? <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData}/> : null
+      }
 
       <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}

@@ -17,22 +17,25 @@ const menuClickCheck = createSlice({
   },
 });
 
-//유저이름 지울예정
+//유저이름 
 const userName = createSlice({
   name: "userName",
-  initialState: localStorage.getItem("Username"),
+  initialState: "",
   reducers: {
     changeUserName(state, action) {
-      return (state = action.payload);
+      return state = action.payload
     },
   },
 });
 
-const myInfo = createSlice({
-  name: "myInfo",
-  initialState: {},
+//myPage 중복확인 삭제예정
+const myPageCheck = createSlice({
+  name: "myPageCheck",
+  initialState: false,
   reducers: {
-    // changeMyInfo(state, action)
+    changeMyPageCheck(state, action) {
+      return state = action.payload;
+    }
   },
 })
 
@@ -511,6 +514,28 @@ const mainCreateRoomList = createSlice({
   }
 })
 
+// PublicModal 끄고 켜는 함수
+const PublicModal = createSlice({
+  name: 'PublicModal',
+  initialState: false,
+  reducers: {
+    showPublicModal(state) {
+      return !state
+    }
+  }
+})
+
+// nav -> alarm -> review에 있는 리뷰 목록에 있는 클릭한 유저 데이터
+const navAlarmReviewEmojiUserData = createSlice({
+  name: 'navAlarmReviewEmojiUserData',
+  initialState: 0,
+  reducers: {
+    changeNavAlarmReviewEmojiUserData(state,action) {
+      return state = action.payload
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -536,10 +561,18 @@ export const store = configureStore({
     roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
     RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
     RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
+    PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
+    // username
+    userName: userName.reducer,
+    // EmojiClickUserData
+    navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
+
+    myPageCheck: myPageCheck.reducer,
   },
 });
+//주석추가
 
 // createSlice의 reducers 에서 만든 state 변경 함수를 export 하기
 export const { changeMenuState } = menuClickCheck.actions
@@ -561,9 +594,14 @@ export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
 export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
+export const { showPublicModal } = PublicModal.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
-
+// username
+export const { changeUserName } = userName.actions
+// EmojiClickUserData
+export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
+export const { changeMyPageCheck } = myPageCheck.actions
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

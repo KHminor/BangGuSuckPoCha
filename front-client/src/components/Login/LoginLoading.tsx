@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { changeUserName } from "../../store/store";
 
 function LoginLoading(): React.ReactElement {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     //지금 현재 주소 가져오기
     const urlStr = window.location.href;
@@ -29,16 +32,20 @@ function LoginLoading(): React.ReactElement {
 
     // Username : "1rvvwoVohwOln9JEnGmwYF70_9Kw-ZkBM17kicx3HdY"
 
-    //토큰을 로컬로 유지할 것인가 store에서 유지할 것인가 고민해봐야함
+    //로컬에 토큰 저장 / store에 Username 저장
     if (Role === "NEWBIE") {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
       localStorage.setItem("Username", Username);
-      navigate("/signup");
+      dispatch(changeUserName(Username));
+      //뉴비는 mypage로 가라!
+      navigate("/mypage");
     } else if (Role === "USER") {
+      //기존유저
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
       localStorage.setItem("Username", Username);
+      dispatch(changeUserName(Username));
       navigate("/main");
     } else if (Role === "SECESSION") {
       alert("탈퇴된 회원입니다.");
@@ -47,6 +54,7 @@ function LoginLoading(): React.ReactElement {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
       localStorage.setItem("Username", Username);
+      dispatch(changeUserName(Username));
       navigate("/adminlogin");
     }
   }, []);

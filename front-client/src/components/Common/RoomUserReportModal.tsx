@@ -1,17 +1,17 @@
 import axios from "axios";
-import { useRef, useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { showRoomUserReportModal } from "../../store/store";
+import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
+import { useState } from "react";
 
 const RoomUserRepotModal = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
   const { username, nickname } = userData.data;
   const [reportReason, setReportReason] = useState<string>("");
   const [reportType, setReportType] = useState<number>(0);
-  const bgDiv = useRef<any>();
 
-
+  //주석추가
   const onChange = (event: React.ChangeEvent<any>) => {
     const { name, value } = event.target;
     switch (name) {
@@ -39,7 +39,7 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
           reporterId: 0,
         },
       });
-
+      toast.success(`${nickname}을 신고하였습니다`)
       console.log("report", rreport);
     } catch (error) {
       console.log(error);
@@ -54,7 +54,6 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
 
   return (
     <div
-      ref={bgDiv}
       className="bg-slate-800 bg-opacity-50 flex justify-center z-10 items-center absolute top-0 right-0 bottom-0 left-0"
     >
       <div className="bg-black w-[22%] px-14 pt-14 pb-7 rounded-md text-center">
