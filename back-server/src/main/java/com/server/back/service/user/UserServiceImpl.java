@@ -1,10 +1,7 @@
 package com.server.back.service.user;
 
 import com.server.back.domain.user.*;
-import com.server.back.dto.user.PointRequestDto;
-import com.server.back.dto.user.PointResponseDto;
-import com.server.back.dto.user.UserRequestDto;
-import com.server.back.dto.user.UserResponseDto;
+import com.server.back.dto.user.*;
 import com.server.back.jwt.refreshToken.RefreshToken;
 import com.server.back.jwt.refreshToken.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,24 +39,26 @@ public class UserServiceImpl implements UserService{
         return responseDto;
     }
     @Override
-    public boolean userNicknameCheck(String nickname){
-        User entity = userRepository.findByNickname(nickname);
-
-        return entity == null;
+    public boolean userNicknameCheck(NicknameRequestDto requestDto){
+        int count = 0;
+        for (User r : userRepository.findAll()){
+            if(r.getNickname() == requestDto.getChangeName()){
+                count += 1;
+            }
+        }
+        if ((count == 0)||(count == 1 && requestDto.getNowName() == requestDto.getChangeName())){
+            return true;
+        }else{
+            return false;
+        }
     }
     @Override
-    public String userUpdate(String username, UserRequestDto requestDto){
+    public void userUpdate(String username, UserRequestDto requestDto){
         User entity = userRepository.findByUsername(username);
         Region region = regionRepository.findById(requestDto.getRegionCode()).orElse(
                 regionRepository.findAll().get(0)
         );
-        User ifuser = userRepository.findByNickname(requestDto.getNickname());
-        if (ifuser == null){
-            entity.update(requestDto, region);
-            return "success";
-        }else{
-            return "fail : username overlap";
-        }
+        entity.update(requestDto, region);
     }
     @Override
     public void uesrLogout(String username){
