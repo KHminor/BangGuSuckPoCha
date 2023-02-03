@@ -28,11 +28,14 @@ const userName = createSlice({
   },
 });
 
-const myInfo = createSlice({
-  name: "myInfo",
-  initialState: {},
+//myPage 중복확인 삭제예정
+const myPageCheck = createSlice({
+  name: "myPageCheck",
+  initialState: false,
   reducers: {
-    // changeMyInfo(state, action)
+    changeMyPageCheck(state, action) {
+      return state = action.payload;
+    }
   },
 })
 
@@ -566,6 +569,7 @@ export const store = configureStore({
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
 
+    myPageCheck: myPageCheck.reducer,
   },
 });
 //주석추가
@@ -597,6 +601,7 @@ export const { changeMainCreateRoomList } = mainCreateRoomList.actions
 export const { changeUserName } = userName.actions
 // EmojiClickUserData
 export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
+export const { changeMyPageCheck } = myPageCheck.actions
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
