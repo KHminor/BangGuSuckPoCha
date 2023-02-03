@@ -1,13 +1,13 @@
 import axios from "axios";
-import { useRef } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { showRoomUserBanModal } from "../../store/store";
+import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
 
 const RoomUserBanModal = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
   const { nickname } = userData.data;
-  const bgDiv = useRef<any>();
+
   // 강퇴하는 함수
   const banUser = async () => {
     try {
@@ -21,6 +21,7 @@ const RoomUserBanModal = ({ userData }: { userData: any }) => {
           waiting: true,
         },
       });
+      toast.success(`${nickname}을 강퇴하였습니다`);
       console.log("bban", bban);
     } catch (error) {
       console.log(error);
@@ -35,7 +36,6 @@ const RoomUserBanModal = ({ userData }: { userData: any }) => {
 
   return (
     <div
-      ref={bgDiv}
       className="bg-slate-800 bg-opacity-50 flex justify-center z-10 items-center absolute top-0 right-0 bottom-0 left-0"
     >
       <div className="bg-black px-16 pt-14 pb-7 rounded-md text-center">

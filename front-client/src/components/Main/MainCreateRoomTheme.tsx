@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { changeCreateRoomThemeCheck } from "../../store/store";
-import style from "./MainCreateRoom.module.css";
+// import style from "./MainCreateRoom.module.css";
 
 const MainCreateRoomTheme = ({ selectOption }: { selectOption: string[] }) => {
   const dispatch = useAppDispatch()
   const [selectTitle, ...selectPocha] = selectOption;
   const themeIdList = ['T0B0', 'T0B1', 'T0B2']
   const selectTheme = useRef<any>([]);
+
+  // 테마 이미지
   const themeImg = [
     require("../../assets/theme/izakaya.jpg"),
     require("../../assets/theme/pocha.jpg"),
