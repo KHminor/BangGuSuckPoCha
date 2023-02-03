@@ -28,7 +28,7 @@ function GameRoom():JSX.Element {
         </div>
       </div>
       {/* footerNav */}
-      <RoomFooterNav/>
+      <RoomFooterNav />
     </div>
   )
 }
