@@ -148,8 +148,20 @@ const WebRTC = () => {
     const offer = await myPeerConnections[socketId].createOffer();
     myPeerConnections[socketId].setLocalDescription(offer);
     console.log("sent the offer");
-    socket.emit("offer", offer, socketId, roomName);
+    socket.emit("offer", offer, socketId, roomName, {username: "유저네임", nickname : "유저닉네임"});
   });
+
+  socket.on("offer", async (offer, socketId, userInfo) => {
+    console.log("received the offer");
+    myPeerConnections[socketId] = makeConnection();
+    myPeerConnections[socketId].setRemoteDescription(offer);
+    const answer = await myPeerConnections[socketId].createAnswer();
+  
+    myPeerConnections[socketId].setLocalDescription(answer);
+    socket.emit("answer", answer, socketId, roomName);
+    console.log("sent the answer");
+  });
+
 
   socket.on("answer", (answer, socketId) => {
     console.log("received the answer");
@@ -191,11 +203,11 @@ const WebRTC = () => {
     let temp = userCount;
     if (temp < 4) {
       while (temp < 4) {
-        if (userCount === 1) {
+        if (temp === 1) {
           peerFace1.current.srcObject = null;
-        } else if (userCount === 2) {
+        } else if (temp === 2) {
           peerFace2.current.srcObject = null;
-        } else if (userCount === 3) {
+        } else if (temp === 3) {
           peerFace3.current.srcObject = null;
         }
         temp += 1;
@@ -251,8 +263,8 @@ const WebRTC = () => {
     } else if (userCount === 3) {
       peerFace3.current.srcObject = data.stream;
     }
-    userCount += 1;
     // peerFace.current.srcObject = data.stream;
+    userCount += 1;
   }
 
 
