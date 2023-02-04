@@ -164,7 +164,7 @@ public class PochaServiceImpl implements PochaService{
         LocalDateTime start = entity.getCreateAt();
         LocalDateTime exit = LocalDateTime.now();
         for(Participant participant : pocha.getParticipant()){
-            if(participant.getExitAt() == null){
+            if(participant.getExitAt() == null && participant.getUser().getUserId() != entity.getUser().getUserId()){
                 LocalDateTime dt = null;
                 if(start.isAfter(participant.getCreateAt()))    dt = start;
                 else dt = participant.getCreateAt();
@@ -189,6 +189,25 @@ public class PochaServiceImpl implements PochaService{
             }
         }
 
+        // 호스트 변경.
+        if(entity.getIsHost()){
+            System.out.println("============> 호스트 변경!");
+            boolean isPochaEnd = true;
+            for(int idx = pocha.getParticipant().size() - 1; idx >= 0; idx--){
+                Participant participant = pocha.getParticipant().get(idx);
+                if(participant.getExitAt() == null && participant.getUser().getUserId() != entity.getUser().getUserId()){
+                    System.out.println("============> 호스트 변경!");
+                    isPochaEnd = false;
+                    participant.updateHost();
+                    break;
+                }
+            }
+
+            // 모든 인원이 나갔다면 포차 종료.
+            if(isPochaEnd){
+                pocha.updateEnd();
+            }
+        }
     }
 
     @Override

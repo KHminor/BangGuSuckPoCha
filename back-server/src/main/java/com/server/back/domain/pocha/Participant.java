@@ -33,4 +33,8 @@ public class Participant extends BaseTimeEntity{
     public void updateExit() {
         this.exitAt = LocalDateTime.now();
     }
+
+    public void updateHost() {
+        this.isHost = true;
+    }
 }
