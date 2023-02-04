@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,16 +36,19 @@ public class PochaServiceImpl implements PochaService{
 
         Integer age = requestDto.getAge();
         String region = requestDto.getRegion();
-        String theme = requestDto.getThemeId().substring(0, 2);
-        Set<String> tagSet = null;
+        String theme = null;
+        if(requestDto.getThemeId() != null) {
+            requestDto.getThemeId();
+        }
+        Set<String> tagSet = new HashSet<>();
         if(requestDto.getTagList() != null){
-            tagSet = requestDto.getTagList().stream().collect(Collectors.toSet());
+            tagSet.addAll(requestDto.getTagList());
         }
 
         int tagSize = tagSet.size();
         // 모든 포차 확인.
         for(Pocha p : pochaRepository.findByAgeAndRegion(age, region)){
-            if(p.getIsEnd() || !p.getTheme().getThemeId().substring(0, 2).equals(theme)) continue;
+            if(p.getIsEnd() || (theme != null && !p.getTheme().getThemeId().equals(theme))) continue;
 
             // 지정한 태그가 모두 포함된 경우만 반환.
             int validTag = 0;
