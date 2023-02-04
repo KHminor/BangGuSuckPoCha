@@ -260,7 +260,7 @@ const WebRTC = () => {
     <div className="h-screen w-screen text-white">
       <div className="p-20">
         <form onSubmit={handleWelcomeSubmit} ref={welcomeForm}>
-          <input ref={welcomeInput} placeholder="Room name" required type="text"/>
+          <input className="text-black" ref={welcomeInput} placeholder="Room name" required type="text"/>
           <button>Enter Room</button>
         </form>
       </div>

@@ -115,10 +115,10 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}
-        className={`bg-slate-800 bg-opacity-50 fixed w-full h-full text-white`}
+        className={`bg-slate-800 bg-opacity-50 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
       >
         <div
-          className={`min-w-[24rem] bg-black w-[20%] px-10 pt-10 pb-5 rounded-3xl relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+          className={`min-w-[24rem] bg-black px-10 pt-10 pb-5 rounded-3xl overflow-y-auto`}
         >
           <div className={`w-full h-24 flex justify-center items-center`}>
             <img
