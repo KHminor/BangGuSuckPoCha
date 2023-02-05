@@ -10,3 +10,46 @@
   border-bottom: solid 2px rgba(255, 255, 255, 0.1);
   margin: 4px 0px 4px 0px ;
 }
+
+.nickNameNeon {
+  color: white;
+  text-shadow: 0 0 3px #FC5E01,
+              0 0 5px #EF6003;
+}
+
+.nickNameNeon:hover {
+  color: #e19a6a;
+  text-shadow: 0 0 3px #FC5E01,
+              0 0 5px #EF6003;
+}
+
+.menuFriendNeon {
+  color: white;
+  text-shadow: 0 0 1px #FC5E01,
+              0 0 3px #EF6003;
+}
+
+.menuFriendNeon:hover {
+  color: #e19a6a;
+  text-shadow: 0 0 3px #FC5E01,
+              0 0 5px #EF6003;
+}
+
+
+.sentenceNeon {
+  color: white;
+  text-shadow: 0 0 1px #ffee5698,
+              0 0 2px #f7ed368a;
+}
+
+
+.createBtn {
+  text-shadow: 0 0 5px rgba(0, 26, 255, 0.5),
+              0 0 15px rgba(0, 26, 255, 0.5);
+
+}
+
+.createBtn:hover {
+  color: rgb(150, 183, 255);
+}
+

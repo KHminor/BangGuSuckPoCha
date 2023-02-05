@@ -174,12 +174,17 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     '이거 마시면 나랑 사귀는거다?😏',
     '오늘 여기 오길 참 잘 해따😵',
     '술이 달아서 네 생각이 나🤬',
+    '흥청망청 취해보자👾',
+    '즐겁게 웃으며 한잔😛',
+    '이거 마시면 나랑 사귀는거다?😏',
+    '오늘 여기 오길 참 잘 해따😵',
+    '술이 달아서 네 생각이 나🤬',
     '흥청망청 취해보자👾'
   ]
   
 
   let cards: JSX.Element[] = mainCreateRoomList.map((e: any, idx: any) => {
-    console.log(e)
+    // console.log(e)
     // 포차 종류
     let themeType;
     if (e.themeId.substr(0, 2) === "T0") {
@@ -196,7 +201,7 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     });
 
     // 썰 타이틀 없을 시 랜덤 타이틀
-    let SSulTitle = randomTitleList[Math.floor(Math.random()*randomTitleList.length)]
+    let SSulTitle = randomTitleList[e.pochaId%10]
     if (typeof e.ssulTitle !== 'object') {
       SSulTitle = e.ssulTitle
     }

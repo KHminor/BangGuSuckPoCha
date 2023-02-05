@@ -10,7 +10,6 @@ function AlarmRequest():JSX.Element {
   const alarmClickState = useAppSelector((state:any)=> {return state.alarmClickState})
   const [apiDataList, setApiDataList] = useState([])
 
-
   useEffect(()=> {   
     if (alarmClickState === 0) {
       // 유저의 친구 요청 목록데이터를 담은 컴포넌트

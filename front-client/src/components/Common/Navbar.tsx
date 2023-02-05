@@ -41,6 +41,7 @@ function MenuOption():JSX.Element {
             <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>상점</p>
           </div>
         </div>
+        {/* 알림 */}
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer" onClick={()=> {
             axios({
@@ -48,8 +49,17 @@ function MenuOption():JSX.Element {
               url: `https://i8e201.p.ssafy.io/api/user/friend/request/${username}`
             })
             .then((r)=> {
+              const checkFrom_id:number[] = []
+              const setData:(number|string)[] = []
+              const data:(number|string)[] = r.data.data
+              data.forEach((e:any)=> {
+                if (checkFrom_id.includes(e.from_id)!== true) {
+                  checkFrom_id.push(e.from_id)
+                  setData.push(e)
+                }
+              })
               dispatch(changeAlarmState())
-              dispatch(changeAlarmApiDataState(r.data.data))
+              dispatch(changeAlarmApiDataState(setData))
               if (menuFriendClickCheck) {
                 dispatch(changeMenuFriendState())
               }
@@ -62,6 +72,7 @@ function MenuOption():JSX.Element {
             <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>알림</p>
           </div>
         </div>
+        {/* 메뉴 */}
         <div className="flex justify-center items-end mb-2 ">
           <div className="cursor-pointer" onClick={()=> {
             if (menuFriendClickCheck) {

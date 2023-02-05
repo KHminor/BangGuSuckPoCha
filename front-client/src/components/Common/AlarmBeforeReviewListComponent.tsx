@@ -39,7 +39,9 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
             dispatch(changeNavAlarmReviewEmojiUserData(r.data))
             dispatch(showRoomUserProfile())
           })
-        }}>{to_nickname}</div>
+        }}>
+          <span className={`${styles.nickNameNeon}`}>{to_nickname}</span>
+        </div>
         <StarReview to_nickname={to_nickname} reviewId={reviewId} toUsername={toUsername}/>
       </div>
     </div>
@@ -52,16 +54,18 @@ function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
   const [starState,setStarState] = useState()
   // username (현재는 내꺼)
   const username = localStorage.getItem('Username')
-  
+  const [rating, setRating] = useState(null) as any
   return (
     
     <div className="flex justify-start items-center">
       <div className={`grid `} style={{gridTemplateColumns: '3fr 1fr 1.5fr'}}>
-        <StarRating to_nickname={to_nickname} setStarState={setStarState}/>
+        <StarRating to_nickname={to_nickname} setStarState={setStarState} rating={rating} setRating={setRating}/>
         <div></div>
         <div className="flex justify-center items-center cursor-pointer w-full h-ful">
-          <input className="text-xs cursor-pointer" type="submit" value={'평가하기'} onClick={(e)=> {
-            e.preventDefault()
+          <input className={`text-xs cursor-pointer ${styles.createBtn}`} type="submit" value={'평가하기'} onClick={(e)=> {
+            console.log('평가점수: ', starState)
+            setRating(null)
+            // e.preventDefault()
             axios({
               method: 'put',
               url: 'https://i8e201.p.ssafy.io/api/user/review',
@@ -92,8 +96,8 @@ function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
 }
 
 // 별점 기능
-function StarRating({to_nickname, setStarState}:any):JSX.Element {
-  const [rating, setRating] = useState(null) as any
+function StarRating({to_nickname, setStarState,rating, setRating}:any):JSX.Element {
+  
   const [hover, setHover] = useState(null) as any
   setStarState(rating)
 
@@ -104,7 +108,9 @@ function StarRating({to_nickname, setStarState}:any):JSX.Element {
         return (
           <label>
             <input type="radio" name="rating" value={ratingValue} 
-            onClick={()=> {setRating(ratingValue)}}
+            onClick={()=> {
+              setRating(ratingValue)
+            }}
             />
             <FaStar className="star" color={ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'} size={15}
               onMouseEnter={()=> {setHover(ratingValue)}}

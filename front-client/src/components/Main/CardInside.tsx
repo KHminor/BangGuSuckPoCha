@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useState, useRef} from "react";
 import styles from "./Main.module.css";
-
+import './CardInside.css'
 
 // 카드 내부
 function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulTitle, isPrivate, alcohol}: any): JSX.Element {
-  const [isNotOver, setIsNotOver] = useState(false);
-  
+  const [isOver, setIsOver] = useState(false);
+
   // 테마에 따른 테마 컬러변경
   let themeTypeColor
+  let themeTypeHoverNeon
   switch (themeType) {
     case ('Talk'):
       themeTypeColor = "#E47200"
+      themeTypeHoverNeon = 'talk'
       break
     case ('Game'):
       themeTypeColor = "#003C74"
+      themeTypeHoverNeon = 'game'
       break
     case ('Meeting'):
       themeTypeColor = "#DE145D"
+      themeTypeHoverNeon = 'meeting'
       
   }
   
@@ -44,17 +48,18 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
   const countSul = Math.floor(alcohol/14)
 
   return (
-    <div className="h-full min-h-[100%] w-full min-w-[100%]"
+    <div
+      className="h-full min-h-[100%] w-full min-w-[100%]"
       onMouseEnter={() => {
-        setIsNotOver(true);
+        setIsOver(true);
       }}
       onMouseLeave={() => {
-        setIsNotOver(false);
+        setIsOver(false);
       }}
     >
-      {isNotOver ? (
-        <div
-          className={`flex flex-col justify-start items-center h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon} `}
+      {isOver ? (
+        <div 
+          className={`flex flex-col justify-start items-center h-full min-h-[100%] w-full min-w-[100%] ${themeTypeHoverNeon} ${styles.neon}`}
           style={{ borderRadius: "16px" }}
         >
           {/* 마우스 호버 O */}
@@ -94,7 +99,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
             </div>
             {/* 술 체크 및 인원수 체크 */}
             <div className="grid" style={{gridTemplateColumns: '1fr 1fr'}}>
-              <div className="flex justify-start items-end pl-4">
+              <div className="flex justify-start items-end pl-5">
                 <img className="w-[1rem] h-[full]" src={require('../../assets/mainIcon/straightSul.png')} alt="" /><div>&nbsp; x &nbsp;{countSul}</div>
               </div>
               <div className="flex justify-center items-end">
@@ -107,7 +112,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
         </div>
       ) : (
         <div
-          className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon} `}
+          className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%] ${styles.neon} `}
           style={{ gridTemplateRows: "7fr 3fr", borderRadius: "16px" }}
         >
           {/* 마우스 호버 X  */}

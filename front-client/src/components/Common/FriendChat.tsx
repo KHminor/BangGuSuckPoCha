@@ -26,22 +26,30 @@ function FriendChat():JSX.Element {
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data} = menuFriendClickUserData
   
+  
+  
   function MyChat({content}:any):JSX.Element {
     return (
-      <div className="flex justify-end items-center my-1">
-        <span className="bg-blue-400 text-white">
-          {content}
-        </span>
+      <div className="flex justify-end items-center my-1 ">
+        <div className="grid w-full " style={{gridTemplateColumns: '3fr 2fr'}}>
+          <div className="inline-flex justify-start items-center whitespace-normal">
+            <span className="text-gray-50 rounded-lg bg-orange-400 font-medium">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+          </div>
+          <div className=""></div>
+        </div>
       </div>
     )
   }
-  
+
   function OtherChat({content}:any):JSX.Element {
     return (
-      <div className="flex justify-start items-center my-1">
-        <span className="bg-red-300 text-white">
-          {content}
-        </span>
+      <div className="flex justify-end items-center my-1 ">
+        <div className="grid w-full " style={{gridTemplateColumns: '2fr 3fr'}}>
+          <div className=""></div>
+          <div className="inline-flex justify-end items-center whitespace-normal">
+            <span className="text-gray-50 rounded-lg bg-blue-400 font-medium">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+          </div>
+        </div>
       </div>
     )
   }
@@ -59,7 +67,7 @@ function FriendChat():JSX.Element {
     <div ref={friendChat} className="absolute  w-[33rem] h-[35rem] max-h-[35rem] top-[11.6rem] right-[19rem] hidden">
         <div className="relative grid w-full h-full rounded-[24px] bg-black text-white" style={{gridTemplateRows: '0.5fr 0.5fr 7fr 1fr', border:'solid 2px white'}}>
             <div className="flex justify-center items-center h-[1.8rem] max-h-[1.8rem] w-full  text-white rounded-[100px] ">Chat</div>
-            <div className="flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] ">{nickname}</div>
+            <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}>{nickname}</div>
             {/* 채팅 공간 */}
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
@@ -68,7 +76,7 @@ function FriendChat():JSX.Element {
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
-                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/> : <OtherChat content={chat.content}/>
+                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/> 
                       }
                     </div>
                   )
