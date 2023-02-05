@@ -1,19 +1,25 @@
 import RoomFooterNav from "../Common/RoomFooterNav";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { showRoomUserProfile } from "../../store/store";
+import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import RoomUserProfile from "../Common/RoomUserProfile";
 import Loading from "../Common/Loading";
 import styles from "./StoryRoom.module.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import WebRTC from "../WebRTC/WebRTC";
 
 function StoryRoom(): JSX.Element {
   const dispatch = useAppDispatch();
-  // 로딩상태 체크
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  // 요청한 유저프로필 데이터 잘왔는지 체크
+  const { PochaId } = useParams();
+  // 요청한 유저프로필 데이터
   const [userProfileData, setUserProfileData] = useState(null);
   const username = "DnXrE8Ea860Euv_LONqQyz4pnK86XrDd0YinVdBAaeA";
+
+  // webRTC Loading 상태 가져옴
+  const isLoading = useAppSelector((state) => {
+    return state.webRtcLoading;
+  });
 
   // 안에 유저들 프로파일 모달 상태 가져옴
   const isRoomUserProfile = useAppSelector((state) => {
@@ -29,7 +35,7 @@ function StoryRoom(): JSX.Element {
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
     setUserProfileData(data);
-    setIsLoading((prev) => !prev);
+    dispatch(isRtcLoading(false));
   };
 
   useEffect(() => {
@@ -43,14 +49,12 @@ function StoryRoom(): JSX.Element {
       ) : (
         <>
           {isRoomUserProfile && <RoomUserProfile userData={userProfileData} />}
-          <div
-            className={`w-screen h-screen grid ${styles.gameroomimg}`}
-            style={{ gridTemplateRows: "0.07fr 1fr 0.12fr" }}
-          >
-            {/* 빈 공간 */}
-            <div></div>
+          <div className={`w-screen h-screen ${styles.gameroomimg}`}>
             {/* 화면 및 게임 공간 */}
-            <div
+            <div className="h-[90%]">
+              <WebRTC pochaId={PochaId!} />
+            </div>
+            {/* <div
               className="grid h-full"
               style={{ gridTemplateRows: "1fr 1fr" }}
             >
@@ -67,9 +71,11 @@ function StoryRoom(): JSX.Element {
                 <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-green-300"></div>
                 <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-blue-300"></div>
               </div>
-            </div>
+            </div> */}
             {/* footerNav */}
-            <RoomFooterNav />
+            <div className="fixed bottom-0 left-0 right-0">
+              <RoomFooterNav />
+            </div>
           </div>
         </>
       )}

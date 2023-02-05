@@ -195,7 +195,7 @@ const MainCreateRoom = ({
                         },
                       }).then((r) => {
                         console.log(r.data);
-                        navigate(`/storyroom/:${PochaId}`);
+                        navigate(`/storyroom/${PochaId}`);
                       });
                     });
                   }}

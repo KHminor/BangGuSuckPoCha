@@ -536,6 +536,17 @@ const navAlarmReviewEmojiUserData = createSlice({
   }
 })
 
+// webRTC로딩 켜고 끄는 함수
+const webRtcLoading = createSlice({
+  name: 'webRtcLoading',
+  initialState: true,
+  reducers: {
+    isRtcLoading(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -570,6 +581,9 @@ export const store = configureStore({
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
 
     myPageCheck: myPageCheck.reducer,
+    // webRTC
+    webRtcLoading: webRtcLoading.reducer,
+    
   },
 });
 //주석추가
@@ -602,6 +616,8 @@ export const { changeUserName } = userName.actions
 // EmojiClickUserData
 export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
 export const { changeMyPageCheck } = myPageCheck.actions
+// webRTC
+export const { isRtcLoading } = webRtcLoading.actions
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
