@@ -7,6 +7,7 @@ import { changeMyPageCheck } from "src/store/store";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
+import regionList from "./regionList";
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
@@ -17,11 +18,15 @@ function Mypage(): JSX.Element {
   const [birth, setBirth] = useState<any | null>("0000.00.00");
   const [gender, setGender] = useState();
   const [age, setAge] = useState<any | null>();
-  const [region, setRegion] = useState();
+  const [region, setRegion] = useState(" ");
   const [point, setPoint] = useState();
   const [comment, setComment] = useState();
   const [manner, setManner] = useState();
   const [profile, setProfile] = useState("string");
+  const [regionfirst, setRegionfirst] = useState();
+
+  const [firstselect, setFirstselect] = useState<any | null>();
+
   const Username: any = localStorage.getItem("Username");
   const onChangeNikename = (event: any) => {
     // console.log(event.target.value);
@@ -32,13 +37,20 @@ function Mypage(): JSX.Element {
     setComment(event.target.value);
   };
 
+  // console.log("첫번째 : ")
+  // console.log(firstselect[0].code);
+
   useEffect(() => {
+    // setRegionfirst(regionList.name)
+
+    // console.log(regionList.name);
     // console.log(Username);
     axios({
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
     }).then((r) => {
-      // console.log(r.data.data);
+      console.log("내정보 : ");
+      console.log(r.data.data);
       //data내용
       let a = r.data.data;
       setNickname(a.nickname);
@@ -62,6 +74,13 @@ function Mypage(): JSX.Element {
       setBirth(birth);
       setAge(age);
       setRegion(a.region);
+      let firstselecttemp: any;
+      if (a.region) {
+        firstselecttemp = regionList.name.filter(
+          (param) => param.name === `${a.region.split(" ")[0]}`
+        );
+      }
+      setFirstselect(firstselecttemp);
       setComment(a.comment);
       setPoint(a.point);
       setManner(a.manner);
@@ -72,7 +91,15 @@ function Mypage(): JSX.Element {
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
     }).then((r) => {
-      console.log(r.data.data);
+      const result = r.data.data;
+      // console.log(r.data.data);
+      // console.log(result);
+      let result2600000000 = result.filter(
+        (param: any) => param.regionCode.substr(0, 2) === "41"
+      );
+      // console.log("result2600000000 : ");
+      // console.log(result2600000000);
+      console.log(regionList);
     });
   }, []);
   // console.log(birth);
@@ -249,27 +276,34 @@ function Mypage(): JSX.Element {
                 <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
                   지역
                 </div>
-                <div
-                  className="grid  border-purple-300 w-[90%] mr-[10%]"
-                  style={{ gridTemplateColumns: "1fr 1fr" }}
-                >
-                  <select
-                    className="text-white text-[1rem] text-center bg-black h-full border-2"
-                    name="address1"
-                    id="address1"
+
+                {region.split(" ").length === 2 ? (
+                  <div
+                    className="grid  border-purple-300 w-[90%] mr-[10%]"
+                    style={{ gridTemplateColumns: "1fr 1fr" }}
                   >
-                    <option value="20">부산광역시</option>
-                  </select>
-                  <select
-                    className="text-black text-[1rem] text-center bg-white h-full border-2"
-                    name="address2"
-                    id="address2"
-                  >
-                    <option value="20" disabled>
-                      ALL
-                    </option>
-                  </select>
-                </div>
+                    <select
+                      className="text-white text-[1rem] text-center bg-black h-full border-2"
+                      name="address1"
+                      id="address1"
+                    >
+                      <option value={`${firstselect[0].code}`}>
+                        {/* {region.split(" ")[0]} */}
+                        test
+                      </option>
+                      {}
+                    </select>
+                    <select
+                      className="text-black text-[1rem] text-center bg-white h-full border-2"
+                      name="address2"
+                      id="address2"
+                    >
+                      <option value="20" disabled>
+                        ALL
+                      </option>
+                    </select>
+                  </div>
+                ) : null}
               </div>
               {/* 포인트 */}
               <div
