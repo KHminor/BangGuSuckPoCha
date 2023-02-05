@@ -1,7 +1,7 @@
-import { changeAlarmApiDataState, changeAlarmState, changeMenuState } from "../../store/store";
+import { changeAlarmApiDataState, changeAlarmState, changeMenuFriendChatState, changeMenuFriendState, changeMenuState } from "../../store/store";
 import styles from '../Main/Main.module.css'
 import axios from "axios";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function Navbar(): JSX.Element {
   return (
@@ -29,6 +29,8 @@ function Navbar(): JSX.Element {
 function MenuOption():JSX.Element {
   let dispatch = useAppDispatch()
   const username = localStorage.getItem('Username')
+  const menuFriendClickCheck = useAppSelector((state)=> {return state.menuFriendClickCheck})
+  const menuFriendChatClickCheck = useAppSelector((state)=> {return state.menuFriendChatClickCheck})
   return (
     <div className="flex w-full">
       <div style={{width: '20%'}}></div>
@@ -48,6 +50,12 @@ function MenuOption():JSX.Element {
             .then((r)=> {
               dispatch(changeAlarmState())
               dispatch(changeAlarmApiDataState(r.data.data))
+              if (menuFriendClickCheck) {
+                dispatch(changeMenuFriendState())
+              }
+              if (menuFriendChatClickCheck){
+                dispatch(changeMenuFriendChatState(false))
+              }
             })
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
@@ -56,6 +64,12 @@ function MenuOption():JSX.Element {
         </div>
         <div className="flex justify-center items-end mb-2 ">
           <div className="cursor-pointer" onClick={()=> {
+            if (menuFriendClickCheck) {
+              dispatch(changeMenuFriendState())
+            }
+            if (menuFriendChatClickCheck){
+              dispatch(changeMenuFriendChatState(false))
+            }
             dispatch(changeMenuState())
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/menu.png')} alt="menu" />

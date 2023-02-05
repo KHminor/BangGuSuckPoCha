@@ -343,17 +343,31 @@ const menuFriendClickCheck = createSlice({
   },
 });
 
-// Nav의 menu에 있는 friend의 친구 목록 클릭 여부
+// Nav의 menu에 있는 friend의 친구 클릭 여부
 const menuFriendChatClickCheck = createSlice({
   name: "menuFriendChatClick",
   initialState: false,
   reducers: {
-    // 추후 action.payload로 채팅방 번호를 받아서 보여줘야 할듯?
-    changeMenuFriendChatState(state) {
-      return !state;
+    // 채팅 목록 열고 닫기 함수
+    changeMenuFriendChatState(state,action) {
+      return state = action.payload
     },
   },
 });
+
+const menuFriendClickUserData  = createSlice({
+  name: "menuFriendClickUserData",
+  initialState: [],
+  reducers: {
+    // 클릭한 유저와의 데이터 변경 함수
+    changemenuFriendClickUserData(state,action) {
+      return state = action.payload
+    },
+  },
+});
+
+
+
 
 // 룸에있는 유저 프로필 클릭 여부
 const RoomUserProfileClickCheck = createSlice({
@@ -561,6 +575,7 @@ export const store = configureStore({
     roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
     RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
     RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
+    menuFriendClickUserData: menuFriendClickUserData.reducer,
     PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
@@ -594,6 +609,7 @@ export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
 export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
+export const { changemenuFriendClickUserData } = menuFriendClickUserData.actions
 export const { showPublicModal } = PublicModal.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions

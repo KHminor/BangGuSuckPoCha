@@ -13,6 +13,7 @@ import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
+import CardInside from "./CardInside";
 import styles from "./Main.module.css";
 import MainCreateRoom from "./MainCreateRoom";
 import MainCreateRoomCarousel from "./MainCreateRoomCarousel";
@@ -57,17 +58,18 @@ function Main(): JSX.Element {
   const alarmClickCheck: any = useAppSelector((state: any) => {
     return state.alarmClickCheck;
   });
-  //  메뉴 -> 친구 클릭 상태
-  const menuFriendClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendClickCheck;
-  });
+
   //  메뉴 -> 친구 클릭 -> 채팅 상태
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck;
   });
 
-  const navAlarmReviewEmojiUserData: any = useAppSelector((state:any) => {return state.navAlarmReviewEmojiUserData})
-  const RoomUserProfileClickCheck : any = useAppSelector((state:any) => {return state.RoomUserProfileClickCheck})
+  const navAlarmReviewEmojiUserData: any = useAppSelector((state: any) => {
+    return state.navAlarmReviewEmojiUserData;
+  });
+  const RoomUserProfileClickCheck: any = useAppSelector((state: any) => {
+    return state.RoomUserProfileClickCheck;
+  });
 
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
@@ -82,9 +84,9 @@ function Main(): JSX.Element {
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
       <FriendList />
-  
+
       {menuFriendChatClickCheck ? <FriendChat /> : null}
-      
+
       {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
       {mainCreateRoomCarouselCheck ? (
         <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
@@ -98,9 +100,9 @@ function Main(): JSX.Element {
         />
       ) : null}
 
-      {
-        RoomUserProfileClickCheck ? <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData}/> : null
-      }
+      {RoomUserProfileClickCheck ? (
+        <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData} />
+      ) : null}
 
       <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
@@ -113,22 +115,30 @@ function Main(): JSX.Element {
         <Navbar />
 
         <div
-          className="grid container mx-auto min-w-[75rem]"
-          style={{
-            gridTemplateRows: "8rem 1fr 3rem",
-            backgroundColor: "rgb(25, 25, 25)",
-          }}
+          className="grid"
+          style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
         >
-          {/* 태그 */}
-          <Tag />
-          {/* 방 보이기 */}
+          <div></div>
           <div
-            className="grid grid-cols-1 w-full min-w-[75rem] "
-            style={{ backgroundColor: "rgb(25, 25, 25)" }}
+            className="grid mx-auto min-w-f"
+            style={{
+              gridTemplateRows: "8rem 1fr 3rem",
+              backgroundColor: "rgb(25, 25, 25)",
+            }}
           >
-            <Room mainCreateRoomList={mainCreateRoomList} />
+            {/* 태그 */}
+            <Tag />
+            {/* 방 보이기 */}
+            <div
+              className="grid grid-cols-1 w-full min-w-[75rem]"
+              style={{ backgroundColor: "rgb(25, 25, 25)" }}
+            >
+              <Room mainCreateRoomList={mainCreateRoomList} />
+            </div>
           </div>
+          <div></div>
         </div>
+
         {/* 방 생성 버튼 */}
         <div
           ref={createBtn}
@@ -156,75 +166,62 @@ function Main(): JSX.Element {
 }
 export default Main;
 
+
 function Room({ mainCreateRoomList }: any): JSX.Element {
-  let [hoverCheck, setHoverCheck] = useState(false);
-  // console.log('방 목록: ',mainCreateRoomList);
+  // ssulTitle가 null일 경우 랜덤하게 넣어줄 문구
+  const randomTitleList = [
+    '즐겁게 웃으며 한잔😛',
+    '이거 마시면 나랑 사귀는거다?😏',
+    '오늘 여기 오길 참 잘 해따😵',
+    '술이 달아서 네 생각이 나🤬',
+    '흥청망청 취해보자👾'
+  ]
+  
 
   let cards: JSX.Element[] = mainCreateRoomList.map((e: any, idx: any) => {
+    console.log(e)
+    // 포차 종류
+    let themeType;
+    if (e.themeId.substr(0, 2) === "T0") {
+      themeType = "Talk";
+    } else if (e.themeId.substr(0, 2) === "T1") {
+      themeType = "Game";
+    } else {
+      themeType = "Meeting";
+    }
+
     // 태그 정렬하기
     const TagList = e.tagList.map((tag: any) => {
       return `#${tag} `;
     });
+
+    // 썰 타이틀 없을 시 랜덤 타이틀
+    let SSulTitle = randomTitleList[Math.floor(Math.random()*randomTitleList.length)]
+    if (typeof e.ssulTitle !== 'object') {
+      SSulTitle = e.ssulTitle
+    }
+    
     return (
       <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
         <div
           className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
           style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
         >
-          <div
-            className=""
-            style={{ backgroundColor: "rgb(25, 25, 25)" }}
-          ></div>
+          <div></div>
           {/* 카드 내부 */}
-          <div
-            className={`grid grid-rows-2 h-full min-h-[100%] w-full min-w-[100%]  ${styles.neon}`}
-            style={{ gridTemplateRows: "7fr 3fr" }}
-          >
-            <div className="h-full min-h-[100%] w-full min-w-[100%] ">
-              <img
-                src="https://images.pexels.com/photos/5220092/pexels-photo-5220092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt=""
-                className="h-full min-h-[100%] w-full min-w-[] object-cover"
-              />
-            </div>
-            <div
-              className={`grid grid-rows-3 h-full min-h-[100%] w-full min-w-[100%] bg-black text-white ${styles.radiusbottom}`}
-            >
-              <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
-                <div className="col-span-1 "></div>
-                <div
-                  className="w-full h-full col-span-4 rounded-full flex justify-center items-center text-base font-medium"
-                  style={{
-                    backgroundColor: "rgb(227, 114, 0)",
-                    height: "60%",
-                  }}
-                >
-                  Talk
-                </div>
-                <div className="col-span-7 "></div>
-              </div>
-              <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
-                <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
-                  <div className="col-span-1 "></div>
-                  <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
-                    즐겁게 웃으며 한잔😛
-                  </div>
-                </div>
-              </div>
-              <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
-                <div className="w-full min-w-[100%] max-w-[100%] grid grid-cols-12 items-center overflow-hidden ">
-                  <div className="col-span-1 "></div>
-                  <div className="w-full h-full col-span-11 flex justify-start items-center text-base font-medium">
-                    {TagList}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div>
+            <CardInside
+              TagList={TagList}
+              themeType={themeType}
+              themeId={e.themeId}
+              femaleCount={e.femaleCount}
+              maleCount={e.maleCount}
+              ssulTitle={SSulTitle}
+              isPrivate={e.isPrivate}
+              alcohol={e.alcohol}
+            />
           </div>
-          <div
-            className=""
-            style={{ backgroundColor: "rgb(25, 25, 25)" }}
-          ></div>
+          <div></div>
         </div>
       </div>
     );
@@ -235,3 +232,4 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     </div>
   );
 }
+

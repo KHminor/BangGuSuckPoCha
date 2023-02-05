@@ -96,10 +96,7 @@ function StarRating({to_nickname, setStarState}:any):JSX.Element {
   const [rating, setRating] = useState(null) as any
   const [hover, setHover] = useState(null) as any
   setStarState(rating)
-  useEffect(()=> {
-    console.log(`${to_nickname}의 별점은 현재: `,rating);
-    
-  },[rating])
+
   return (
     <div className="flex">
       {[...Array(5)].map((star, idx)=> {

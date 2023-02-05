@@ -11,9 +11,7 @@ function AlarmRequest():JSX.Element {
   const [apiDataList, setApiDataList] = useState([])
 
 
-  useEffect(()=> {
-    console.log('변경된 api 데이터: ',alarmApiData);
-    
+  useEffect(()=> {   
     if (alarmClickState === 0) {
       // 유저의 친구 요청 목록데이터를 담은 컴포넌트
       setApiDataList(alarmApiData.map((e:any)=> {

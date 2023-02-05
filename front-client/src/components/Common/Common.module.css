@@ -2,6 +2,10 @@
   display: none; /* Chrome, Safari, Opera*/
 }
 
+.Scroll {
+  overflow-y:scroll;
+}
+
 .shortBorder {
   border-bottom: solid 2px rgba(255, 255, 255, 0.1);
   margin: 4px 0px 4px 0px ;
