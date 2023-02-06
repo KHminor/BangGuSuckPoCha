@@ -277,7 +277,7 @@ function Mypage(): JSX.Element {
                 <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
                   지역
                 </div>
-
+                  {/* 지역추가 */}
                 {region.split(" ").length === 2 ? (
                   <div
                     className="grid  border-purple-300 w-[90%] mr-[10%]"

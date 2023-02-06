@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
-
+// test지워도됨
 export type UserInfo = {
   nickname: string;
   age: number;

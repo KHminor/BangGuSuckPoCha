@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+// test지워도됨
 function AdminLogin(): React.ReactElement {
   const navigate = useNavigate();
   return (
