@@ -4,8 +4,10 @@ import styles from './Common.module.css'
 import './StarReview.css'
 import AlarmBeforeReviewListComponent from "./AlarmBeforeReviewListComponent";
 import RequestListComponent from "./AlarmRequestListComponent";
+import { useNavigate } from "react-router-dom";
 
 function AlarmRequest():JSX.Element {
+  const navigate = useNavigate()
   const alarmApiData = useAppSelector((state:any)=> {return state.alarmApiData})
   const alarmClickState = useAppSelector((state:any)=> {return state.alarmClickState})
   const [apiDataList, setApiDataList] = useState([])
@@ -37,14 +39,40 @@ function AlarmRequest():JSX.Element {
   },[alarmApiData])
 
   return (
-    <div className="grid w-full h-full" style={{gridTemplateRows: '4fr 0.2fr' }}>
-        <div className={`flex flex-col justify-start items-center overflow-scroll max-h-[25.6rem] my-[0.8rem] ${styles.hideScroll}`}>
-          {
-            apiDataList
-          }
-        </div>
-        <div></div>
-    </div>
+    <>
+      {
+        // 클릭한게 리뷰가 아닐경우
+        alarmClickState !== 2 ? 
+        (
+          <div className="grid w-full h-full" style={{gridTemplateRows: '4fr 0.2fr' }}>
+            <div className={`flex flex-col justify-start items-center overflow-scroll max-h-[25.6rem] my-[0.8rem] ${styles.hideScroll}`}>
+              {
+                apiDataList
+              }
+            </div>
+            <div></div>
+          </div>
+        ) :
+        (
+          // 클릭한게 리뷰일 경우
+          <div className="grid w-full h-full" style={{gridTemplateRows: '0.2fr 4fr 0.2fr' }}>
+            <div className="flex justify-start items-end pl-2 text-sm ">
+              <span className="cursor-pointer reviewpage" onClick={()=> {
+                navigate('/review')
+              }}>Review</span>
+            </div>
+            <div className={`flex flex-col justify-start items-center overflow-scroll max-h-[25.6rem] my-[0.8rem] ${styles.hideScroll}`}>
+              {
+                apiDataList
+              }
+            </div>
+            <div></div>
+          </div>
+        )
+      }
+      
+    </>
+    
   )
 }
 export default AlarmRequest

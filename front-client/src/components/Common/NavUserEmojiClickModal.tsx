@@ -10,9 +10,10 @@ import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
 import RoomUserReportModal from "./RoomUserReportModal";
 
-const RoomUserProfile = ({ userData }: { userData: any }) => {
+const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
+  console.log('클릭한 유저데이터: ',userData)
   let dispatch = useAppDispatch();
-  let { manner, gender, birth, region } = userData.data;
+  let { manner, gender, birth, region, comment } = userData.data;
   const { nickname } = userData.data;
   // 백그라운드 div
   const bgDiv = useRef<any>();
@@ -122,7 +123,7 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
             <div>{nickname}</div>
           </div>
           <div className={`w-full h-10 text-lg`}>
-            #ISFP #자바칩모카 #스파이패밀리
+            {comment}
           </div>
           <div className={`flex h-32 my-12 justify-evenly`}>
             {userInfosData.map((info, index) => {
@@ -168,4 +169,4 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
   );
 };
 
-export default RoomUserProfile;
+export default NavUserEmojiClickModal;
