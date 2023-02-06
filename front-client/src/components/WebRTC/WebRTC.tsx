@@ -1,13 +1,15 @@
+import axios from "axios";
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading } from "../../store/store";
+import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
+import RoomUserProfile from "../Common/NavUserEmojiClickModal";
 
-const WebRTC = ({ pochaId }: { pochaId: string }) => {
+const WebRTC = ({ pochaId }: { pochaId: string;}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // webRTC관련
@@ -33,8 +35,6 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   const peerFace4 = useRef<any>(null);
   const peerFace5 = useRef<any>(null);
 
-
-
   const myStream = useRef<any>(null);
   // let myStream: any;
   const roomName: any = pochaId;
@@ -51,7 +51,9 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   let cameraOff = false;
   // let userCount = 1;
 
+  // 최초실행
   useEffect(() => {
+    getUsersProfile();
     handleWelcomeSubmit();
   }, []);
 
@@ -211,8 +213,36 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // await pocha_config_update(3);
   });
 
+  // webRTC Loading 상태 가져옴
+  const isLoading = useAppSelector((state) => {
+    return state.webRtcLoading;
+  });
+
+  // 유저들 프로파일 모달 상태 가져옴
+  const isRoomUserProfile = useAppSelector((state) => {
+    return state.RoomUserProfileClickCheck;
+  });
+
+  // 요청한 유저프로필 데이터
+  const [userProfileData, setUserProfileData] = useState(null);
+
+  // 요청한 포차참여 유저들 데이터
+  const [pochaUsers, setPochaUsers] = useState<any>(null);
+
+  // 유저 데이터 axios 요청
+  async function getUsersProfile() {
+    const { data } = await axios({
+      url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
+    });
+    console.log("유유유유저들 데이터?", data);
+    setPochaUsers(data);
+    dispatch(isRtcLoading(false));
+  };
+
   socket.on("welcome", async (socketId, user) => {
     let myPeer = makeConnection();
+
+    await getUsersProfile();
 
     myPeerConnections.current[socketId] = {
       peer: myPeer,
@@ -248,7 +278,6 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     const answer = await myPeerConnections.current[socketId][
       "peer"
     ].createAnswer();
-
 
     myPeerConnections.current[socketId]["peer"].setLocalDescription(answer);
     const receivers =
@@ -432,18 +461,31 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     console.log("즐", currentUsers);
   }
 
+  // 유저들 프로파일 모달 띄우기
+  const ShowUserProfile = (event: React.MouseEvent<HTMLVideoElement>) => {
+    console.log("오냐???", event.target);
+    dispatch(showRoomUserProfile());
+  };
+
   return (
-    <div className="text-white">
-      <div className="flex flex-wrap justify-evenly items-center p-28">
-        {/* 내 비디오 공간 */}
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={myFace}
-          playsInline
-          autoPlay
-        ></video>
-        {/* 다른 사람들 비디오 공간 */}
-        {/* {currentUsers.current.map((vide: number, index: number) => {
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          {isRoomUserProfile && <RoomUserProfile userData={userProfileData} />}
+          <div className="text-white">
+            <div className="flex flex-wrap justify-evenly items-center p-28">
+              {/* 내 비디오 공간 */}
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={myFace}
+                playsInline
+                autoPlay
+              ></video>
+              {/* 다른 사람들 비디오 공간 */}
+              {/* {currentUsers.current.map((vide: number, index: number) => {
           return (
             <video
               key={index}
@@ -454,64 +496,67 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
             ></video>
           );
         })} */}
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={peerFace1}
-          playsInline
-          autoPlay
-        ></video>
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={peerFace2}
-          playsInline
-          autoPlay
-        ></video>
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={peerFace3}
-          playsInline
-          autoPlay
-        ></video>
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={peerFace4}
-          playsInline
-          autoPlay
-        ></video>
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={peerFace5}
-          playsInline
-          autoPlay
-        ></video>
-      </div>
-      <div className="flex w-fit">
-        {/* 뮤트 */}
-        <button
-          className="border-2 px-3"
-          onClick={handleMuteClick}
-          ref={muteBtn}
-        >
-          Mute
-        </button>
-        {/* 카메라 */}
-        <button
-          className="border-2 px-3"
-          onClick={handleCameraClick}
-          ref={cameraBtn}
-        >
-          Camera Off
-        </button>
-        {/* 카메라 옵션 */}
-        <select
-          className="text-black"
-          onInput={handleCameraChange}
-          ref={cameraSelect}
-        >
-          {optionList}
-        </select>
-      </div>
-    </div>
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={peerFace1}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={peerFace2}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={peerFace3}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={peerFace4}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={peerFace5}
+                playsInline
+                autoPlay
+              ></video>
+            </div>
+            <div className="flex w-fit">
+              {/* 뮤트 */}
+              <button
+                className="border-2 px-3"
+                onClick={handleMuteClick}
+                ref={muteBtn}
+              >
+                Mute
+              </button>
+              {/* 카메라 */}
+              <button
+                className="border-2 px-3"
+                onClick={handleCameraClick}
+                ref={cameraBtn}
+              >
+                Camera Off
+              </button>
+              {/* 카메라 옵션 */}
+              <select
+                className="text-black"
+                onInput={handleCameraChange}
+                ref={cameraSelect}
+              >
+                {optionList}
+              </select>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
