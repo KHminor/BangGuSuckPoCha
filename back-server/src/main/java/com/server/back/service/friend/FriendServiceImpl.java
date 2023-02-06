@@ -158,5 +158,33 @@ public class FriendServiceImpl implements FriendService {
 		messageRepository.save(message);
 		return message;
 	}
+
+	
+	// 친구인지 판별
+	@Override
+	public Boolean checkFriend(FRequestDto requestDto) {
+		Friend isFriend = friendRepository.findByMyId_userIdAndYourId_userId(requestDto.getFrom_id(), requestDto.getTo_id());
+		if(isFriend != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// 요청 보냈는지 판별
+	@Override
+	public Boolean checkFriendRequest(FRequestDto requestDto) {
+		FRequest isFrequest1 = fRequestRepository.findByFromId_userIdAndToId_userId(requestDto.getFrom_id(), requestDto.getTo_id());
+		FRequest isFrequest2 = fRequestRepository.findByFromId_userIdAndToId_userId(requestDto.getTo_id(), requestDto.getFrom_id());
+		if(isFrequest1 != null || isFrequest2 != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	
 	
 }
