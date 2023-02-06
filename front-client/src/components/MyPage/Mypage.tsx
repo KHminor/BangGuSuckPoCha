@@ -25,7 +25,8 @@ function Mypage(): JSX.Element {
   const [profile, setProfile] = useState("string");
   const [regionfirst, setRegionfirst] = useState();
 
-  const [firstselect, setFirstselect] = useState<any | null>();
+  const [firstselect, setFirstselect] = useState<any | null>(" ");
+  const [secondselect, setSecondselect] = useState<any | null>(" ");
 
   const Username: any = localStorage.getItem("Username");
   const onChangeNikename = (event: any) => {
@@ -79,6 +80,7 @@ function Mypage(): JSX.Element {
         firstselecttemp = regionList.name.filter(
           (param) => param.name === `${a.region.split(" ")[0]}`
         );
+        
       }
       setFirstselect(firstselecttemp);
       setComment(a.comment);
@@ -97,12 +99,11 @@ function Mypage(): JSX.Element {
       let result2600000000 = result.filter(
         (param: any) => param.regionCode.substr(0, 2) === "41"
       );
-      // console.log("result2600000000 : ");
-      // console.log(result2600000000);
       console.log(regionList);
+      console.log(region);
     });
   }, []);
-  // console.log(birth);
+
   return (
     <div
       className="grid w-screen h-screen font-nanum"
@@ -288,18 +289,17 @@ function Mypage(): JSX.Element {
                       id="address1"
                     >
                       <option value={`${firstselect[0].code}`}>
-                        {/* {region.split(" ")[0]} */}
-                        test
+                        {region.split(" ")[0]}
                       </option>
                       {}
                     </select>
                     <select
-                      className="text-black text-[1rem] text-center bg-white h-full border-2"
+                      className="text-white text-[1rem] text-center bg-black h-full border-2"
                       name="address2"
                       id="address2"
                     >
-                      <option value="20" disabled>
-                        ALL
+                      <option value={region.split(" ")[1]}>
+                        {region.split(" ")[1]}
                       </option>
                     </select>
                   </div>
