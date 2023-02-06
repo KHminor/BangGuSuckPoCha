@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+// test지워도됨
 function AdminMain(): React.ReactElement {
   const navigate = useNavigate();
 

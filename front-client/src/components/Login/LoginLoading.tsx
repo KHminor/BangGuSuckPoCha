@@ -36,7 +36,7 @@ function LoginLoading(): React.ReactElement {
     // Role : NEWBIE/USER/SECESSION/ADMIN
 
     // Username : "1rvvwoVohwOln9JEnGmwYF70_9Kw-ZkBM17kicx3HdY"
-
+//test지워도됨
     //로컬에 토큰 저장 / store에 Username 저장
     if (Role === "NEWBIE") {
       localStorage.setItem("accessToken", Auth);
