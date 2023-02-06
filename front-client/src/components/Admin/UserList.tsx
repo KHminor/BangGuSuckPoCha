@@ -28,33 +28,33 @@ function UserSelect(usertemp: any) {
   console.log(usertemp);
   return (
     <div className="row-span-6 w-full overflow-x-auto  max-h-[26.3rem]">
-      <table className="border-collapse border border-slate-400 w-full">
-        <thead>
-          <tr>
-            <th className="border border-slate-200 w-[35%]">닉네임</th>
-            <th className="border border-slate-300 w-[20%]">나이</th>
-            <th className="border border-slate-300 w-[20%]">벌점</th>
-            <th className="border border-slate-300 w-[25%]">test</th>
-          </tr>
-        </thead>
-        <tbody>
+        <table className="border-collapse border border-slate-400 w-full">
+          <thead>
+            <tr>
+              <th className="border border-slate-200 w-[35%]">닉네임</th>
+              <th className="border border-slate-300 w-[20%]">나이</th>
+              <th className="border border-slate-300 w-[20%]">벌점</th>
+              <th className="border border-slate-300 w-[25%]">test</th>
+            </tr>
+          </thead>
+          <tbody>
           {/* {usertemp.map(function (a: any, i: number) {
             return (
-              <tr className="h-10">
-                <td className="border border-slate-300  " onClick={() => {}}>
+            <tr className="h-10">
+              <td className="border border-slate-300  " onClick={() => {}}>
                   {usertemp[i].nickname}
-                </td>
+              </td>
                 <td className="border border-slate-300  ">{usertemp[i].age}</td>
                 <td className="border border-slate-300  ">
                   {usertemp[i].demerit}
                 </td>
-                <td className="border border-slate-300  ">❌Delete</td>
-              </tr>
+              <td className="border border-slate-300  ">❌Delete</td>
+            </tr>
             );
           })} */}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
   );
 }
 function UserList() {
@@ -71,11 +71,8 @@ function UserList() {
   //일단 지금은 유지해보자
   const navigate = useNavigate();
   const usertemp: any = useAppSelector((state: any) => {
-    return state.adminUser;
+    return state.adminUser[0];
   });
-
-  // const test = Array.from(usertemp);
-  // console.log(test);
   // console.log(usertemp);
 
   /* 
