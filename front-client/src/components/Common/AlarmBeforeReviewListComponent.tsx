@@ -4,6 +4,7 @@ import styles from './Common.module.css'
 import { useEffect, useState } from "react";
 import { changeAlarmApiDataState, changeNavAlarmReviewEmojiUserData, showRoomUserProfile } from "../../store/store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { toast } from "react-toastify";
 
 // 리뷰 리스트
 function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any):JSX.Element {
@@ -76,6 +77,7 @@ function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
               }
             })
             .then((r)=> {
+              toast.success(`${toUsername}님을 평가 완료하였습니다`);
               axios({
                 method: 'get',
                 url: `https://i8e201.p.ssafy.io/api/user/review/${username}`

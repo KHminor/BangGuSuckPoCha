@@ -54,7 +54,7 @@ function FriendList():JSX.Element {
             console.log(error)
           }
         }
-        getChatList().then((data)=> {
+        getChatList().then((data)=> {  
           dispatch(changemenuFriendClickUserData({nickname:e.f_nickname,data:data}))
         })
         

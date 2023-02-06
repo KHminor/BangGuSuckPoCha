@@ -1,11 +1,13 @@
+import axios from "axios";
 import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading } from "../../store/store";
+import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
+import RoomUserProfile from "../Common/RoomUserProfile";
 
 const WebRTC = ({ pochaId }: { pochaId: string }) => {
   const dispatch = useAppDispatch();
@@ -26,7 +28,12 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
-  const peerFace = useRef<any>([]);
+  // const peerFace = useRef<any>([]);
+  const peerFace1 = useRef<any>(null);
+  const peerFace2 = useRef<any>(null);
+  const peerFace3 = useRef<any>(null);
+  const peerFace4 = useRef<any>(null);
+  const peerFace5 = useRef<any>(null);
 
   const myStream = useRef<any>(null);
   // let myStream: any;
@@ -35,14 +42,45 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   // let myPeerConnections: any = {};
   // const [userCount, setUserCount] = useState<number>(1);
   const userCount = useRef<number>(1);
+
+  // webRTC Loading 상태 가져옴
+  const isLoading = useAppSelector((state) => {
+    return state.webRtcLoading;
+  });
+
+  // 유저들 프로파일 모달 상태 가져옴
+  const isRoomUserProfile = useAppSelector((state) => {
+    return state.RoomUserProfileClickCheck;
+  });
+
+  // 요청한 유저프로필 데이터
+  const [userProfileData, setUserProfileData] = useState(null);
+
+  // 요청한 포차참여 유저들 데이터
+  // const [pochaUsers, setPochaUsers] = useState<any>(null);
+
+  // 포차 참여유저 데이터 axios 요청
+  async function getUsersProfile() {
+    const { data } = await axios({
+      url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
+    });
+    console.log("참여 유저들 데이터?", data);
+    // setPochaUsers(data);
+    dispatch(isRtcLoading(false));
+    return data;
+  }
+
   // 카메라 뮤트
   let muted = false;
   // 카메라 오프
   let cameraOff = false;
   // let userCount = 1;
 
+  // 최초실행 <<---------- 여기부터 해봐야함
   useEffect(() => {
-    handleWelcomeSubmit();
+    const userData = getUsersProfile();
+    console.log("유우우$$$?",userData);
+    handleWelcomeSubmit(userData);
   }, []);
 
   const getCameras = async () => {
@@ -170,11 +208,16 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   // }
 
-  async function handleWelcomeSubmit() {
+  async function handleWelcomeSubmit(userData : any) {
     // event : React.FormEvent<HTMLFormElement>
     // event.preventDefault();
     await getMedia();
-    socket.emit("join_room", { roomName, username: "testname" });
+    console.log('@@@@@@@@@@@@@@@@',userData)
+    socket.emit("join_room", {
+      roomName,
+      username: "NUEoAaUktTEixFvA25NzirH--LwR1eVDIsPnOAysvD8",
+      nickname: "남규짱짱맨",
+    });
     // roomName = welcomeInput.current?.value;
     // welcomeInput.current!.value = "";
   }
@@ -182,14 +225,51 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   // welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
   // ------ Socket Code ------
-  socket.on("welcome", async (socketId) => {
+  // Socket Code
+  socket.on("users_of_room", async (users) => {
+    console.log("--------------------");
+    await users.forEach((user: any) => {
+      console.log(user);
+      myPeerConnections.current[user.id] = {
+        username: user.username,
+        nickname: user.nickname,
+      };
+    });
+
+    console.log("방 입장--------------");
+    // await pocha_config_update(3);
+  });
+
+
+  socket.on("welcome", async (socketId, user) => {
     let myPeer = makeConnection();
 
-    myPeerConnections.current[socketId] = myPeer;
 
-    const offer = await myPeerConnections.current[socketId].createOffer();
-    myPeerConnections.current[socketId].setLocalDescription(offer);
+    myPeerConnections.current[socketId] = {
+      peer: myPeer,
+      username: user.username,
+      nickname: user.nickname,
+    };
+    console.log("환영!!!!----------------------------");
+
+    const offer = await myPeerConnections.current[socketId][
+      "peer"
+    ].createOffer();
+    myPeerConnections.current[socketId]["peer"].setLocalDescription(offer);
+
+    const receivers =
+      myPeerConnections.current[socketId]["peer"].getReceivers();
+    const peerStream = new MediaStream([
+      receivers[0].track,
+      receivers[1].track,
+    ]);
+    handleAddStream(
+      peerStream,
+      myPeerConnections.current[socketId].username,
+      myPeerConnections.current[socketId].nickname
+    );
     console.log("sent the offer");
+
     socket.emit("offer", offer, socketId, roomName, {
       username: "유저네임",
       nickname: "유저닉네임",
@@ -198,51 +278,79 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   socket.on("offer", async (offer, socketId, userInfo) => {
     console.log("received the offer");
-    myPeerConnections.current[socketId] = makeConnection();
-    myPeerConnections.current[socketId].setRemoteDescription(offer);
-    const answer = await myPeerConnections.current[socketId].createAnswer();
+    myPeerConnections.current[socketId]["peer"] = makeConnection();
+    myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
+    const answer = await myPeerConnections.current[socketId][
+      "peer"
+    ].createAnswer();
 
-    myPeerConnections.current[socketId].setLocalDescription(answer);
+    myPeerConnections.current[socketId]["peer"].setLocalDescription(answer);
+    const receivers =
+      myPeerConnections.current[socketId]["peer"].getReceivers();
+    const peerStream = new MediaStream([
+      receivers[0].track,
+      receivers[1].track,
+    ]);
+    handleAddStream(
+      peerStream,
+      myPeerConnections.current[socketId].username,
+      myPeerConnections.current[socketId].nickname
+    );
+
     socket.emit("answer", answer, socketId, roomName);
     console.log("sent the answer");
   });
 
   socket.on("answer", (answer, socketId) => {
     console.log("received the answer");
-    myPeerConnections.current[socketId].setRemoteDescription(answer);
+    myPeerConnections.current[socketId]["peer"].setRemoteDescription(answer);
   });
 
   socket.on("ice", (ice, socketId) => {
     console.log("received the candidate");
-    myPeerConnections.current[socketId].addIceCandidate(ice);
+    if (
+      myPeerConnections.current[socketId]["peer"] === null ||
+      myPeerConnections.current[socketId]["peer"] === undefined
+    ) {
+      return;
+    }
+    myPeerConnections.current[socketId]["peer"].addIceCandidate(ice);
   });
 
   socket.on("user_exit", ({ id }) => {
     delete myPeerConnections.current[id];
     // 사람수 - 2 해야 마지막인덱스값
     const lastIndex = userCount.current - 2;
-    peerFace.current[lastIndex].classList.toggle("hidden");
-    // setCurrentUsers((prev) => {
-    //   prev.pop();
-    //   return [...prev]
-    // })
+    // const lastIndex = userCount - 2
+    // peerFace.current[lastIndex].classList.toggle("hidden");
+
     console.log("==============>방 탈출!!!");
     console.log(id);
 
     // userCount = 1;
     // setUserCount(1);
     userCount.current = 1;
-    const indexData = userCount.current;
+    // setUserCount(1);
+
     const keys = Object.keys(myPeerConnections.current);
     for (let socketID of keys) {
       console.log("---------");
       console.log(myPeerConnections.current[socketID]);
-      console.log(myPeerConnections.current[socketID].getReceivers());
+      // console.log(myPeerConnections.current[socketID].getReceivers());
       console.log("---------");
-      const receivers = myPeerConnections.current[socketID].getReceivers();
-      const media = new MediaStream([receivers[0].track, receivers[1].track]);
+      const receivers =
+        myPeerConnections.current[socketID]["peer"].getReceivers();
+      const peerStream = new MediaStream([
+        receivers[0].track,
+        receivers[1].track,
+      ]);
+      handleAddStream(
+        peerStream,
+        myPeerConnections.current[socketID].username,
+        myPeerConnections.current[socketID].nickname
+      );
 
-      peerFace.current[indexData - 1].srcObject = media;
+      // peerFace.current[indexData - 1].srcObject = media;
       // if (userCount.current === 1) {
       //   peerFace.current[0].srcObject = media;
       // } else if (userCount.current === 2) {
@@ -259,14 +367,15 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
       // }
       // userCount += 1;
       // setUserCount((prev) => prev + 1);
-      userCount.current += 1;
+      // userCount.current += 1;
     }
 
     console.log(userCount + "==================");
     let temp = userCount.current;
+    // let temp = userCount;
     if (temp < 6) {
       while (temp < 6) {
-        peerFace.current[temp - 1].srcObject = null;
+        // peerFace.current[temp - 1].srcObject = null;
         // if (temp === 1) {
         //   peerFace.current[0].srcObject = null;
         // } else if (temp === 2) {
@@ -274,13 +383,17 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
         // } else if (temp === 3) {
         //   peerFace.current[2].srcObject = null;
         // }
-        // if (temp === 1) {
-        //   peerFace1.current.srcObject = null;
-        // } else if (temp === 2) {
-        //   peerFace2.current.srcObject = null;
-        // } else if (temp === 3) {
-        //   peerFace3.current.srcObject = null;
-        // }
+        if (temp === 1) {
+          peerFace1.current.srcObject = null;
+        } else if (temp === 2) {
+          peerFace2.current.srcObject = null;
+        } else if (temp === 3) {
+          peerFace3.current.srcObject = null;
+        } else if (temp === 4) {
+          peerFace4.current.srcObject = null;
+        } else if (temp === 5) {
+          peerFace5.current.srcObject = null;
+        }
         temp += 1;
       }
     }
@@ -308,7 +421,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
       ],
     });
     myPeerConnection.addEventListener("icecandidate", handleIce);
-    myPeerConnection.addEventListener("addstream", handleAddStream);
+    //myPeerConnection.addEventListener("addstream", handleAddStream);
     myStream.current.getTracks().forEach((track: any) => {
       myPeerConnection.addTrack(track, myStream.current);
     });
@@ -323,12 +436,13 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   }
 
   // addStream 이벤트시 실행 함수
-  function handleAddStream(data: any) {
-    console.log("data.stream@@@@@@@@@@@", data.stream);
+  function handleAddStream(stream: any, username: string, nickname: string) {
+    console.log("handleAddStream---------------------");
     const indexData = userCount.current;
-    peerFace.current[indexData - 1].classList.toggle("hidden");
-    peerFace.current[indexData - 1].srcObject = data.stream;
-
+    // const indexData = userCount;
+    // peerFace.current[indexData - 1].classList.toggle("hidden");
+    // peerFace.current[indexData - 1].srcObject = stream;
+    console.log("사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ", indexData);
     // if (userCount.current === 1) {
     //   peerFace.current[0].srcObject = data.stream;
     // } else if (userCount.current === 2) {
@@ -336,75 +450,141 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // } else if (userCount.current === 3) {
     //   peerFace.current[2].srcObject = data.stream;
     // }
-    // if (userCount.current === 1) {
-    //   peerFace1.current.srcObject = data.stream;
-    // } else if (userCount.current === 2) {
-    //   peerFace2.current.srcObject = data.stream;
-    // } else if (userCount.current === 3) {
-    //   peerFace3.current.srcObject = data.stream;
-    // }
+    if (userCount.current === 1) {
+      peerFace1.current.srcObject = stream;
+      peerFace1.current.value = username;
+    } else if (userCount.current === 2) {
+      peerFace2.current.srcObject = stream;
+      peerFace2.current.value = username;
+    } else if (userCount.current === 3) {
+      peerFace3.current.srcObject = stream;
+      peerFace3.current.value = username;
+    } else if (userCount.current === 4) {
+      peerFace4.current.srcObject = stream;
+      peerFace4.current.value = username;
+    } else if (userCount.current === 5) {
+      peerFace5.current.srcObject = stream;
+      peerFace5.current.value = username;
+    }
 
-    console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
+    // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
     // peerFace.current.srcObject = data.stream;
     // userCount += 1;
     // setUserCount((prev) => prev + 1);
     userCount.current += 1;
-    // setCurrentUsers((prev) => [...prev, 1])
+
     // currentUsers.current.push(1);
     // dispatch(isRtcLoading());
-    console.log("즐", currentUsers);
   }
 
+  // 유저들 프로파일 모달 띄우기
+  const ShowUserProfile = async (event: React.MouseEvent<any>) => {
+    const username = (event.target as any).value;
+    const { data } = await axios({
+      url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
+    });
+    console.log("모달용 데이터?", data);
+    setUserProfileData(data);
+    // dispatch(isRtcLoading(false));
+    // console.log("오냐??????", (event.target as any).value);
+
+    dispatch(showRoomUserProfile());
+  };
+
   return (
-    <div className="text-white">
-      <div className="flex flex-wrap justify-evenly items-center p-28">
-        {/* 내 비디오 공간 */}
-        <video
-          className="w-[30rem] h-80 py-3"
-          ref={myFace}
-          playsInline
-          autoPlay
-        ></video>
-        {/* 다른 사람들 비디오 공간 */}
-        {currentUsers.current.map((vide: number, index: number) => {
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          {isRoomUserProfile && <RoomUserProfile userData={userProfileData} />}
+          <div className="text-white">
+            <div className="flex flex-wrap justify-evenly items-center p-28">
+              {/* 내 비디오 공간 */}
+              <video
+                className="w-[30rem] h-80 py-3"
+                ref={myFace}
+                playsInline
+                autoPlay
+              ></video>
+              {/* 다른 사람들 비디오 공간 */}
+              {/* {currentUsers.current.map((vide: number, index: number) => {
           return (
             <video
-              key={vide}
-              className="w-[30rem] h-80 py-3 hidden"
+              key={index}
+              className="w-[30rem] h-80 py-3"
               ref={(element) => (peerFace.current[index] = element)}
               playsInline
               autoPlay
             ></video>
           );
-        })}
-      </div>
-      <div className="flex w-fit">
-        {/* 뮤트 */}
-        <button
-          className="border-2 px-3"
-          onClick={handleMuteClick}
-          ref={muteBtn}
-        >
-          Mute
-        </button>
-        {/* 카메라 */}
-        <button
-          className="border-2 px-3"
-          onClick={handleCameraClick}
-          ref={cameraBtn}
-        >
-          Camera Off
-        </button>
-        {/* 카메라 옵션 */}
-        <select
-          className="text-black"
-          onInput={handleCameraChange}
-          ref={cameraSelect}
-        >
-          {optionList}
-        </select>
-      </div>
-    </div>
+        })} */}
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace1}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace2}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace3}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace4}
+                playsInline
+                autoPlay
+              ></video>
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace5}
+                playsInline
+                autoPlay
+              ></video>
+            </div>
+            <div className="flex w-fit">
+              {/* 뮤트 */}
+              <button
+                className="border-2 px-3"
+                onClick={handleMuteClick}
+                ref={muteBtn}
+              >
+                Mute
+              </button>
+              {/* 카메라 */}
+              <button
+                className="border-2 px-3"
+                onClick={handleCameraClick}
+                ref={cameraBtn}
+              >
+                Camera Off
+              </button>
+              {/* 카메라 옵션 */}
+              <select
+                className="text-black"
+                onInput={handleCameraChange}
+                ref={cameraSelect}
+              >
+                {optionList}
+              </select>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
