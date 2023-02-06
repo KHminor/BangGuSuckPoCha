@@ -123,15 +123,18 @@ public class PochaController {
     public ResponseEntity<Map<String, Object>> pochaSsul(@PathVariable(value = "pocha_id") Long pochaId, @RequestBody SsulReqeustDto reqeustDto){
         Map<String, Object> response = new HashMap<>();
 
-        pochaService.pochaSsul(pochaId, reqeustDto);
         // 포인트 사용
-        userService.usePoint(reqeustDto.getUsername(), PointRequestDto.builder()
+        if(userService.usePoint(reqeustDto.getUsername(), PointRequestDto.builder()
                 .amount(-500)
                 .content("썰 변경-"+reqeustDto.getSsulTitle())
                 .build()
-        );
+        )) {
+            pochaService.pochaSsul(pochaId, reqeustDto);
+            response.put("message", "success");
+        }else{
+            response.put("message", "fail");
+        }
 
-        response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "포차 초대 목록")
