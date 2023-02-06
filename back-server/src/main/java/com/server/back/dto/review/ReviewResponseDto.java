@@ -18,6 +18,7 @@ public class ReviewResponseDto {
    private String to_username;
    private String to_nickname;
    private String to_profile;
+   private String to_comment;
    private Integer review_score;
    private LocalDateTime create_at;
    private LocalDateTime review_at;
@@ -25,6 +26,7 @@ public class ReviewResponseDto {
       this.reviewId = r.getReviewId();
       this.to_username = r.getToId().getUsername();
       this.to_nickname = r.getToId().getNickname();
+      this.to_comment = r.getToId().getComment();
       this.to_profile = r.getToId().getProfile();
       this.review_score = r.getReviewScore();
       this.create_at = r.getCreate_at();
