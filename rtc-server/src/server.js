@@ -29,7 +29,7 @@ let users = {};
 
 let socketToRoom = {};
 
-const maximum = 4;
+const maximum = 6;
 
 wsServer.on("connection", (socket) => {
   socket.on("join_room", ({ roomName, username }) => {
