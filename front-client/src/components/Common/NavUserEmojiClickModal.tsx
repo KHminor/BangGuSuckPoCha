@@ -102,7 +102,6 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
       {roomAddFriendModalCheck ? (
         <RoomUserFriendModal userData={userData} />
       ) : null}
-      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} /> : null}
       {RoomUserReportClickCheck ? <RoomUserReportModal userData={userData} /> : null}
       <div
         ref={bgDiv}

@@ -28,7 +28,7 @@ function StoryRoom(): JSX.Element {
         <WebRTC pochaId={PochaId!} />
       </div>
       <div className="relative bottom-0 left-0 right-0">
-        <RoomFooterNav />
+        <RoomFooterNav pochaId={PochaId!} />
       </div>
     </div>
   );

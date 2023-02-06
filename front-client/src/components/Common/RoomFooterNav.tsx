@@ -1,6 +1,22 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
-function RoomFooterNav(): JSX.Element {
+function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
+  const socket = io("https://pocha.online");
+  const navigate = useNavigate();
+  // 룸 이름
+  const roomName = pochaId;
+  // 썰 관련
+  // const ssulTitle = useRef<HTMLDivElement>(null);
+  // const ssulBtn = useRef<HTMLDivElement>(null);
+  // // 포차관련
+  // const pochaChangeBtn = useRef<HTMLDivElement>(null);
+  // const pochaExtensionBtn = useRef<HTMLDivElement>(null);
+  // const pochaCheersBtn = useRef<HTMLDivElement>(null);
+  // const pochaExitBtn = useRef<HTMLDivElement>(null);
+
   // 현재 시간 관련
   const [currentDate, setCurrentDate] = useState();
   setInterval(() => {
@@ -10,6 +26,67 @@ function RoomFooterNav(): JSX.Element {
     let minutes = ("0" + date.getMinutes()).slice(-2);
     setCurrentDate((hour + ":" + minutes) as any);
   }, 1000);
+
+  //  axios 요청
+  const api = axios.create({
+    baseURL: "https://i8e201.p.ssafy.io/api",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+
+  // ----- 소켓 관련 썰 변경 이벤트 ------
+  function handleSsulClick() {
+    let input = prompt("Ssul을 입력하세요!", "새로운 타이틀!");
+    if (input == null) return;
+
+    // 썰 변경.
+    socket.emit("ssul_change", roomName, input);
+  }
+  // 포차 설정 변경 이벤트
+  async function handlePochaUpdate() {
+    // 설정값 입력.
+    let pocha_config = {};
+
+    // axios를 통해 포차 설정 변경. (await 사용해야할 듯?)
+
+    socket.emit("pocha_change", roomName);
+  }
+  // 포차 시간 추가 이벤트
+  async function handlePochaExtension() {
+    // axios를 통해 포차 시간 연장. (await 사용해야할 듯?)
+    try {
+      await api.put("/pocha/extension/3");
+      socket.emit("pocha_extension", roomName);
+    } catch (error) {
+      console.log("시간추가 error", error);
+    }
+  }
+  // 포차 짠!! 이벤트
+  async function handlePochaCheers() {
+    // axios를 통해 포차 짠 실행.
+    try {
+      await api.put("/pocha/alcohol/3");
+      socket.emit("pocha_cheers", roomName);
+    } catch (error) {
+      console.log("짠 error", error);
+    }
+  }
+
+  // 포차 나가기 이벤트
+  async function handlePochaExit() {
+    try {
+      await api.put("/pocha/exit", {
+        isHost: false,
+        pochaId: 3,
+        username: "1zjK_Yrq6klkIxBWj8bj1WJkV5ng-7jhrRGvlIJXawI",
+        waiting: false,
+      });
+      navigate(`/main`);
+    } catch (error) {
+      console.log("포차나가기 error", error);
+    }
+  }
 
   return (
     <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
@@ -36,6 +113,7 @@ function RoomFooterNav(): JSX.Element {
             </div>
             <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
               <img
+                onClick={handlePochaExtension}
                 className="h-[2.2rem] py-auto"
                 src={require("src/assets/roomIcon/time.png")}
                 alt=""
@@ -44,6 +122,7 @@ function RoomFooterNav(): JSX.Element {
             </div>
             <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
               <img
+                onClick={handlePochaCheers}
                 className="h-[2.2rem] py-auto"
                 src={require("src/assets/roomIcon/cheers.png")}
                 alt=""
@@ -60,6 +139,7 @@ function RoomFooterNav(): JSX.Element {
             </div>
             <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
               <img
+                onClick={handleSsulClick}
                 className="h-[2.2rem] py-auto"
                 src={require("src/assets/roomIcon/communication.png")}
                 alt=""
@@ -76,6 +156,7 @@ function RoomFooterNav(): JSX.Element {
             </div>
             <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
               <img
+                onClick={handlePochaExit}
                 className="h-[2.2rem] py-auto"
                 src={require("src/assets/roomIcon/cancel.png")}
                 alt=""
