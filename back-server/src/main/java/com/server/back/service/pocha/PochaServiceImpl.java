@@ -254,14 +254,16 @@ public class PochaServiceImpl implements PochaService{
         User toUser = userRepository.findByUsername(requestDto.getToUsername());
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
 
-        Invite invite = Invite.builder()
-                .fromUser(fromUser)
-                .toUser(toUser)
-                .pocha(pocha)
-                .build();
+        if(inviteRepository.findByToUserAndPocha(toUser, pocha) == null) {
+            Invite invite = Invite.builder()
+                    .fromUser(fromUser)
+                    .toUser(toUser)
+                    .pocha(pocha)
+                    .build();
 
-        // 초대 추가.
-        Invite entity = inviteRepository.save(invite);
+            // 초대 추가.
+            Invite entity = inviteRepository.save(invite);
+        }
     }
 
     @Override
