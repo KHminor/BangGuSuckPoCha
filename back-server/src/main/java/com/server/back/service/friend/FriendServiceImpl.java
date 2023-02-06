@@ -69,8 +69,16 @@ public class FriendServiceImpl implements FriendService {
 		Chat chat = friendRepository.findByMyId_userIdAndYourId_userId(my_id, you_id).getChatId();
 		Long MyFriendId = friendRepository.findByMyId_userIdAndYourId_userId(my_id, you_id).getFriendId();
 		Long YourFriendId = friendRepository.findByMyId_userIdAndYourId_userId(you_id, my_id).getFriendId();
+		
+		
+		// 메시지 삭제
+		messageRepository.deleteByChatId_chatId(chat.getChatId());
+		
 		friendRepository.deleteByFriendId(MyFriendId);
 		friendRepository.deleteByFriendId(YourFriendId);
+		
+		// 채팅방 삭제
+		//chatRepository.deleteByChatId(chat.getChatId());
 		chatRepository.delete(chat);
 		
 	}
