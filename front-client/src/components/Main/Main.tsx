@@ -24,6 +24,19 @@ function Main(): JSX.Element {
   const mainCreateRoomList: any = useAppSelector((state) => {
     return state.mainCreateRoomList;
   });
+
+  
+  // 메인 페이지 들어올 시 현재 userId가 localStorage에 저장이 안되어있을 경우 axios 요청하여 넣어주기
+  useEffect(()=> {
+    const userName = localStorage.getItem('Username')
+    if (localStorage.getItem('userId') === null) {
+      axios.get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
+      .then((r)=> {
+        localStorage.setItem('userId',r.data.data.userId )
+      })
+    }
+  },[])
+  
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
   useEffect(() => {
     axios({
