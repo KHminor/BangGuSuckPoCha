@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
@@ -23,48 +23,49 @@ function UserDetail() {
 }
 let isDetail = false;
 
-function UserSelect(usertemp: any) {
-  // console.log(Object.keys(usertemp));
-  console.log(usertemp);
+function UserSelect(userList: any) {
+  console.log(userList);
+  // console.log(usertemp);
   return (
     <div className="row-span-6 w-full overflow-x-auto  max-h-[26.3rem]">
-        <table className="border-collapse border border-slate-400 w-full">
-          <thead>
-            <tr>
-              <th className="border border-slate-200 w-[35%]">닉네임</th>
-              <th className="border border-slate-300 w-[20%]">나이</th>
-              <th className="border border-slate-300 w-[20%]">벌점</th>
-              <th className="border border-slate-300 w-[25%]">test</th>
-            </tr>
-          </thead>
-          <tbody>
-          {/* {usertemp.map(function (a: any, i: number) {
-            return (
+      <table className="border-collapse border border-slate-400 w-full">
+        <thead>
+          <tr>
+            <th className="border border-slate-200 w-[35%]">닉네임</th>
+            <th className="border border-slate-300 w-[20%]">나이</th>
+            <th className="border border-slate-300 w-[20%]">벌점</th>
+            <th className="border border-slate-300 w-[25%]">test</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userList.map((it: any) => {
+            {
+              console.log(it.age);
+            }
             <tr className="h-10">
               <td className="border border-slate-300  " onClick={() => {}}>
-                  {usertemp[i].nickname}
+                {it.nickname}
               </td>
-                <td className="border border-slate-300  ">{usertemp[i].age}</td>
-                <td className="border border-slate-300  ">
-                  {usertemp[i].demerit}
-                </td>
+              <td className="border border-slate-300  ">{it.age}</td>
+              <td className="border border-slate-300  ">{it.demerit}</td>
               <td className="border border-slate-300  ">❌Delete</td>
-            </tr>
-            );
-          })} */}
-          </tbody>
-        </table>
-      </div>
+            </tr>;
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 function UserList() {
   //실행되자마자 요청해서 받아오기
+  const [userList, setUserList] = useState<any | null | undefined>();
   useEffect(() => {
     axios({
       method: "get",
-      url: "https://i8e201.p.ssafy.io/api/admin/user",
+      url: `https://i8e201.p.ssafy.io/api/admin/user`,
     }).then((r) => {
-      // console.log(r.data);
+      const result = r.data.data;
+      setUserList(result);
     });
   }, []);
 
@@ -99,8 +100,10 @@ function UserList() {
       <div className="col-span-3 grid grid-rows-5 gap-5">
         <div className="text-8xl">AdminPage</div>
         <div className="w-full row-span-3 border-2 border-white grid grid-cols-2 overflow-auto">
-          <UserSelect {...usertemp} />
-          <div>{isDetail === true ? <UserDetail /> : null}</div>
+          {userList
+            ? (console.log(userList), (<UserSelect {...userList} />))
+            : null}
+          {/* <div>{isDetail === true ? <UserDetail /> : null}</div> */}
         </div>
         <div className="grid grid-cols-4">
           <div

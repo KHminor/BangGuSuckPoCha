@@ -1,6 +1,5 @@
 export default {
-  name: [
-    { code: "1", name: "전국" },
+  name: [    
     { code: "11", name: "서울특별시" },
     { code: "27", name: "대구광역시" },
     { code: "26", name: "부산광역시" },

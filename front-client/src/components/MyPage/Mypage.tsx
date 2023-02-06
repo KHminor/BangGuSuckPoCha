@@ -1,4 +1,5 @@
 import axios from "axios";
+import { time } from "console";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,27 +9,43 @@ import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 import regionList from "./regionList";
+import regionOneList from "./regionOneList";
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [modifydisplay, setModifydisplay] = useState(false);
-  const [nickname, setNickname] = useState();
-  const [nowName, setNowName] = useState();
-  const [birth, setBirth] = useState<any | null>("0000.00.00");
-  const [gender, setGender] = useState();
-  const [age, setAge] = useState<any | null>();
-  const [region, setRegion] = useState(" ");
-  const [point, setPoint] = useState();
-  const [comment, setComment] = useState();
-  const [manner, setManner] = useState();
-  const [profile, setProfile] = useState("string");
-  const [regionfirst, setRegionfirst] = useState();
 
-  const [firstselect, setFirstselect] = useState<any | null>(" ");
-  const [secondselect, setSecondselect] = useState<any | null>(" ");
+  const [modifydisplay, setModifydisplay] = useState(false);
+  //바뀔이름
+  const [nickname, setNickname] = useState();
+  //이름
+  const [nowName, setNowName] = useState();
+  //생일
+  const [birth, setBirth] = useState<any | null>("0000.00.00");
+  //성별
+  const [gender, setGender] = useState();
+  //본인만나이
+  const [age, setAge] = useState<any | null>();
+  //본인 지역
+  const [region, setRegion] = useState("지역 구");
+  //포인트
+  const [point, setPoint] = useState();
+  //자기소개
+  const [comment, setComment] = useState();
+  //매너온도
+  const [manner, setManner] = useState();
+  //프로필경로
+  const [profile, setProfile] = useState("string");
+
+  //regionList(하드코딩으로 넣은 지역코드)에서 들고오는 지역코드 앞에서 2자리
+  const [regionfirst, setRegionfirst] = useState<any | null>("");
+  //내 정보 중 지역의 첫번째 구분
+  const [firstselect, setFirstselect]: any = useState<any | null | undefined>();
+  //내 지역의 두번쨰 구분이 있으면 두번째
+  const [secondselect, setSecondselect] = useState<any | null>();
 
   const Username: any = localStorage.getItem("Username");
+
   const onChangeNikename = (event: any) => {
     // console.log(event.target.value);
     setNickname(event.target.value);
@@ -37,15 +54,10 @@ function Mypage(): JSX.Element {
     // console.log(event.target.value);
     setComment(event.target.value);
   };
-
-  // console.log("첫번째 : ")
-  // console.log(firstselect[0].code);
+  console.log("firstselect값", firstselect);
+  console.log("secondselect값이 undifine?", secondselect === undefined);
 
   useEffect(() => {
-    // setRegionfirst(regionList.name)
-
-    // console.log(regionList.name);
-    // console.log(Username);
     axios({
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
@@ -75,14 +87,25 @@ function Mypage(): JSX.Element {
       setBirth(birth);
       setAge(age);
       setRegion(a.region);
+
       let firstselecttemp: any;
-      if (a.region) {
-        firstselecttemp = regionList.name.filter(
-          (param) => param.name === `${a.region.split(" ")[0]}`
-        );
-        
+      if (a.region.split(" ").length === 2) {
+        // firstselecttemp = regionList.name.filter(
+        //   (param) => param.name === `${a.region.split(" ")[0]}`
+        // );
+        // console.log("firstselecttemp", firstselecttemp);
+        //내 정보 중 지역의 첫번째 구분
+        setFirstselect(a.region.split(" ")[0]);
+        console.log("firstselect값", firstselect);
+
+        //내 정보 중 지역의 두번째 구분
+        setSecondselect(a.region.split(" ")[1]);
+        console.log("secondselect값", secondselect);
+      } else if (a.region.split(" ").length === 1) {
+        setFirstselect(a.region.split(" ")[0]);
+        // console.log("secondselect값이 undifine?", secondselect==="undefined");
       }
-      setFirstselect(firstselecttemp);
+
       setComment(a.comment);
       setPoint(a.point);
       setManner(a.manner);
@@ -95,12 +118,14 @@ function Mypage(): JSX.Element {
     }).then((r) => {
       const result = r.data.data;
       // console.log(r.data.data);
-      // console.log(result);
-      let result2600000000 = result.filter(
-        (param: any) => param.regionCode.substr(0, 2) === "41"
-      );
-      console.log(regionList);
-      console.log(region);
+      console.log("모든지역코드", result);
+
+      // let result2600000000 = result.filter(
+      //   (param: any) => param.regionCode.substr(0, 2) === "41"
+      // );
+      console.log("setRegionfirst", regionList.name);
+      setRegionfirst(regionList.name);
+      // console.log(region);
     });
   }, []);
 
@@ -277,33 +302,33 @@ function Mypage(): JSX.Element {
                 <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
                   지역
                 </div>
-
-                {region.split(" ").length === 2 ? (
-                  <div
-                    className="grid  border-purple-300 w-[90%] mr-[10%]"
-                    style={{ gridTemplateColumns: "1fr 1fr" }}
-                  >
-                    <select
-                      className="text-white text-[1rem] text-center bg-black h-full border-2"
-                      name="address1"
-                      id="address1"
-                    >
-                      <option value={`${firstselect[0].code}`}>
-                        {region.split(" ")[0]}
+                <div
+                  className="grid  border-purple-300 w-[90%] mr-[10%]"
+                  style={{ gridTemplateColumns: "1fr 1fr" }}
+                >
+                  <select className="text-white text-[1rem] text-center bg-black border-2  overflow-auto ">
+                    {firstselect ? (
+                      <option value={firstselect} selected>
+                        {firstselect}
                       </option>
-                      {}
-                    </select>
+                    ) : null}
+                    {regionList.name.map((it): any =>
+                      it.name === firstselect ? null : (
+                        <option value={it.code}>{it.name}</option>
+                      )
+                    )}
+                  </select>
+
+                  {secondselect === undefined ? null : (
                     <select
                       className="text-white text-[1rem] text-center bg-black h-full border-2"
                       name="address2"
                       id="address2"
                     >
-                      <option value={region.split(" ")[1]}>
-                        {region.split(" ")[1]}
-                      </option>
+                      <option value={secondselect}>{secondselect}</option>
                     </select>
-                  </div>
-                ) : null}
+                  )}
+                </div>
               </div>
               {/* 포인트 */}
               <div
@@ -375,8 +400,6 @@ function Mypage(): JSX.Element {
                   className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
                   onClick={() => {
                     console.log("modifydisplay : " + modifydisplay);
-                    console.log(nickname);
-                    console.log(nowName);
                     //수정가능
                     axios({
                       method: "put",
