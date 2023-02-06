@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeAlarmApiDataState, changeAlarmClickState } from "../../store/store";
 import styles from './Common.module.css'
@@ -34,6 +35,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                     })
                     .then((r)=> {
                       dispatch(changeAlarmApiDataState(r.data.data))
+                      toast.success("요청을 승인하였습니다");
                     })
                   })
                   
@@ -65,6 +67,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   })
                   .then((r)=> {
                     dispatch(changeAlarmApiDataState(r.data.data))
+                    toast.success("요청을 거절하였습니다.");
                   })
                 })
               } else if (alarmClickState === 1) {
@@ -80,6 +83,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   .then((r)=> {
                     dispatch(changeAlarmClickState(1))
                     dispatch(changeAlarmApiDataState(r.data.data))
+                    toast.success("요청을 거절하였습니다.");
                   })
                 })
               }

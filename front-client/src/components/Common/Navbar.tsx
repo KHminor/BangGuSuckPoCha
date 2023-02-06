@@ -1,4 +1,4 @@
-import { changeAlarmApiDataState, changeAlarmState, changeMenuFriendChatState, changeMenuFriendState, changeMenuState } from "../../store/store";
+import { changeAlarmApiDataState, changeAlarmClickState, changeAlarmState, changeMenuFriendChatState, changeMenuFriendState, changeMenuState } from "../../store/store";
 import styles from '../Main/Main.module.css'
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -59,6 +59,7 @@ function MenuOption():JSX.Element {
                 }
               })
               dispatch(changeAlarmState())
+              dispatch(changeAlarmClickState(0))
               dispatch(changeAlarmApiDataState(setData))
               if (menuFriendClickCheck) {
                 dispatch(changeMenuFriendState())
