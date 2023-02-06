@@ -10,7 +10,7 @@ import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
 import RoomUserReportModal from "./RoomUserReportModal";
 
-const RoomUserProfile = ({ userData }: { userData: any }) => {
+const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
   let { manner, gender, birth, region } = userData.data;
   const { nickname } = userData.data;
@@ -168,4 +168,4 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
   );
 };
 
-export default RoomUserProfile;
+export default NavUserEmojiClickModal;
