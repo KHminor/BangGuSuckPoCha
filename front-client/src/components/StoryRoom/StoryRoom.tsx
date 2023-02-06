@@ -49,31 +49,14 @@ function StoryRoom(): JSX.Element {
       ) : (
         <>
           {isRoomUserProfile && <RoomUserProfile userData={userProfileData} />}
-          <div className={`w-screen h-screen ${styles.gameroomimg}`}>
+          <div
+            className={`w-screen min-h-screen ${styles.gameroomimg} bg-scroll`}
+          >
             {/* 화면 및 게임 공간 */}
             <div className="h-[90%]">
               <WebRTC pochaId={PochaId!} />
             </div>
-            {/* <div
-              className="grid h-full"
-              style={{ gridTemplateRows: "1fr 1fr" }}
-            >
-              <div className="flex justify-center items-center h-[85%] w-[97%] mx-auto  my-auto ">
-                <div
-                  onClick={ShowUserProfile}
-                  className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-red-300"
-                ></div>
-                <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-green-300"></div>
-                <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-blue-300"></div>
-              </div>
-              <div className="flex justify-center items-center h-[90%] w-[97%] mx-auto  my-auto ">
-                <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-red-300"></div>
-                <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-green-300"></div>
-                <div className=" h-full w-[90%] mx-5 rounded-[20px] border-2 border-blue-300"></div>
-              </div>
-            </div> */}
-            {/* footerNav */}
-            <div className="fixed bottom-0 left-0 right-0">
+            <div className="relative bottom-0 left-0 right-0">
               <RoomFooterNav />
             </div>
           </div>
