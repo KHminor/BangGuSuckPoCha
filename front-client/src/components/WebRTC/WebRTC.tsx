@@ -380,7 +380,11 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
       </div>
       <div className="flex w-fit">
         {/* 뮤트 */}
-        <button className="border-2 px-3" onClick={handleMuteClick} ref={muteBtn}>
+        <button
+          className="border-2 px-3"
+          onClick={handleMuteClick}
+          ref={muteBtn}
+        >
           Mute
         </button>
         {/* 카메라 */}
