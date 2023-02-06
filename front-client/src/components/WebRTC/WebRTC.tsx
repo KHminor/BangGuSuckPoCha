@@ -26,7 +26,14 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
-  const peerFace = useRef<any>([]);
+  // const peerFace = useRef<any>([]);
+  const peerFace1 = useRef<any>(null);
+  const peerFace2 = useRef<any>(null);
+  const peerFace3 = useRef<any>(null);
+  const peerFace4 = useRef<any>(null);
+  const peerFace5 = useRef<any>(null);
+
+
 
   const myStream = useRef<any>(null);
   // let myStream: any;
@@ -242,6 +249,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
       "peer"
     ].createAnswer();
 
+
     myPeerConnections.current[socketId]["peer"].setLocalDescription(answer);
     const receivers =
       myPeerConnections.current[socketId]["peer"].getReceivers();
@@ -273,7 +281,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   socket.on("user_exit", ({ id }) => {
     delete myPeerConnections.current[id];
-    setUserCheck(prev => !prev);
+    setUserCheck((prev) => !prev);
     // 사람수 - 2 해야 마지막인덱스값
     const lastIndex = userCount.current - 2;
     // const lastIndex = userCount - 2
@@ -286,8 +294,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // setUserCount(1);
     userCount.current = 1;
     // setUserCount(1);
-    // const indexData = userCount.current;
-    const indexData = userCount;
+
     const keys = Object.keys(myPeerConnections.current);
     for (let socketID of keys) {
       console.log("---------");
@@ -319,7 +326,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
       // }
       // userCount += 1;
       // setUserCount((prev) => prev + 1);
-      userCount.current += 1;
+      // userCount.current += 1;
     }
 
     console.log(userCount + "==================");
@@ -327,7 +334,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // let temp = userCount;
     if (temp < 6) {
       while (temp < 6) {
-        peerFace.current[temp - 1].srcObject = null;
+        // peerFace.current[temp - 1].srcObject = null;
         // if (temp === 1) {
         //   peerFace.current[0].srcObject = null;
         // } else if (temp === 2) {
@@ -335,13 +342,17 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
         // } else if (temp === 3) {
         //   peerFace.current[2].srcObject = null;
         // }
-        // if (temp === 1) {
-        //   peerFace1.current.srcObject = null;
-        // } else if (temp === 2) {
-        //   peerFace2.current.srcObject = null;
-        // } else if (temp === 3) {
-        //   peerFace3.current.srcObject = null;
-        // }
+        if (temp === 1) {
+          peerFace1.current.srcObject = null;
+        } else if (temp === 2) {
+          peerFace2.current.srcObject = null;
+        } else if (temp === 3) {
+          peerFace3.current.srcObject = null;
+        } else if (temp === 4) {
+          peerFace4.current.srcObject = null;
+        } else if (temp === 5) {
+          peerFace5.current.srcObject = null;
+        }
         temp += 1;
       }
     }
@@ -389,8 +400,8 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     const indexData = userCount.current;
     // const indexData = userCount;
     // peerFace.current[indexData - 1].classList.toggle("hidden");
-    peerFace.current[indexData - 1].srcObject = stream;
-    console.log('사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ',indexData);
+    // peerFace.current[indexData - 1].srcObject = stream;
+    console.log("사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ", indexData);
     // if (userCount.current === 1) {
     //   peerFace.current[0].srcObject = data.stream;
     // } else if (userCount.current === 2) {
@@ -398,13 +409,17 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // } else if (userCount.current === 3) {
     //   peerFace.current[2].srcObject = data.stream;
     // }
-    // if (userCount.current === 1) {
-    //   peerFace1.current.srcObject = data.stream;
-    // } else if (userCount.current === 2) {
-    //   peerFace2.current.srcObject = data.stream;
-    // } else if (userCount.current === 3) {
-    //   peerFace3.current.srcObject = data.stream;
-    // }
+    if (userCount.current === 1) {
+      peerFace1.current.srcObject = stream;
+    } else if (userCount.current === 2) {
+      peerFace2.current.srcObject = stream;
+    } else if (userCount.current === 3) {
+      peerFace3.current.srcObject = stream;
+    } else if (userCount.current === 4) {
+      peerFace4.current.srcObject = stream;
+    } else if (userCount.current === 5) {
+      peerFace5.current.srcObject = stream;
+    }
 
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
     // peerFace.current.srcObject = data.stream;
@@ -428,17 +443,47 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
           autoPlay
         ></video>
         {/* 다른 사람들 비디오 공간 */}
-        {currentUsers.current.map((vide: number, index: number) => {
+        {/* {currentUsers.current.map((vide: number, index: number) => {
           return (
             <video
-              key={vide}
+              key={index}
               className="w-[30rem] h-80 py-3"
               ref={(element) => (peerFace.current[index] = element)}
               playsInline
               autoPlay
             ></video>
           );
-        })}
+        })} */}
+        <video
+          className="w-[30rem] h-80 py-3"
+          ref={peerFace1}
+          playsInline
+          autoPlay
+        ></video>
+        <video
+          className="w-[30rem] h-80 py-3"
+          ref={peerFace2}
+          playsInline
+          autoPlay
+        ></video>
+        <video
+          className="w-[30rem] h-80 py-3"
+          ref={peerFace3}
+          playsInline
+          autoPlay
+        ></video>
+        <video
+          className="w-[30rem] h-80 py-3"
+          ref={peerFace4}
+          playsInline
+          autoPlay
+        ></video>
+        <video
+          className="w-[30rem] h-80 py-3"
+          ref={peerFace5}
+          playsInline
+          autoPlay
+        ></video>
       </div>
       <div className="flex w-fit">
         {/* 뮤트 */}
