@@ -1,9 +1,12 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import { changeUserList } from "src/store/store";
 // test지워도됨
 function AdminMain(): React.ReactElement {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   return (
     <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
       <div>
@@ -16,6 +19,13 @@ function AdminMain(): React.ReactElement {
           <div
             className="cursor-pointer "
             onClick={() => {
+              axios({
+                method: "get",
+                url: `https://i8e201.p.ssafy.io/api/admin/user`,
+              }).then((r) => {
+                console.log(r.data.data);
+                dispatch(changeUserList(r.data.data));
+              });
               navigate("/userList");
             }}
           >
