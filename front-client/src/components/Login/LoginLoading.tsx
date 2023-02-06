@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
@@ -24,6 +25,8 @@ function LoginLoading(): React.ReactElement {
     const Role: any = urlParams.get("Role");
 
     const Username: any = urlParams.get("Username");
+
+    
     // console.log("Username : " + Username);
 
     // Auth : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxcnZ2d29Wb2h3T2xuOUpFbkdtd1lGNzBfOUt3LVprQk0xN2tpY3gzSGRZIiwiZXhwIjoxNjc1MTgxMTU3LCJ1c2VySWQiOjMsInVzZXJuYW1lIjoiMXJ2dndvVm9od09sbjlKRW5HbXdZRjcwXzlLdy1aa0JNMTdraWN4M0hkWSJ9.zk-eGoa1Q00e2HG3puEYN8-6v8S_KWXIDTJgFaBO2SXiYfg8yp5bBDetycTYkwDVpJSwVLpAGCDOracEbDhOOg
@@ -46,7 +49,7 @@ function LoginLoading(): React.ReactElement {
       //기존유저
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
-      localStorage.setItem("Username", Username);
+      localStorage.setItem("Username", Username);      
       dispatch(changeUserName(Username));
       navigate("/main");
     } else if (Role === "SECESSION") {
