@@ -135,12 +135,15 @@ function Main(): JSX.Element {
           <div
             className="grid mx-auto min-w-f"
             style={{
-              gridTemplateRows: "8rem 1fr 3rem",
+              gridTemplateRows: "20rem 1fr 3rem",
               backgroundColor: "rgb(25, 25, 25)",
             }}
           >
             {/* 태그 */}
-            <Tag />
+            <div className="grid" style={{gridTemplateRows: '12rem 8rem'}}>
+              <div></div>
+              <Tag />
+            </div>
             {/* 방 보이기 */}
             <div
               className="grid grid-cols-1 w-full min-w-[75rem]"
