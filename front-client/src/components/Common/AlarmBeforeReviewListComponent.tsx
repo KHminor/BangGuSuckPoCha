@@ -77,7 +77,7 @@ function StarReview({to_nickname, reviewId, toUsername}:any):JSX.Element {
               }
             })
             .then((r)=> {
-              toast.success(`${toUsername}님을 평가 완료하였습니다`);
+              toast.success(`${to_nickname}님을 평가 완료하였습니다`);
               axios({
                 method: 'get',
                 url: `https://i8e201.p.ssafy.io/api/user/review/${username}`

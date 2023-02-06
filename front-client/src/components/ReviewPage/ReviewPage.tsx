@@ -4,6 +4,7 @@ import { useAppDispatch } from "src/store/hooks";
 import { changeAlarmApiDataState } from "src/store/store";
 import Navbar from "../Common/Navbar";
 import styles from "../Main/Main.module.css";
+import './ReviewPage.css'
 function ReviewPage():JSX.Element {
   const dispatch = useAppDispatch()
   const username = localStorage.getItem('Username')
@@ -50,27 +51,28 @@ export default ReviewPage
 
 function ReviewComponent({reviewAfter,setReviewAfter,reviewBefore,setReviewBefore }:any):JSX.Element {
   return (
-    <div className="max-h-[55rem] borer-2 border-pink-300 grid" style={{gridTemplateColumns: '1fr 3fr 1fr'}}>
+    <div className="max-h-[55rem] borer-2 border-pink-300 grid" style={{gridTemplateColumns: '1.3fr 3fr 1.3fr'}}>
       {/* 빈칸 */}
       <div className="border-2 border-red-300"></div>
       {/* 했는지 안했는지에 대한 체크 */}
       <div className="grid border-2 border-green-300 text-white  " style={{gridTemplateRows: '0.3fr 3fr 0.3fr'}}>
-        <div className="flex justify-start items-center border-2  border-yellow-200">
-          <div className="h-full w-[12rem] text-xl cursor-pointer"><span className="flex justify-center items-end border-2 h-full border-red-300" onClick={()=> {
+        <div className="flex justify-start items-center">
+          <div className="h-full w-[12rem] text-xl cursor-pointer"><span className="flex justify-center items-end h-full" onClick={()=> {
             console.log('리뷰 된거: ', reviewAfter);
             console.log('리뷰 안된거: ', reviewBefore);
             
           }}>리뷰 목록</span></div>
-          <div className="h-full w-[12rem] text-xl cursor-pointer"><span className="flex justify-center items-end border-2 h-full border-green-300">리뷰 완료</span></div>
+          <div className="h-full w-[12rem] text-xl cursor-pointer"><span className="flex justify-center items-end h-full">리뷰 완료</span></div>
         </div>
         {/* 리뷰 목록 */}
-        <div className="flex flex-col max-h-[37.5rem] border-2 border-cyan-300 overflow-hidden">
-          {/* ReviewLayout */}
-          <ReviewLayout />
-          {/* <ReviewLayout /> */}
-          {/* <ReviewLayout />
-          <ReviewLayout /> */}
-          
+        <div className="flex flex-col w-full max-h-[37.5rem] overflow-scroll hideScroll">
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+          <ReviewLayout reviewAfter={reviewAfter} reviewBefore={reviewBefore}/>
+
         </div>
         <div className="border-2 border-orange-300"></div>
       </div>
@@ -81,9 +83,10 @@ function ReviewComponent({reviewAfter,setReviewAfter,reviewBefore,setReviewBefor
 }
 
 
-function ReviewLayout():JSX.Element {
+function ReviewLayout({reviewAfter, reviewBefore}:any):JSX.Element {
+
   return (
-    <div className="min-h-[18.75rem] h-[18.75rem] my-[0.75rem] border-2 mb-[0.625rem] border-white">
+    <div className="flex justify-start items-center min-h-[9.375rem] h-[9.375rem] my-[0.75rem] border-2 mb-[0.1rem] border-red-400">
       hi
     </div>
   )
