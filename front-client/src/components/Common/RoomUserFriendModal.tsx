@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
 
 const RoomUserFriendModal = ({ userData }: { userData: any }) => {
+  const clickUserId:number = userData.data.userId
   let dispatch = useAppDispatch();
   const { nickname } = userData.data;
 
@@ -15,12 +16,17 @@ const RoomUserFriendModal = ({ userData }: { userData: any }) => {
         method: "POST",
         url: "https://i8e201.p.ssafy.io/api/user/friend/request",
         data: {
-          from_id: 0,
-          to_id: 0,
+          from_id: localStorage.getItem('userId'),
+          to_id: clickUserId,
         },
       });
-      toast.success(`${nickname}에게 친구신청을 완료하였습니다`);
-      console.log("친구요청", ffriend);
+      
+      if (ffriend.data.message === "success") {
+        toast.success(`${nickname}에게 친구신청을 완료하였습니다`);
+      } else {
+        toast.error(`${nickname}에게 친구신청을 이미 보냈습니다`);
+      }
+      
     } catch (error) {
       console.log(error);
     }

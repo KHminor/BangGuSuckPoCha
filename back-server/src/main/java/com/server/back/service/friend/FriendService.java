@@ -31,4 +31,8 @@ public interface FriendService  {
 
 	Message saveMessage(MessageRequestDto requestDto);
 
+	Boolean checkFriend(FRequestDto requestDto);
+
+	Boolean checkFriendRequest(FRequestDto requestDto);
+
 }

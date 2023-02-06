@@ -12,3 +12,15 @@ input[type="radio"] {
   -ms-use-select: none;
   user-select: none;
 }
+
+.reviewpage {
+  color: white;
+  text-shadow: 0 0 3px #E6A5FF,
+              0 0 5px #FF3E84;
+}
+
+.reviewpage:hover {
+  color: #34FE4F;
+  text-shadow: 0 0 3px #E6A5FF,
+              0 0 12px #D1FE49;
+}
