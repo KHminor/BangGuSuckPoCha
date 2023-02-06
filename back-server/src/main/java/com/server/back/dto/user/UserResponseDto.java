@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "UserResponseDto", description = "User 정보 조회")
 public class UserResponseDto {
     private String username;
+    private Long userId;
     private String nickname;
     private String gender;
     private String birth;
@@ -26,6 +27,7 @@ public class UserResponseDto {
 
     public UserResponseDto(User e) {
         this.username = e.getUsername();
+        this.userId = e.getUserId();
         this.nickname = e.getNickname();
         this.gender = e.getGender();
         this.birth = e.getBirth();
