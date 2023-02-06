@@ -1,7 +1,7 @@
-import { changeAlarmApiDataState, changeAlarmState, changeMenuState } from "../../store/store";
+import { changeAlarmApiDataState, changeAlarmClickState, changeAlarmState, changeMenuFriendChatState, changeMenuFriendState, changeMenuState } from "../../store/store";
 import styles from '../Main/Main.module.css'
 import axios from "axios";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function Navbar(): JSX.Element {
   return (
@@ -29,6 +29,8 @@ function Navbar(): JSX.Element {
 function MenuOption():JSX.Element {
   let dispatch = useAppDispatch()
   const username = localStorage.getItem('Username')
+  const menuFriendClickCheck = useAppSelector((state)=> {return state.menuFriendClickCheck})
+  const menuFriendChatClickCheck = useAppSelector((state)=> {return state.menuFriendChatClickCheck})
   return (
     <div className="flex w-full">
       <div style={{width: '20%'}}></div>
@@ -39,6 +41,7 @@ function MenuOption():JSX.Element {
             <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>상점</p>
           </div>
         </div>
+        {/* 알림 */}
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer" onClick={()=> {
             axios({
@@ -46,16 +49,39 @@ function MenuOption():JSX.Element {
               url: `https://i8e201.p.ssafy.io/api/user/friend/request/${username}`
             })
             .then((r)=> {
+              const checkFrom_id:number[] = []
+              const setData:(number|string)[] = []
+              const data:(number|string)[] = r.data.data
+              data.forEach((e:any)=> {
+                if (checkFrom_id.includes(e.from_id)!== true) {
+                  checkFrom_id.push(e.from_id)
+                  setData.push(e)
+                }
+              })
               dispatch(changeAlarmState())
-              dispatch(changeAlarmApiDataState(r.data.data))
+              dispatch(changeAlarmClickState(0))
+              dispatch(changeAlarmApiDataState(setData))
+              if (menuFriendClickCheck) {
+                dispatch(changeMenuFriendState())
+              }
+              if (menuFriendChatClickCheck){
+                dispatch(changeMenuFriendChatState(false))
+              }
             })
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/alarm.png')} alt="alarm" />
             <p className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}>알림</p>
           </div>
         </div>
+        {/* 메뉴 */}
         <div className="flex justify-center items-end mb-2 ">
           <div className="cursor-pointer" onClick={()=> {
+            if (menuFriendClickCheck) {
+              dispatch(changeMenuFriendState())
+            }
+            if (menuFriendChatClickCheck){
+              dispatch(changeMenuFriendChatState(false))
+            }
             dispatch(changeMenuState())
           }}>
             <img className="object-contain" style={{width: '1.5rem', height: '1.5rem'}} src={require('../../assets/logoIcon/menu.png')} alt="menu" />

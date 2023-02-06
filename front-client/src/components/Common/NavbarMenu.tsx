@@ -51,6 +51,7 @@ function NavbarMenu(): JSX.Element {
   }, [menuFriendClickCheck]);
 
   return (
+    // 마이페이지
     <div
       ref={menuIcon}
       className={`absolute rounded-full w-48 min-w-[12rem] h-16 min-h-[4rem] hidden`}
@@ -80,6 +81,7 @@ function NavbarMenu(): JSX.Element {
           />
           <p className="text-stone-200 text-xs">My</p>
         </div>
+        {/* 친구 */}
         <div
           className="mx-5 cursor-pointer"
           style={{ height: "52%" }}
@@ -88,8 +90,18 @@ function NavbarMenu(): JSX.Element {
               method: "get",
               url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
             }).then((r) => {
+              // 중복된 친구 등록으로 인해 생길 수 있는 현상 방지
+              const data = r.data.data
+              const checkFriendId:string[] = []
+              const setFriendData:string[] = []
+              data.forEach((e:any) => {
+                if (checkFriendId.includes(e.f_nickname) !== true) {
+                  checkFriendId.push(e.f_nickname)
+                  setFriendData.push(e)
+                }
+              })
               dispatch(changeMenuFriendState());
-              dispatch(changeMenuFriendListApiDataState(r.data.data));
+              dispatch(changeMenuFriendListApiDataState(setFriendData));
             });
           }}
         >
