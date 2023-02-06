@@ -88,17 +88,22 @@ public class UserServiceImpl implements UserService{
         return responseDtoList;
     }
     @Override
-    public void usePoint(String username, PointRequestDto requestDto){
+    public boolean usePoint(String username, PointRequestDto requestDto){
         User entity = userRepository.findByUsername(username);
-        entity.setPoint(entity.getPoint()+ requestDto.getAmount());
-        Point point = Point.builder()
-            .content(requestDto.getContent())
-            .amount(requestDto.getAmount())
-            .current_point(entity.getPoint())
-            .create_at(LocalDateTime.now())
-            .user(entity)
-            .build();
-        pointRepository.save(point);
+        int total = entity.getPoint()+ requestDto.getAmount();
+        if(total >= 0) {
+            entity.setPoint(total);
+            Point point = Point.builder()
+                    .content(requestDto.getContent())
+                    .amount(requestDto.getAmount())
+                    .current_point(entity.getPoint())
+                    .create_at(LocalDateTime.now())
+                    .user(entity)
+                    .build();
+            pointRepository.save(point);
+            return true;
+        }
+        return false;
     }
     @Override
     public void roleChange(String username){
