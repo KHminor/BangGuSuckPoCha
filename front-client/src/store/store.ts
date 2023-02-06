@@ -343,17 +343,31 @@ const menuFriendClickCheck = createSlice({
   },
 });
 
-// Nav의 menu에 있는 friend의 친구 목록 클릭 여부
+// Nav의 menu에 있는 friend의 친구 클릭 여부
 const menuFriendChatClickCheck = createSlice({
   name: "menuFriendChatClick",
   initialState: false,
   reducers: {
-    // 추후 action.payload로 채팅방 번호를 받아서 보여줘야 할듯?
-    changeMenuFriendChatState(state) {
-      return !state;
+    // 채팅 목록 열고 닫기 함수
+    changeMenuFriendChatState(state,action) {
+      return state = action.payload
     },
   },
 });
+
+const menuFriendClickUserData  = createSlice({
+  name: "menuFriendClickUserData",
+  initialState: [],
+  reducers: {
+    // 클릭한 유저와의 데이터 변경 함수
+    changemenuFriendClickUserData(state,action) {
+      return state = action.payload
+    },
+  },
+});
+
+
+
 
 // 룸에있는 유저 프로필 클릭 여부
 const RoomUserProfileClickCheck = createSlice({
@@ -536,6 +550,17 @@ const navAlarmReviewEmojiUserData = createSlice({
   }
 })
 
+// webRTC로딩 켜고 끄는 함수
+const webRtcLoading = createSlice({
+  name: 'webRtcLoading',
+  initialState: true,
+  reducers: {
+    isRtcLoading(state, action) {
+      return state = action.payload
+    }
+  }
+})
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -561,6 +586,7 @@ export const store = configureStore({
     roomAddFriendModalCheck: roomAddFriendModalCheck.reducer,
     RoomUserBanClickCheck: RoomUserBanClickCheck.reducer,
     RoomUserReportClickCheck: RoomUserReportClickCheck.reducer,
+    menuFriendClickUserData: menuFriendClickUserData.reducer,
     PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
@@ -570,6 +596,9 @@ export const store = configureStore({
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
 
     myPageCheck: myPageCheck.reducer,
+    // webRTC
+    webRtcLoading: webRtcLoading.reducer,
+    
   },
 });
 //주석추가
@@ -594,6 +623,7 @@ export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
 export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
+export const { changemenuFriendClickUserData } = menuFriendClickUserData.actions
 export const { showPublicModal } = PublicModal.actions
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions
@@ -602,6 +632,8 @@ export const { changeUserName } = userName.actions
 // EmojiClickUserData
 export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
 export const { changeMyPageCheck } = myPageCheck.actions
+// webRTC
+export const { isRtcLoading } = webRtcLoading.actions
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

@@ -12,7 +12,7 @@
 
 .neonDefault {
   color: #fff;
-  box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px;
+  box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff;
   z-index: 50;
 }
 
@@ -21,19 +21,21 @@
   transition: all 0.4s ;
 }
 
-.neon:hover {
-  box-shadow: 0 0 5px #ffa0cf, 0 0 10px #f661ac, 0 0 20px #fa2f94, 0 0 30px #ff0280, 0 0 40px;
-  /* z-index: ; */
+.isHover{
+  transition: all 0.5s;
 }
+
+/* .neon:hover {
+  box-shadow: 0px 0px 3px #fff201, 1px 1px 20px #E47200, -1px -1px 20px #E47200, 1px -1px 60px #FF321A;
+} */
+
 
 .hidden {
   display: none;
 }
 
 
-.radiusbottom {
-  border-radius: 0px 0px 16px 16px;
-}
+
 
 .cancelBtn {
   /* background: rgba(248, 248, 248, 0.185); */

@@ -9,8 +9,10 @@ function LoginLoading(): React.ReactElement {
   useEffect(() => {
     //지금 현재 주소 가져오기
     const urlStr = window.location.href;
-    // console.log("urlStr : " + urlStr);
+
+    console.log("urlStr : " + urlStr);
     const url = new URL(urlStr);
+    
     const urlParams = url.searchParams;
 
     const Auth: any = urlParams.get("Auth");

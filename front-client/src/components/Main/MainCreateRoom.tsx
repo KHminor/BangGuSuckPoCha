@@ -12,7 +12,7 @@ import {
 } from "../../store/store";
 import MainCreateRoomTheme from "./MainCreateRoomTheme";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PublicModal from "../Common/PublicModal";
 
@@ -27,7 +27,7 @@ const MainCreateRoom = ({
   const navigate = useNavigate();
 
   // username (현재는 내꺼)
-  const username = localStorage.getItem('Username')
+  const username = localStorage.getItem("Username");
 
   const roomTitle = ["소통포차", "게임포차", "헌팅포차"];
   const regionOption = ["지역", "전국", "부산광역시"];
@@ -75,7 +75,7 @@ const MainCreateRoom = ({
   ) => {
     if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
       dispatch(showPublicModal());
-      return 
+      return;
     }
     if (choiceTagList.includes(index)) {
       setChoiceTagList((prev) => {
@@ -123,9 +123,11 @@ const MainCreateRoom = ({
       {roomTheme === 1 ? (
         <>
           {showModal && <PublicModal Data={msg} />}
-          <div className={`bg-black bg-opacity-90 fixed h-screen text-white`}>
+          <div
+            className={`bg-black bg-opacity-90 overflow-y-auto fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
+          >
             <div
-              className={`${style.tagListbox} ${style.boxShadow} min-w-[44rem] bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}
+              className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl `}
             >
               <div
                 className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}
@@ -193,7 +195,7 @@ const MainCreateRoom = ({
                         },
                       }).then((r) => {
                         console.log(r.data);
-                        navigate(`/storyroom/:${PochaId}`);
+                        navigate(`/storyroom/${PochaId}`);
                       });
                     });
                   }}

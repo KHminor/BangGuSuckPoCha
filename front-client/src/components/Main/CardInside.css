@@ -1,0 +1,14 @@
+/* Talk */
+.talk:hover {
+  box-shadow: 0px 0px 3px #fff201, 1px 1px 20px #E47200, -1px -1px 20px #E47200, 1px -1px 60px #FF321A;
+}
+
+/* Game */
+.game:hover {
+  box-shadow: 0px 0px 10px #0835EE, 1px 1px 20px #0026A4, -1px -1px 20px #1904DA, 1px -1px 60px #220070;
+} 
+
+/* Meeting */
+.meeting:hover {
+  box-shadow: 0px 0px 3px hsl(328, 100%, 80%), 1px 1px 20px #EB00A1, -1px -1px 20px #FF0051, 1px -1px 60px #E80448;
+}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeAlarmApiDataState, changeAlarmClickState } from "../../store/store";
 import styles from './Common.module.css'
@@ -14,11 +15,11 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
   
   return (
     <div className={`grid h-[4rem] w-full ${styles.shortBorder}`} style={{gridTemplateRows: '1fr 0.8fr' }}>
-      <div className="flex justify-start items-center h-full w-[95%] ml-[5%] text-lg">{from_nickname}</div>
+      <div className="flex justify-start items-center h-full w-[95%] ml-[5%] text-lg font-normal"><span className={`${styles.nickNameNeon}`}>{from_nickname}</span></div>
       <div className="grid" style={{gridTemplateColumns: '3fr 1fr'}}>
-        <div className="flex justify-start items-center h-full w-[92%] ml-[8%] text-xs">님에게 {sentence} 왔습니다</div>
+        <div className="flex justify-start items-center h-full w-[92%] ml-[8%] text-xs"><span className={`${styles.sentenceNeon}`}>님에게 {sentence} 왔습니다</span></div>
         <div className="grid" style={{gridTemplateColumns: '1fr 1fr'}}>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center cursor-pointer">
             <img className="flex justify-center items-center h-[60%]" src={require('../../assets/roomIcon/check.png')} alt="" 
             onClick={()=> {
               // 승인했을때
@@ -34,6 +35,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                     })
                     .then((r)=> {
                       dispatch(changeAlarmApiDataState(r.data.data))
+                      toast.success("요청을 승인하였습니다");
                     })
                   })
                   
@@ -50,7 +52,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
             }}/>
           </div>
           {/* 거절했을때 */}
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center cursor-pointer">
             <img className="flex justify-center items-center h-[60%]" src={require('../../assets/roomIcon/cancel.png')} alt="" 
             onClick={()=> {
               if (alarmClickState === 0) {
@@ -65,6 +67,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   })
                   .then((r)=> {
                     dispatch(changeAlarmApiDataState(r.data.data))
+                    toast.success("요청을 거절하였습니다.");
                   })
                 })
               } else if (alarmClickState === 1) {
@@ -80,6 +83,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   .then((r)=> {
                     dispatch(changeAlarmClickState(1))
                     dispatch(changeAlarmApiDataState(r.data.data))
+                    toast.success("요청을 거절하였습니다.");
                   })
                 })
               }
