@@ -118,7 +118,7 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
         className={`z-50 bg-slate-800 bg-opacity-50 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
       >
         <div
-          className={`min-w-[24rem] bg-black px-10 pt-10 pb-5 rounded-3xl overflow-y-auto`}
+          className={`min-w-[24rem] bg-black px-10 pt-10 pb-5 rounded-3xl `}
         >
           <div className={`w-full h-24 flex justify-center items-center`}>
             <img
