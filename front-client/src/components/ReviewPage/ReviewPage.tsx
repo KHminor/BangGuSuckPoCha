@@ -138,12 +138,12 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
   const username = localStorage.getItem('Username')
   const [rating, setRating] = useState(null) as any
   return (
-    <div className="grid w-full min-h-[12rem]" style={{gridTemplateRows: '0.6fr 2.6fr '}}>
+    <div className="grid w-full min-h-[12rem] mb-1" style={{gridTemplateRows: '0.6fr 2fr '}}>
       <div className="h-full"></div>
       {
         clickReviewState === false? 
         (
-          <div className="grid " style={{gridTemplateRows: '2.1fr 0.8fr 0.8fr', border: 'groove 4px white', borderRadius: '60px'}}>
+          <div className="grid " style={{gridTemplateRows: '2.1fr 0.8fr 0.8fr', border: 'groove 4px white', borderRadius: '1.5rem'}}>
             {/* 이모지, 닉네임, 별점 */}
             <div className="flex justify-center items-center">
               <div className="grid w-[80%] h-full" style={{gridTemplateColumns: '1fr 4fr 2.7fr'}}>
@@ -156,7 +156,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                 }}>
                   <img className="w-[4rem] h-[4rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
                 </div>
-                <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon">
+                <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}
                 </div>
                 <div className="flex justify-end items-center">
@@ -168,7 +168,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
             <div className="grid" style={{gridTemplateColumns: '2fr 3fr 2fr'}}>
               <div className="flex justify-start items-center text-xs pl-[4.5rem]">{createReviewat}</div>
               <div className="flex justify-center items-center w-full h-ful">
-                <input className={`text-xs cursor-pointer ${styles.createBtn} reviewpage`} type="submit" value={'평가하기'} onClick={(e)=> {
+                <input className={`text-base cursor-pointer ${styles.createBtn} reviewpage `} type="submit" value={'평가하기'} onClick={(e)=> {
                   setRating(null)
                   axios({
                     method: 'put',
@@ -221,7 +221,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                 }}>
                   <img className="w-[4rem] h-[4rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
                 </div>
-                <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon">
+                <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}
                 </div>
                 <div className="flex justify-end items-center">
