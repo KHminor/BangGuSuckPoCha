@@ -80,8 +80,7 @@ function FriendChat():JSX.Element {
   
   const subscribe = () => {
     client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-      const msg = JSON.parse(newMessage.body)
-      setChatMessages([...data, msg]as any)
+      setChatMessages([...data, newMessage.body]as any)
       console.log("#############3333"+ message);
       //showGreeting(JSON.parse(message.body))
     });
