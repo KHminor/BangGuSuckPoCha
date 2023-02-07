@@ -43,7 +43,7 @@ function FriendChat():JSX.Element {
   //     afterChat.push(e.content)
   //   })
   // }
-  const [message, setMessage] = useState<any>([data]);
+  const [message, setMessage] = useState<any>([]);
 
   useEffect(() => {
     connect();
