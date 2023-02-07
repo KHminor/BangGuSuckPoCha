@@ -11,6 +11,7 @@ import styles from "./Common.module.css";
 import StompJs, { Stomp } from '@stomp/stompjs';
 
 function FriendList(): JSX.Element {
+  
   // 메뉴 클릭시
   const dispatch = useAppDispatch();
   const friendListIcon = useRef<any>(null);
@@ -45,27 +46,27 @@ function FriendList(): JSX.Element {
   // 클릭한 유저가 이전에 클릭한 유저와 같은지 체크
   const [checkChatId, setCheckChatId] = useState();
 
+  
 
+  function connect(chat_id:any) {
+    wws.connect({}, function () {
+      wws.subscribe("/sub/chat/" + chat_id, function (message) {
+        console.log('메시지!!!!!!!!!!!! ',message)
+        // showGreeting(JSON.parse(message.body));
+      });
+    });
+  }
 
-  const sock = new SockJS('https://i8e201.p.ssafy.io/api/ws/chat',)
+  const sock = new SockJS('/api/ws/chat',)
   const wws = Stomp.over(sock)
   const userId = localStorage.getItem('userId')
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
     const chat_id = e.chat_id;
+    console.log('챗아이디!!!!!!!!!',chat_id)
 
     // 소켓 연결 함수
-    function connect() {
-      wws.connect({}, function () {
-        wws.subscribe("/sub/chat/" + chat_id, function (message) {
-          console.log('메시지!!!!!!!!!!!! ',message)
-          // showGreeting(JSON.parse(message.body));
-        });
-      });
-    }
-
     
-
     return (
       <div
         key={idx}
@@ -75,7 +76,7 @@ function FriendList(): JSX.Element {
           // 채팅 서버 접속
           console.log('소켓 통신!!!!!!!!: ',sock)
           console.log(wws)
-          connect()
+          connect(chat_id)
           console.log('연결해땅아!!!!!!!!!!!!!!!!')
 
           // 클릭한 유저와의 채팅 아이디 체크
