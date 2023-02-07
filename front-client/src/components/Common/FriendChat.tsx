@@ -37,7 +37,7 @@ function FriendChat():JSX.Element {
   const {nickname, data, chat_id} = menuFriendClickUserData
   console.log(chat_id);
   
-  const [message, setMessage] = useState<any>([]);
+  const [message, setMessage] = useState<any>([data]);
 
   useEffect(() => {
     connect();
@@ -63,7 +63,7 @@ function FriendChat():JSX.Element {
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
-          setMessage((_chat_list:any)=> [...data,..._chat_list, msg])
+          setMessage((_chat_list:any)=> [..._chat_list, msg])
           
           //showGreeting(JSON.parse(message.body))
         });
