@@ -92,7 +92,7 @@ function FriendChat():JSX.Element {
     }
 
     client.current.publish({
-      destination: "/pub/chat",
+      destination: "/pub/chat/message",
       body: JSON.stringify({ roomSeq: chat_id, message }),
     });
 
