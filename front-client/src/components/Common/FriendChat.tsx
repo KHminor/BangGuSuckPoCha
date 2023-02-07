@@ -126,7 +126,7 @@ function FriendChat():JSX.Element {
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
                 
-                data&&data.map((chat:any)=>{
+                message&&message.map((chat:any)=>{
                   console.log(chat)
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
