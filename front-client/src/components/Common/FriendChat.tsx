@@ -33,14 +33,15 @@ function FriendChat():JSX.Element {
   console.log(chat_id);
   
 
-  const client = useRef<any>({});
-  const [chatMessages, setChatMessages] = useState([]);
-  const [message, setMessage] = useState("");
+  const client = useRef({})as any ;
+  // const [chatMessages, setChatMessages] = useState([]);
+  const [chat, setChat] = useState('');
+  const [message, setMessage] = useState(data);
 
   useEffect(()=> {
     console.log(message)
-    console.log(chatMessages)
-  },[message, chatMessages])
+    console.log(chat)
+  })
 
   useEffect(() => {
     connect();
@@ -48,43 +49,37 @@ function FriendChat():JSX.Element {
     return () => disconnect();
   }, []);
 
-  // 소켓 연결
-  const connect = () => {
-    client.current = new StompJs.Client({
-      brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 웹소켓 서버로 직접 접속
-      webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"), // proxy를 통한 접속
-      connectHeaders: {
-        "auth-token": "spring-chat-auth-token",
-      },
+
+  
+
+  const connect:any = () => {
+    const client = new StompJs.Client({
+      brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
+      webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
       debug: function (str) {
-        console.log(str);
+          console.log(str);
       },
-      reconnectDelay: 5000,
+      onConnect:() => { 
+        console.log("onConnect");
+        client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
+          setMessage([...message, newMessage.body])
+          console.log("#############3333"+ message);
+          //showGreeting(JSON.parse(message.body))
+        });
+      },
+      reconnectDelay: 5000, //자동 재 연결
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
-      onConnect: () => {
-        subscribe();
-      },
-      onStompError: (frame) => {
-        console.error(frame);
-      },
     });
+      client.activate();
+      console.log(client.connected)
+    }
 
-    client.current.activate();
-  };
-
-  const disconnect = () => {
-    client.current.deactivate();
-  };
   
-  const subscribe = () => {
-    client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-      const jsonMsg = JSON.parse(newMessage.body)
-      setChatMessages([...data, jsonMsg ]as any)
-      console.log("#############3333"+ message);
-      //showGreeting(JSON.parse(message.body))
-    });
-  }
+  const disconnect = () => {
+    client.deactivate();
+  };
+
 
   const publish = (message:any) => {
     if (!client.current.connected) {
@@ -193,19 +188,19 @@ function FriendChat():JSX.Element {
 
 
               {/* 소켓통신 메시지 */}
-              {chatMessages && chatMessages.length > 0 && (
+              {
                 <ul>
-                  {chatMessages.map((_chatMessage:any, index) => (
+                  {message&&message.map((_chatMessage:any, index:any) => (
                     <li key={index}>{_chatMessage.message}</li>))}
                 </ul>
-              )}
+              }
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
               <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' 
               type={"text"}
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => setChat(e.target.value)}
               onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=> {publish(message)}}/>
