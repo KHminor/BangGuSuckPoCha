@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import styles from '../Common/Common.module.css'
 
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { changeclickfriendChatData } from "src/store/store";
 
 function FriendChat():JSX.Element {
-  const dispatch = useAppDispatch()
   const friendChat = useRef<any>(null);
   //  메뉴 -> 친구 클릭 -> 챗팅
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck
   })
 
-
-
+  
   // 채팅구역
   const chatArea = useRef<any>(null)
   const client = useRef<any>({});
@@ -32,36 +29,23 @@ function FriendChat():JSX.Element {
 
   
   
-  
-
-
-  
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data ,chat_id} = menuFriendClickUserData
   console.log(chat_id);
-  // const data:any[] = menuFriendClickUserData.data
-  // const afterChat = []
-  // if (data.length !== 0) {
-  //   data.map((e)=> {
-  //     afterChat.push(e.content)
-  //   })
-  // }
+
 
   console.log('기존채팅 데이터: ', data)
-  // const [message, setMessage] = useState<any>(data);
-  const clickfriendChatData: any = useAppSelector((state:any)=> {return state.clickfriendChatData})
-
+  const [message, setMessage] = useState<any>(data);
 
   useEffect(() => {
     connect();
     scrollToBottom()
     return () => disconnect();
-  }, [clickfriendChatData]);
+  }, [message]);
   
-
   useEffect(()=> {
-    console.log('현재 메세지 값: ', clickfriendChatData)
+    console.log('현재 메세지 값: ', message)
   })
 
 
@@ -76,9 +60,11 @@ function FriendChat():JSX.Element {
       onConnect:() => { 
         console.log("onConnect");
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
+          // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
-          // setMessage((_chat_list:any)=> [..._chat_list, msg])
-          dispatch(changeclickfriendChatData((_chat_list:any)=> [..._chat_list, msg]))
+          setMessage((_chat_list:any)=> [..._chat_list, msg])
+          
+          //showGreeting(JSON.parse(message.body))
         });
       },
       reconnectDelay: 1000, //자동 재 연결
@@ -139,7 +125,7 @@ function FriendChat():JSX.Element {
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
                 
-                clickfriendChatData&&clickfriendChatData.map((chat:any)=>{
+                message&&message.map((chat:any)=>{
                   console.log(chat)
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
