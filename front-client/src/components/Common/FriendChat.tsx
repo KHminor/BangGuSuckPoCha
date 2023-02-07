@@ -34,15 +34,15 @@ function FriendChat():JSX.Element {
   
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
-  const {nickname,  chat_id} = menuFriendClickUserData
+  const {nickname, data ,chat_id} = menuFriendClickUserData
   console.log(chat_id);
-  const data:any[] = menuFriendClickUserData.data
-  const afterChat = []
-  if (data.length !== 0) {
-    data.map((e)=> {
-      afterChat.push(e.content)
-    })
-  }
+  // const data:any[] = menuFriendClickUserData.data
+  // const afterChat = []
+  // if (data.length !== 0) {
+  //   data.map((e)=> {
+  //     afterChat.push(e.content)
+  //   })
+  // }
   const [message, setMessage] = useState<any>([data]);
 
   useEffect(() => {
