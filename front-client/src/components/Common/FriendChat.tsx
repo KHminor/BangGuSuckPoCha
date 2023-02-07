@@ -28,11 +28,7 @@ function FriendChat():JSX.Element {
 
   
   
-  useEffect(() => {
-    connect();
-
-    return () => disconnect();
-  }, []);
+  
 
 
   
@@ -41,9 +37,19 @@ function FriendChat():JSX.Element {
   const {nickname, data, chat_id} = menuFriendClickUserData
   console.log(chat_id);
   
-  const [message, setMessage] = useState(data);
+  const [message, setMessage] = useState<any>([]);
 
+  useEffect(() => {
+    connect();
+
+    return () => disconnect();
+  }, [message]);
   
+  useEffect(()=> {
+    console.log('현재 메세지 값: ', message)
+  })
+
+
 
   const connect = () => {
     client.current = new StompJs.Client({
@@ -55,8 +61,10 @@ function FriendChat():JSX.Element {
       onConnect:() => { 
         console.log("onConnect");
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-          setMessage([...message, newMessage.body])
-          console.log("#############3333"+ message);
+          // setMessage([...message, newMessage.body])
+          const msg = JSON.parse(newMessage.body)
+          setMessage((_chat_list:any)=> [..._chat_list, msg])
+          
           //showGreeting(JSON.parse(message.body))
         });
       },
