@@ -154,7 +154,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                     dispatch(showRoomUserProfile())         
                   })
                 }}>
-                  <img className="w-[4rem] h-[4rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
                 </div>
                 <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}
@@ -208,7 +208,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
           </div>
         ):
         (
-          <div className="grid " style={{gridTemplateRows: '2.1fr 0.8fr 0.8fr', border: 'groove 4px white', borderRadius: '60px'}}>
+          <div className="grid " style={{gridTemplateRows: '2.1fr 0.8fr 0.8fr', border: 'groove 4px white', borderRadius: '30px'}}>
             {/* 이모지, 닉네임, 별점 */}
             <div className="flex justify-center items-center">
               <div className="grid w-[80%] h-full" style={{gridTemplateColumns: '1fr 4fr 2.7fr'}}>
