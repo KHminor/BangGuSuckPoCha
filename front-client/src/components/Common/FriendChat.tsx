@@ -93,8 +93,8 @@ function FriendChat():JSX.Element {
     }
 
     client.current.publish({
-      destination: "/pub/chat/message",
-      body: JSON.stringify({ chat_id: chat_id,  user_id:user_id ,content:message }),
+      destination: "/pub/chat/",
+      body: JSON.stringify({ chat_id: chat_id, user_id:user_id ,content:message }),
     });
 
     setMessage("");
