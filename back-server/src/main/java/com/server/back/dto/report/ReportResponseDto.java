@@ -22,8 +22,10 @@ public class ReportResponseDto {
     private String attackerName;
     private Integer reportType;
     private String reportReason;
+    private Boolean reportResult;
     private LocalDateTime report_at;
     public ReportResponseDto(Report r){
+        this.reportResult = r.getReportResult();
         this.reportId = r.getReportId();
         this.reporterId = r.getReportId();
         this.repoterName = r.getRepoterId().getUsername();
