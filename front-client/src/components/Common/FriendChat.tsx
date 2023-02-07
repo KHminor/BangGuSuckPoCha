@@ -31,8 +31,8 @@ function FriendChat():JSX.Element {
   
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
-  const {nickname, data} = menuFriendClickUserData
-  // console.log(chat_id);
+  const {nickname, data ,chat_id} = menuFriendClickUserData
+  console.log(chat_id);
 
 
   console.log('기존채팅 데이터: ', data)
@@ -59,7 +59,6 @@ function FriendChat():JSX.Element {
       },
       onConnect:() => { 
         console.log("onConnect");
-        const chat_id = localStorage.getItem('chat_id')
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
