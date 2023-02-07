@@ -31,7 +31,7 @@ function FriendChat():JSX.Element {
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
   console.log(chat_id);
-  const user_id = localStorage.getItem('userId')
+  
 
   const client = useRef<any>({});
   const [chatMessages, setChatMessages] = useState([]);
@@ -92,12 +92,20 @@ function FriendChat():JSX.Element {
     }
 
     client.current.publish({
-      destination: "/pub/chat/message",
-      body: JSON.stringify({ chat_id: chat_id, user_id:user_id, content:message }),
+      destination: "/pub/chat",
+      body: JSON.stringify({ roomSeq: chat_id, message }),
     });
 
     setMessage("");
   };
+
+
+
+
+
+
+
+
 
   // const [message, setMessage] = useState(data);
 
@@ -185,17 +193,20 @@ function FriendChat():JSX.Element {
 
 
               {/* 소켓통신 메시지 */}
-              {/* {
-              chatMessages && chatMessages.length > 0 && (
+              {/* {chatMessages && chatMessages.length > 0 && (
                 <ul>
                   {chatMessages.map((_chatMessage:any, index) => (
                     <li key={index}>{_chatMessage.message}</li>))}
                 </ul>
               )} */}
               {
-                chatMessages&&chatMessages.map((chat:any) => {
+                chatMessages&&chatMessages.map((chat:any)=>{
                   return (
-                    <div className="flex flex-col justify-start w-full h-full ">{chat}</div>
+                    <div className="flex flex-col justify-start w-full h-full ">
+                      {
+                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/> 
+                      }
+                    </div>
                   )
                 })
               }
