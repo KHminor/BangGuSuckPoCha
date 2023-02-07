@@ -14,6 +14,7 @@ function FriendChat():JSX.Element {
 
   // 채팅구역
   const chatArea = useRef<any>(null)
+  const client = useRef<any>({});
   // 해당 구역 가장 아래위치 체크후 해당 위치가 default 되도록 하기
   // console.log('채팅구역: ',chatArea&&chatArea.current?.scrollHeight) 
 
@@ -27,7 +28,12 @@ function FriendChat():JSX.Element {
 
   
   
-  
+  useEffect(() => {
+    connect();
+
+    return () => disconnect();
+  }, []);
+
 
   
   // 클릭 되어진 유저와의 데이터
@@ -40,7 +46,7 @@ function FriendChat():JSX.Element {
   
 
   const connect = () => {
-  const client = new StompJs.Client({
+  const client:any = new StompJs.Client({
     brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
     webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
     debug: function (str) {
@@ -62,7 +68,11 @@ function FriendChat():JSX.Element {
     console.log(client.connected)
   }
 
-  connect();
+
+  const disconnect = () => {
+    client.current.deactivate();
+  };
+
 
   function MyChat({content}:any):JSX.Element {
     return (
