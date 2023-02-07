@@ -63,14 +63,14 @@ function FriendChat():JSX.Element {
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
-          setMessage((_chat_list:any)=> [..._chat_list, msg])
+          setMessage((_chat_list:any)=> [...data,..._chat_list, msg])
           
           //showGreeting(JSON.parse(message.body))
         });
       },
       reconnectDelay: 5000, //자동 재 연결
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      heartbeatIncoming: 1000,
+      heartbeatOutgoing: 1000,
     });
       client.current.activate();
       console.log(client.current.connected)
