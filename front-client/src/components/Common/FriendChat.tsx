@@ -117,16 +117,7 @@ function FriendChat():JSX.Element {
             {/* 채팅 공간 */}
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
-                
-                data&&data.map((chat:any)=>{
-                  return (
-                    <div className="flex flex-col justify-start w-full h-full ">
-                      {
-                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/> 
-                      }
-                    </div>
-                  )
-                })
+                data
               }
             </div>
 
