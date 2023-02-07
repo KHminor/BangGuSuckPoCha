@@ -46,6 +46,8 @@ const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string
   // 유저 정보 데이터 재가공 함수
   function userDataReBuild() {
     const date: any = new Date();
+    //매너온도 가공
+    manner = (manner).toFixed(1) + "℃"
     // 성별 데이터 다시 가공
     if (gender === "F") {
       gender = "여자";
