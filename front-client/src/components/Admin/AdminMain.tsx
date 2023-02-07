@@ -54,14 +54,8 @@ function AdminMain(): React.ReactElement {
           </div>
           <div
             className="cursor-pointer "
-            onClick={() => {
-              axios({
-                method: "get",
-                url: "https://i8e201.p.ssafy.io/api/admin/report",
-              }).then((r) => {
-                console.log(r.data);
-              });
-              // navigate("/userreport");
+            onClick={() => {              
+              navigate("/userreport/wait");
             }}
           >
             report list

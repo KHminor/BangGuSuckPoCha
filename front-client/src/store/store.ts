@@ -105,29 +105,12 @@ const createThemeRoomCheck = createSlice({
 //admin페이지 Reprot 데이터
 const adminreport = createSlice({
   name: "adminreport",
-  initialState: [
-    {
-      reportnum: 1,
-      reporter: "한상현",
-      reported: "장꾸",
-      type: "욕설/협박",
-      reason: "술 마시다가 갑자기 저보고 한상현 닮았다고 함",
-      date: "2023-01-18",
-      result: "O",
-      point: 10,
-    },
-    {
-      reportnum: 1,
-      reporter: "한상현",
-      reported: "장꾸",
-      type: "욕설/협박",
-      reason: "술 마시다가 갑자기 저보고 한상현 닮았다고 함",
-      date: "2023-01-18",
-      result: "",
-      point: 0,
-    },
-  ],
-  reducers: {},
+  initialState: "",
+  reducers: {
+    changeAdminReport(state, action) {
+      return state = action.payload
+    }
+  },
 });
 
 //admin페이지 UserList 데이터
@@ -436,7 +419,7 @@ export const { changeUserList } = UserList.actions;
 // DetailUser
 export const { changeDetailUser } = DetailUser.actions;
 export const { changeSelectDetailUser } = SelectDetailUser.actions;
-
+export const { changeAdminReport } = adminreport.actions;
 // EmojiClickUserData
 export const { changeNavAlarmReviewEmojiUserData } =
   navAlarmReviewEmojiUserData.actions;
