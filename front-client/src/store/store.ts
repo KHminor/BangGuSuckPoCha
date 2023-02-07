@@ -48,6 +48,17 @@ const DetailUser = createSlice({
     },
   },
 });
+//선택한 방 데이터
+const DetailRoom = createSlice({
+  name: "detailRoom",
+  initialState: "",
+  reducers: {
+    changeDetailRoom(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 const SelectDetailUser = createSlice({
   name: "selectDetailUser",
   initialState: false,
@@ -108,8 +119,8 @@ const adminreport = createSlice({
   initialState: "",
   reducers: {
     changeAdminReport(state, action) {
-      return state = action.payload
-    }
+      return (state = action.payload);
+    },
   },
 });
 
@@ -371,6 +382,7 @@ export const store = configureStore({
     // DetailUser
     DetailUser: DetailUser.reducer,
     SelectDetailUser: SelectDetailUser.reducer,
+    DetailRoom: DetailRoom.reducer,
 
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
@@ -378,7 +390,6 @@ export const store = configureStore({
     myPageCheck: myPageCheck.reducer,
     // webRTC
     webRtcLoading: webRtcLoading.reducer,
-    
   },
 });
 //주석추가
@@ -419,6 +430,7 @@ export const { changeUserList } = UserList.actions;
 // DetailUser
 export const { changeDetailUser } = DetailUser.actions;
 export const { changeSelectDetailUser } = SelectDetailUser.actions;
+export const { changeDetailRoom } = DetailRoom.actions;
 export const { changeAdminReport } = adminreport.actions;
 // EmojiClickUserData
 export const { changeNavAlarmReviewEmojiUserData } =

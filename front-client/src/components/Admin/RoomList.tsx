@@ -3,6 +3,7 @@ import { log } from "console";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  changeDetailRoom,
   changeDetailUser,
   changeMainCreateRoomList,
   changeSelectDetailUser,
@@ -11,30 +12,31 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function RoomDetail() {
   const detailRoom: any = useAppSelector((state: any) => {
-    return state.detailRoom;
+    console.log("선택", state.DetailRoom);
+    return state.DetailRoom;
   });
   return (
-    <div className="row-span-6 w-full overflow-x-auto  max-h-[39.5rem] grid grid-rows-12">
+    <div className="row-span-6 w-full overflow-x-auto  max-h-[34.5rem] grid grid-rows-12">
       <div className="grid grid-cols-2 ">
-        <div className="w-[10rem]">profile : </div>
-        {/* <div className="max-w-[10rem]">{detailRoom.profile}</div> */}
-        <div className="max-w-[10rem]">detailRoom.profile</div>
+        <div className="w-[10rem]">pochaId : </div>
+        <div className="max-w-[10rem]">{detailRoom.pochaId}</div>
+        {/* <div className="max-w-[10rem]">detailRoom.profile</div> */}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">nickname : </div>
-        <div className="w-[10rem] max-w-[10rem]">detailRoom.nickname</div>
+        <div className="w-[10rem]">themeId : </div>
+        <div className="w-[10rem] max-w-[10rem]">{detailRoom.themeId}</div>
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">birth :</div>
-        <div className="max-w-[10rem]">detailRoom.birth</div>
+        <div className="w-[10rem]">isPrivate :</div>
+        {detailRoom.isPrivate===true?<div className="max-w-[10rem]">O</div>:<div className="max-w-[10rem]">X</div>}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">gender :</div>
-        <div className="max-w-[10rem]">detailRoom.gender</div>
+        <div className="w-[10rem]">isSsul :</div>
+        {detailRoom.isSsul===true?<div className="max-w-[10rem]">O</div>:<div className="max-w-[10rem]">X</div>}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">region : </div>
-        <div className="max-w-[10rem]">detailRoom.region</div>
+        <div className="w-[10rem]">ssulTitle : </div>
+        {detailRoom.isSsul===true?<div className="max-w-[10rem]">{detailRoom.ssulTitle}</div>:<div className="max-w-[10rem]">썰없음</div>}
       </div>
       <div className="grid grid-cols-2">
         <div className="w-[10rem]">username : </div>
@@ -46,11 +48,11 @@ function RoomDetail() {
       </div>
       <div className="grid grid-cols-2">
         <div className="w-[10rem]">userId : </div>
-        <div className="max-w-[10rem]">{detailRoom.userId}</div>
+        <div className="max-w-[10rem]">detailRoom.userId</div>
       </div>
       <div className="grid grid-cols-2">
         <div className="w-[10rem]">manner : </div>
-        <div className="max-w-[10rem]">{detailRoom.manner}</div>
+        <div className="max-w-[10rem]">detailRoom.manner</div>
       </div>
     </div>
   );
@@ -62,12 +64,13 @@ function RoomSelect() {
     console.log(state.SelectDetailUser);
     return state.SelectDetailUser;
   });
+
   const room: any = useAppSelector((state: any) => {
     console.log("만들어진방", state.mainCreateRoomList);
     return state.mainCreateRoomList;
   });
   return (
-    <div className="w-full overflow-x-auto max-h-[39rem]">
+    <div className="w-full overflow-x-auto max-h-[34rem]">
       <table className="border-collapse border border-slate-400 w-full ">
         <thead className="border border-slate-300">
           <tr>
@@ -109,10 +112,12 @@ function RoomSelect() {
                 </td>
                 <td
                   className="w-[10%] cursor-pointer"
-                  onClick={() => {                    
-                    dispatch(changeDetailUser(true));
-                    console.log(isSelect);
-                    
+                  onClick={() => {
+                    // console.log("몇번째야?", room[i]);
+                    dispatch(changeDetailRoom(room[i]));
+                    dispatch(changeSelectDetailUser(true));
+                    // console.log("선택한방", Selectroom);
+                    // console.log(isSelect);
                   }}
                 >
                   {"==>"}
@@ -142,7 +147,7 @@ function RoomList(): React.ReactElement {
       url: "https://i8e201.p.ssafy.io/api/admin/pocha",
     }).then((r) => {
       // console.log(r.data.data);
-      dispatch(changeMainCreateRoomList(r.data.data));      
+      dispatch(changeMainCreateRoomList(r.data.data));
     });
   }, []);
 
