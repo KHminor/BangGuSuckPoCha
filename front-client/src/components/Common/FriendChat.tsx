@@ -8,7 +8,6 @@ import SockJS from "sockjs-client";
 
 function FriendChat():JSX.Element {
   const friendChat = useRef<any>(null);
-  const user_id = localStorage.getItem('userId')
   //  메뉴 -> 친구 클릭 -> 챗팅
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck
@@ -38,17 +37,16 @@ function FriendChat():JSX.Element {
   const [chatMessages, setChatMessages] = useState([]);
   const [message, setMessage] = useState("");
 
+  useEffect(()=> {
+    console.log(message)
+    console.log(chatMessages)
+  },[message, chatMessages])
 
   useEffect(() => {
     connect();
 
     return () => disconnect();
   }, []);
-
-  useEffect(()=> {
-    console.log('채팅 목록: ',chatMessages)
-    console.log('이건 입력한 메시지: ',message)
-  })
 
   // 소켓 연결
   const connect = () => {
@@ -81,7 +79,8 @@ function FriendChat():JSX.Element {
   
   const subscribe = () => {
     client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-      setChatMessages([...data, newMessage.body]as any)
+      const jsonMsg = JSON.parse(newMessage.body)
+      setChatMessages([...data, jsonMsg ]as any)
       console.log("#############3333"+ message);
       //showGreeting(JSON.parse(message.body))
     });
@@ -93,8 +92,8 @@ function FriendChat():JSX.Element {
     }
 
     client.current.publish({
-      destination: "/pub/chat/",
-      body: JSON.stringify({ chat_id: chat_id, user_id:user_id ,content:message }),
+      destination: "/pub/chat",
+      body: JSON.stringify({ roomSeq: chat_id, message }),
     });
 
     setMessage("");
@@ -194,23 +193,12 @@ function FriendChat():JSX.Element {
 
 
               {/* 소켓통신 메시지 */}
-              {/* {chatMessages && chatMessages.length > 0 && (
+              {chatMessages && chatMessages.length > 0 && (
                 <ul>
                   {chatMessages.map((_chatMessage:any, index) => (
                     <li key={index}>{_chatMessage.message}</li>))}
                 </ul>
-              )} */}
-              {
-                chatMessages&&chatMessages.map((chat:any)=>{
-                  return (
-                    <div className="flex flex-col justify-start w-full h-full ">
-                      {
-                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/> 
-                      }
-                    </div>
-                  )
-                })
-              }
+              )}
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
@@ -220,9 +208,7 @@ function FriendChat():JSX.Element {
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
-                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={() => { 
-                  console.log('현재 메시지: ',message)
-                  publish(message)}}/>
+                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=> {publish(message)}}/>
               </div>
             </div>
       </div>
