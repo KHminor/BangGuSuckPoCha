@@ -28,9 +28,9 @@ public class ReportResponseDto {
         this.reportResult = r.getReportResult();
         this.reportId = r.getReportId();
         this.reporterId = r.getReportId();
-        this.repoterName = r.getRepoterId().getUsername();
+        this.repoterName = r.getRepoterId().getNickname();
         this.attackerId = r.getAttackerId().getUserId();
-        this.attackerName = r.getAttackerId().getUsername();
+        this.attackerName = r.getAttackerId().getNickname();
         this.reportType = r.getReportType();
         this.reportReason = r.getReportReason();
         this.report_at = LocalDateTime.now();
