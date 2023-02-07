@@ -31,7 +31,7 @@ function FriendChat():JSX.Element {
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
   console.log(chat_id);
-  
+  const user_id = localStorage.getItem('userId')
 
   const client = useRef<any>({});
   const [chatMessages, setChatMessages] = useState([]);
@@ -80,7 +80,8 @@ function FriendChat():JSX.Element {
   
   const subscribe = () => {
     client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-      setChatMessages([...data, newMessage.body]as any)
+      const msg = JSON.parse(newMessage.body)
+      setChatMessages([...data, msg]as any)
       console.log("#############3333"+ message);
       //showGreeting(JSON.parse(message.body))
     });
@@ -92,20 +93,12 @@ function FriendChat():JSX.Element {
     }
 
     client.current.publish({
-      destination: "/pub/chat",
-      body: JSON.stringify({ roomSeq: chat_id, message }),
+      destination: "/pub/chat/message",
+      body: JSON.stringify({ chat_id: chat_id, user_id:user_id, content:message }),
     });
 
     setMessage("");
   };
-
-
-
-
-
-
-
-
 
   // const [message, setMessage] = useState(data);
 
@@ -193,12 +186,20 @@ function FriendChat():JSX.Element {
 
 
               {/* 소켓통신 메시지 */}
-              {chatMessages && chatMessages.length > 0 && (
+              {/* {
+              chatMessages && chatMessages.length > 0 && (
                 <ul>
                   {chatMessages.map((_chatMessage:any, index) => (
                     <li key={index}>{_chatMessage.message}</li>))}
                 </ul>
-              )}
+              )} */}
+              {
+                chatMessages&&chatMessages.map((chat:any) => {
+                  return (
+                    <div className="flex flex-col justify-start w-full h-full ">{chat}</div>
+                  )
+                })
+              }
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
@@ -206,7 +207,7 @@ function FriendChat():JSX.Element {
               type={"text"}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
+              onKeyDown={(e:any) => publish(message)}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={() => publish(message)}/>
               </div>
