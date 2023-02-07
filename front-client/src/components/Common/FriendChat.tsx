@@ -8,6 +8,7 @@ import SockJS from "sockjs-client";
 
 function FriendChat():JSX.Element {
   const friendChat = useRef<any>(null);
+  const user_id = localStorage.getItem('userId')
   //  메뉴 -> 친구 클릭 -> 챗팅
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck
@@ -93,7 +94,7 @@ function FriendChat():JSX.Element {
 
     client.current.publish({
       destination: "/pub/chat/message",
-      body: JSON.stringify({ chat_id: chat_id, message:message }),
+      body: JSON.stringify({ chat_id: chat_id,  user_id:user_id ,content:message }),
     });
 
     setMessage("");
