@@ -326,8 +326,8 @@ const PublicModal = createSlice({
   name: "PublicModal",
   initialState: false,
   reducers: {
-    showPublicModal(state) {
-      return !state;
+    showPublicModal(state, action) {
+      return (state = action.payload);
     },
   },
 });
@@ -395,6 +395,7 @@ export const store = configureStore({
     myPageCheck: myPageCheck.reducer,
     // webRTC
     webRtcLoading: webRtcLoading.reducer,
+    
   },
 });
 //주석추가

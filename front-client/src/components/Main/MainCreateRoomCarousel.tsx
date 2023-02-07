@@ -16,6 +16,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
   let dispatch = useAppDispatch();
   const bgDiv = useRef<any>();
 
+  // 캐러셀 모달 끄는거
   function CloseCarouselModal(event : any ) {
     if(event.target === bgDiv.current) {
       console.log("cliiick")
