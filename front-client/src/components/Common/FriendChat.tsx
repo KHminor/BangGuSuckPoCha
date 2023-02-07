@@ -93,7 +93,7 @@ function FriendChat():JSX.Element {
 
     client.current.publish({
       destination: "/pub/chat/message",
-      body: JSON.stringify({ roomSeq: chat_id, message }),
+      body: JSON.stringify({ chat_id: chat_id, message:message }),
     });
 
     setMessage("");
@@ -219,7 +219,9 @@ function FriendChat():JSX.Element {
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
-                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={() => publish(message)}/>
+                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={() => { 
+                  console.log('현재 메시지: ',message)
+                  publish(message)}}/>
               </div>
             </div>
       </div>
