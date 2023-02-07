@@ -45,13 +45,13 @@ function FriendChat():JSX.Element {
   // }
 
   console.log('기존채팅 데이터: ', data)
-  const [message, setMessage] = useState<any>([]);
+  const [message, setMessage] = useState<any>(data);
 
   useEffect(() => {
     connect();
 
     return () => disconnect();
-  }, []);
+  }, [message]);
   
   useEffect(()=> {
     console.log('현재 메세지 값: ', message)
@@ -71,7 +71,7 @@ function FriendChat():JSX.Element {
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
-          setMessage((_chat_list:any)=> [..._chat_list, msg])
+          setMessage((_chat_list:any)=> [...message, ..._chat_list, msg])
           
           //showGreeting(JSON.parse(message.body))
         });
