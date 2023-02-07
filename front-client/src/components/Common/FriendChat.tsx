@@ -5,15 +5,13 @@ import styles from '../Common/Common.module.css'
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-
 function FriendChat():JSX.Element {
   const friendChat = useRef<any>(null);
   //  메뉴 -> 친구 클릭 -> 챗팅
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck
   })
-  
-  
+
   // 채팅구역
   const chatArea = useRef<any>(null)
   // 해당 구역 가장 아래위치 체크후 해당 위치가 default 되도록 하기
@@ -27,109 +25,44 @@ function FriendChat():JSX.Element {
     }
   },[menuFriendChatClickCheck])
 
+  
+  
+  
+
+  
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
   console.log(chat_id);
   
-
-  const client = useRef({})as any ;
-  // const [chatMessages, setChatMessages] = useState([]);
-  const [chat, setChat] = useState('');
   const [message, setMessage] = useState(data);
 
-  useEffect(()=> {
-    console.log(message)
-    console.log(chat)
-  })
-
-  useEffect(() => {
-    connect();
-
-    return () => disconnect();
-  }, []);
-
-
   
 
-  const connect:any = () => {
-    const client = new StompJs.Client({
-      brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
-      webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
-      debug: function (str) {
-          console.log(str);
-      },
-      onConnect:() => { 
-        console.log("onConnect");
-        client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-          setMessage([...message, newMessage.body])
-          console.log("#############3333"+ message);
-          //showGreeting(JSON.parse(message.body))
-        });
-      },
-      reconnectDelay: 5000, //자동 재 연결
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-      client.activate();
-      console.log(client.connected)
-    }
+  const connect = () => {
+  const client = new StompJs.Client({
+    brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
+    webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
+    debug: function (str) {
+        console.log(str);
+    },
+    onConnect:() => { 
+      console.log("onConnect");
+      client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
+        setMessage([...message, newMessage.body])
+        console.log("#############3333"+ message);
+        //showGreeting(JSON.parse(message.body))
+      });
+    },
+    reconnectDelay: 5000, //자동 재 연결
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
+  });
+    client.activate();
+    console.log(client.connected)
+  }
 
-  
-  const disconnect = () => {
-    client.deactivate();
-  };
-
-
-  const publish = (message:any) => {
-    if (!client.current.connected) {
-      return;
-    }
-
-    client.current.publish({
-      destination: "/pub/chat",
-      body: JSON.stringify({ roomSeq: chat_id, message }),
-    });
-
-    setMessage("");
-  };
-
-
-
-
-
-
-
-
-
-  // const [message, setMessage] = useState(data);
-
-  
-
-  // const connect = () => {
-  // const client = new StompJs.Client({
-  //   brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
-  //   webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
-  //   debug: function (str) {
-  //       console.log(str);
-  //   },
-  //   onConnect:() => { 
-  //     console.log("onConnect");
-  //     client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-  //       setMessage([...message, newMessage.body])
-  //       console.log("#############3333"+ message);
-  //       //showGreeting(JSON.parse(message.body))
-  //     });
-  //   },
-  //   reconnectDelay: 5000, //자동 재 연결
-  //   heartbeatIncoming: 4000,
-  //   heartbeatOutgoing: 4000,
-  // });
-  //   client.activate();
-  //   console.log(client.connected)
-  // }
-
-  // connect();
+  connect();
 
   function MyChat({content}:any):JSX.Element {
     return (
@@ -173,7 +106,7 @@ function FriendChat():JSX.Element {
             <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}>{nickname}</div>
             {/* 채팅 공간 */}
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
-              {/* {
+              {
                 
                 data&&data.map((chat:any)=>{
                   return (
@@ -184,26 +117,13 @@ function FriendChat():JSX.Element {
                     </div>
                   )
                 })
-              } */}
-
-
-              {/* 소켓통신 메시지 */}
-              {
-                <ul>
-                  {message&&message.map((_chatMessage:any, index:any) => (
-                    <li key={index}>{_chatMessage.message}</li>))}
-                </ul>
               }
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
-              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' 
-              type={"text"}
-              value={message}
-              onChange={(e) => setChat(e.target.value)}
-              onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
+              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' type="text" />
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
-                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=> {publish(message)}}/>
+                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt=""/>
               </div>
             </div>
       </div>
