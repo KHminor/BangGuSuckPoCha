@@ -144,7 +144,7 @@ public class AdminServiceImpl implements AdminService {
         Report report = reportRepository.findByReportId(reportId);
         User attacker = report.getAttackerId();
         attacker.setReport_point(attacker.getReport_point()+requestDto.getDemerit());
-        report.adminReportUpdate();
+        report.adminReportUpdate(requestDto.getDemerit());
     }
     @Override
     public void adminYscInsert(YscRequestDto requestDto) {
