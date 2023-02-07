@@ -3,10 +3,14 @@ import { useAppDispatch } from "../../store/hooks";
 import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
-const PublicModal = ({ Data }: { Data: string }) => {
+const PublicModal = ({ data }: { data: object }) => {
   let dispatch = useAppDispatch();
-  const message = Data;
   const bgDiv = useRef<HTMLDivElement>(null);
+  const message = data;
+  // 메시지 구분하기
+  // switch (data.type)
+  console.log('dddatat',data)
+
 
   // 배경 클릭시 모달 끄는 함수
   const BgCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {

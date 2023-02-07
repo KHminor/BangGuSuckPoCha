@@ -1,3 +1,4 @@
+import { log } from "console";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -6,8 +7,10 @@ function RoomList(): React.ReactElement {
   const navigate = useNavigate();
 
   const roomtemp: any = useAppSelector((state: any) => {
-    return state.adminRoom;
+    console.log("만들어진방",state.mainCreateRoomList);
+    return state.mainCreateRoomList;
   });
+  // useEffect();
 
   return (
     <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-9 gap-5">
@@ -31,7 +34,7 @@ function RoomList(): React.ReactElement {
               </tr>
             </thead>
             <tbody>
-              {roomtemp.map(function (a: any, i: number) {
+              {roomtemp.map(function (a: any, i: number) {                
                 return (
                   <tr>
                     <td className="w-[7%]">{roomtemp[i].num}</td>

@@ -41,7 +41,7 @@ const RoomUserFriendModal = ({ userData }: { userData: any }) => {
 
   return (
     <div
-      className="bg-slate-800 bg-opacity-50 flex justify-center z-10 items-center absolute top-0 right-0 bottom-0 left-0"
+      className="bg-slate-800 bg-opacity-50 flex justify-center z-20 items-center absolute top-0 right-0 bottom-0 left-0"
     >
       <div className="bg-black px-16 pt-14 pb-7 rounded-md text-center">
         <div className="text-xl mb-4 font-bold text-white">

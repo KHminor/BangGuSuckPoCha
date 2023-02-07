@@ -1,0 +1,27 @@
+.hideScroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+.nickNameNeon {
+  transition: all 0.5s;
+  color: white;
+  text-shadow: 0 0 3px #FC5E01,
+              0 0 5px #EF6003;
+}
+
+.nickNameNeon:hover {
+  color: #e19a6a;
+  text-shadow: 0 0 3px #FC5E01,
+              0 0 5px #EF6003;
+}
+
+.reviewpage{
+  transition: all 0.5s;
+}
+
+.reviewpage:hover {
+  color: rgb(247, 195, 239);
+  text-shadow: 0 0 3px #b85188,
+              0 0 7px #FF3E84;
+}
+
