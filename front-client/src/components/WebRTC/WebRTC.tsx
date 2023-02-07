@@ -5,11 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showRoomUserProfile } from "../../store/store";
+import { isRtcLoading, showPublicModal, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
-const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function }) => {
+const WebRTC = ({
+  pochaId,
+  propSocket,
+}: {
+  pochaId: string;
+  propSocket: Function;
+}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // webRTC관련
@@ -26,6 +32,10 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   const [optionList, setOptionList] = useState<any[]>([]);
   // 사람수 체크 리스트(카메라 생성용);
   // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
+  // 짠 카운트
+  const [count, setCount] = useState<string>("");
+  // 정보 변경 업데이트용 변수
+  const [updateCheck, setUpdateCheck] = useState<boolean>(false);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -61,10 +71,10 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
-    console.log(pochaId)
+    console.log(pochaId);
     try {
       const {
-        data: { data }
+        data: { data },
       } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
       });
@@ -73,7 +83,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
       // setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
-    } catch(error) {
+    } catch (error) {
       console.log("포차 참여유저 데이터 axios error", error);
     }
   }
@@ -84,7 +94,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   let cameraOff = false;
   // let userCount = 1;
 
-  // 최초실행 
+  // 최초실행
   useEffect(() => {
     propSocket(socket);
     getUsersProfile();
@@ -430,7 +440,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
         pochaInfo = result.data.data;
       });
       console.log(pochaInfo);
-    } catch(error) {
+    } catch (error) {
       console.log("방설정 다시불러오기 error", error);
     }
   }
@@ -446,24 +456,44 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   // 포차 설정 변경! : 방 설정 다시 불러오기.
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
+    setUpdateCheck((prev) => !prev);
+    toast.success("포차 정보가 변경되었습니다");
     // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
+    // await pocha_config_update("3");
   });
 
   // 포차 시간 연장! : 방 설정 다시 불러오기.
   socket.on("pocha_extension", async () => {
     console.log("포차 시간 연장!----------------------");
     // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
+    // await pocha_config_update("3");
   });
 
-  // // 포차 짠! 기능 : 방 설정 다시 불러오기.
-  // socket.on("pocha_cheers", async () => {
-  //   console.log("포차 짠!!!!!----------------------");
-  //   // 방 설정 다시 불러오기!!! 테스트
-  //   // await pocha_config_update("3");
-  // });
 
+  // 포차 짠 함수
+  const jjan = () => {
+    let time: number = 3;
+    setCount(String(time));
+    const interval = setInterval(() => {
+      time -= 1;
+      setCount(String(time));
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+      setCount("짠!!!!");
+    }, 3900);
+    setTimeout(() => {
+      setCount("");
+      dispatch(showPublicModal(false));
+    }, 5000);
+  };
+  // 포차 짠! 기능 : 방 설정 다시 불러오기.
+  socket.on("pocha_cheers", async () => {
+    console.log("포차 짠!!!!!------------ㅇ----------");
+    jjan();
+    // 방 설정 다시 불러오기!!! 테스트
+    // await pocha_config_update("3");
+  });
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -559,8 +589,16 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
           {isRoomUserProfile && userProfileData && (
             <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
           )}
+          {count && (
+            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
+              <div className="text-7xl font-bold text-white">{count}</div>
+            </div>
+          )}
           <div className="text-white">
-            <span className="font-bold text-3xl fixed left-0 right-0 top-10" ref={ssulTitle}>{`:: ${ssul} ::`}</span>
+            <span
+              className="font-bold text-3xl fixed left-0 right-0 top-10"
+              ref={ssulTitle}
+            >{`:: ${ssul} ::`}</span>
             <div className="flex flex-wrap justify-evenly items-center p-24">
               {/* 내 비디오 공간 */}
               <video
