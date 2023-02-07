@@ -3,20 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 // test지워도됨
-export type UserInfo = {
-  nickname: string;
-  age: number;
-  yymmdd: number;
-  birthday: string;
-  region: string;
-  manner: number;
-  report: number;
-  demerit: number;
-  age_group: string;
-  left_report: number;
-  ban: boolean;
-  admin: boolean;
-};
 
 function UserDetail() {
   return <div></div>;
@@ -24,7 +10,7 @@ function UserDetail() {
 let isDetail = false;
 
 function UserSelect(userList: any) {
-  console.log(userList);
+  console.log("test", userList);
   // console.log(usertemp);
   return (
     <div className="row-span-6 w-full overflow-x-auto  max-h-[26.3rem]">
@@ -38,19 +24,21 @@ function UserSelect(userList: any) {
           </tr>
         </thead>
         <tbody>
-          {userList.map((it: any) => {
-            {
-              console.log(it.age);
-            }
-            <tr className="h-10">
-              <td className="border border-slate-300  " onClick={() => {}}>
-                {it.nickname}
-              </td>
-              <td className="border border-slate-300  ">{it.age}</td>
-              <td className="border border-slate-300  ">{it.demerit}</td>
-              <td className="border border-slate-300  ">❌Delete</td>
-            </tr>;
-          })}
+          {userList
+            ? userList.map((it: any) => {
+                {
+                  console.log(userList);
+                }
+                <tr className="h-10">
+                  <td className="border border-slate-300  " onClick={() => {}}>
+                    {it.nickname}
+                  </td>
+                  <td className="border border-slate-300  ">{it.age}</td>
+                  <td className="border border-slate-300  ">{it.demerit}</td>
+                  <td className="border border-slate-300  ">❌Delete</td>
+                </tr>;
+              })
+            : null}
         </tbody>
       </table>
     </div>

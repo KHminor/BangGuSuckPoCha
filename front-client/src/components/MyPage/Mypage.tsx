@@ -9,7 +9,7 @@ import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 import regionList from "./regionList";
-import regionOneList from "./regionOneList";
+// import regionOneList from "./regionOneList";
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
