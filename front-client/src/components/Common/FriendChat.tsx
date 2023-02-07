@@ -25,20 +25,19 @@ function FriendChat():JSX.Element {
     }
   },[menuFriendChatClickCheck])
 
-
   
-  useEffect(() => {
-    connect();
-    
-  }, []);
+  
+  
 
   
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
+  console.log(chat_id);
   
   const [message, setMessage] = useState(data);
 
+  
 
   const connect = () => {
   const client = new StompJs.Client({
@@ -63,7 +62,7 @@ function FriendChat():JSX.Element {
     console.log(client.connected)
   }
 
-
+  connect();
 
   function MyChat({content}:any):JSX.Element {
     return (
