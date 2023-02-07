@@ -207,7 +207,7 @@ function FriendChat():JSX.Element {
               type={"text"}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e:any) => publish(message)}/>
+              onKeyDown={(e:any) => e.key === 13 && publish(message)}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={() => publish(message)}/>
               </div>
