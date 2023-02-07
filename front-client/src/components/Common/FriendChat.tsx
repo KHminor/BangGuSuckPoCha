@@ -46,27 +46,27 @@ function FriendChat():JSX.Element {
   
 
   const connect = () => {
-  const client:any = new StompJs.Client({
-    brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
-    webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
-    debug: function (str) {
-        console.log(str);
-    },
-    onConnect:() => { 
-      console.log("onConnect");
-      client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-        setMessage([...message, newMessage.body])
-        console.log("#############3333"+ message);
-        //showGreeting(JSON.parse(message.body))
-      });
-    },
-    reconnectDelay: 5000, //자동 재 연결
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
-  });
-    client.activate();
-    console.log(client.connected)
-  }
+    client.current = new StompJs.Client({
+      brokerURL: 'ws://i8e201.p.ssafy.io/api/ws/chat', // 왜 websocket을 붙여줘야하는거지..?
+      webSocketFactory: () => new SockJS("https://i8e201.p.ssafy.io/api/ws/chat"),
+      debug: function (str) {
+          console.log(str);
+      },
+      onConnect:() => { 
+        console.log("onConnect");
+        client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
+          setMessage([...message, newMessage.body])
+          console.log("#############3333"+ message);
+          //showGreeting(JSON.parse(message.body))
+        });
+      },
+      reconnectDelay: 5000, //자동 재 연결
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+      client.current.activate();
+      console.log(client.current.connected)
+    }
 
 
   const disconnect = () => {
