@@ -12,10 +12,11 @@ import WebRTC from "../WebRTC/WebRTC";
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
+  const [ socket, setSocket ] = useState(null);
 
-  // const username = "DnXrE8Ea860Euv_LONqQyz4pnK86XrDd0YinVdBAaeA";
-
-
+  const propSocket = (socket : any) => {
+    setSocket(socket);
+  }
 
   useEffect(() => {
     // getUsersProfile();
@@ -25,10 +26,10 @@ function StoryRoom(): JSX.Element {
     <div className={`w-screen min-h-screen ${styles.gameroomimg} bg-scroll`}>
       {/* 화면 및 게임 공간 */}
       <div className="h-[90%]">
-        <WebRTC pochaId={PochaId!} />
+        <WebRTC pochaId={PochaId!} propSocket={propSocket}/>
       </div>
       <div className="fixed -bottom-2 left-0 right-0">
-        <RoomFooterNav pochaId={PochaId!} />
+        {socket && <RoomFooterNav pochaId={PochaId!} socket={socket} />}
       </div>
     </div>
   );

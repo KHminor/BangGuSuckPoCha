@@ -24,6 +24,10 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
     }
   };
 
+  // 나의 아이디 값
+  const myId = localStorage.getItem("Username");
+  
+
   // 신고하는 함수
   const reportUser = async (event: any) => {
     event.preventDefault();
@@ -36,7 +40,7 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
           attackerId: username,
           reportReason: reportReason,
           reportType: reportType,
-          reporterId: 0,
+          reporterId: myId,
         },
       });
       toast.success(`${nickname}을 신고하였습니다`)

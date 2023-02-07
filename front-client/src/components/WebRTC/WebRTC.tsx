@@ -9,7 +9,7 @@ import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
-const WebRTC = ({ pochaId }: { pochaId: string }) => {
+const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // webRTC관련
@@ -84,8 +84,9 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   let cameraOff = false;
   // let userCount = 1;
 
-  // 최초실행 <<---------- 여기부터 해봐야함
+  // 최초실행 
   useEffect(() => {
+    propSocket(socket);
     getUsersProfile();
   }, []);
 
@@ -439,7 +440,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     console.log("썰 변경!----------------------");
     setSsul(ssul);
     // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
+    // await pocha_config_update("3");
   });
 
   // 포차 설정 변경! : 방 설정 다시 불러오기.
@@ -456,12 +457,13 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     await pocha_config_update("3");
   });
 
-  // 포차 짠! 기능 : 방 설정 다시 불러오기.
-  socket.on("pocha_cheers", async () => {
-    console.log("포차 짠!!!!!----------------------");
-    // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
-  });
+  // // 포차 짠! 기능 : 방 설정 다시 불러오기.
+  // socket.on("pocha_cheers", async () => {
+  //   console.log("포차 짠!!!!!----------------------");
+  //   // 방 설정 다시 불러오기!!! 테스트
+  //   // await pocha_config_update("3");
+  // });
+
 
   // ------------- RTC Code --------------
   function makeConnection() {
