@@ -25,11 +25,7 @@ function FriendChat():JSX.Element {
     }
   },[menuFriendChatClickCheck])
 
-  
-  
-  
 
-  
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
@@ -108,7 +104,7 @@ function FriendChat():JSX.Element {
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
                 
-                data&&data.map((chat:any)=>{
+                message&&message.map((chat:any)=>{
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
