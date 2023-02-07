@@ -2,20 +2,18 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import PublicModal from "./PublicModal";
 
 function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
   const socket = io("https://pocha.online");
   const navigate = useNavigate();
   // 룸 이름
   const roomName = pochaId;
-  // 썰 관련
-  // const ssulTitle = useRef<HTMLDivElement>(null);
-  // const ssulBtn = useRef<HTMLDivElement>(null);
-  // // 포차관련
-  // const pochaChangeBtn = useRef<HTMLDivElement>(null);
-  // const pochaExtensionBtn = useRef<HTMLDivElement>(null);
-  // const pochaCheersBtn = useRef<HTMLDivElement>(null);
-  // const pochaExitBtn = useRef<HTMLDivElement>(null);
+  // 나가기 관련
+  const modalData = {
+    type: "exit",
+    msg: "방에서 나가시겠습니까?",
+  };
 
   // 현재 시간 관련
   const [currentDate, setCurrentDate] = useState();
@@ -89,86 +87,89 @@ function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
   }
 
   return (
-    <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
-      <div></div>
-      <div
-        className="grid w-full"
-        style={{ gridTemplateColumns: "0.6fr 8fr 0.6fr" }}
-      >
+    <>
+      <PublicModal data={modalData} />
+      <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
         <div></div>
-        <div className="grid" style={{ gridTemplateRows: "0.2fr 0.8fr" }}>
+        <div
+          className="grid w-full"
+          style={{ gridTemplateColumns: "0.6fr 8fr 0.6fr" }}
+        >
           <div></div>
-          <div
-            className="grid  text-white"
-            style={{
-              gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 1fr",
-              border: "solid 2px white",
-              borderBottom: "solid 0px",
-              borderTopLeftRadius: "10px",
-              borderTopRightRadius: "10px",
-            }}
-          >
-            <div className="flex justify-center items-center text-[2rem] ">
-              {currentDate}
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                onClick={handlePochaExtension}
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/time.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">시간추가</span>
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                onClick={handlePochaCheers}
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/cheers.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">짠</span>
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/add-user.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">친구초대</span>
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                onClick={handleSsulClick}
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/communication.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">썰</span>
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/exclamation-mark.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">포차정보</span>
-            </div>
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                onClick={handlePochaExit}
-                className="h-[2.2rem] py-auto"
-                src={require("src/assets/roomIcon/cancel.png")}
-                alt=""
-              />
-              <span className="text-[0.7rem]">나가기</span>
+          <div className="grid" style={{ gridTemplateRows: "0.2fr 0.8fr" }}>
+            <div></div>
+            <div
+              className="grid  text-white p-2"
+              style={{
+                gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 1fr",
+                border: "solid 2px white",
+                borderBottom: "solid 0px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+              }}
+            >
+              <div className="flex justify-center items-center text-[2rem] ">
+                {currentDate}
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  onClick={handlePochaExtension}
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/time.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">시간추가</span>
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  onClick={handlePochaCheers}
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/cheers.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">짠</span>
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/add-user.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">친구초대</span>
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  onClick={handleSsulClick}
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/communication.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">썰</span>
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/exclamation-mark.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">포차정보</span>
+              </div>
+              <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+                <img
+                  onClick={handlePochaExit}
+                  className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                  src={require("src/assets/roomIcon/cancel.png")}
+                  alt=""
+                />
+                <span className="text-[0.8rem] mt-1">나가기</span>
+              </div>
             </div>
           </div>
+          <div></div>
         </div>
         <div></div>
       </div>
-      <div></div>
-    </div>
+    </>
   );
 }
 export default RoomFooterNav;

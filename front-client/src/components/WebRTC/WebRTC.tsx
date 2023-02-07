@@ -559,7 +559,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
           )}
           <div className="text-white">
             <span className="font-bold text-3xl fixed left-0 right-0 top-10" ref={ssulTitle}>{`:: ${ssul} ::`}</span>
-            <div className="flex flex-wrap justify-evenly items-center p-28">
+            <div className="flex flex-wrap justify-evenly items-center p-24">
               {/* 내 비디오 공간 */}
               <video
                 className="w-[30rem] h-80 py-3"

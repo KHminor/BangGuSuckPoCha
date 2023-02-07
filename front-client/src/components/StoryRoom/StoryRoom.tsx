@@ -27,7 +27,7 @@ function StoryRoom(): JSX.Element {
       <div className="h-[90%]">
         <WebRTC pochaId={PochaId!} />
       </div>
-      <div className="relative bottom-0 left-0 right-0">
+      <div className="fixed -bottom-2 left-0 right-0">
         <RoomFooterNav pochaId={PochaId!} />
       </div>
     </div>
