@@ -10,9 +10,9 @@ import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
 import RoomUserReportModal from "./RoomUserReportModal";
 
-const RoomUserProfile = ({ userData }: { userData: any }) => {
+const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string }) => {
   let dispatch = useAppDispatch();
-  let { manner, gender, birth, region } = userData.data;
+  let { manner, gender, birth, region, comment } = userData.data;
   const { nickname } = userData.data;
   // 백그라운드 div
   const bgDiv = useRef<any>();
@@ -110,15 +110,15 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
       {roomAddFriendModalCheck ? (
         <RoomUserFriendModal userData={userData} />
       ) : null}
-      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} /> : null}
+      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} pochaId={pochaId} /> : null}
       {RoomUserReportClickCheck ? <RoomUserReportModal userData={userData} /> : null}
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}
-        className={`z-50 bg-slate-800 bg-opacity-50 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
+        className={`z-10 bg-slate-800 bg-opacity-50 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
       >
         <div
-          className={`min-w-[24rem] bg-black px-10 pt-10 pb-5 rounded-3xl overflow-y-auto`}
+          className={`min-w-[24rem] bg-black px-10 pt-10 pb-5 rounded-3xl `}
         >
           <div className={`w-full h-24 flex justify-center items-center`}>
             <img
@@ -131,7 +131,7 @@ const RoomUserProfile = ({ userData }: { userData: any }) => {
             <div>{nickname}</div>
           </div>
           <div className={`w-full h-10 text-lg`}>
-            #ISFP #자바칩모카 #스파이패밀리
+            {comment}
           </div>
           <div className={`flex h-32 my-12 justify-evenly`}>
             {userInfosData.map((info, index) => {

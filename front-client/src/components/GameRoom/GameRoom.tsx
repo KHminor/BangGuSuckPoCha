@@ -48,7 +48,7 @@ function GameRoom(): JSX.Element {
         </div>
       </div>
       {/* footerNav */}
-      <RoomFooterNav />
+      {/* <RoomFooterNav pochaId={pochaId!}/> */}
     </div>
   );
 }
