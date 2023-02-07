@@ -25,7 +25,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   // 옵션 태그 리스트
   const [optionList, setOptionList] = useState<any[]>([]);
   // 사람수 체크 리스트(카메라 생성용);
-  const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
+  // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -61,13 +61,21 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
-    const { data } = await axios({
-      url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
-    });
-    console.log("참여 유저들 데이터?", data);
-    // setPochaUsers(data);
-    dispatch(isRtcLoading(false));
-    return data;
+    console.log(pochaId)
+    try {
+      const {
+        data: { data }
+      } = await axios({
+        url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
+      });
+      const lastIndex = data.length - 1;
+      console.log("참여 유저들 데이터?", data);
+      // setPochaUsers(data);
+      dispatch(isRtcLoading(false));
+      handleWelcomeSubmit(data[lastIndex]);
+    } catch(error) {
+      console.log("포차 참여유저 데이터 axios error", error);
+    }
   }
 
   // 카메라 뮤트
@@ -78,9 +86,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   // 최초실행 <<---------- 여기부터 해봐야함
   useEffect(() => {
-    const userData = getUsersProfile();
-    console.log("유우우$$$?",userData);
-    handleWelcomeSubmit(userData);
+    getUsersProfile();
   }, []);
 
   const getCameras = async () => {
@@ -208,15 +214,15 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
 
   // }
 
-  async function handleWelcomeSubmit(userData : any) {
+  async function handleWelcomeSubmit(userData: any) {
     // event : React.FormEvent<HTMLFormElement>
     // event.preventDefault();
     await getMedia();
-    console.log('@@@@@@@@@@@@@@@@',userData)
+    console.log("@@@@@@@@@@@@@@@@", userData);
     socket.emit("join_room", {
       roomName,
-      username: "NUEoAaUktTEixFvA25NzirH--LwR1eVDIsPnOAysvD8",
-      nickname: "남규짱짱맨",
+      username: userData.username,
+      nickname: userData.nickname,
     });
     // roomName = welcomeInput.current?.value;
     // welcomeInput.current!.value = "";
@@ -240,10 +246,8 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // await pocha_config_update(3);
   });
 
-
   socket.on("welcome", async (socketId, user) => {
     let myPeer = makeConnection();
-
 
     myPeerConnections.current[socketId] = {
       peer: myPeer,
@@ -271,8 +275,8 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     console.log("sent the offer");
 
     socket.emit("offer", offer, socketId, roomName, {
-      username: "유저네임",
-      nickname: "유저닉네임",
+      username: user.username,
+      nickname: user.nickname,
     });
   });
 
@@ -320,7 +324,7 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
   socket.on("user_exit", ({ id }) => {
     delete myPeerConnections.current[id];
     // 사람수 - 2 해야 마지막인덱스값
-    const lastIndex = userCount.current - 2;
+    // const lastIndex = userCount.current - 2;
     // const lastIndex = userCount - 2
     // peerFace.current[lastIndex].classList.toggle("hidden");
 
@@ -405,7 +409,61 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     // location.href = "http://localhost:3000";
   });
 
-  // ------ RTC Code ------
+  // ------------ 포차 기능 code --------------
+  const ssulTitle = useRef<HTMLDivElement>(null);
+  const [ssul, setSsul] = useState<string>("");
+
+  //  axios
+  const api = axios.create({
+    baseURL: "https://i8e201.p.ssafy.io/api",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+
+  async function pocha_config_update(pochaId: string) {
+    // 방 설정 다시 불러오기!!! 테스트
+    let pochaInfo = {};
+    try {
+      await api.get(`/pocha/${pochaId}`).then((result) => {
+        pochaInfo = result.data.data;
+      });
+      console.log(pochaInfo);
+    } catch(error) {
+      console.log("방설정 다시불러오기 error", error);
+    }
+  }
+
+  // 썰 변경! : 방 설정 다시 불러오기.
+  socket.on("ssul_change", async (ssul) => {
+    console.log("썰 변경!----------------------");
+    setSsul(ssul);
+    // 방 설정 다시 불러오기!!! 테스트
+    await pocha_config_update("3");
+  });
+
+  // 포차 설정 변경! : 방 설정 다시 불러오기.
+  socket.on("pocha_change", async () => {
+    console.log("포차 설정 변경!----------------------");
+    // 방 설정 다시 불러오기!!! 테스트
+    await pocha_config_update("3");
+  });
+
+  // 포차 시간 연장! : 방 설정 다시 불러오기.
+  socket.on("pocha_extension", async () => {
+    console.log("포차 시간 연장!----------------------");
+    // 방 설정 다시 불러오기!!! 테스트
+    await pocha_config_update("3");
+  });
+
+  // 포차 짠! 기능 : 방 설정 다시 불러오기.
+  socket.on("pocha_cheers", async () => {
+    console.log("포차 짠!!!!!----------------------");
+    // 방 설정 다시 불러오기!!! 테스트
+    await pocha_config_update("3");
+  });
+
+  // ------------- RTC Code --------------
   function makeConnection() {
     let myPeerConnection = new RTCPeerConnection({
       iceServers: [
@@ -487,7 +545,6 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
     setUserProfileData(data);
     // dispatch(isRtcLoading(false));
     // console.log("오냐??????", (event.target as any).value);
-
     dispatch(showRoomUserProfile());
   };
 
@@ -497,9 +554,12 @@ const WebRTC = ({ pochaId }: { pochaId: string }) => {
         <Loading />
       ) : (
         <>
-          {isRoomUserProfile && <RoomUserProfile userData={userProfileData} />}
+          {isRoomUserProfile && userProfileData && (
+            <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
+          )}
           <div className="text-white">
-            <div className="flex flex-wrap justify-evenly items-center p-28">
+            <span className="font-bold text-3xl fixed left-0 right-0 top-10" ref={ssulTitle}>{`:: ${ssul} ::`}</span>
+            <div className="flex flex-wrap justify-evenly items-center p-24">
               {/* 내 비디오 공간 */}
               <video
                 className="w-[30rem] h-80 py-3"
