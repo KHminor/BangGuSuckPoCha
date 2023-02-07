@@ -71,7 +71,7 @@ function FriendChat():JSX.Element {
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
-          setMessage((_chat_list:any)=> [...message, ..._chat_list, msg])
+          setMessage((_chat_list:any)=> [..._chat_list, msg])
           
           //showGreeting(JSON.parse(message.body))
         });
