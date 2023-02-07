@@ -11,7 +11,7 @@ function FriendChat():JSX.Element {
   // 채팅구역
   const chatArea = useRef<any>(null)
   // 해당 구역 가장 아래위치 체크후 해당 위치가 default 되도록 하기
-  console.log('채팅구역: ',chatArea&&chatArea.current?.scrollHeight) 
+  // console.log('채팅구역: ',chatArea&&chatArea.current?.scrollHeight) 
   
   useEffect(()=> {
     if (menuFriendChatClickCheck) {
