@@ -44,6 +44,11 @@ function FriendChat():JSX.Element {
     return () => disconnect();
   }, []);
 
+  useEffect(()=> {
+    console.log('채팅 목록: ',chatMessages)
+    console.log('이건 입력한 메시지: ',message)
+  })
+
   // 소켓 연결
   const connect = () => {
     client.current = new StompJs.Client({
