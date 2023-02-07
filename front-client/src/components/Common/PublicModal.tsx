@@ -3,13 +3,13 @@ import { useAppDispatch } from "../../store/hooks";
 import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
-const PublicModal = ({ data }: { data: object }) => {
+const PublicModal = ({ data }: { data: any }) => {
   let dispatch = useAppDispatch();
   const bgDiv = useRef<HTMLDivElement>(null);
   const message = data;
   // 메시지 구분하기
   // switch (data.type)
-  console.log('dddatat',data)
+  
 
 
   // 배경 클릭시 모달 끄는 함수
