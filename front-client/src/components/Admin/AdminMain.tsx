@@ -2,11 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { changeUserList } from "src/store/store";
+import {
+  changeMainCreateRoomList,
+  changeSelectDetailUser,
+  changeUserList,
+} from "src/store/store";
 // test지워도됨
 function AdminMain(): React.ReactElement {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   return (
     <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
       <div>
@@ -25,6 +30,7 @@ function AdminMain(): React.ReactElement {
               }).then((r) => {
                 console.log(r.data.data);
                 dispatch(changeUserList(r.data.data));
+                dispatch(changeSelectDetailUser(false));
               });
               navigate("/userList");
             }}
@@ -34,6 +40,13 @@ function AdminMain(): React.ReactElement {
           <div
             className="cursor-pointer "
             onClick={() => {
+              axios({
+                method: "get",
+                url: "https://i8e201.p.ssafy.io/api/admin/pocha",
+              }).then((r) => {
+                console.log(r.data.data);
+                dispatch(changeMainCreateRoomList(r.data.data));
+              });
               navigate("/roomlist");
             }}
           >
@@ -42,7 +55,13 @@ function AdminMain(): React.ReactElement {
           <div
             className="cursor-pointer "
             onClick={() => {
-              navigate("/userreport");
+              axios({
+                method: "get",
+                url: "https://i8e201.p.ssafy.io/api/admin/report",
+              }).then((r) => {
+                console.log(r.data);
+              });
+              // navigate("/userreport");
             }}
           >
             report list

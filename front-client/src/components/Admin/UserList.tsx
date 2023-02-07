@@ -108,6 +108,9 @@ function UserList() {
     // console.log(state.UserList);
     return state.UserList;
   });
+  const isSelect: any = useAppSelector((state: any) => {
+    return state.SelectDetailUser;
+  });
   useEffect(() => {
     axios({
       method: "get",
@@ -127,7 +130,7 @@ function UserList() {
         <div className="text-8xl">AdminPage</div>
         <div className="w-full row-span-3 border-2 border-white grid grid-cols-2 overflow-auto">
           {userList ? <UserSelect /> : null}
-          {true ? <UserDetail /> : null}
+          {isSelect === true ? <UserDetail /> : null}
         </div>
         <div className="grid grid-cols-4">
           <div
