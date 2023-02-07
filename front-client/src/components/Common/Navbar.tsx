@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 function Navbar(): JSX.Element {
   return (
-    <div className="h-full min-w-[75rem]" >
+    <div className="h-[11rem] min-w-[75rem] fixed w-full" >
       <div className="flex justify-center bg-black h-full" >
         <div style={{ width: "34%" }}></div>
         <img
