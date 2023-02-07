@@ -53,7 +53,10 @@ const MainCreateRoom = ({
     "기타",
   ];
   // 5개 제한 태그 관련
-  const msg = "태그는 5개까지 선택 가능합니다";
+  const modalData = {
+    type: "tag",
+    msg: "태그는 5개까지만 선택가능합니다",
+  };
   const showModal = useAppSelector((state) => {
     return state.PublicModal;
   });
@@ -122,12 +125,12 @@ const MainCreateRoom = ({
     <>
       {roomTheme === 1 ? (
         <>
-          {showModal && <PublicModal Data={msg} />}
+          {showModal && <PublicModal data={modalData} />}
           <div
             className={`bg-black bg-opacity-90 overflow-y-auto fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >
             <div
-              className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl `}
+              className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl absolute top-20`}
             >
               <div
                 className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}

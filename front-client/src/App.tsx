@@ -36,7 +36,7 @@ function App() {
               return "💙"
             case "info":
               return "🗨"
-          } 
+          }
         }
         }
         progressStyle={
@@ -47,7 +47,7 @@ function App() {
         style={
           {
             fontSize : "1rem",
-            minWidth: "fit-content",  
+          minWidth: "fit-content",
           }
         }
       />
