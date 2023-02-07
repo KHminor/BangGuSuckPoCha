@@ -12,6 +12,7 @@
 }
 
 .nickNameNeon {
+  transition: all 0.5s;
   color: white;
   text-shadow: 0 0 3px #FC5E01,
               0 0 5px #EF6003;
@@ -24,6 +25,7 @@
 }
 
 .menuFriendNeon {
+  transition: all 0.5s;
   color: white;
   text-shadow: 0 0 1px #FC5E01,
               0 0 3px #EF6003;
@@ -37,6 +39,7 @@
 
 
 .sentenceNeon {
+  transition: all 0.5s;
   color: white;
   text-shadow: 0 0 1px #ffee5698,
               0 0 2px #f7ed368a;
@@ -44,6 +47,7 @@
 
 
 .createBtn {
+  transition: all 0.5s;
   text-shadow: 0 0 5px rgba(0, 26, 255, 0.5),
               0 0 15px rgba(0, 26, 255, 0.5);
 
