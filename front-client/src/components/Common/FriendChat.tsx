@@ -43,13 +43,15 @@ function FriendChat():JSX.Element {
   //     afterChat.push(e.content)
   //   })
   // }
+
+  console.log('기존채팅 데이터: ', data)
   const [message, setMessage] = useState<any>([]);
 
   useEffect(() => {
     connect();
 
     return () => disconnect();
-  }, [message]);
+  }, []);
   
   useEffect(()=> {
     console.log('현재 메세지 값: ', message)
@@ -74,7 +76,7 @@ function FriendChat():JSX.Element {
           //showGreeting(JSON.parse(message.body))
         });
       },
-      reconnectDelay: 5000, //자동 재 연결
+      reconnectDelay: 1000, //자동 재 연결
       heartbeatIncoming: 1000,
       heartbeatOutgoing: 1000,
     });
