@@ -77,7 +77,7 @@ const MainCreateRoom = ({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
-      dispatch(showPublicModal());
+      dispatch(showPublicModal(true));
       return;
     }
     if (choiceTagList.includes(index)) {
@@ -199,6 +199,8 @@ const MainCreateRoom = ({
                       }).then((r) => {
                         console.log(r.data);
                         navigate(`/storyroom/${PochaId}`);
+                        // 방 만들기 창 종료
+                        dispatch(changeThemeRoomState(0)); 
                       });
                     });
                   }}
