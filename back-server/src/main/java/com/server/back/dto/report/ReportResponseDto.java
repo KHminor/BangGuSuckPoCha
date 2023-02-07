@@ -15,14 +15,20 @@ import java.time.LocalDateTime;
 @Data
 @ApiModel(value = "ReportResponseDto")
 public class ReportResponseDto {
+    private Long reportId;
     private Long reporterId;
+    private String repoterName;
     private Long attackerId;
+    private String attackerName;
     private Integer reportType;
     private String reportReason;
     private LocalDateTime report_at;
     public ReportResponseDto(Report r){
+        this.reportId = r.getReportId();
         this.reporterId = r.getReportId();
+        this.repoterName = r.getRepoterId().getUsername();
         this.attackerId = r.getAttackerId().getUserId();
+        this.attackerName = r.getAttackerId().getUsername();
         this.reportType = r.getReportType();
         this.reportReason = r.getReportReason();
         this.report_at = LocalDateTime.now();
