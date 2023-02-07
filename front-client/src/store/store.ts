@@ -1,5 +1,6 @@
 // createSlice: store state 생성 (name: state 변수 이름, initialState: 초기 데이터, reducers: state 변경 함수)
 import { createSlice, configureStore, PayloadAction } from "@reduxjs/toolkit";
+import exp from "constants";
 import { create } from "domain";
 
 /*
@@ -17,13 +18,42 @@ const menuClickCheck = createSlice({
   },
 });
 
-//유저이름 
+//유저이름
 const userName = createSlice({
   name: "userName",
   initialState: "",
   reducers: {
     changeUserName(state, action) {
-      return state = action.payload
+      return (state = action.payload);
+    },
+  },
+});
+//모든유저데이터
+const UserList = createSlice({
+  name: "userList",
+  initialState: "",
+  reducers: {
+    changeUserList(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+//선택한유저데이터
+const DetailUser = createSlice({
+  name: "detailUser",
+  initialState: "",
+  reducers: {
+    changeDetailUser(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+const SelectDetailUser = createSlice({
+  name: "selectDetailUser",
+  initialState: false,
+  reducers: {
+    changeSelectDetailUser(state, action) {
+      return (state = action.payload);
     },
   },
 });
@@ -34,12 +64,10 @@ const myPageCheck = createSlice({
   initialState: false,
   reducers: {
     changeMyPageCheck(state, action) {
-      return state = action.payload;
-    }
+      return (state = action.payload);
+    },
   },
-})
-
-
+});
 
 const alarmClickCheck = createSlice({
   name: "alarmClick",
@@ -104,234 +132,6 @@ const adminreport = createSlice({
 
 //admin페이지 UserList 데이터
 
-const adminUser = createSlice({
-  name: "user",
-  initialState: [
-    {
-      nickname: "장난꾸러기1",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기2",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기3",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기4",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기5",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기6",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기7",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기8",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기9",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기10",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기11",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    }, {
-      nickname: "장난꾸러기12",
-      age: 28,
-      yymmdd: 960418,
-      birthday: "0418",
-      region: "부산광역시",
-      manner: 34,
-      report: 3,
-      demerit: 3,
-      age_group: "20대",
-      left_report: 2,
-      ban: false,
-      admin: false,
-    },
-  ],
-  reducers: {
-    findDetail(state, action) {
-      const select = state.findIndex((num) => {
-        return num.nickname === action.payload;
-      });
-    },
-    deleteUser(state, action) {
-      const select = state.findIndex((num) => {
-        return num.nickname === action.payload;
-      });
-      state.pop();
-    },
-  },
-});
-
-const adminRoom = createSlice({
-  name: "room",
-  initialState: [
-    {
-      num: 1,
-      theme: "소통",
-      lock: "X",
-      sull: "O",
-      title: "나는 이런것까지 먹어본적 있다",
-      startdate: "2023-01-18",
-      starttime: "20:22:08",
-    },
-    {
-      num: 2,
-      theme: "게임",
-      lock: "O",
-      sull: "X",
-      title: "",
-      startdate: "2023-01-18",
-      starttime: "20:25:08",
-    },
-    {
-      num: 3,
-      theme: "게임",
-      lock: "O",
-      sull: "X",
-      title: "",
-      startdate: "2023-01-18",
-      starttime: "20:25:08",
-    },
-    {
-      num: 4,
-      theme: "게임",
-      lock: "X",
-      sull: "X",
-      title: "",
-      startdate: "2023-01-18",
-      starttime: "20:25:08",
-    },
-    {
-      num: 5,
-      theme: "소통",
-      lock: "O",
-      sull: "O",
-      title: "니가 그렇게 싸움을 잘해?",
-      startdate: "2023-01-18",
-      starttime: "20:25:08",
-    },
-  ],
-  reducers: {},
-});
-
 // Nav의 menu에 있는 friend 클릭 여부
 const menuFriendClickCheck = createSlice({
   name: "menuFriendClick",
@@ -349,36 +149,33 @@ const menuFriendChatClickCheck = createSlice({
   initialState: false,
   reducers: {
     // 채팅 목록 열고 닫기 함수
-    changeMenuFriendChatState(state,action) {
-      return state = action.payload
+    changeMenuFriendChatState(state, action) {
+      return (state = action.payload);
     },
   },
 });
 
-const menuFriendClickUserData  = createSlice({
+const menuFriendClickUserData = createSlice({
   name: "menuFriendClickUserData",
   initialState: [],
   reducers: {
     // 클릭한 유저와의 데이터 변경 함수
-    changemenuFriendClickUserData(state,action) {
-      return state = action.payload
+    changemenuFriendClickUserData(state, action) {
+      return (state = action.payload);
     },
   },
 });
 
-
-
-
 // 룸에있는 유저 프로필 클릭 여부
 const RoomUserProfileClickCheck = createSlice({
-  name: 'RoomUserProfileCheck',
+  name: "RoomUserProfileCheck",
   initialState: false,
   reducers: {
     showRoomUserProfile(state) {
-      return !state
-    }
-  }
-})
+      return !state;
+    },
+  },
+});
 
 // Room에 있는 유저 친구 클릭 여부
 const roomAddFriendModalCheck = createSlice({
@@ -391,175 +188,171 @@ const roomAddFriendModalCheck = createSlice({
   },
 });
 
-
 // Room에 있는 유저 강퇴 클릭 여부
 const RoomUserBanClickCheck = createSlice({
-  name: 'RoomUserBanCheck',
+  name: "RoomUserBanCheck",
   initialState: false,
   reducers: {
     showRoomUserBanModal(state) {
-      return !state
-    }
-  }
-})
+      return !state;
+    },
+  },
+});
 
 // Room에 있는 유저 신고 클릭 여부
 const RoomUserReportClickCheck = createSlice({
-  name: 'RoomUserReportCheck',
+  name: "RoomUserReportCheck",
   initialState: false,
   reducers: {
     showRoomUserReportModal(state) {
-      return !state
-    }
-  }
-})
-
-
+      return !state;
+    },
+  },
+});
 
 // Nav의 alarm에 있는 요청, 초대, 리뷰 클릭 상태
 // 요청:0(default), 초대:1, 리뷰:2
 const alarmClickState = createSlice({
-  name: 'alarmClickState',
+  name: "alarmClickState",
   initialState: 0,
   reducers: {
     changeAlarmClickState(state, action) {
-      return state = action.payload
-    }
-  }
-})
-
+      return (state = action.payload);
+    },
+  },
+});
 
 // Nav의 alarm을 클릭 후 요청, 초대, 리뷰에 따른 api 데이터 변경
 const alarmApiData = createSlice({
-  name: 'alarmApiData',
+  name: "alarmApiData",
   initialState: [],
   reducers: {
     changeAlarmApiDataState(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
 // Nav의 menu 클릭 후 friend list 요청 api 데이터
 const menuFriendListApiData = createSlice({
-  name: 'enuFriendListApiData',
+  name: "enuFriendListApiData",
   initialState: [],
   reducers: {
     changeMenuFriendListApiDataState(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
-// 방 만들때 인원 체크 
+// 방 만들때 인원 체크
 const createRoomChoicePeople = createSlice({
-  name: 'createRoomChoicePeople',
+  name: "createRoomChoicePeople",
   initialState: 2,
   reducers: {
     changeCreateRoomChoicePeople(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
-// 방 만들때 나이 체크 
+// 방 만들때 나이 체크
 const createRoomChoiceAge = createSlice({
-  name: 'createRoomChoiceAge',
-  initialState: 'ALL',
+  name: "createRoomChoiceAge",
+  initialState: "ALL",
   reducers: {
     changeCreateRoomChoiceAge(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
-// 방 만들때 지역 체크 
+// 방 만들때 지역 체크
 const createRoomChoiceRegion = createSlice({
-  name: 'createRoomChoiceAge',
-  initialState: '전국',
+  name: "createRoomChoiceAge",
+  initialState: "전국",
   reducers: {
     changeCreateRoomChoiceRegion(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
-// 방 만들때 태그 체크 
+// 방 만들때 태그 체크
 const createRoomChoiceTag = createSlice({
-  name: 'createRoomChoiceTag',
+  name: "createRoomChoiceTag",
   initialState: [],
   reducers: {
     // 클릭 후 추가하는 함수
     changeCreateRoomChoiceAddTag(state: any, action: any): any {
-      state.push(action.payload)
+      state.push(action.payload);
     },
     changeCreateRoomChoiceRemoveTag(state: any, action: any): any {
       const newState = state.filter((e: any) => {
-        return e != action.payload
-      })
-      return state = newState
+        return e != action.payload;
+      });
+      return (state = newState);
     },
     // 태그 초기화하는 함수
     changeCreateRoomChoiceTagReset(state: any): any {
-      return state = []
+      return (state = []);
     },
-  }
-})
+  },
+});
 
-// 방 만들때 테마Id 체크 
+// 방 만들때 테마Id 체크
 const createRoomThemeCheck = createSlice({
-  name: 'createRoomThemeCheck',
-  initialState: 'T0B0',
+  name: "createRoomThemeCheck",
+  initialState: "T0B0",
   reducers: {
     changeCreateRoomThemeCheck(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
-// 만들어진 방 리스트 (관리자 controller Api) 
+// 만들어진 방 리스트 (관리자 controller Api)
 const mainCreateRoomList = createSlice({
-  name: 'mainCreateRoomList',
+  name: "mainCreateRoomList",
   initialState: [],
   reducers: {
     changeMainCreateRoomList(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
 // PublicModal 끄고 켜는 함수
 const PublicModal = createSlice({
-  name: 'PublicModal',
+  name: "PublicModal",
   initialState: false,
   reducers: {
     showPublicModal(state) {
-      return !state
-    }
-  }
-})
+      return !state;
+    },
+  },
+});
 
 // nav -> alarm -> review에 있는 리뷰 목록에 있는 클릭한 유저 데이터
 const navAlarmReviewEmojiUserData = createSlice({
-  name: 'navAlarmReviewEmojiUserData',
+  name: "navAlarmReviewEmojiUserData",
   initialState: 0,
   reducers: {
-    changeNavAlarmReviewEmojiUserData(state,action) {
-      return state = action.payload
-    }
-  }
-})
+    changeNavAlarmReviewEmojiUserData(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
 
 // webRTC로딩 켜고 끄는 함수
 const webRtcLoading = createSlice({
-  name: 'webRtcLoading',
+  name: "webRtcLoading",
   initialState: true,
   reducers: {
     isRtcLoading(state, action) {
-      return state = action.payload
-    }
-  }
-})
+      return (state = action.payload);
+    },
+  },
+});
 
 //
 export const store = configureStore({
@@ -569,9 +362,7 @@ export const store = configureStore({
     alarmClickCheck: alarmClickCheck.reducer,
     mainCreateRoomCarouselCheck: mainCreateRoomCarouselCheck.reducer,
     createThemeRoomCheck: createThemeRoomCheck.reducer,
-    adminUser: adminUser.reducer,
     adminreport: adminreport.reducer,
-    adminRoom: adminRoom.reducer,
     menuFriendClickCheck: menuFriendClickCheck.reducer,
     menuFriendChatClickCheck: menuFriendChatClickCheck.reducer,
     alarmClickState: alarmClickState.reducer,
@@ -592,48 +383,65 @@ export const store = configureStore({
     mainCreateRoomList: mainCreateRoomList.reducer,
     // username
     userName: userName.reducer,
+    // userList
+    UserList: UserList.reducer,
+    // DetailUser
+    DetailUser: DetailUser.reducer,
+    SelectDetailUser: SelectDetailUser.reducer,
+
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
 
     myPageCheck: myPageCheck.reducer,
     // webRTC
     webRtcLoading: webRtcLoading.reducer,
-    
   },
 });
 //주석추가
 
 // createSlice의 reducers 에서 만든 state 변경 함수를 export 하기
-export const { changeMenuState } = menuClickCheck.actions
-export const { changeAlarmState } = alarmClickCheck.actions
-export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions
-export const { changeThemeRoomState } = createThemeRoomCheck.actions
-export const { findDetail, deleteUser } = adminUser.actions
-export const { changeMenuFriendState } = menuFriendClickCheck.actions
-export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions
-export const { changeAlarmApiDataState } = alarmApiData.actions
-export const { changeAlarmClickState } = alarmClickState.actions
-export const { changeMenuFriendListApiDataState } = menuFriendListApiData.actions
-export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions
-export const { changeCreateRoomChoicePeople } = createRoomChoicePeople.actions
-export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions
-export const { changeCreateRoomChoiceRegion } = createRoomChoiceRegion.actions
-export const { changeCreateRoomChoiceAddTag, changeCreateRoomChoiceRemoveTag, changeCreateRoomChoiceTagReset } = createRoomChoiceTag.actions
-export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions
-export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions
-export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions
-export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions
-export const { changemenuFriendClickUserData } = menuFriendClickUserData.actions
-export const { showPublicModal } = PublicModal.actions
+export const { changeMenuState } = menuClickCheck.actions;
+export const { changeAlarmState } = alarmClickCheck.actions;
+export const { changeCarouselState } = mainCreateRoomCarouselCheck.actions;
+export const { changeThemeRoomState } = createThemeRoomCheck.actions;
+export const { changeMenuFriendState } = menuFriendClickCheck.actions;
+export const { changeMenuFriendChatState } = menuFriendChatClickCheck.actions;
+export const { changeAlarmApiDataState } = alarmApiData.actions;
+export const { changeAlarmClickState } = alarmClickState.actions;
+export const { changeMenuFriendListApiDataState } =
+  menuFriendListApiData.actions;
+export const { showRoomUserProfile } = RoomUserProfileClickCheck.actions;
+export const { changeCreateRoomChoicePeople } = createRoomChoicePeople.actions;
+export const { changeCreateRoomChoiceAge } = createRoomChoiceAge.actions;
+export const { changeCreateRoomChoiceRegion } = createRoomChoiceRegion.actions;
+export const {
+  changeCreateRoomChoiceAddTag,
+  changeCreateRoomChoiceRemoveTag,
+  changeCreateRoomChoiceTagReset,
+} = createRoomChoiceTag.actions;
+export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions;
+export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions;
+export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions;
+export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions;
+export const { changemenuFriendClickUserData } =
+  menuFriendClickUserData.actions;
+export const { showPublicModal } = PublicModal.actions;
 // 관리자
-export const { changeMainCreateRoomList } = mainCreateRoomList.actions
+export const { changeMainCreateRoomList } = mainCreateRoomList.actions;
 // username
-export const { changeUserName } = userName.actions
+export const { changeUserName } = userName.actions;
+// userList
+export const { changeUserList } = UserList.actions;
+// DetailUser
+export const { changeDetailUser } = DetailUser.actions;
+export const { changeSelectDetailUser } = SelectDetailUser.actions;
+
 // EmojiClickUserData
-export const { changeNavAlarmReviewEmojiUserData } = navAlarmReviewEmojiUserData.actions
-export const { changeMyPageCheck } = myPageCheck.actions
+export const { changeNavAlarmReviewEmojiUserData } =
+  navAlarmReviewEmojiUserData.actions;
+export const { changeMyPageCheck } = myPageCheck.actions;
 // webRTC
-export const { isRtcLoading } = webRtcLoading.actions
+export const { isRtcLoading } = webRtcLoading.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,13 +1,25 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { changeUserList } from "src/store/store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 function UserReport(): React.ReactElement {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const reporttemp: any = useAppSelector((state: any) => {
-    console.log(state.adminreport[0]);
-    return state.adminreport[0];
+    console.log("store에서 들고오는 값",state.mainCreateRoomList);
+    return state.mainCreateRoomList;
   });
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `https://i8e201.p.ssafy.io/api/admin/user`,
+    }).then((r) => {
+      console.log("받아오는데이터", r.data.data);
+      dispatch(changeUserList(r.data.data));
+    });
+  }, []);
   return (
     <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-9 gap-5">
       <div>
@@ -31,7 +43,7 @@ function UserReport(): React.ReactElement {
               </tr>
             </thead>
             <tbody>
-              <tr className="border border-slate-300">
+              {/* <tr className="border border-slate-300">
                 <td className="w-[7%]">{reporttemp.reportnum}</td>
                 <td className="w-[12%]">{reporttemp.reporter}</td>
                 <td className="w-[12%]">{reporttemp.reported}</td>
@@ -60,7 +72,7 @@ function UserReport(): React.ReactElement {
                 <td className="w-[10%]">{reporttemp.date}</td>
                 <td className="w-[10%]">{reporttemp.result}</td>
                 <td className="w-[7%]">{reporttemp.point}</td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
