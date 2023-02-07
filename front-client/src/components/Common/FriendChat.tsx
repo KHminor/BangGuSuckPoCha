@@ -40,8 +40,6 @@ function FriendChat():JSX.Element {
 
   useEffect(() => {
     connect();
-    connect();
-    connect();
     scrollToBottom()
     return () => disconnect();
   }, [message]);
