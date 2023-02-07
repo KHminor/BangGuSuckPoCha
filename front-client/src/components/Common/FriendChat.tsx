@@ -119,10 +119,11 @@ function FriendChat():JSX.Element {
               {
                 
                 data&&data.map((chat:any)=>{
+                  console.log(chat)
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
-                        chat
+                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
                       }
                     </div>
                   )
