@@ -28,23 +28,28 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-        icon={({ type }) => {
+        icon={({type}) => {
           switch (type) {
             case "success":
-              return "🗨";
+              return "🗨"
             case "error":
-              return "💙";
+              return "💙"
             case "info":
-              return "🗨";
+              return "🗨"
           }
-        }}
-        progressStyle={{
-          height: "0.1rem",
-        }}
-        style={{
-          fontSize: "1rem",
+        }
+        }
+        progressStyle={
+          {
+            height: "0.1rem"
+          }
+        }
+        style={
+          {
+            fontSize : "1rem",
           minWidth: "fit-content",
-        }}
+          }
+        }
       />
       <Routes>
         <Route path="/" element={<Login />} />

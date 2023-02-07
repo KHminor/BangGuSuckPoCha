@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import styles from '../Common/Common.module.css'
 
@@ -25,12 +25,20 @@ function FriendChat():JSX.Element {
     }
   },[menuFriendChatClickCheck])
 
+
+  
   useEffect(() => {
     connect();
+    
   }, []);
+
+  
   // 클릭 되어진 유저와의 데이터
   const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
   const {nickname, data, chat_id} = menuFriendClickUserData
+  
+  const [message, setMessage] = useState(data);
+
 
   const connect = () => {
   const client = new StompJs.Client({
@@ -41,7 +49,8 @@ function FriendChat():JSX.Element {
     },
     onConnect:() => { 
       console.log("onConnect");
-      client.subscribe("/sub/chat/"+ chat_id, function(message:any) {
+      client.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
+        setMessage([...message, newMessage.body])
         console.log("#############3333"+ message);
         //showGreeting(JSON.parse(message.body))
       });
@@ -53,6 +62,9 @@ function FriendChat():JSX.Element {
     client.activate();
     console.log(client.connected)
   }
+
+
+
   function MyChat({content}:any):JSX.Element {
     return (
       <div className="flex justify-end items-center my-1 ">

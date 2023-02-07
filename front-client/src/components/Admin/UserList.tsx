@@ -97,6 +97,32 @@ function UserSelect() {
               </tr>
             );
           })}
+          {userList.map((it: any) => {
+            return (
+              <tr className="h-full">
+                <td
+                  className="border border-slate-300 max-w-[10rem] text-ellipsis overflow-hidden cursor-pointer"
+                  onClick={() => {
+                    // console.log(it);
+                    dispatch(changeDetailUser(it));
+                    dispatch(changeSelectDetailUser(true));
+                  }}
+                >
+                  {it.nickname}
+                </td>
+                <td className="border border-slate-300 max-w-[10rem] ">
+                  {it.birth}
+                </td>
+                <td className="border border-slate-300  max-w-[5rem]">
+                  {it.manner}
+                </td>
+                <td className="border border-slate-300 max-w-[10rem] ">
+                  {" "}
+                  {it.region}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -128,7 +154,7 @@ function UserList() {
       </div>
       <div className="col-span-3 grid grid-rows-5 gap-5">
         <div className="text-8xl">AdminPage</div>
-        <div className="w-full row-span-3 border-2 border-white grid grid-cols-2 overflow-auto">
+        <div className="w-full row-span-3 border-2 border-white grid grid-cols-2">
           {userList ? <UserSelect /> : null}
           {isSelect === true ? <UserDetail /> : null}
         </div>
