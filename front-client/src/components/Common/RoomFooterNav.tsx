@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import { useAppSelector } from "src/store/hooks";
 import PublicModal from "./PublicModal";
 
 function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
@@ -14,6 +15,11 @@ function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
     type: "exit",
     msg: "방에서 나가시겠습니까?",
   };
+  
+  // 모달 보이기 관련
+  const showModal = useAppSelector((state) => {
+    return state.PublicModal;
+  });
 
   // 현재 시간 관련
   const [currentDate, setCurrentDate] = useState();
@@ -88,7 +94,7 @@ function RoomFooterNav({ pochaId }: { pochaId: string }): JSX.Element {
 
   return (
     <>
-      <PublicModal data={modalData} />
+      {showModal && <PublicModal data={modalData} />}
       <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
         <div></div>
         <div

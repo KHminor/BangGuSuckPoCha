@@ -127,7 +127,7 @@ const MainCreateRoom = ({
         <>
           {showModal && <PublicModal data={modalData} />}
           <div
-            className={`bg-black bg-opacity-90 overflow-y-auto fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
+            className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >
             <div
               className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl absolute top-20`}
