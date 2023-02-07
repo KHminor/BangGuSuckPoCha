@@ -23,8 +23,10 @@ public class ReportResponseDto {
     private Integer reportType;
     private String reportReason;
     private Boolean reportResult;
+    private Integer demerit;
     private LocalDateTime report_at;
     public ReportResponseDto(Report r){
+        this.demerit = r.getDemerit();
         this.reportResult = r.getReportResult();
         this.reportId = r.getReportId();
         this.reporterId = r.getReportId();
