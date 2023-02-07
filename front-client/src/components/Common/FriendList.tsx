@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import SockJS from "sockjs-client";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeMenuFriendChatState,
@@ -8,7 +7,7 @@ import {
   changeMenuFriendState,
 } from "../../store/store";
 import styles from "./Common.module.css";
-import StompJs, { Stomp } from '@stomp/stompjs';
+
 
 function FriendList(): JSX.Element {
   
@@ -48,37 +47,16 @@ function FriendList(): JSX.Element {
 
   
 
-  function connect(chat_id:any) {
-    wws.connect({}, function () {
-      wws.subscribe("/sub/chat/" + chat_id, function (message) {
-        console.log('메시지!!!!!!!!!!!! ',message)
-        // showGreeting(JSON.parse(message.body));
-      });
-    });
-  }
-
-  const sock = new SockJS('/api/ws/chat',)
-  const wws = Stomp.over(sock)
-  const userId = localStorage.getItem('userId')
+  
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
     const chat_id = e.chat_id;
-    console.log('챗아이디!!!!!!!!!',chat_id)
-
-    // 소켓 연결 함수
-    
     return (
       <div
         key={idx}
         className=" grid my-2 cursor-pointer "
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
         onClick={() => {
-          // 채팅 서버 접속
-          console.log('소켓 통신!!!!!!!!: ',sock)
-          console.log(wws)
-          connect(chat_id)
-          console.log('연결해땅아!!!!!!!!!!!!!!!!')
-
           // 클릭한 유저와의 채팅 아이디 체크
           setCheckChatId(e.chat_id);
           // 채팅내용 가져오기
@@ -97,6 +75,7 @@ function FriendList(): JSX.Element {
               changemenuFriendClickUserData({
                 nickname: e.f_nickname,
                 data: data,
+                chat_id: chat_id
               })
             );
           });
