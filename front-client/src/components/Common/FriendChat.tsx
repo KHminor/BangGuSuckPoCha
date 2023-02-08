@@ -36,7 +36,7 @@ function FriendChat():JSX.Element {
   useEffect(() => {
     connect();
     return () => disconnect();
-  }, [message]);
+  }, []);
   
   useEffect(()=> {
     const chat_id = localStorage.getItem('chat_id')
