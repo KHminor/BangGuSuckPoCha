@@ -30,6 +30,5 @@ public class PochaParticipantResponseDto {
         this.createAt = e.getCreateAt();
         this.exitAt = e.getExitAt();
         this.isHost = e.getIsHost();
-        this.waiting = e.getWaiting();
     }
 }
