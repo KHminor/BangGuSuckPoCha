@@ -27,19 +27,34 @@ function ReviewPage():JSX.Element {
     })
     .then((r)=>{
       const datas:any[] = r.data.data
-      console.log('리뷰목록: ',r.data.data);
+      // 현재 날짜 지정
+      const now = new Date()
+      // 현재 연도
+      let now_year = now.getFullYear()
+      // 현재 월
+      let now_month = ('0' + (now.getMonth() +  1 )).slice(-2);
+      // 현재 일
+      let now_day= ('0'+(now.getDate())).slice(-2)
+      let two_day_ago= ('0'+(now.getDate()-2)).slice(-2)
+      // 현재 연도-월-일
+      const nowYMD:any = new Date(now_year+"-"+now_month+"-"+now_day)
+      const threeBeforeYMD:any = new Date(now_year+"-"+now_month+"-"+two_day_ago)
+      
+      // 3일 
       // 리뷰 이전
-      const Beforedata:any = datas.filter((data)=> {
-        return data.review_at === null
+      const Beforedata:any = datas.filter((data)=> {  
+        const review_create_at = new Date(((data.create_at).split('T'))[0])
+        return ((data.review_at === null)&&(review_create_at<=nowYMD)&&(threeBeforeYMD<=review_create_at))
       })
       setReviewBefore(Beforedata)
       // 리뷰 이후
       const Afterdata:any = datas.filter((data)=> {
-        return data.review_at !== null
+        return  data.review_at !== null
       })
       setReviewAfter(Afterdata)
     })
   },[])
+
 
 
   return (
@@ -185,17 +200,31 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                       method: 'get',
                       url: `https://i8e201.p.ssafy.io/api/user/review/${username}`
                     })
-                    .then((r:any)=> {
+                    .then((r)=>{
                       const datas:any[] = r.data.data
-                      console.log('리뷰목록: ',r.data.data);
+                      // 현재 날짜 지정
+                      const now = new Date()
+                      // 현재 연도
+                      let now_year = now.getFullYear()
+                      // 현재 월
+                      let now_month = ('0' + (now.getMonth() +  1 )).slice(-2);
+                      // 현재 일
+                      let now_day= ('0'+(now.getDate())).slice(-2)
+                      let two_day_ago= ('0'+(now.getDate()-2)).slice(-2)
+                      // 현재 연도-월-일
+                      const nowYMD:any = new Date(now_year+"-"+now_month+"-"+now_day)
+                      const threeBeforeYMD:any = new Date(now_year+"-"+now_month+"-"+two_day_ago)
+                      
+                      // 3일 
                       // 리뷰 이전
-                      const Beforedata:any = datas.filter((data)=> {
-                        return data.review_at === null
+                      const Beforedata:any = datas.filter((data)=> {  
+                        const review_create_at = new Date(((data.create_at).split('T'))[0])
+                        return ((data.review_at === null)&&(review_create_at<=nowYMD)&&(threeBeforeYMD<=review_create_at))
                       })
                       setReviewBefore(Beforedata)
                       // 리뷰 이후
                       const Afterdata:any = datas.filter((data)=> {
-                        return data.review_at !== null
+                        return  data.review_at !== null
                       })
                       setReviewAfter(Afterdata)
                     })
@@ -219,7 +248,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                     dispatch(showRoomUserProfile())         
                   })
                 }}>
-                  <img className="w-[4rem] h-[4rem]" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
                 </div>
                 <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}
