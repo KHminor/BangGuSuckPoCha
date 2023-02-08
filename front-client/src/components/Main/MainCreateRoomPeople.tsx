@@ -3,14 +3,23 @@ import { useAppDispatch } from "../../store/hooks";
 import { changeCreateRoomChoicePeople } from "../../store/store";
 import style from "./MainCreateRoom.module.css";
 
-const MainCreateRoomPeople = ({ selectOption }: { selectOption: string[] }) => {
+const MainCreateRoomPeople = ({ selectOption, pochaInfo }: { selectOption: string[], pochaInfo?: any }) => {
   const dispatch = useAppDispatch()
   const [selectTitle, ...selectPeople] = selectOption;
   const selectHumans = useRef<any>([]);
   const [people, setPeople] = useState<any>(null);
 
-
   useEffect(() => {
+    // 포차 정보 있을때
+    if (pochaInfo) {
+      const index = pochaInfo.limitUser - 2;
+      // console.log("인덱스", index);
+      selectHumans.current[index].classList.toggle("text-black");
+      selectHumans.current[index].classList.toggle("bg-white");
+      setPeople(selectHumans.current[index]);
+      dispatch(changeCreateRoomChoicePeople(pochaInfo.limitUser));
+      return
+    }
     // 처음에 제일 첫번째 값 선택세팅
     selectHumans.current[0].classList.toggle("text-black");
     selectHumans.current[0].classList.toggle("bg-white");

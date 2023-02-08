@@ -293,7 +293,7 @@ const createRoomChoiceTag = createSlice({
     },
     changeCreateRoomChoiceRemoveTag(state: any, action: any): any {
       const newState = state.filter((e: any) => {
-        return e != action.payload;
+        return e !== action.payload;
       });
       return (state = newState);
     },
