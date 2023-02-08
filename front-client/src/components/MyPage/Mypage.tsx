@@ -9,6 +9,8 @@ import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 
+//최초 호출시 내 지역 보여주기 / profile 보여주기
+
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -39,7 +41,7 @@ function Mypage(): JSX.Element {
   };
   const [modifydisplay, setModifydisplay] = useState(false);
   //바뀔이름
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState<any>();
   //이름
   const [nowName, setNowName] = useState();
   //생일
@@ -151,7 +153,7 @@ function Mypage(): JSX.Element {
       console.log("도시", city);
       setRegionlist2(rlist2);
       console.log("rlist1---------------------", rlist1);
-      console.log("rlist2---------------------", rlist2);      
+      console.log("rlist2---------------------", rlist2);
     });
   }, []);
 
@@ -200,32 +202,37 @@ function Mypage(): JSX.Element {
                   className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
                   placeholder={nickname}
                   type="text"
+                  maxLength={8}
                   onChange={onChangeNikename}
                 />
                 <div
                   className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
                   onClick={() => {
-                    console.log(nickname);
-                    console.log(nowName);
-                    axios({
-                      method: "post",
-                      url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
-                      data: {
-                        changeName: nickname,
-                        nowName: nowName,
-                      },
-                    }).then((r) => {
-                      const isDouble = r.data.data;
-                      if (isDouble) {
-                        toast.success(
-                          `${nickname}(은)는 수정가능한 닉네임입니다`
-                        );
-                        setModifydisplay(isDouble);
-                      } else {
-                        toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
-                        setModifydisplay(isDouble);
-                      }
-                    });
+                    if (nickname.length < 2) {
+                      toast.warning(`2글자 이상 입력바랍니다`);
+                    } else {
+                      axios({
+                        method: "post",
+                        url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
+                        data: {
+                          changeName: nickname,
+                          nowName: nowName,
+                        },
+                      }).then((r) => {
+                        const isDouble = r.data.data;
+                        if (isDouble) {
+                          toast.success(
+                            `${nickname}(은)는 수정가능한 닉네임입니다`
+                          );
+                          setModifydisplay(isDouble);
+                        } else {
+                          toast.warning(
+                            `${nickname}(은)는 중복된 닉네임입니다`
+                          );
+                          setModifydisplay(isDouble);
+                        }
+                      });
+                    }
                   }}
                 >
                   중복확인
@@ -343,11 +350,20 @@ function Mypage(): JSX.Element {
                         value={Selected}
                       >
                         {regionlist
-                          ? regionlist.map((it: any): any => (
-                              <option value={it.regionCode}>
-                                {it.sidoName}
-                              </option>
-                            ))
+                          ? regionlist.map((it: any): any =>
+                              it.regionCode.substr(0, 2) === Selected ? (
+                                (console.log("나선택됨", it.sidoName),
+                                (
+                                  <option value={it.regionCode} selected>
+                                    {it.sidoName}
+                                  </option>
+                                ))
+                              ) : (
+                                <option value={it.regionCode}>
+                                  {it.sidoName}
+                                </option>
+                              )
+                            )
                           : null}
                       </select>
                       {isSelected === false ? (
