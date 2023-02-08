@@ -39,6 +39,10 @@ function FriendChat():JSX.Element {
   }, [message]);
   
   useEffect(()=> {
+    const chat_id = localStorage.getItem('chat_id')
+    axios.get(`https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`).then((r)=> {
+      setMessage(r.data.data)
+    })
     scrollToBottom()
   },[])
 
@@ -60,11 +64,6 @@ function FriendChat():JSX.Element {
       onConnect:() => { 
         console.log("onConnect");
         const chat_id = localStorage.getItem('chat_id')
-
-        axios.get(`https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`).then((r)=> {
-          setMessage(r.data.data)
-        })
-
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           const msg = JSON.parse(newMessage.body)
           setMessage((_chat_list:any)=> [..._chat_list, msg])
@@ -86,9 +85,12 @@ function FriendChat():JSX.Element {
     console.log('퍼블리쉬 대따!!!!!')
 
     if (!client.current.connected) {
+      console.log(client.current.connected)
+      console.log('리턴되따!!!!')
       return;
     }
 
+    console.log('리턴 안되고 진행중!!')
     client.current.publish({
       destination: "/pub/chat/message",
       body: JSON.stringify({chat_id:chat_id, user_id:userId, content:inputChat}),
