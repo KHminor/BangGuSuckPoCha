@@ -21,6 +21,16 @@ public class PochaController {
     private final PochaService pochaService;
     private final UserService userService;
 
+    @ApiOperation(value = "전체 포차 목록")
+    @GetMapping("/all")
+    public ResponseEntity<Map<String, Object>> allPochaList(){
+        Map<String, Object> response = new HashMap<>();
+
+        List<PochaResponseDto> pochaResponseDto = pochaService.allPochaList();
+        response.put("data", pochaResponseDto);
+        response.put("message", "success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     @ApiOperation(value = "포차 목록")
     @GetMapping
     public ResponseEntity<Map<String, Object>> pochaList(@RequestParam(value = "age") Integer age, @RequestParam(value = "region") String region, @RequestParam(value = "themeId", required = false) String themeId, @RequestParam(value = "tag", required = false) List<String> tagList){
