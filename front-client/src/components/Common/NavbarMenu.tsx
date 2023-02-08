@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeAlarmState,
@@ -13,7 +14,7 @@ function NavbarMenu(): JSX.Element {
   const navigate = useNavigate();
   let dispatch = useAppDispatch();
   // username (현재는 내꺼)
-  const username = localStorage.getItem('Username')
+  const username = localStorage.getItem("Username");
 
   const menuIcon = useRef<any>(null);
   // 메뉴 클릭 상태
@@ -91,15 +92,15 @@ function NavbarMenu(): JSX.Element {
               url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
             }).then((r) => {
               // 중복된 친구 등록으로 인해 생길 수 있는 현상 방지
-              const data = r.data.data
-              const checkFriendId:string[] = []
-              const setFriendData:string[] = []
-              data.forEach((e:any) => {
+              const data = r.data.data;
+              const checkFriendId: string[] = [];
+              const setFriendData: string[] = [];
+              data.forEach((e: any) => {
                 if (checkFriendId.includes(e.f_nickname) !== true) {
-                  checkFriendId.push(e.f_nickname)
-                  setFriendData.push(e)
+                  checkFriendId.push(e.f_nickname);
+                  setFriendData.push(e);
                 }
-              })
+              });
               dispatch(changeMenuFriendState());
               dispatch(changeMenuFriendListApiDataState(setFriendData));
             });
@@ -113,7 +114,23 @@ function NavbarMenu(): JSX.Element {
           />
           <p className="text-stone-200 text-xs">friend</p>
         </div>
-        <div className="mr-5 cursor-pointer" style={{ height: "52%" }}>
+        <div
+          className="mr-5 cursor-pointer"
+          style={{ height: "52%" }}
+          onClick={() => {
+            axios({
+              method: "put",
+              url: `https://i8e201.p.ssafy.io/api/user/logout/${username}`,
+            }).then((r) => {
+              const result = r.data.message;
+              if ("success") {
+                toast.success("로그아웃되셨습니다");
+                window.localStorage.clear();
+                navigate("/");
+              }
+            });
+          }}
+        >
           <img
             src={require("../../assets/logoIcon/logout.png")}
             alt=""
