@@ -61,7 +61,7 @@ function FriendChat():JSX.Element {
       },
     });
       client.current.activate();
-      scrollToBottom()
+      
     }
 
   const disconnect = () => {
@@ -118,10 +118,6 @@ function FriendChat():JSX.Element {
   const scrollToBottom = () => {
     if (chatArea.current) {
       chatArea.current.scrollTop = chatArea.current.scrollHeight
-      console.log("스크롤높이: ", chatArea.current.scrollHeight)
-      console.log('스크롤탑-31.95: ', chatArea.current.scrollTop-31.95);
-      console.log('스크롤탑: ', chatArea.current.scrollTop);
-      
     }
   };
 
