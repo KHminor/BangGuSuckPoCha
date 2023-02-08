@@ -31,7 +31,7 @@ function FriendChat():JSX.Element {
 
   const [message, setMessage] = useState<any>();
   const [inputChat, setInputChat] = useState<any>()
-  const [sendCheck, setsendCheck] = useState<any>(0)
+  // const [sendCheck, setsendCheck] = useState<any>(0)
 
   useEffect(() => {
     connect();
@@ -40,9 +40,13 @@ function FriendChat():JSX.Element {
   
   useEffect(()=> {
     scrollToBottom()
-    console.log('내가 작성한 채팅: ',inputChat);
-    console.log('현재 메세지 값: ', message)
-  },[sendCheck])
+  },[])
+
+  // useEffect(()=> {
+  //   scrollToBottom()
+  //   console.log('내가 작성한 채팅: ',inputChat);
+  //   console.log('현재 메세지 값: ', message)
+  // },[sendCheck])
 
 
 
@@ -75,15 +79,18 @@ function FriendChat():JSX.Element {
     client.current.deactivate();
   };
 
+  
   const publish = (inputChat:any) => {
     const chat_id = localStorage.getItem('chat_id')
     const userId = localStorage.getItem('userId')
+    console.log('퍼블리쉬 대따!!!!!')
+
     if (!client.current.connected) {
       return;
     }
 
     client.current.publish({
-      destination: "/pub/chat",
+      destination: "/pub/chat/message",
       body: JSON.stringify({chat_id:chat_id, user_id:userId, content:inputChat}),
     });
 
@@ -138,7 +145,7 @@ function FriendChat():JSX.Element {
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
                 message&&message.map((chat:any)=>{
-                  console.log(chat)
+                  // console.log(chat)
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
@@ -155,7 +162,7 @@ function FriendChat():JSX.Element {
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
                   publish(inputChat)
-                  setsendCheck(sendCheck+1)
+                  // setsendCheck(sendCheck+1)
                 }}/>
               </div>
             </div>
