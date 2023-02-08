@@ -58,10 +58,10 @@ function FriendChat():JSX.Element {
           const msg = JSON.parse(newMessage.body)
           setMessage((_chat_list:any)=> [..._chat_list, msg])
         });
-        scrollToBottom()
       },
     });
       client.current.activate();
+      scrollToBottom()
     }
 
   const disconnect = () => {
@@ -117,7 +117,7 @@ function FriendChat():JSX.Element {
 
   const scrollToBottom = () => {
     if (chatArea.current) {
-      chatArea.current.scrollTop = chatArea.current.scrollHeight+31.95;
+      chatArea.current.scrollTop = chatArea.current.scrollHeight
       console.log("스크롤높이: ", chatArea.current.scrollHeight)
       console.log('스크롤탑-31.95: ', chatArea.current.scrollTop-31.95);
       console.log('스크롤탑: ', chatArea.current.scrollTop);
