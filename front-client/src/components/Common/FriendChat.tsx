@@ -70,9 +70,9 @@ function FriendChat():JSX.Element {
           setMessage((_chat_list:any)=> [..._chat_list, msg])
         });
       },
-      reconnectDelay: 1000, //자동 재 연결
-      heartbeatIncoming: 1000,
-      heartbeatOutgoing: 1000,
+      // reconnectDelay: 1000, //자동 재 연결
+      // heartbeatIncoming: 1000,
+      // heartbeatOutgoing: 1000,
     });
       client.current.activate();
       console.log(client.current.connected)
