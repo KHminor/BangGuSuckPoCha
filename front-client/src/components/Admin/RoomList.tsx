@@ -16,43 +16,70 @@ function RoomDetail() {
     return state.DetailRoom;
   });
   return (
-    <div className="row-span-6 w-full overflow-x-auto  max-h-[34.5rem] grid grid-rows-12">
+    <div className="row-span-6 w-full overflow-x-auto  max-h-[39.5rem] grid grid-rows-13">
       <div className="grid grid-cols-2 ">
-        <div className="w-[10rem]">pochaId : </div>
+        <div className="w-[6rem]">pochaId : </div>
         <div className="max-w-[10rem]">{detailRoom.pochaId}</div>
         {/* <div className="max-w-[10rem]">detailRoom.profile</div> */}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">themeId : </div>
-        <div className="w-[10rem] max-w-[10rem]">{detailRoom.themeId}</div>
+        <div className="w-[6rem]">tagList : </div>
+        <div className="max-w-[10rem]">
+          {detailRoom.tagList.map((it: any) => {
+            return `${it} `;
+          })}
+        </div>
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">isPrivate :</div>
-        {detailRoom.isPrivate===true?<div className="max-w-[10rem]">O</div>:<div className="max-w-[10rem]">X</div>}
+        <div className="w-[6rem]">themeId : </div>
+        <div className="w-[14rem] max-w-[10rem]">{detailRoom.themeId}</div>
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">isSsul :</div>
-        {detailRoom.isSsul===true?<div className="max-w-[10rem]">O</div>:<div className="max-w-[10rem]">X</div>}
+        <div className="w-[6rem]">isPrivate :</div>
+        {detailRoom.isPrivate === true ? (
+          <div className="max-w-[14rem]">O</div>
+        ) : (
+          <div className="max-w-[14rem]">X</div>
+        )}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">ssulTitle : </div>
-        {detailRoom.isSsul===true?<div className="max-w-[10rem]">{detailRoom.ssulTitle}</div>:<div className="max-w-[10rem]">썰없음</div>}
+        <div className="w-[6rem]">isSsul :</div>
+        {detailRoom.isSsul === true ? (
+          <div className="max-w-[14rem]">O</div>
+        ) : (
+          <div className="max-w-[14rem]">X</div>
+        )}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">username : </div>
-        <div className="w-[10rem] max-w-[10rem]">detailRoom.username</div>
+        <div className="w-[6rem]">ssulTitle : </div>
+        {detailRoom.isSsul === true ? (
+          <div className="max-w-[14rem]">{detailRoom.ssulTitle}</div>
+        ) : (
+          <div className="max-w-[14rem]">썰없음</div>
+        )}
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">point : </div>
-        <div className="max-w-[10rem]">detailRoom.point</div>
+        <div className="w-[6rem]">region : </div>
+        <div className="w-[14rem] max-w-[14rem]">{detailRoom.region}</div>
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">userId : </div>
-        <div className="max-w-[10rem]">detailRoom.userId</div>
+        <div className="w-[6rem]">totalCount : </div>
+        <div className="max-w-[20rem]">
+          총 : {detailRoom.totalCount}명 || 남 : {detailRoom.maleCount}명,여 :
+          {detailRoom.femaleCount}명
+        </div>
       </div>
       <div className="grid grid-cols-2">
-        <div className="w-[10rem]">manner : </div>
-        <div className="max-w-[10rem]">detailRoom.manner</div>
+        <div className="w-[6rem]">createAt : </div>
+        <div className="max-w-[10rem]">{detailRoom.createAt}</div>
+      </div>
+      <div className="grid grid-cols-2">
+        <div className="w-[6rem]">endAt : </div>
+        {detailRoom.isEnd === false ? (
+          <div className="max-w-[10rem]">진행중</div>
+        ) : (
+          <div className="max-w-[10rem]">닫힌방</div>
+        )}
       </div>
     </div>
   );
@@ -66,7 +93,7 @@ function RoomSelect() {
   });
 
   const room: any = useAppSelector((state: any) => {
-    console.log("만들어진방", state.mainCreateRoomList);
+    // console.log("만들어진방", state.mainCreateRoomList);
     return state.mainCreateRoomList;
   });
   return (
@@ -106,10 +133,7 @@ function RoomSelect() {
                     <td className="w-[42%]">썰없슈</td>
                   </>
                 )}
-                <td className="w-[20%]">
-                  {room[i].createAt}
-                  {/* / {room[i].endAt} */}
-                </td>
+                <td className="w-[20%]">{room[i].createAt}</td>
                 <td
                   className="w-[10%] cursor-pointer"
                   onClick={() => {
