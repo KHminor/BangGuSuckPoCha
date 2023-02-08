@@ -17,8 +17,6 @@ function FriendChat():JSX.Element {
   // 채팅구역
   const chatArea = useRef<any>(null)
   const client = useRef<any>({});
-  // 해당 구역 가장 아래위치 체크후 해당 위치가 default 되도록 하기
-  // console.log('채팅구역: ',chatArea&&chatArea.current?.scrollHeight) 
 
   useEffect(()=> {
     if (menuFriendChatClickCheck) {
@@ -45,13 +43,6 @@ function FriendChat():JSX.Element {
     })
   },[])
 
-  // useEffect(()=> {
-  //   scrollToBottom()
-  //   console.log('내가 작성한 채팅: ',inputChat);
-  //   console.log('현재 메세지 값: ', message)
-  // },[sendCheck])
-
-
 
   const connect = () => {
     client.current = new StompJs.Client({
@@ -71,7 +62,6 @@ function FriendChat():JSX.Element {
       },
     });
       client.current.activate();
-      console.log(client.current.connected)
     }
 
   const disconnect = () => {
@@ -82,15 +72,10 @@ function FriendChat():JSX.Element {
   const publish = (inputChat:any) => {
     const chat_id = localStorage.getItem('chat_id')
     const userId = localStorage.getItem('userId')
-    console.log('퍼블리쉬 대따!!!!!')
-
     if (!client.current.connected) {
-      console.log(client.current.connected)
-      console.log('리턴되따!!!!')
       return;
     }
 
-    console.log('리턴 안되고 진행중!!')
     client.current.publish({
       destination: "/pub/chat/message",
       body: JSON.stringify({chat_id:chat_id, user_id:userId, content:inputChat}),
@@ -132,9 +117,15 @@ function FriendChat():JSX.Element {
 
   const scrollToBottom = () => {
     if (chatArea.current) {
-      chatArea.current.scrollTop = chatArea.current.scrollHeight;
+      chatArea.current.scrollTop = chatArea.current.scrollHeight+31.95;
+      console.log("스크롤높이: ", chatArea.current.scrollHeight)
+      console.log('스크롤탑-31.95: ', chatArea.current.scrollTop-31.95);
+      console.log('스크롤탑: ', chatArea.current.scrollTop);
+      
     }
   };
+
+  
 
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter') {
