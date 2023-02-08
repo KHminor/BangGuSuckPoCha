@@ -18,5 +18,5 @@ public class InviteRequestDto {
     @ApiModelProperty(value = "발신자")
     String fromUsername;
     @ApiModelProperty(value = "수신자")
-    String toUsername;
+    Long youId;
 }
