@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { showPublicModal, showUpdateRoom } from "src/store/store";
+import { inviteMyFriend, showPublicModal, showUpdateRoom } from "src/store/store";
 import InviteFriend from "./InviteFriend";
 import PublicModal from "./PublicModal";
 import UpdateRoomInfo from "./UpdateRoomInfo";
@@ -52,10 +52,15 @@ function RoomFooterNav({
     return state.updateRoomInfo;
   });
 
+  // 친구 초대 모달 보이기 관련
+  const showInviteFriend = useAppSelector((state) => {
+    return state.inviteFriendModal;
+  })
+
 
   // 클릭시 Public모달 보이는 함수
   const onClickShowModal = (event: React.MouseEvent<HTMLImageElement>) => {
-    switch ((event.target as HTMLImageElement).alt) {
+    switch (event.currentTarget.id) {
       // 시간추가 관련 데이터
       case "addTime":
         setModalData({
@@ -89,11 +94,28 @@ function RoomFooterNav({
     dispatch(showPublicModal(true));
   };
 
+  const onClickShowInvite = (username : string, nickname: string) => {
+    setModalData({
+      type: "invite",
+      msg: "포차에 초대하시겠습니까?",
+      username,
+      nickname,
+      pochaId,
+    });
+    // 모달 켜는 dispatch
+    dispatch(showPublicModal(true));
+  };
+
+
   // 포차 정보 업데이트 모달 켜기
   const onClickUpdateModal = () => {
     dispatch(showUpdateRoom(true));
   }
 
+  // 친구 초대 창 켜기
+  const onClickInviteFriend = () => {
+    dispatch(inviteMyFriend(true));
+  }
 
   // ----- 소켓 관련 썰 변경 이벤트 ------
   function handleSsulClick() {
@@ -105,12 +127,11 @@ function RoomFooterNav({
   }
 
 
-
   return (
     <>
       {showModal && <PublicModal data={modalData} socket={socket} />}
       {showUpdateModal && <UpdateRoomInfo pochaId={pochaId} roomTheme={roomTheme!} socket={socket} />}
-      {<InviteFriend />}
+      {showInviteFriend && <InviteFriend pochaId={pochaId} onClickShowInvite={onClickShowInvite}/>}
       <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
         <div></div>
         <div
@@ -139,6 +160,7 @@ function RoomFooterNav({
                   className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
                   src={require("src/assets/roomIcon/time.png")}
                   alt="addTime"
+                  id="addTime"
                 />
                 <span className="text-[0.8rem] mt-1">시간추가</span>
               </div>
@@ -148,14 +170,17 @@ function RoomFooterNav({
                   className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
                   src={require("src/assets/roomIcon/cheers.png")}
                   alt="jjan"
+                  id="jjan"
                 />
                 <span className="text-[0.8rem] mt-1">짠</span>
               </div>
               <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
                 <img
+                  onClick={onClickInviteFriend}
                   className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
                   src={require("src/assets/roomIcon/add-user.png")}
                   alt="invite"
+                  id="invite"
                 />
                 <span className="text-[0.8rem] mt-1">친구초대</span>
               </div>
@@ -174,6 +199,7 @@ function RoomFooterNav({
                   className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
                   src={require("src/assets/roomIcon/exclamation-mark.png")}
                   alt="update"
+                  id="update"
                 />
                 <span className="text-[0.8rem] mt-1">포차정보</span>
               </div>
@@ -183,6 +209,7 @@ function RoomFooterNav({
                   className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
                   src={require("src/assets/roomIcon/cancel.png")}
                   alt="exit"
+                  id="exit"
                 />
                 <span className="text-[0.8rem] mt-1">나가기</span>
               </div>

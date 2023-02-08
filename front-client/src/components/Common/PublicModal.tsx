@@ -7,6 +7,7 @@ import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
 const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
+  console.log("여기까지는 오니??ㅇㅇ", data)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // 내 아이디
@@ -20,6 +21,10 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
   const [roomName, setRoomName] = useState<string>("");
   // 이미지 데이터
   const [modalImg, setModalImg] = useState<string>("");
+  // 닉네임 데이터
+  const [nickname, setNickName] = useState<string>("");
+  // 상대방 데이터
+  const [toUsername, setToUserName] = useState<string>("");
 
   //  axios 요청
   const api = axios.create({
@@ -31,7 +36,7 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
 
   // 메시지 구분하기
   useEffect(() => {
-    const { msg, pochaId, img } = data;
+    const { msg, pochaId, img, nickname, username } = data;
     // 모든 공통으로 메시지 세팅
     setMessage(msg);
     switch (data.type) {
@@ -50,6 +55,11 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
         setRoomName(pochaId);
         setIsCancelBtn(true);
         break;
+      case "invite":
+        setRoomName(pochaId);
+        setNickName(nickname);
+        setToUserName(username);
+        setIsCancelBtn(true);
     }
   }, []);
 
@@ -91,6 +101,23 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
       console.log("포차나가기 error", error);
     }
   }
+  // 포차에 친구 초대 요청
+  async function inviteMyFriend() {
+    try {
+      await axios({
+        method: "POST",
+        url: `/api/pocha/invite`,
+        data: {
+          "fromUsername": myName,
+          "pochaId": roomName,
+          "youId": toUsername,
+        }
+      })
+      toast.success(`${nickname}님에게 초대요청을 보냈습니다`);
+    } catch (error) {
+      console.log("포차에 친구초대 실패", error);
+    }
+  }
 
   // 배경 클릭시 모달 끄는 함수
   const BgCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -112,7 +139,9 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
         break;
       case "exit":
         handlePochaExit();
-        setIsCancelBtn(true);
+        break;
+      case "invite":
+        inviteMyFriend();
         break;
     }
     // 모달 끄기
@@ -133,7 +162,7 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
       <div className="bg-black px-16 pt-14 pb-7 rounded-md text-center">
         {modalImg && <img src={modalImg} alt="modalImg" className="w-44" />}
         <div className="text-xl mb-6 font-bold text-white">
-          {/* <span className="font-bold text-purple-300">{`${message}`}</span> */}
+          <span className="font-bold text-purple-300">{`${nickname} `}</span>
           {`${message}`}
         </div>
         <input

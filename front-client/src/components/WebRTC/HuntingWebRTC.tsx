@@ -5,17 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showPublicModal, showRoomUserProfile } from "../../store/store";
+import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
-const WebRTC = ({
-  pochaId,
-  propSocket,
-}: {
-  pochaId: string;
-  propSocket: Function;
-}) => {
+const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // webRTC관련
@@ -32,10 +26,6 @@ const WebRTC = ({
   const [optionList, setOptionList] = useState<any[]>([]);
   // 사람수 체크 리스트(카메라 생성용);
   // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
-  // 짠 카운트
-  const [count, setCount] = useState<string>("");
-  // 정보 변경 업데이트용 변수
-  const [updateCheck, setUpdateCheck] = useState<boolean>(false);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -71,10 +61,10 @@ const WebRTC = ({
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
-    console.log(pochaId);
+    console.log(pochaId)
     try {
       const {
-        data: { data },
+        data: { data }
       } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
       });
@@ -83,7 +73,7 @@ const WebRTC = ({
       // setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
-    } catch (error) {
+    } catch(error) {
       console.log("포차 참여유저 데이터 axios error", error);
     }
   }
@@ -94,12 +84,11 @@ const WebRTC = ({
   let cameraOff = false;
   // let userCount = 1;
 
-  // 최초실행
+  // 최초실행 
   useEffect(() => {
     propSocket(socket);
     getUsersProfile();
   }, []);
-
 
   const getCameras = async () => {
     try {
@@ -252,7 +241,6 @@ const WebRTC = ({
         username: user.username,
         nickname: user.nickname,
       };
-      console.log("방 입장--------------", myPeerConnections.current[user.id]);
     });
 
     console.log("방 입장--------------");
@@ -267,7 +255,7 @@ const WebRTC = ({
       username: user.username,
       nickname: user.nickname,
     };
-    console.log("환영!!!!----------------------------", myPeerConnections.current[socketId]);
+    console.log("환영!!!!----------------------------");
 
     const offer = await myPeerConnections.current[socketId][
       "peer"
@@ -366,6 +354,25 @@ const WebRTC = ({
         myPeerConnections.current[socketID].username,
         myPeerConnections.current[socketID].nickname
       );
+
+      // peerFace.current[indexData - 1].srcObject = media;
+      // if (userCount.current === 1) {
+      //   peerFace.current[0].srcObject = media;
+      // } else if (userCount.current === 2) {
+      //   peerFace.current[1].srcObject = media;
+      // } else if (userCount.current === 3) {
+      //   peerFace.current[2].srcObject = media;
+      // }
+      // if (userCount.current === 1) {
+      //   peerFace1.current.srcObject = media;
+      // } else if (userCount.current === 2) {
+      //   peerFace2.current.srcObject = media;
+      // } else if (userCount.current === 3) {
+      //   peerFace3.current.srcObject = media;
+      // }
+      // userCount += 1;
+      // setUserCount((prev) => prev + 1);
+      // userCount.current += 1;
     }
 
     console.log(userCount + "==================");
@@ -423,7 +430,7 @@ const WebRTC = ({
         pochaInfo = result.data.data;
       });
       console.log(pochaInfo);
-    } catch (error) {
+    } catch(error) {
       console.log("방설정 다시불러오기 error", error);
     }
   }
@@ -439,44 +446,24 @@ const WebRTC = ({
   // 포차 설정 변경! : 방 설정 다시 불러오기.
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
-    setUpdateCheck((prev) => !prev);
-    toast.success("포차 정보가 변경되었습니다");
     // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
+    await pocha_config_update("3");
   });
 
   // 포차 시간 연장! : 방 설정 다시 불러오기.
   socket.on("pocha_extension", async () => {
     console.log("포차 시간 연장!----------------------");
     // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
+    await pocha_config_update("3");
   });
 
+  // // 포차 짠! 기능 : 방 설정 다시 불러오기.
+  // socket.on("pocha_cheers", async () => {
+  //   console.log("포차 짠!!!!!----------------------");
+  //   // 방 설정 다시 불러오기!!! 테스트
+  //   // await pocha_config_update("3");
+  // });
 
-  // 포차 짠 함수
-  const jjan = () => {
-    let time: number = 3;
-    setCount(String(time));
-    const interval = setInterval(() => {
-      time -= 1;
-      setCount(String(time));
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(interval);
-      setCount("짠!!!!");
-    }, 3900);
-    setTimeout(() => {
-      setCount("");
-      dispatch(showPublicModal(false));
-    }, 5000);
-  };
-  // 포차 짠! 기능 : 방 설정 다시 불러오기.
-  socket.on("pocha_cheers", async () => {
-    console.log("포차 짠!!!!!------------ㅇ----------");
-    jjan();
-    // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
-  });
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -510,7 +497,7 @@ const WebRTC = ({
 
   // addStream 이벤트시 실행 함수
   function handleAddStream(stream: any, username: string, nickname: string) {
-    console.log("handleAddStream---------------------", username);
+    console.log("handleAddStream---------------------");
     const indexData = userCount.current;
     // const indexData = userCount;
     // peerFace.current[indexData - 1].classList.toggle("hidden");
@@ -525,22 +512,19 @@ const WebRTC = ({
     // }
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
-      peerFace1.current.id = username;
-      console.log('비디오 아이디 유저네임1', username);
+      peerFace1.current.value = username;
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
-      peerFace2.current.id = username;
-      console.log('비디오 아이디 유저네임2', username);
+      peerFace2.current.value = username;
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
-      peerFace3.current.id = username;
-      console.log('비디오 아이디 유저네임3', username);
+      peerFace3.current.value = username;
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
-      peerFace4.current.id = username;
+      peerFace4.current.value = username;
     } else if (userCount.current === 5) {
       peerFace5.current.srcObject = stream;
-      peerFace5.current.id = username;
+      peerFace5.current.value = username;
     }
 
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
@@ -555,14 +539,14 @@ const WebRTC = ({
 
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    const username = event.currentTarget.id;
-    console.log("모달용 데이터 닉?", peerFace2.current.id);
+    const username = (event.target as any).value;
     const { data } = await axios({
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
     console.log("모달용 데이터?", data);
     setUserProfileData(data);
     // dispatch(isRtcLoading(false));
+    // console.log("오냐??????", (event.target as any).value);
     dispatch(showRoomUserProfile());
   };
 
@@ -575,40 +559,13 @@ const WebRTC = ({
           {isRoomUserProfile && userProfileData && (
             <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
           )}
-          {count && (
-            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
-              <div className="text-7xl font-bold text-white">{count}</div>
-            </div>
-          )}
-          <div className="text-white">
-            <span
-              className="font-bold text-3xl fixed left-0 right-0 top-10"
-              ref={ssulTitle}
-            >{`:: ${ssul} ::`}</span>
-            <div className="flex flex-wrap justify-evenly items-center p-24">
+          <div className="text-white grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
+            <div className="flex flex-col justify-between items-center">
+            {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
               {/* 내 비디오 공간 */}
               <video
                 className="w-[30rem] h-80 py-3"
                 ref={myFace}
-                playsInline
-                autoPlay
-              ></video>
-              {/* 다른 사람들 비디오 공간 */}
-              {/* {currentUsers.current.map((vide: number, index: number) => {
-          return (
-            <video
-              key={index}
-              className="w-[30rem] h-80 py-3"
-              ref={(element) => (peerFace.current[index] = element)}
-              playsInline
-              autoPlay
-            ></video>
-          );
-        })} */}
-              <video
-                onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
-                ref={peerFace1}
                 playsInline
                 autoPlay
               ></video>
@@ -622,14 +579,34 @@ const WebRTC = ({
               <video
                 onClick={ShowUserProfile}
                 className="w-[30rem] h-80 py-3 cursor-pointer"
-                ref={peerFace3}
+                ref={peerFace4}
+                playsInline
+                autoPlay
+                >
+              </video>
+              </div>
+              {/* 게임 공간 */}
+              <div
+                className="grid"
+                style={{ gridTemplateColumns: "0.98fr" }}
+              >
+                <div className="flex justify-center h-240 items-center border-2 border-blue-400 rounded-[20px]">
+                  2
+                </div>
+              </div>
+              {/* 사람 공간 */}
+              <div className="flex flex-col justify-between items-center">
+              <video
+                onClick={ShowUserProfile}
+                className="w-[30rem] h-80 py-3 cursor-pointer"
+                ref={peerFace1}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
                 className="w-[30rem] h-80 py-3 cursor-pointer"
-                ref={peerFace4}
+                ref={peerFace3}
                 playsInline
                 autoPlay
               ></video>
@@ -640,7 +617,7 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
-            </div>
+              </div>
             <div className="flex w-fit">
               {/* 뮤트 */}
               <button
