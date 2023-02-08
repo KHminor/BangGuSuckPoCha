@@ -21,7 +21,7 @@ function ReviewPage():JSX.Element {
     return state.RoomUserProfileClickCheck;
   });
   useEffect(()=> {
-    axios({
+    axios({ 
       method: 'get',
       url: `https://i8e201.p.ssafy.io/api/user/review/${username}`
     })
