@@ -35,7 +35,7 @@ function FriendChat():JSX.Element {
 
   useEffect(() => {
     connect();
-    return () => disconnect();
+    // return () => disconnect();
   }, []);
   
   useEffect(()=> {
