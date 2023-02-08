@@ -44,9 +44,9 @@ function FriendChat():JSX.Element {
     return () => disconnect();
   }, [message]);
   
-  useEffect(()=> {
-    console.log('현재 메세지 값: ', message)
-  })
+  // useEffect(()=> {
+  //   console.log('현재 메세지 값: ', message)
+  // })
 
 
 
