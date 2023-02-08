@@ -417,6 +417,7 @@ const WebRTC = ({
   });
 
   // ------------ 포차 기능 code --------------
+
   //  axios
   const api = axios.create({
     baseURL: "https://i8e201.p.ssafy.io/api",
@@ -429,7 +430,7 @@ const WebRTC = ({
     // 방 설정 다시 불러오기!!! 테스트
     let pochaInfo = {};
     try {
-      await api.get(`/pocha/${pochaId}`).then((result: any) => {
+      await api.get(`/pocha/${pochaId}`).then((result) => {
         pochaInfo = result.data.data;
       });
       console.log(pochaInfo);
@@ -437,6 +438,7 @@ const WebRTC = ({
       console.log("방설정 다시불러오기 error", error);
     }
   }
+
   // 포차 설정 변경! : 방 설정 다시 불러오기.
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
