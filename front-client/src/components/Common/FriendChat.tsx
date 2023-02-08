@@ -43,7 +43,6 @@ function FriendChat():JSX.Element {
     axios.get(`https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`).then((r)=> {
       setMessage(r.data.data)
     })
-    scrollToBottom()
   },[])
 
   // useEffect(()=> {
@@ -68,6 +67,7 @@ function FriendChat():JSX.Element {
           const msg = JSON.parse(newMessage.body)
           setMessage((_chat_list:any)=> [..._chat_list, msg])
         });
+        scrollToBottom()
       },
     });
       client.current.activate();
@@ -175,6 +175,7 @@ function FriendChat():JSX.Element {
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
                   publish(inputChat)
+                  scrollToBottom()
                   // setsendCheck(sendCheck+1)
                 }}/>
               </div>
