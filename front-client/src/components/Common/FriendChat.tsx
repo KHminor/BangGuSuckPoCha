@@ -75,18 +75,23 @@ function FriendChat():JSX.Element {
     client.current.deactivate();
   };
 
-  const publish = (message:any) => {
+  const publish = (inputChat:any) => {
     const chat_id = localStorage.getItem('chat_id')
+    const userId = localStorage.getItem('userId')
     if (!client.current.connected) {
       return;
     }
 
     client.current.publish({
       destination: "/pub/chat",
-      body: JSON.stringify({ roomSeq: chat_id, message }),
+      body: JSON.stringify({chat_id:chat_id, user_id:userId, content:inputChat}),
     });
 
-    setMessage("");
+    setInputChat("");
+  };
+
+  const handleChange = (event:any) => { // 채팅 입력 시 state에 값 설정
+    setInputChat(event.target.value);
   };
 
 
@@ -146,14 +151,11 @@ function FriendChat():JSX.Element {
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
-              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' type="text" onChange={(e)=> {
-                setInputChat(e.target.value)
-              }}/>
+              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...'  type="text" value={inputChat} onChange={handleChange}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
                   publish(inputChat)
                   setsendCheck(sendCheck+1)
-                  
                 }}/>
               </div>
             </div>
