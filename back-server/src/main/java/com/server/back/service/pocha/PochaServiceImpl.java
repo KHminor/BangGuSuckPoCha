@@ -266,7 +266,7 @@ public class PochaServiceImpl implements PochaService{
     @Override
     public void pochaInvite(InviteRequestDto requestDto) {
         User fromUser = userRepository.findByUsername(requestDto.getFromUsername());
-        User toUser = userRepository.findByUsername(requestDto.getToUsername());
+        User toUser = userRepository.findByUserId(requestDto.getYouId());
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
 
         if(inviteRepository.findByToUserAndPocha(toUser, pocha) == null) {
