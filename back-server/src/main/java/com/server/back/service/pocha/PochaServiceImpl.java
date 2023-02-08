@@ -92,7 +92,9 @@ public class PochaServiceImpl implements PochaService{
                 .region(requestDto.getRegion())
                 .isPrivate(requestDto.getIsPrivate())
                 .limitUser(requestDto.getLimitUser())
+                .createAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusHours(2))
+                .isWaiting(theme.getThemeId().contains("T2") ? true : false)
                 .isSsul(false)
                 .alcohol(0)
                 .isEnd(false)
@@ -151,7 +153,7 @@ public class PochaServiceImpl implements PochaService{
                 .pocha(pocha)
                 .user(user)
                 .isHost(requestDto.getIsHost())
-                .waiting(requestDto.getWaiting())
+                .createAt(LocalDateTime.now())
                 .build();
         participantRepository.save(participant);
     }
@@ -165,30 +167,32 @@ public class PochaServiceImpl implements PochaService{
         entity.updateExit();
 
         // 유저 평가 추가!!!
-        LocalDateTime start = entity.getCreateAt();
-        LocalDateTime exit = LocalDateTime.now();
-        for(Participant participant : pocha.getParticipant()){
-            if(participant.getExitAt() == null && participant.getUser().getUserId() != entity.getUser().getUserId()){
-                LocalDateTime dt = null;
-                if(start.isAfter(participant.getCreateAt()))    dt = start;
-                else dt = participant.getCreateAt();
+        if(!pocha.getIsWaiting()) {
+            LocalDateTime start = entity.getCreateAt();
+            LocalDateTime exit = LocalDateTime.now();
+            for (Participant participant : pocha.getParticipant()) {
+                if (participant.getExitAt() == null && participant.getUser().getUserId() != entity.getUser().getUserId()) {
+                    LocalDateTime dt = null;
+                    if (start.isAfter(participant.getCreateAt())) dt = start;
+                    else dt = participant.getCreateAt();
 
-                Duration diff = Duration.between(dt, exit);
-                if(diff.getSeconds() > 1800){
-                    reviewRepository.save(Review.builder()
-                            .pocha(pocha)
-                            .fromId(participant.getUser())
-                            .toId(entity.getUser())
-                            .reviewScore(3)
-                            .create_at(LocalDateTime.now())
-                            .build());
-                    reviewRepository.save(Review.builder()
-                            .pocha(pocha)
-                            .fromId(entity.getUser())
-                            .toId(participant.getUser())
-                            .reviewScore(3)
-                            .create_at(LocalDateTime.now())
-                            .build());
+                    Duration diff = Duration.between(dt, exit);
+                    if (diff.getSeconds() > 1800) {
+                        reviewRepository.save(Review.builder()
+                                .pocha(pocha)
+                                .fromId(participant.getUser())
+                                .toId(entity.getUser())
+                                .reviewScore(3)
+                                .create_at(LocalDateTime.now())
+                                .build());
+                        reviewRepository.save(Review.builder()
+                                .pocha(pocha)
+                                .fromId(entity.getUser())
+                                .toId(participant.getUser())
+                                .reviewScore(3)
+                                .create_at(LocalDateTime.now())
+                                .build());
+                    }
                 }
             }
         }
@@ -211,6 +215,17 @@ public class PochaServiceImpl implements PochaService{
             if(isPochaEnd){
                 pocha.updateEnd();
             }
+        }
+    }
+
+    @Override
+    public void pochaHuntingStart(Long pochaId) {
+        Pocha entity = pochaRepository.findByPochaId(pochaId);
+
+        entity.startHuntingPocha();
+        for(Participant p : entity.getParticipant()){
+            if(p.getExitAt() == null) continue;
+            p.updateCreate();
         }
     }
 
@@ -292,7 +307,7 @@ public class PochaServiceImpl implements PochaService{
             }
             // 참여가 가능하다면 참여.
             if(pocha.getLimitUser() > participantToal) {
-                pochaEnter(PochaParticipantRequestDto.builder().pochaId(pocha.getPochaId()).username(user.getUsername()).isHost(false).waiting(false).build());
+                pochaEnter(PochaParticipantRequestDto.builder().pochaId(pocha.getPochaId()).username(user.getUsername()).isHost(false).build());
 
                 return true;
             }

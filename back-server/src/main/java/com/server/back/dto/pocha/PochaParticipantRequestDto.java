@@ -15,5 +15,4 @@ public class PochaParticipantRequestDto {
     private Long pochaId;
     private String username;
     private Boolean isHost;
-    private Boolean waiting;
 }

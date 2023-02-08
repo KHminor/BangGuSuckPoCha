@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Entity
-public class Participant extends BaseTimeEntity{
+public class Participant{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantId;
     @ManyToOne(targetEntity = Pocha.class, fetch = FetchType.LAZY)
@@ -26,13 +26,14 @@ public class Participant extends BaseTimeEntity{
     private User user;
     @Column(nullable = false)
     private Boolean isHost;
+    @Column(nullable=false)
+    private LocalDateTime createAt;
     private LocalDateTime exitAt;
-    @Column(nullable = false)
-    private Boolean waiting;
 
     public void updateExit() {
         this.exitAt = LocalDateTime.now();
     }
+    public void updateCreate() {this.createAt = LocalDateTime.now();}
 
     public void updateHost() {
         this.isHost = true;
