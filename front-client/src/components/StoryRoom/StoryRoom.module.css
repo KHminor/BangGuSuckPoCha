@@ -1,4 +1,5 @@
 .gameroomimg {
   background-image: url('../../assets/img/GameRoomImg.png');
+  /* background-image: url('src/assets/theme/izakaya.jpg'); */
   background-size: cover;
 }

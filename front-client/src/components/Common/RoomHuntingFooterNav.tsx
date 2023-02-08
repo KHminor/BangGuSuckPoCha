@@ -127,7 +127,7 @@ function RoomHuntingFooterNav({
         </div>
       ) : (
         <>
-          {showModal && <PublicModal data={modalData} socket={socket} jjan={jjan} />}
+          {showModal && <PublicModal data={modalData} socket={socket} />}
           <div
             className="grid"
             style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}

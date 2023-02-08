@@ -370,6 +370,17 @@ const updateRoomInfo = createSlice({
   },
 });
 
+// 친구 초대창 켜고 끄는 함수
+const inviteFriendModal = createSlice({
+  name: "inviteFriendModal",
+  initialState: false,
+  reducers: {
+    inviteMyFriend(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -415,6 +426,7 @@ export const store = configureStore({
     webRtcLoading: webRtcLoading.reducer,
     // room관련
     updateRoomInfo: updateRoomInfo.reducer,
+    inviteFriendModal: inviteFriendModal.reducer,
   },
 });
 //주석추가
@@ -466,6 +478,7 @@ export const { changeMyPageCheck } = myPageCheck.actions;
 export const { isRtcLoading } = webRtcLoading.actions;
 // room
 export const { showUpdateRoom } = updateRoomInfo.actions;
+export const { inviteMyFriend } = inviteFriendModal.actions;
 
 
 // store의 타입 미리 export 해둔 것.
