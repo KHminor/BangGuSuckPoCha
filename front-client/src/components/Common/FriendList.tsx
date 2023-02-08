@@ -85,6 +85,7 @@ function FriendList(): JSX.Element {
           if (checkChatId === chat_id) {
             dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
           } else {
+            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
             dispatch(changeMenuFriendChatState(true));
           }
         }}
