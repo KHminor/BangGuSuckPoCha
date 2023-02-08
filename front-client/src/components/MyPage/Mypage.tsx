@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { changeMyPageCheck } from "src/store/store";
+import FriendChat from "../Common/FriendChat";
+import FriendList from "../Common/FriendList";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
@@ -19,8 +21,10 @@ function Mypage(): JSX.Element {
   const [isSelected, setIsSelected] = useState<any>();
   const [city, setCity] = useState<any>();
 
+  const [myInfo, setMyInfo] = useState();
+
   const handleSelect = (event: any) => {
-    console.log("e의 타겟밸류ㅠㅠㅠㅠ", event.target.value);
+    // console.log("e의 타겟밸류ㅠㅠㅠㅠ", event.target.value);
     setSelected(event.target.value);
     setIsSelected(false);
     city.map((it: any) => {
@@ -33,6 +37,11 @@ function Mypage(): JSX.Element {
       }
     });
   };
+
+    //  메뉴 -> 친구 클릭 -> 채팅 상태
+    const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
+      return state.menuFriendChatClickCheck;
+    });
 
   const handleSelect2 = (event: any) => {
     console.log(event.target.value);
@@ -92,8 +101,11 @@ function Mypage(): JSX.Element {
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
     }).then((r) => {
-      console.log("내정보 : ");
-      console.log(r.data.data);
+      // console.log("내정보 : ");
+      // console.log(r.data.data);
+      setMyInfo(r.data.data);
+      console.log("내정보가져오기", myInfo);
+
       //data내용
       let a = r.data.data;
       setNickname(a.nickname);
@@ -160,6 +172,10 @@ function Mypage(): JSX.Element {
   return (
     <>
       <Navbar />
+      {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
+      <FriendList />
+
+      {menuFriendChatClickCheck ? <FriendChat /> : null}
       <div>
         <div
           className="grid w-screen h-screen font-nanum "
@@ -497,7 +513,7 @@ function Mypage(): JSX.Element {
                 </div>
               </div>
             </div>
-            <div className="bg-black ">3</div>
+            <div className="bg-black "></div>
           </div>
           {/* 메뉴 클릭시 보이기 */}
           <NavbarMenu />
