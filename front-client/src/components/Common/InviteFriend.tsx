@@ -4,37 +4,26 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeMenuFriendChatState,
   changemenuFriendClickUserData,
+  changeMenuFriendListApiDataState,
   changeMenuFriendState,
 } from "../../store/store";
 import styles from "./Common.module.css";
 
 
-function FriendList(): JSX.Element {
-  
+function InviteFriend(): JSX.Element {
+  const username = localStorage.getItem("username")
   // 메뉴 클릭시
   const dispatch = useAppDispatch();
   const friendListIcon = useRef<any>(null);
 
-  //  메뉴 -> 친구 클릭 상태
-  const menuFriendClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendClickCheck;
-  });
-  //  메뉴 -> 친구 클릭 -> 챗팅
-  const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
-    return state.menuFriendChatClickCheck;
-  });
   //  메뉴 -> 친구 리스트
   const menuFriendListApiData: any = useAppSelector((state: any) => {
     return state.menuFriendListApiData;
   });
 
-  useEffect(() => {
-    if (menuFriendClickCheck) {
-      friendListIcon.current.classList.remove("hidden");
-    } else {
-      friendListIcon.current.classList.add("hidden");
-    }
-  }, [menuFriendClickCheck]);
+  console.log('친구리스트데이터',menuFriendListApiData)
+
+
 
   const emoji =
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Noto_Emoji_KitKat_263a.svg/220px-Noto_Emoji_KitKat_263a.svg.png";
@@ -42,52 +31,15 @@ function FriendList(): JSX.Element {
   const logState =
     "https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png";
 
-  // 클릭한 유저가 이전에 클릭한 유저와 같은지 체크
-  const [checkChatId, setCheckChatId] = useState();
-
-  
-
-  
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
-    const chat_id = e.chat_id;
     return (
       <div
         key={idx}
         className=" grid my-2 cursor-pointer "
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
         onClick={() => {
-          // 클릭한 유저와의 채팅 아이디 체크
-          setCheckChatId(e.chat_id);
-          // 채팅내용 가져오기
-          const getChatList = async () => {
-            try {
-              const getChat = await axios.get(
-                `https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`
-              );
-              return getChat.data.data;
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          getChatList().then((data) => {
-            localStorage.setItem('chat_id',chat_id)
-            localStorage.setItem('f_nickname',e.f_nickname)
-            dispatch(
-              changemenuFriendClickUserData({
-                nickname: e.f_nickname,
-                data: data,
-                chat_id: chat_id
-              })
-            );
-          });
-
-          dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
-          // if (checkChatId === chat_id) {
-          //   dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
-          // } else {
-          //   dispatch(changeMenuFriendChatState(true));
-          // }
+          console.log("체크상태1");
         }}
       >
         <div className="flex justify-center items-center h-full pl-2">
@@ -108,7 +60,7 @@ function FriendList(): JSX.Element {
   return (
     <div
       ref={friendListIcon}
-      className="absolute  w-[17rem] h-[35rem] top-[11.6rem] right-[2rem] hidden"
+      className="fixed  w-[17rem] h-[35rem] bottom-0 right-0"
     >
       <div className="h-full w-full">
         <div className="w-full h-full">
@@ -135,12 +87,10 @@ function FriendList(): JSX.Element {
                   src={require("../../assets/roomIcon/cancel.png")}
                   alt=""
                   onClick={() => {
-                    if (menuFriendChatClickCheck) {
-                      dispatch(changeMenuFriendChatState(false));
-                    }
-                    if (menuFriendClickCheck) {
-                      dispatch(changeMenuFriendState());
-                    }
+                    console.log("체크상태2");
+
+                    dispatch(changeMenuFriendState());
+                    
                   }}
                 />
               </div>
@@ -178,4 +128,4 @@ function FriendList(): JSX.Element {
     </div>
   );
 }
-export default FriendList;
+export default InviteFriend;

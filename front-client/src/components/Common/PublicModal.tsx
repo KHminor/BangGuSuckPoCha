@@ -2,12 +2,11 @@ import axios from "axios";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { io } from "socket.io-client";
 import { useAppDispatch } from "../../store/hooks";
 import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
-const PublicModal = ({ data, socket, jjan }: { data: any; socket?: any, jjan?: any }) => {
+const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // 내 아이디
@@ -33,42 +32,49 @@ const PublicModal = ({ data, socket, jjan }: { data: any; socket?: any, jjan?: a
   // 메시지 구분하기
   useEffect(() => {
     const { msg, pochaId, img } = data;
+    // 모든 공통으로 메시지 세팅
+    setMessage(msg);
     switch (data.type) {
       case "tag":
-        setMessage(msg);
+        break;
+      case "addTime":
+        setRoomName(pochaId);
+        setIsCancelBtn(true);
         break;
       case "jjan":
-        setMessage(msg);
         setIsCancelBtn(true);
         setRoomName(pochaId);
         setModalImg(img);
         break;
       case "exit":
-        setMessage(msg);
         setRoomName(pochaId);
         setIsCancelBtn(true);
         break;
     }
   }, []);
 
+  // 포차 시간 추가 이벤트
+  async function handlePochaExtension() {
+    // axios를 통해 포차 시간 연장. (await 사용해야할 듯?)
+    try {
+      await api.put(`/pocha/extension/${roomName}`);
+      socket.emit("pocha_extension", roomName);
+      toast.success("시간을 연장하였습니다");
+    } catch (error) {
+      console.log("시간추가 error", error);
+    }
+  }
+
   // 포차 짠!! 이벤트
   async function handlePochaCheers() {
     // axios를 통해 포차 짠 실행.
     try {
-      await api.put("/pocha/alcohol/3");
+      await api.put(`/pocha/alcohol/${roomName}`);
       socket.emit("pocha_cheers", roomName);
     } catch (error) {
       console.log("짠 error", error);
     }
   }
-
-  // 포차 짠! 기능 : 방 설정 다시 불러오기.
-  socket.on("pocha_cheers", async () => {
-    console.log("포차 짠!!!!!------------ㅇ----------");
-    jjan();
-    // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
-  });
 
   // 포차 나가기 요청
   async function handlePochaExit() {
@@ -93,11 +99,13 @@ const PublicModal = ({ data, socket, jjan }: { data: any; socket?: any, jjan?: a
     }
   };
 
-  // 확인 클릭시 처리하는 함수
+  // 확인 클릭시 처리
   const onClickConfirm = () => {
     switch (data.type) {
       case "tag":
-        dispatch(showPublicModal(false));
+        break;
+      case "addTime":
+        handlePochaExtension();
         break;
       case "jjan":
         handlePochaCheers();
@@ -105,9 +113,10 @@ const PublicModal = ({ data, socket, jjan }: { data: any; socket?: any, jjan?: a
       case "exit":
         handlePochaExit();
         setIsCancelBtn(true);
-        dispatch(showPublicModal(false));
         break;
     }
+    // 모달 끄기
+    dispatch(showPublicModal(false));
   };
 
   // 취소 클릭시 모달 끄는 함수

@@ -263,7 +263,7 @@ const createRoomChoicePeople = createSlice({
 // 방 만들때 나이 체크
 const createRoomChoiceAge = createSlice({
   name: "createRoomChoiceAge",
-  initialState: "ALL",
+  initialState: 0,
   reducers: {
     changeCreateRoomChoiceAge(state, action) {
       return (state = action.payload);
@@ -359,6 +359,17 @@ const webRtcLoading = createSlice({
   },
 });
 
+// UpdateRoomModal 켜고 끄는 함수
+const updateRoomInfo = createSlice({
+  name: "updateRoomInfo",
+  initialState: false,
+  reducers: {
+    showUpdateRoom(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -402,6 +413,8 @@ export const store = configureStore({
     myPageCheck: myPageCheck.reducer,
     // webRTC
     webRtcLoading: webRtcLoading.reducer,
+    // room관련
+    updateRoomInfo: updateRoomInfo.reducer,
   },
 });
 //주석추가
@@ -451,6 +464,9 @@ export const { changeNavAlarmReviewEmojiUserData } =
 export const { changeMyPageCheck } = myPageCheck.actions;
 // webRTC
 export const { isRtcLoading } = webRtcLoading.actions;
+// room
+export const { showUpdateRoom } = updateRoomInfo.actions;
+
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
