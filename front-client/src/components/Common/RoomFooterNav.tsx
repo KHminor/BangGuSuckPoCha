@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { showPublicModal, showUpdateRoom } from "src/store/store";
+import InviteFriend from "./InviteFriend";
 import PublicModal from "./PublicModal";
 import UpdateRoomInfo from "./UpdateRoomInfo";
 
@@ -109,6 +110,7 @@ function RoomFooterNav({
     <>
       {showModal && <PublicModal data={modalData} socket={socket} />}
       {showUpdateModal && <UpdateRoomInfo pochaId={pochaId} roomTheme={roomTheme!} socket={socket} />}
+      {<InviteFriend />}
       <div className="grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
         <div></div>
         <div

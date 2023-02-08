@@ -100,6 +100,7 @@ const WebRTC = ({
     getUsersProfile();
   }, []);
 
+
   const getCameras = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -251,6 +252,7 @@ const WebRTC = ({
         username: user.username,
         nickname: user.nickname,
       };
+      console.log("방 입장--------------", myPeerConnections.current[user.id]);
     });
 
     console.log("방 입장--------------");
@@ -265,7 +267,7 @@ const WebRTC = ({
       username: user.username,
       nickname: user.nickname,
     };
-    console.log("환영!!!!----------------------------");
+    console.log("환영!!!!----------------------------", myPeerConnections.current[socketId]);
 
     const offer = await myPeerConnections.current[socketId][
       "peer"
@@ -364,25 +366,6 @@ const WebRTC = ({
         myPeerConnections.current[socketID].username,
         myPeerConnections.current[socketID].nickname
       );
-
-      // peerFace.current[indexData - 1].srcObject = media;
-      // if (userCount.current === 1) {
-      //   peerFace.current[0].srcObject = media;
-      // } else if (userCount.current === 2) {
-      //   peerFace.current[1].srcObject = media;
-      // } else if (userCount.current === 3) {
-      //   peerFace.current[2].srcObject = media;
-      // }
-      // if (userCount.current === 1) {
-      //   peerFace1.current.srcObject = media;
-      // } else if (userCount.current === 2) {
-      //   peerFace2.current.srcObject = media;
-      // } else if (userCount.current === 3) {
-      //   peerFace3.current.srcObject = media;
-      // }
-      // userCount += 1;
-      // setUserCount((prev) => prev + 1);
-      // userCount.current += 1;
     }
 
     console.log(userCount + "==================");
@@ -527,7 +510,7 @@ const WebRTC = ({
 
   // addStream 이벤트시 실행 함수
   function handleAddStream(stream: any, username: string, nickname: string) {
-    console.log("handleAddStream---------------------");
+    console.log("handleAddStream---------------------", username);
     const indexData = userCount.current;
     // const indexData = userCount;
     // peerFace.current[indexData - 1].classList.toggle("hidden");
@@ -542,21 +525,22 @@ const WebRTC = ({
     // }
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
-      peerFace1.current.value = username;
+      peerFace1.current.id = username;
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
-      peerFace2.current.value = username;
+      peerFace2.current.id = username;
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
-      peerFace3.current.value = username;
+      peerFace3.current.id = username;
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
-      peerFace4.current.value = username;
+      peerFace4.current.id = username;
     } else if (userCount.current === 5) {
       peerFace5.current.srcObject = stream;
-      peerFace5.current.value = username;
+      peerFace5.current.id = username;
     }
-
+    console.log('현재1', peerFace1.current.id)
+    console.log('현재2', peerFace2.current.id)
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
     // peerFace.current.srcObject = data.stream;
     // userCount += 1;
@@ -569,14 +553,14 @@ const WebRTC = ({
 
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    const username = (event.target as any).value;
+    const username = event.currentTarget.id;
+    console.log("모달용 데이터 닉?", peerFace2.current.id);
     const { data } = await axios({
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
     console.log("모달용 데이터?", data);
     setUserProfileData(data);
     // dispatch(isRtcLoading(false));
-    // console.log("오냐??????", (event.target as any).value);
     dispatch(showRoomUserProfile());
   };
 
