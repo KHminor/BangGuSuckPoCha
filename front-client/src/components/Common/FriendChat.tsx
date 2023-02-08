@@ -4,6 +4,7 @@ import styles from '../Common/Common.module.css'
 
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import axios from "axios";
 
 function FriendChat():JSX.Element {
   const friendChat = useRef<any>(null);
@@ -30,14 +31,13 @@ function FriendChat():JSX.Element {
   
   
   // 클릭 되어진 유저와의 데이터
-  const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
-  const {nickname, data ,chat_id} = menuFriendClickUserData
-  console.log(chat_id);
+  // const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
+  // const {nickname, data ,chat_id} = menuFriendClickUserData
+  // console.log(chat_id);
 
 
-  console.log('기존채팅 데이터: ', data)
-  const [message, setMessage] = useState<any>(data);
-
+  // console.log('기존채팅 데이터: ', data)
+  const [message, setMessage] = useState<any>();
   useEffect(() => {
     connect();
     scrollToBottom()
@@ -60,12 +60,14 @@ function FriendChat():JSX.Element {
       onConnect:() => { 
         console.log("onConnect");
         const chat_id = localStorage.getItem('chat_id')
+
+        axios.get(`https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`).then((r)=> {
+          setMessage(r.data.data)
+        })
+
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
-          // setMessage([...message, newMessage.body])
           const msg = JSON.parse(newMessage.body)
           setMessage((_chat_list:any)=> [..._chat_list, msg])
-          
-          //showGreeting(JSON.parse(message.body))
         });
       },
       reconnectDelay: 1000, //자동 재 연결
@@ -121,7 +123,7 @@ function FriendChat():JSX.Element {
     <div ref={friendChat} className="absolute  w-[33rem] h-[35rem] max-h-[35rem] top-[11.6rem] right-[19rem] hidden">
         <div className="relative grid w-full h-full rounded-[24px] bg-black text-white" style={{gridTemplateRows: '0.5fr 0.5fr 7fr 1fr', border:'solid 2px white'}}>
             <div className="flex justify-center items-center h-[1.8rem] max-h-[1.8rem] w-full  text-white rounded-[100px] ">Chat</div>
-            <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}>{nickname}</div>
+            <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}></div>
             {/* 채팅 공간 */}
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
@@ -131,7 +133,7 @@ function FriendChat():JSX.Element {
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
-                        chat.user_nickname === menuFriendClickUserData.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
+                        chat.user_nickname === chat.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
                       }
                     </div>
                   )
