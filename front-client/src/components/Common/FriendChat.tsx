@@ -28,16 +28,11 @@ function FriendChat():JSX.Element {
     }
   },[menuFriendChatClickCheck])
 
-  
-  
-  // 클릭 되어진 유저와의 데이터
-  // const menuFriendClickUserData: any = useAppSelector((state)=> {return state.menuFriendClickUserData})
-  // const {nickname, data ,chat_id} = menuFriendClickUserData
-  // console.log(chat_id);
 
-
-  // console.log('기존채팅 데이터: ', data)
   const [message, setMessage] = useState<any>();
+  const [inputChat, setInputChat] = useState<any>()
+  const [sendCheck, setsendCheck] = useState<any>(0)
+
   useEffect(() => {
     connect();
     return () => disconnect();
@@ -45,8 +40,9 @@ function FriendChat():JSX.Element {
   
   useEffect(()=> {
     scrollToBottom()
+    console.log('내가 작성한 채팅: ',inputChat);
     console.log('현재 메세지 값: ', message)
-  },[])
+  },[sendCheck])
 
 
 
@@ -77,6 +73,20 @@ function FriendChat():JSX.Element {
 
   const disconnect = () => {
     client.current.deactivate();
+  };
+
+  const publish = (message:any) => {
+    const chat_id = localStorage.getItem('chat_id')
+    if (!client.current.connected) {
+      return;
+    }
+
+    client.current.publish({
+      destination: "/pub/chat",
+      body: JSON.stringify({ roomSeq: chat_id, message }),
+    });
+
+    setMessage("");
   };
 
 
@@ -122,7 +132,6 @@ function FriendChat():JSX.Element {
             {/* 채팅 공간 */}
             <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
               {
-                
                 message&&message.map((chat:any)=>{
                   console.log(chat)
                   return (
@@ -137,9 +146,15 @@ function FriendChat():JSX.Element {
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
-              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' type="text" />
+              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...' type="text" onChange={(e)=> {
+                setInputChat(e.target.value)
+              }}/>
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
-                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt=""/>
+                <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
+                  publish(inputChat)
+                  setsendCheck(sendCheck+1)
+                  
+                }}/>
               </div>
             </div>
       </div>
