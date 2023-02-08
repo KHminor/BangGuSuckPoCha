@@ -48,7 +48,7 @@ function UserDetail() {
       </div>
       <div className="grid grid-cols-2">
         <div className="w-[10rem]">manner : </div>
-        <div className="max-w-[10rem]">{detailUser.manner}</div>
+        <div className="max-w-[10rem]">{detailUser.manner.toFixed(1)}</div>
       </div>
     </div>
   );
@@ -88,7 +88,7 @@ function UserSelect() {
                   {it.birth}
                 </td>
                 <td className="border border-slate-300  max-w-[5rem]">
-                  {it.manner}
+                  {it.manner.toFixed(1)}
                 </td>
                 <td className="border border-slate-300 max-w-[10rem] ">
                   {" "}
@@ -114,7 +114,7 @@ function UserSelect() {
                   {it.birth}
                 </td>
                 <td className="border border-slate-300  max-w-[5rem]">
-                  {it.manner}
+                  {it.manner.toFixed(1)}
                 </td>
                 <td className="border border-slate-300 max-w-[10rem] ">
                   {" "}
