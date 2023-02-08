@@ -136,6 +136,14 @@ function FriendChat():JSX.Element {
     }
   };
 
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      publish(inputChat)
+      scrollToBottom()
+      setInputChat("");
+    }
+  };
+
   const f_nickname = localStorage.getItem('f_nickname') 
 
   return (
@@ -160,7 +168,10 @@ function FriendChat():JSX.Element {
             </div>
 
             <div className="grid h-full w-full" style={{gridTemplateColumns: '1fr 0.12fr'}}>
-              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...'  type="text" value={inputChat} onChange={handleChange}/>
+              <input className="my-auto mx-auto h-[55%] w-[90%] max-w-[90%] rounded-[24px] pl-4 text-black" style={{border: 'groove 2px rgba(225,225,225,0.4)'}} placeholder='Search for anything...'  type="text" value={inputChat} 
+              onChange={handleChange} 
+              onKeyDown={handleKeyPress}
+              />
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
                   publish(inputChat)
