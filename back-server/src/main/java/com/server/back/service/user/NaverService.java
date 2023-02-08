@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -130,8 +131,12 @@ public class NaverService {
                     .build();
 
             userRepository.save(user);
+        }else {
+            if (user.getTime().toLocalDate().isBefore(LocalDate.now())){
+                user.setRole("TODAY");
+            }
+            user.setTime(LocalDateTime.now());
         }
-
         return user;
     }
 }
