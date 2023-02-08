@@ -8,17 +8,34 @@ import { changeMyPageCheck } from "src/store/store";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
-import regionList from "./regionList";
-// import regionOneList from "./regionOneList";
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [Selected, setSelected] = useState();
+  const [Selected, setSelected] = useState<any>();
+  const [Selected2, setSelected2] = useState<any>("0000000000");
+  const [isSelected, setIsSelected] = useState<any>();
+  const [city, setCity] = useState<any>();
 
-  const handleSelect = (e: any) => {
-    console.log("e의 타겟밸류ㅠㅠㅠㅠ", e.target.value)
-    setSelected(e.target.value);
+  const handleSelect = (event: any) => {
+    console.log("e의 타겟밸류ㅠㅠㅠㅠ", event.target.value);
+    setSelected(event.target.value);
+    setIsSelected(false);
+    city.map((it: any) => {
+      if (it.regionCode === Selected) {
+        console.log(
+          `${it.regionCode}비슷한값이 있나요?${Selected}`,
+          isSelected
+        );
+        setIsSelected(true);
+      }
+    });
+  };
+
+  const handleSelect2 = (event: any) => {
+    console.log(event.target.value);
+
+    setSelected2(event.target.value);
   };
   const [modifydisplay, setModifydisplay] = useState(false);
   //바뀔이름
@@ -99,52 +116,27 @@ function Mypage(): JSX.Element {
       setAge(age);
       setRegion(a.region);
       setRegioncode(a.regionCode);
-      // let firstselecttemp: any;
-      // if (a.region.split(" ").length === 2) {
-      //   // firstselecttemp = regionList.name.filter(
-      //   //   (param) => param.name === `${a.region.split(" ")[0]}`
-      //   // );
-      //   // console.log("firstselecttemp", firstselecttemp);
-      //   //내 정보 중 지역의 첫번째 구분
-      //   setFirstselect(a.region.split(" ")[0]);
-      //   console.log("firstselect값", firstselect);
-    
-      //   //내 정보 중 지역의 두번째 구분
-      //   setSecondselect(a.region.split(" ")[1]);
-      //   console.log("secondselect값", secondselect);
-      // } else if (a.region.split(" ").length === 1) {
-      //   setFirstselect(a.region.split(" ")[0]);
-      //   // console.log("secondselect값이 undifine?", secondselect==="undefined");
-      // }
-    
+      setSelected(a.regionCode);
       setComment(a.comment);
       setPoint(a.point);
       setManner(a.manner.toFixed(1));
       setProfile(a.profile);
     });
-    
+
     axios({
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
     }).then((r) => {
       const result = r.data.data;
-      // console.log(r.data.data);
-      // console.log("모든지역코드", result);
-    
-      // setRegionlist(result);
-      // console.log("지역코드목록 저장", result);
+
       let rlist1 = new Array();
       let rlist2 = new Array();
       for (var i = 0; i < result.length; i++) {
-        // console.log("test", result[i]);
-        // console.log(`${i} 조건 확인?`, result[i].regionCode.substr(0, 1));
         if (i === 0) {
           rlist1.push(result[i]);
         } else {
-          console.log(`${i}번쨰 비교`,result[i-1].regionCode.substr(0, 2) ===
-          result[i].regionCode.substr(0, 2))
           if (
-            result[i-1].regionCode.substr(0, 2) ===
+            result[i - 1].regionCode.substr(0, 2) ===
             result[i].regionCode.substr(0, 2)
           ) {
             rlist2.push(result[i]);
@@ -154,17 +146,13 @@ function Mypage(): JSX.Element {
         }
       }
       setRegionlist(rlist1);
+
+      setCity(rlist1.slice(0, 7));
+      console.log("도시", city);
       setRegionlist2(rlist2);
       console.log("rlist1---------------------", rlist1);
-      console.log("rlist2---------------------", rlist2);
-      // let result2600000000 = result.filter(
-      //   (param: any) => param.regionCode.substr(0, 2) === "41"
-      // );
-      // console.log("setRegionfirst", regionList.name);
-      // setRegionfirst(regionList.name);
-      // // console.log(region);
+      console.log("rlist2---------------------", rlist2);      
     });
-
   }, []);
 
   return (
@@ -228,15 +216,15 @@ function Mypage(): JSX.Element {
                       },
                     }).then((r) => {
                       const isDouble = r.data.data;
-                      // if (isDouble) {
-                      //   toast.success(
-                      //     `${nickname}(은)는 수정가능한 닉네임입니다`
-                      //   );
-                      //   setModifydisplay(isDouble);
-                      // } else {
-                      //   toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
-                      //   setModifydisplay(isDouble);
-                      // }
+                      if (isDouble) {
+                        toast.success(
+                          `${nickname}(은)는 수정가능한 닉네임입니다`
+                        );
+                        setModifydisplay(isDouble);
+                      } else {
+                        toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
+                        setModifydisplay(isDouble);
+                      }
                     });
                   }}
                 >
@@ -337,7 +325,7 @@ function Mypage(): JSX.Element {
                       </div>
                     )}
                   </div>
-                  {/* 지역 */}
+                  {/* 지역위치보기 */}
                   <div
                     className="grid  w-full h-[40%] my-auto "
                     style={{ gridTemplateColumns: "1.2fr 2fr" }}
@@ -349,8 +337,11 @@ function Mypage(): JSX.Element {
                       className="grid  border-purple-300 w-[90%] mr-[10%]"
                       style={{ gridTemplateColumns: "1fr 1fr" }}
                     >
-                      
-                      <select className="text-white text-[1rem] text-center bg-black border-2  overflow-auto " onChange={handleSelect} value={Selected}>
+                      <select
+                        className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                        onChange={handleSelect}
+                        value={Selected}
+                      >
                         {regionlist
                           ? regionlist.map((it: any): any => (
                               <option value={it.regionCode}>
@@ -359,23 +350,24 @@ function Mypage(): JSX.Element {
                             ))
                           : null}
                       </select>
-                      
-
-
-                      {regionlist2 === undefined ? null : (
+                      {isSelected === false ? (
                         <select
-                          className="text-white text-[1rem] text-center bg-black h-full border-2"
-                          name="address2"
-                          id="address2"
+                          className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                          onChange={handleSelect2}
+                          value={Selected2}
                         >
-                          {/* {regionlist2.map((it: any): any => (
-                            {Selected.substr(0, 1) === it.regionCode.substr(0, 1) ? 
-                            <option value={it.regionCode}>
-                              {it.gugunName}
-                            </option>:null}
-                          ))} */}
+                          {regionlist2
+                            ? regionlist2.map((it: any): any =>
+                                Selected.substr(0, 2) ===
+                                it.regionCode.substr(0, 2) ? (
+                                  <option value={it.regionCode}>
+                                    {it.gugunName}
+                                  </option>
+                                ) : null
+                              )
+                            : null}
                         </select>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                   {/* 포인트 */}
@@ -449,6 +441,10 @@ function Mypage(): JSX.Element {
                       onClick={() => {
                         console.log("modifydisplay : " + modifydisplay);
                         //수정가능
+
+                        const Code =
+                          Selected.substr(0, 2) + Selected2.substr(2, 8);
+
                         axios({
                           method: "put",
                           url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
@@ -456,11 +452,11 @@ function Mypage(): JSX.Element {
                             comment: comment,
                             nickname: nickname,
                             profile: profile,
-                            regionCode: "4111000000",
+                            regionCode: Code,
                           },
                         }).then((r) => {
                           console.log("성공");
-                          // toast.success("수정에 성공하셨습니다");
+                          toast.success("수정에 성공하셨습니다");
                           navigate("/main");
                         });
                       }}
@@ -494,7 +490,6 @@ function Mypage(): JSX.Element {
         </div>
       </div>
     </>
-
   );
 }
 export default Mypage;
