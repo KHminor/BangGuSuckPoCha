@@ -526,12 +526,15 @@ const WebRTC = ({
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
+      console.log('비디오 아이디 유저네임1', username);
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
       peerFace2.current.id = username;
+      console.log('비디오 아이디 유저네임2', username);
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
       peerFace3.current.id = username;
+      console.log('비디오 아이디 유저네임3', username);
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
       peerFace4.current.id = username;
@@ -539,8 +542,7 @@ const WebRTC = ({
       peerFace5.current.srcObject = stream;
       peerFace5.current.id = username;
     }
-    console.log('현재1', peerFace1.current.id)
-    console.log('현재2', peerFace2.current.id)
+
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
     // peerFace.current.srcObject = data.stream;
     // userCount += 1;
