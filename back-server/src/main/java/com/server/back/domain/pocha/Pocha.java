@@ -16,10 +16,9 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-public class Pocha extends BaseTimeEntity{
+public class Pocha{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pochaId;
-
     @Column(nullable = false)
     private Integer age;
     @Column(nullable = false)
@@ -38,9 +37,13 @@ public class Pocha extends BaseTimeEntity{
     @Column(length = 40)
     private String ssulTitle;
     @Column(nullable = false)
+    private LocalDateTime createAt;
+    @Column(nullable = false)
     private LocalDateTime endAt;
     @Column(nullable = false)
     private Boolean isEnd;
+    @Column(nullable = false)
+    private Boolean isWaiting;
 
     // 포차 태그
     @OneToMany(mappedBy = "pocha", fetch = FetchType.LAZY)
@@ -81,5 +84,9 @@ public class Pocha extends BaseTimeEntity{
     public void updateSsul(SsulReqeustDto reqeustDto) {
         this.isSsul = true;
         this.ssulTitle = reqeustDto.getSsulTitle();
+    }
+    public void startHuntingPocha(){
+        this.createAt = LocalDateTime.now();
+        this.isWaiting = false;
     }
 }
