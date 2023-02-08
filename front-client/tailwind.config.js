@@ -15,6 +15,7 @@ module.exports = {
         "hof": "url('src/assets/theme/hof_theme.png')",
         "rain": "url('src/assets/theme/rain_theme.gif')",
         "china": "url('src/assets/theme/china_theme.png')",
+        "beer": "url('src/assets/theme/beer_theme.gif')",
       }
     },
   },

@@ -123,7 +123,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
   const BgCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === bgDiv.current) {
       dispatch(showPublicModal(false));
-      fx!();
+      if(fx) {
+        fx!();
+      }
     }
   };
 
@@ -131,7 +133,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
   const onClickConfirm = () => {
     switch (data.type) {
       case "tag":
-        fx!();
+        if(fx) {
+          fx!();
+        }
         break;
       case "addTime":
         handlePochaExtension();

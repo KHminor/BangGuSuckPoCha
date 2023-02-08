@@ -40,7 +40,7 @@ function StoryRoom(): JSX.Element {
           setUrlImg(`bg-pocha`);
           break
         case "T0B2":
-          setUrlImg(`bg-china`);
+          setUrlImg(`bg-beer`);
           break
       }
       setTimeout(() => {

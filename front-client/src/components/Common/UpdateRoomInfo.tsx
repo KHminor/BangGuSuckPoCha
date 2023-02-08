@@ -75,7 +75,7 @@ const UpdateRoomInfo = ({
 
   // 태그 리스트
   const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
-
+  console.log('태그리스트',choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
     tag: string,
