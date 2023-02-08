@@ -42,9 +42,10 @@ function Main(): JSX.Element {
   useEffect(() => {
     axios({
       method: "get",
-      url: "https://i8e201.p.ssafy.io/api/admin/pocha",
+      url: "https://i8e201.p.ssafy.io/api/pocha/",
     }).then((r) => {
-      dispatch(changeMainCreateRoomList(r.data.data));
+      console.log(r.data)
+      // dispatch(changeMainCreateRoomList(r.data.data));
     });
   }, []);
 
@@ -187,7 +188,6 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
   const navigate = useNavigate();
   // 내 아이디
   const username = localStorage.getItem("Username");
-  console.log("유저", username);
   // ssulTitle가 null일 경우 랜덤하게 넣어줄 문구
   const randomTitleList = [
     "즐겁게 웃으며 한잔😛",

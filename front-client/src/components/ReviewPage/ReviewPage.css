@@ -25,3 +25,17 @@
               0 0 7px #FF3E84;
 }
 
+
+.blink {
+  animation: 3s infinite alternate sliedin;
+}
+
+@keyframes sliedin {
+  from {
+    font-weight: 200;
+  }
+  to {
+    color: #e19a6a;
+    font-weight: 800;
+  }
+}
