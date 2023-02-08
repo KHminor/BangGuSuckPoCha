@@ -82,12 +82,12 @@ function FriendList(): JSX.Element {
             );
           });
 
-          if (checkChatId === chat_id) {
-            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
-          } else {
-            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
-            dispatch(changeMenuFriendChatState(true));
-          }
+          dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
+          // if (checkChatId === chat_id) {
+          //   dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
+          // } else {
+          //   dispatch(changeMenuFriendChatState(true));
+          // }
         }}
       >
         <div className="flex justify-center items-center h-full pl-2">
