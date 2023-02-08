@@ -28,6 +28,13 @@ const UpdateRoomInfo = ({
   // username (현재는 내꺼)
   const username = localStorage.getItem("Username");
 
+  // 5개 제한 모달 상태 체크
+  const [showModal, setShowModal] = useState<boolean>(false); 
+  //
+  const onClickModalState = () => {
+    setShowModal(false);
+  }
+
   const roomTitle = "포차정보수정";
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
@@ -57,10 +64,6 @@ const UpdateRoomInfo = ({
     msg: "태그는 5개까지만 선택가능합니다",
   };
 
-  // 모달 상태 체크
-  const showModal = useAppSelector((state) => {
-    return state.PublicModal;
-  });
 
   // 전달받아온 함수를 실행해서 창끄기
   const closeModal = () => {
@@ -77,7 +80,7 @@ const UpdateRoomInfo = ({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
-      dispatch(showPublicModal(true));
+      setShowModal(true);
       return;
     }
     if (choiceTagList.includes(index)) {
@@ -164,7 +167,7 @@ const UpdateRoomInfo = ({
     <>
       {roomTheme === 1 ? (
         <>
-          {showModal && <PublicModal data={modalData} />}
+          {showModal && <PublicModal data={modalData} fx={onClickModalState}/>}
           <div
             className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >

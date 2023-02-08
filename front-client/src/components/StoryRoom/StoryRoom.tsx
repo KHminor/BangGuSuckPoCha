@@ -11,9 +11,10 @@ function StoryRoom(): JSX.Element {
   const { PochaId } = useParams();
   const [socket, setSocket] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
 
-  const [urlImg, setUrlImg] = useState<string>(`url('../../assets/img/GameRoomImg.png')`);
+  const [urlImg, setUrlImg] = useState<any>(`url('src/assets/theme/izakaya.jpg')`);
 
   console.log('pochaInfo',pochaInfo);
 
@@ -28,9 +29,16 @@ function StoryRoom(): JSX.Element {
         url: `https://i8e201.p.ssafy.io/api/pocha/${Number(PochaId)}`,
       });
       setPochaInfo(data.data);
+      console.log('테마아이이디',data.data.themeId)
       // switch (data.data.themeId) {
       //   case "T0B0":
-      //     setUrlImg(`url('assets/theme/izakaya.jpg')`);
+      //     setUrlImg(`url('src/assets/theme/izakaya.jpg')`);
+      //     break
+      //   case "T0B1":
+      //     setUrlImg(`url('src/assets/theme/pocha.jpg')`);
+      //     break
+      //   case "T0B2":
+      //     setUrlImg(`url('src/assets/theme/hof.jpg')`);
       //     break
       // }
       setIsLoading(false);
@@ -50,7 +58,8 @@ function StoryRoom(): JSX.Element {
         <Loading />
       ) : (
         <div
-          className={`w-screen min-h-screen ${styles.gameroomimg} bg-scroll`}
+          // className={`w-screen min-h-screen bg-scroll`}
+          className={`w-screen min-h-screen bg-[${urlImg}] bg-contain bg-no-repeat bg-center bg-scroll`}
         >
           {/* 화면 및 게임 공간 */}
           <div className="h-[90%]">
