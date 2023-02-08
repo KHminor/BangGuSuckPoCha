@@ -72,6 +72,7 @@ function FriendList(): JSX.Element {
           };
           getChatList().then((data) => {
             localStorage.setItem('chat_id',chat_id)
+            localStorage.setItem('f_nickname',e.f_nickname)
             dispatch(
               changemenuFriendClickUserData({
                 nickname: e.f_nickname,

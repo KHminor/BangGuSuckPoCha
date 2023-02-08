@@ -40,13 +40,13 @@ function FriendChat():JSX.Element {
   const [message, setMessage] = useState<any>();
   useEffect(() => {
     connect();
-    scrollToBottom()
     return () => disconnect();
   }, [message]);
   
-  // useEffect(()=> {
-  //   console.log('현재 메세지 값: ', message)
-  // })
+  useEffect(()=> {
+    scrollToBottom()
+    console.log('현재 메세지 값: ', message)
+  },[])
 
 
 
@@ -70,14 +70,10 @@ function FriendChat():JSX.Element {
           setMessage((_chat_list:any)=> [..._chat_list, msg])
         });
       },
-      // reconnectDelay: 1000, //자동 재 연결
-      // heartbeatIncoming: 1000,
-      // heartbeatOutgoing: 1000,
     });
       client.current.activate();
       console.log(client.current.connected)
     }
-
 
   const disconnect = () => {
     client.current.deactivate();
@@ -115,9 +111,8 @@ function FriendChat():JSX.Element {
       chatArea.current.scrollTop = chatArea.current.scrollHeight;
     }
   };
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [chatArea]);
+
+  const f_nickname = localStorage.getItem('f_nickname') 
 
   return (
     <div ref={friendChat} className="absolute  w-[33rem] h-[35rem] max-h-[35rem] top-[11.6rem] right-[19rem] hidden">
@@ -133,7 +128,7 @@ function FriendChat():JSX.Element {
                   return (
                     <div className="flex flex-col justify-start w-full h-full ">
                       {
-                        chat.user_nickname === chat.nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
+                        chat.user_nickname === f_nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
                       }
                     </div>
                   )
