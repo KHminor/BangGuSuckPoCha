@@ -25,7 +25,7 @@ function UserReportWait(): React.ReactElement {
       </div>
       <form className="col-span-7 grid grid-rows-5 gap-5">
         <div className="text-8xl">AdminPage</div>
-        <div className="w-full row-span-3 border-2 border-white max-h-[40rem] overflow-y-scroll">
+        <div className="w-full row-span-3 border-2 border-white max-h-[34rem] overflow-y-scroll">
           {/* <div className="text-2xl h-20">신고관리</div> */}
           <table className="border-collapse border border-slate-400 w-full ">
             <thead className="border border-slate-300">

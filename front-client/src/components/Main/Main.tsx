@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeCarouselState,
@@ -25,18 +26,18 @@ function Main(): JSX.Element {
     return state.mainCreateRoomList;
   });
 
-  
   // 메인 페이지 들어올 시 현재 userId가 localStorage에 저장이 안되어있을 경우 axios 요청하여 넣어주기
-  useEffect(()=> {
-    const userName = localStorage.getItem('Username')
-    if (localStorage.getItem('userId') === null) {
-      axios.get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
-      .then((r)=> {
-        localStorage.setItem('userId',r.data.data.userId )
-      })
+  useEffect(() => {
+    const userName = localStorage.getItem("Username");
+    if (localStorage.getItem("userId") === null) {
+      axios
+        .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
+        .then((r) => {
+          localStorage.setItem("userId", r.data.data.userId);
+        });
     }
-  },[])
-  
+  }, []);
+
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
   useEffect(() => {
     axios({
@@ -140,7 +141,7 @@ function Main(): JSX.Element {
             }}
           >
             {/* 태그 */}
-            <div className="grid" style={{gridTemplateRows: '12rem 8rem'}}>
+            <div className="grid" style={{ gridTemplateRows: "12rem 8rem" }}>
               <div></div>
               <Tag />
             </div>
@@ -182,22 +183,43 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-
 function Room({ mainCreateRoomList }: any): JSX.Element {
+  const navigate = useNavigate();
+  // 내 아이디
+  const username = localStorage.getItem("Username");
+  console.log("유저", username);
   // ssulTitle가 null일 경우 랜덤하게 넣어줄 문구
   const randomTitleList = [
-    '즐겁게 웃으며 한잔😛',
-    '이거 마시면 나랑 사귀는거다?😏',
-    '오늘 여기 오길 참 잘 해따😵',
-    '술이 달아서 네 생각이 나🤬',
-    '흥청망청 취해보자👾',
-    '즐겁게 웃으며 한잔😛',
-    '이거 마시면 나랑 사귀는거다?😏',
-    '오늘 여기 오길 참 잘 해따😵',
-    '술이 달아서 네 생각이 나🤬',
-    '흥청망청 취해보자👾'
-  ]
-  
+    "즐겁게 웃으며 한잔😛",
+    "이거 마시면 나랑 사귀는거다?😏",
+    "오늘 여기 오길 참 잘 해따😵",
+    "술이 달아서 네 생각이 나🤬",
+    "흥청망청 취해보자👾",
+    "즐겁게 웃으며 한잔😛",
+    "이거 마시면 나랑 사귀는거다?😏",
+    "오늘 여기 오길 참 잘 해따😵",
+    "술이 달아서 네 생각이 나🤬",
+    "흥청망청 취해보자👾",
+  ];
+  // 방에 입장하는 함수
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const pochaId = event.currentTarget.id;
+    try {
+      await axios({
+        method: "POST",
+        url: `https://i8e201.p.ssafy.io/api/pocha/enter`,
+        data: {
+          isHost: false,
+          pochaId: pochaId,
+          username: username,
+          waiting: false,
+        },
+      });
+      navigate(`/storyroom/${pochaId}`);
+    } catch (error) {
+      console.log("포차 입장 에러", error);
+    }
+  };
 
   let cards: JSX.Element[] = mainCreateRoomList.map((e: any, idx: any) => {
     // console.log(e)
@@ -217,13 +239,18 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     });
 
     // 썰 타이틀 없을 시 랜덤 타이틀
-    let SSulTitle = randomTitleList[e.pochaId%10]
-    if (typeof e.ssulTitle !== 'object') {
-      SSulTitle = e.ssulTitle
+    let SSulTitle = randomTitleList[e.pochaId % 10];
+    if (typeof e.ssulTitle !== "object") {
+      SSulTitle = e.ssulTitle;
     }
-    
+
     return (
-      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
+      <div
+        onClick={enterRoom}
+        key={e.pochaId}
+        id={e.pochaId}
+        className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
+      >
         <div
           className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
           style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
@@ -253,4 +280,3 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     </div>
   );
 }
-

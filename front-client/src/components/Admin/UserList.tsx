@@ -60,7 +60,7 @@ function UserSelect() {
     return state.UserList;
   });
   return (
-    <div className="row-span-6 w-full overflow-x-auto  max-h-[39.5rem]">
+    <div className="row-span-6 w-full overflow-x-auto  max-h-[34rem]">
       <table className="border-collapse border border-slate-400 w-full">
         <thead>
           <tr>
@@ -148,7 +148,7 @@ function UserList() {
   }, []);
   const navigate = useNavigate();
   return (
-    <div className="inline-block align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
+    <div className="align-baseline text-white h-screen w-screen grid grid-cols-5 gap-5">
       <div>
         <div></div>
       </div>
