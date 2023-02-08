@@ -193,6 +193,17 @@ const RoomUserBanClickCheck = createSlice({
   },
 });
 
+// 탈퇴하기 클릭 여부
+const SecessionClickCheck = createSlice({
+  name: "SecessionClickCheck",
+  initialState: false,
+  reducers: {
+    showSecessionModal(state) {
+      return !state;
+    },
+  },
+});
+
 // Room에 있는 유저 신고 클릭 여부
 const RoomUserReportClickCheck = createSlice({
   name: "RoomUserReportCheck",
@@ -353,6 +364,7 @@ export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
   reducer: {
     menuClickCheck: menuClickCheck.reducer,
+    SecessionClickCheck: SecessionClickCheck.reducer,
     alarmClickCheck: alarmClickCheck.reducer,
     mainCreateRoomCarouselCheck: mainCreateRoomCarouselCheck.reducer,
     createThemeRoomCheck: createThemeRoomCheck.reducer,
@@ -417,6 +429,7 @@ export const {
 export const { changeCreateRoomThemeCheck } = createRoomThemeCheck.actions;
 export const { roomAddFriendModalState } = roomAddFriendModalCheck.actions;
 export const { showRoomUserBanModal } = RoomUserBanClickCheck.actions;
+export const { showSecessionModal } = SecessionClickCheck.actions;
 export const { showRoomUserReportModal } = RoomUserReportClickCheck.actions;
 export const { changemenuFriendClickUserData } =
   menuFriendClickUserData.actions;

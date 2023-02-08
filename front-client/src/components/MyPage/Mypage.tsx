@@ -14,7 +14,12 @@ import regionList from "./regionList";
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [Selected, setSelected] = useState();
 
+  const handleSelect = (e: any) => {
+    console.log("e의 타겟밸류ㅠㅠㅠㅠ", e.target.value)
+    setSelected(e.target.value);
+  };
   const [modifydisplay, setModifydisplay] = useState(false);
   //바뀔이름
   const [nickname, setNickname] = useState();
@@ -37,13 +42,19 @@ function Mypage(): JSX.Element {
   //프로필경로
   const [profile, setProfile] = useState("string");
 
-  //regionList(하드코딩으로 넣은 지역코드)에서 들고오는 지역코드 앞에서 2자리
-  const [regionfirst, setRegionfirst] = useState<any | null>("");
-  //내 정보 중 지역의 첫번째 구분
-  const [firstselect, setFirstselect]: any = useState<any | null | undefined>();
-  //내 지역의 두번쨰 구분이 있으면 두번째
-  const [secondselect, setSecondselect] = useState<any | null>();
+  // //regionList(하드코딩으로 넣은 지역코드)에서 들고오는 지역코드 앞에서 2자리
+  // const [regionfirst, setRegionfirst] = useState<any | null>("");
+  // //내 정보 중 지역의 첫번째 구분
+  // const [firstselect, setFirstselect]: any = useState<any | null | undefined>();
+  // //내 지역의 두번쨰 구분이 있으면 두번째
+  // const [secondselect, setSecondselect] = useState<any | null>();
 
+  //내정보 지역코드
+  const [regioncode, setRegioncode] = useState();
+  //지역코드 전체 목록(시도)
+  const [regionlist, setRegionlist] = useState<any | null>();
+  //지역코드 전체 목록(구군)
+  const [regionlist2, setRegionlist2] = useState<any | null>();
   const Username: any = localStorage.getItem("Username");
 
   const onChangeNikename = (event: any) => {
@@ -54,8 +65,8 @@ function Mypage(): JSX.Element {
     // console.log(event.target.value);
     setComment(event.target.value);
   };
-  console.log("firstselect값", firstselect);
-  console.log("secondselect값이 undifine?", secondselect === undefined);
+  // console.log("firstselect값", firstselect);
+  // console.log("secondselect값이 undifine?", secondselect === undefined);
 
   useEffect(() => {
     axios({
@@ -87,46 +98,73 @@ function Mypage(): JSX.Element {
       setBirth(birth);
       setAge(age);
       setRegion(a.region);
-
-      let firstselecttemp: any;
-      if (a.region.split(" ").length === 2) {
-        // firstselecttemp = regionList.name.filter(
-        //   (param) => param.name === `${a.region.split(" ")[0]}`
-        // );
-        // console.log("firstselecttemp", firstselecttemp);
-        //내 정보 중 지역의 첫번째 구분
-        setFirstselect(a.region.split(" ")[0]);
-        console.log("firstselect값", firstselect);
-
-        //내 정보 중 지역의 두번째 구분
-        setSecondselect(a.region.split(" ")[1]);
-        console.log("secondselect값", secondselect);
-      } else if (a.region.split(" ").length === 1) {
-        setFirstselect(a.region.split(" ")[0]);
-        // console.log("secondselect값이 undifine?", secondselect==="undefined");
-      }
-
+      setRegioncode(a.regionCode);
+      // let firstselecttemp: any;
+      // if (a.region.split(" ").length === 2) {
+      //   // firstselecttemp = regionList.name.filter(
+      //   //   (param) => param.name === `${a.region.split(" ")[0]}`
+      //   // );
+      //   // console.log("firstselecttemp", firstselecttemp);
+      //   //내 정보 중 지역의 첫번째 구분
+      //   setFirstselect(a.region.split(" ")[0]);
+      //   console.log("firstselect값", firstselect);
+    
+      //   //내 정보 중 지역의 두번째 구분
+      //   setSecondselect(a.region.split(" ")[1]);
+      //   console.log("secondselect값", secondselect);
+      // } else if (a.region.split(" ").length === 1) {
+      //   setFirstselect(a.region.split(" ")[0]);
+      //   // console.log("secondselect값이 undifine?", secondselect==="undefined");
+      // }
+    
       setComment(a.comment);
       setPoint(a.point);
-      setManner(a.manner);
+      setManner(a.manner.toFixed(1));
       setProfile(a.profile);
     });
-
+    
     axios({
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
     }).then((r) => {
       const result = r.data.data;
       // console.log(r.data.data);
-      console.log("모든지역코드", result);
-
+      // console.log("모든지역코드", result);
+    
+      // setRegionlist(result);
+      // console.log("지역코드목록 저장", result);
+      let rlist1 = new Array();
+      let rlist2 = new Array();
+      for (var i = 0; i < result.length; i++) {
+        // console.log("test", result[i]);
+        // console.log(`${i} 조건 확인?`, result[i].regionCode.substr(0, 1));
+        if (i === 0) {
+          rlist1.push(result[i]);
+        } else {
+          console.log(`${i}번쨰 비교`,result[i-1].regionCode.substr(0, 2) ===
+          result[i].regionCode.substr(0, 2))
+          if (
+            result[i-1].regionCode.substr(0, 2) ===
+            result[i].regionCode.substr(0, 2)
+          ) {
+            rlist2.push(result[i]);
+          } else {
+            rlist1.push(result[i]);
+          }
+        }
+      }
+      setRegionlist(rlist1);
+      setRegionlist2(rlist2);
+      console.log("rlist1---------------------", rlist1);
+      console.log("rlist2---------------------", rlist2);
       // let result2600000000 = result.filter(
       //   (param: any) => param.regionCode.substr(0, 2) === "41"
       // );
-      console.log("setRegionfirst", regionList.name);
-      setRegionfirst(regionList.name);
-      // console.log(region);
+      // console.log("setRegionfirst", regionList.name);
+      // setRegionfirst(regionList.name);
+      // // console.log(region);
     });
+
   }, []);
 
   return (
@@ -190,15 +228,15 @@ function Mypage(): JSX.Element {
                       },
                     }).then((r) => {
                       const isDouble = r.data.data;
-                      if (isDouble) {
-                        toast.success(
-                          `${nickname}(은)는 수정가능한 닉네임입니다`
-                        );
-                        setModifydisplay(isDouble);
-                      } else {
-                        toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
-                        setModifydisplay(isDouble);
-                      }
+                      // if (isDouble) {
+                      //   toast.success(
+                      //     `${nickname}(은)는 수정가능한 닉네임입니다`
+                      //   );
+                      //   setModifydisplay(isDouble);
+                      // } else {
+                      //   toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
+                      //   setModifydisplay(isDouble);
+                      // }
                     });
                   }}
                 >
@@ -311,26 +349,31 @@ function Mypage(): JSX.Element {
                       className="grid  border-purple-300 w-[90%] mr-[10%]"
                       style={{ gridTemplateColumns: "1fr 1fr" }}
                     >
-                      <select className="text-white text-[1rem] text-center bg-black border-2  overflow-auto ">
-                        {firstselect ? (
-                          <option value={firstselect} selected>
-                            {firstselect}
-                          </option>
-                        ) : null}
-                        {regionList.name.map((it): any =>
-                          it.name === firstselect ? null : (
-                            <option value={it.code}>{it.name}</option>
-                          )
-                        )}
+                      
+                      <select className="text-white text-[1rem] text-center bg-black border-2  overflow-auto " onChange={handleSelect} value={Selected}>
+                        {regionlist
+                          ? regionlist.map((it: any): any => (
+                              <option value={it.regionCode}>
+                                {it.sidoName}
+                              </option>
+                            ))
+                          : null}
                       </select>
+                      
 
-                      {secondselect === undefined ? null : (
+
+                      {regionlist2 === undefined ? null : (
                         <select
                           className="text-white text-[1rem] text-center bg-black h-full border-2"
                           name="address2"
                           id="address2"
                         >
-                          <option value={secondselect}>{secondselect}</option>
+                          {/* {regionlist2.map((it: any): any => (
+                            {Selected.substr(0, 1) === it.regionCode.substr(0, 1) ? 
+                            <option value={it.regionCode}>
+                              {it.gugunName}
+                            </option>:null}
+                          ))} */}
                         </select>
                       )}
                     </div>
@@ -417,7 +460,7 @@ function Mypage(): JSX.Element {
                           },
                         }).then((r) => {
                           console.log("성공");
-                          toast.success("수정에 성공하셨습니다");
+                          // toast.success("수정에 성공하셨습니다");
                           navigate("/main");
                         });
                       }}
@@ -451,6 +494,7 @@ function Mypage(): JSX.Element {
         </div>
       </div>
     </>
+
   );
 }
 export default Mypage;
