@@ -25,8 +25,8 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
     <div className={`grid h-[4rem] w-full ${styles.shortBorder}`} style={{gridTemplateColumns: '0.25fr 1fr'}}>
 
       {/* 유저 이모지 */}
-      <div className="flex justify-center items-start" onClick={UserStateSearch}>
-        <img className="w-[2rem] h-[2rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+      <div className="flex justify-center items-start">
+        <img className="w-[2rem] h-[2rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" onClick={UserStateSearch}/>
       </div>
       {/* 별점 및 평가하기 */}
       <div className="grid" style={{gridTemplateRows: '1fr 1fr'}}>

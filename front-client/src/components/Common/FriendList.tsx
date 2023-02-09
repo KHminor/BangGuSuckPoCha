@@ -7,6 +7,8 @@ import {
   changemenuFriendClickUserData,
   changeMenuFriendListApiDataState,
   changeMenuFriendState,
+  changeNavAlarmReviewEmojiUserData,
+  showRoomUserProfile,
 } from "../../store/store";
 import styles from "./Common.module.css";
 import FriendSearch from "./FriendSearch";
@@ -39,7 +41,17 @@ function FriendList(): JSX.Element {
   // 친구 요청 검색 모달
   const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
 
-  
+  function UserStateSearch(user_nickname:any) {
+    axios({
+      method: 'get',
+      url: `https://i8e201.p.ssafy.io/api/user/info/${user_nickname}`,
+    })
+    .then((r)=> {
+      console.log('넣어따')
+      dispatch(changeNavAlarmReviewEmojiUserData(r.data))
+      dispatch(showRoomUserProfile())
+    })
+  }
 
 
   useEffect(() => {
@@ -82,40 +94,42 @@ function FriendList(): JSX.Element {
         key={idx}
         className=" grid my-2 cursor-pointer "
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
-        onClick={() => {
-          // 클릭한 유저와의 채팅 아이디 체크
-          setCheckChatId(e.chat_id);
-          // 채팅내용 가져오기
-          const getChatList = async () => {
-            try {
-              const getChat = await axios.get(
-                `https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`
-              );
-              return getChat.data.data;
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          getChatList().then((data) => {
-            localStorage.setItem('chat_id',chat_id)
-            localStorage.setItem('f_nickname',e.f_nickname)
-            dispatch(
-              changemenuFriendClickUserData({
-                nickname: e.f_nickname,
-                data: data,
-                chat_id: chat_id
-              })
-            );
-          });
-
-          dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
-        }}
       >
         <div className="flex justify-center items-center h-full pl-2">
-          <img className="object-contain h-[80%] " src={emoji} alt="" />
+          <img className="object-contain h-[80%] " src={emoji} alt="" onClick={()=>{
+            UserStateSearch(e.user_nickname)
+          }}/>
         </div>
         <div
           className={`flex justify-start items-center pl-3 text-base font-semibold h-full ${styles.menuFriendNeon}`}
+          onClick={() => {
+            // 클릭한 유저와의 채팅 아이디 체크
+            setCheckChatId(e.chat_id);
+            // 채팅내용 가져오기
+            const getChatList = async () => {
+              try {
+                const getChat = await axios.get(
+                  `https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`
+                );
+                return getChat.data.data;
+              } catch (error) {
+                console.log(error);
+              }
+            };
+            getChatList().then((data) => {
+              localStorage.setItem('chat_id',chat_id)
+              localStorage.setItem('f_nickname',e.f_nickname)
+              dispatch(
+                changemenuFriendClickUserData({
+                  nickname: e.f_nickname,
+                  data: data,
+                  chat_id: chat_id
+                })
+              );
+            });
+  
+            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
+          }}
         >
           {e.f_nickname}
         </div>
