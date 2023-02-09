@@ -1,3 +1,5 @@
+import axios from "axios";
+import { log } from "console";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
@@ -130,6 +132,12 @@ function Login(): React.ReactElement {
               // eslint-disable-next-line no-restricted-globals
               location.href =
                 "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code";
+              // axios({
+              //   method: "post",
+              //   url: "https://nid.naver.com/oauth2.0/authorize?client_id=ZQnQO8XghTL7eTyln27j&redirect_uri=https://i8e201.p.ssafy.io/api/user/oauth2/token/naver&response_type=code",
+              // }).then((r) => {
+              //   console.log(r);
+              // });
             }}
           >
             <img
