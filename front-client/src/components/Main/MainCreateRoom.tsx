@@ -195,7 +195,6 @@ const MainCreateRoom = ({
                           isHost: true,
                           pochaId: PochaId,
                           username: username,
-                          waiting: true,
                         },
                       }).then((r) => {
                         console.log(r.data);
@@ -265,11 +264,54 @@ const MainCreateRoom = ({
                   className={`${style.createBtn} cursor-pointer`}
                   type="submit"
                   value="포차생성"
+                  onClick={() => {
+                    console.log("방 허용 나이", createRoomChoiceAge);
+                    console.log("현재 인원수", createRoomChoicePeople);
+                    console.log("방 허용 지역", createRoomChoiceRegion);
+                    console.log("클릭한 태그", createRoomChoiceTag);
+                    console.log("클릭한 테마Id", createRoomThemeCheck);
+
+                    axios({
+                      method: "post",
+                      url: "https://i8e201.p.ssafy.io/api/pocha",
+                      data: {
+                        age: createRoomChoiceAge,
+                        isPrivate: false,
+                        limitUser: createRoomChoicePeople,
+                        region: createRoomChoiceRegion,
+                        tagList: createRoomChoiceTag,
+                        themeId: createRoomThemeCheck,
+                      },
+                    }).then((r) => {
+                      const PochaId = r.data.data;
+                      axios({
+                        method: "post",
+                        url: "https://i8e201.p.ssafy.io/api/pocha/enter",
+                        data: {
+                          isHost: true,
+                          pochaId: PochaId,
+                          username: username,
+                        },
+                      }).then((r) => {
+                        if (roomTheme === 2) {
+                          navigate(`/gameroom/${PochaId}`);
+                        } else if (roomTheme === 3) {
+                          navigate(`/huntingroom/${PochaId}`);
+                        } 
+                        // 방 만들기 창 종료
+                        dispatch(changeThemeRoomState(0));
+                      });
+                    });
+                  }}
                 />
                 <input
-                  onClick={closeModal}
+                  onClick={() => {
+                    closeModal();
+                    // 태그 선택 초기화 함수
+                    dispatch(changeCreateRoomChoiceTagReset());
+                  }}
                   className={`${style.cancelBtn} cursor-pointer`}
-                  type="submit"
+                  type="button"
                   value="취소"
                 />
               </div>
