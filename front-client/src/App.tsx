@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Loading from "./components/Common/Loading";
 import GameRoom from "./components/GameRoom/GameRoom";
 import StoryRoom from "./components/StoryRoom/StoryRoom";
+import HuntingRoom from "./components/HuntingRoom/HuntingRoom";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminMain from "./components/Admin/AdminMain";
 import UserList from "./components/Admin/UserList";
@@ -59,6 +60,7 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/gameroom" element={<GameRoom />} />
         <Route path="/storyroom/:PochaId" element={<StoryRoom />} />
+        <Route path="/huntingroom/:PochaId" element={<HuntingRoom />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
