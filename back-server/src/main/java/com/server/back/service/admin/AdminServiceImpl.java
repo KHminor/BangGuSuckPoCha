@@ -144,7 +144,10 @@ public class AdminServiceImpl implements AdminService {
         Report report = reportRepository.findByReportId(reportId);
         User attacker = report.getAttackerId();
         attacker.setReport_point(attacker.getReport_point()+requestDto.getDemerit());
-        report.adminReportUpdate();
+        if (attacker.getReport_point() > 10){
+            attacker.setRole("BAN");
+        }
+        report.adminReportUpdate(requestDto.getDemerit());
     }
     @Override
     public void adminYscInsert(YscRequestDto requestDto) {

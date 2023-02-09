@@ -51,22 +51,22 @@ public class AdminController {
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @ApiOperation(value = "관리자 로그인")
-    @PostMapping("/auth/login")
-    public ResponseEntity<?> adminLogin(/*@RequestParam LoginAdminRequestDto requestDto*/){
-        Map<String, Object> tokenDto = new HashMap<>();
-        tokenDto.put("accessToken", "액세스 토큰");
-        tokenDto.put("refreshToken", "리프레시 토큰");
-        tokenDto.put("grantType", "인증 타입");
-        tokenDto.put("accessTokenExpireIn", "액세스 토큰 만료 시간");
-        tokenDto.put("username", "유저 아이디");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Auth", (String) tokenDto.get("accessToken"));
-        headers.add("Refresh", (String) tokenDto.get("refreshToken"));
-
-        return new ResponseEntity<>(tokenDto, headers, HttpStatus.OK);
-    }
+//    @ApiOperation(value = "관리자 로그인")
+//    @PostMapping("/auth/login")
+//    public ResponseEntity<?> adminLogin(/*@RequestParam LoginAdminRequestDto requestDto*/){
+//        Map<String, Object> tokenDto = new HashMap<>();
+//        tokenDto.put("accessToken", "액세스 토큰");
+//        tokenDto.put("refreshToken", "리프레시 토큰");
+//        tokenDto.put("grantType", "인증 타입");
+//        tokenDto.put("accessTokenExpireIn", "액세스 토큰 만료 시간");
+//        tokenDto.put("username", "유저 아이디");
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Auth", (String) tokenDto.get("accessToken"));
+//        headers.add("Refresh", (String) tokenDto.get("refreshToken"));
+//
+//        return new ResponseEntity<>(tokenDto, headers, HttpStatus.OK);
+//    }
 
     // 유저 기능
     @ApiOperation(value = "전체 회원 목록")

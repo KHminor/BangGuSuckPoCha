@@ -49,7 +49,8 @@ public class Report {
         this.repoterId = repoterId;
     }
 
-    public void adminReportUpdate() {
+    public void adminReportUpdate(Integer demerit) {
+        this.demerit = demerit;
         this.reportResult = Boolean.TRUE;
     }
 }
