@@ -49,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
                 .username(requestDto.getUsername())
                 .password(bCryptPasswordEncoder.encode(requestDto.getPassword()))
                 .nickname("관리자" + requestDto.getNickname())
-                .profile("^_^")
+                .profile("/profile/icon_0004.png")
                 .comment(null)
                 .gender("M")
                 .birth("2023.02.02")
@@ -63,7 +63,6 @@ public class AdminServiceImpl implements AdminService {
                 .build();
 
         userRepository.save(user);
-
     }
 
     @Override
@@ -144,7 +143,7 @@ public class AdminServiceImpl implements AdminService {
         Report report = reportRepository.findByReportId(reportId);
         User attacker = report.getAttackerId();
         attacker.setReport_point(attacker.getReport_point()+requestDto.getDemerit());
-        if (attacker.getReport_point() > 10){
+        if (attacker.getReport_point() >= 10){
             attacker.setRole("BAN");
         }
         report.adminReportUpdate(requestDto.getDemerit());
