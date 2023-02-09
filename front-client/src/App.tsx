@@ -18,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReviewPage from "./components/ReviewPage/ReviewPage";
 import FriendSearch from "./components/Common/FriendSearch";
+import AdminAdd from "./components/Admin/AdminAdd";
 
 function App() {
   return (
@@ -29,28 +30,23 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-        icon={({type}) => {
+        icon={({ type }) => {
           switch (type) {
             case "success":
-              return "🗨"
+              return "🗨";
             case "error":
-              return "💙"
+              return "💙";
             case "info":
-              return "🗨"
+              return "🗨";
           }
-        }
-        }
-        progressStyle={
-          {
-            height: "0.1rem"
-          }
-        }
-        style={
-          {
-            fontSize : "1rem",
+        }}
+        progressStyle={{
+          height: "0.1rem",
+        }}
+        style={{
+          fontSize: "1rem",
           minWidth: "fit-content",
-          }
-        }
+        }}
       />
       <Routes>
         <Route path="/" element={<Login />} />
@@ -63,6 +59,7 @@ function App() {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
+        <Route path="/adminadd" element={<AdminAdd />} />
         <Route path="/userlist" element={<UserList />} />
         <Route path="/userreport" element={<UserReport />} />
         <Route path="/userreport/wait" element={<UserReportWait />} />

@@ -171,6 +171,8 @@ function Mypage(): JSX.Element {
       setNowName(a.nickname);
       const birth = a.birth;
       setGender(a.gender);
+
+      
       const today = new Date();
 
       const birthDate = new Date(
