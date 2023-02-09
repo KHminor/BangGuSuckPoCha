@@ -18,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -136,6 +137,17 @@ public class NaverService {
                 user.setRole("TODAY");
             }
             user.setTime(LocalDateTime.now());
+        }
+        // 문자열
+        String dateStr = Integer.toString(Integer.parseInt(profile.response.birthyear)+19)+"-"+profile.response.birthday;
+        // 포맷터
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // 문자열 -> Date
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+        // 오늘 날짜
+        LocalDate today = LocalDate.now();
+        if (date.isAfter(today)){
+            user.setRole("TEENAGER");
         }
         return user;
     }
