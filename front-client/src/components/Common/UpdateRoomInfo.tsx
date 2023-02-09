@@ -6,13 +6,13 @@ import {
   changeCreateRoomChoiceAddTag,
   changeCreateRoomChoiceRemoveTag,
   changeCreateRoomChoiceTagReset,
-  showPublicModal,
   showUpdateRoom,
 } from "../../store/store";
 import MainCreateRoomTheme from "src/components/Main/MainCreateRoomTheme";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import PublicModal from "./PublicModal";
+import Loading from "./Loading";
 
 const UpdateRoomInfo = ({
   roomTheme,
@@ -24,11 +24,21 @@ const UpdateRoomInfo = ({
   socket: any;
 }): React.ReactElement => {
   const dispatch = useAppDispatch();
-
-  // username (현재는 내꺼)
-  const username = localStorage.getItem("Username");
+  // 로딩중
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // 현재 포차 정보
+  const [pochaInfo, setPochaInfo] = useState<any>(null);
+  // 5개 제한 모달 상태 체크
+  const [showModal, setShowModal] = useState<boolean>(false);
+  // 태그들 가져오기
+  const selectTags = useRef<any[]>([]);
+  //
+  const onClickModalState = () => {
+    setShowModal(false);
+  };
 
   const roomTitle = "포차정보수정";
+  // 후에 내 지역과 내 나이 세팅해야함
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
   const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
@@ -57,11 +67,6 @@ const UpdateRoomInfo = ({
     msg: "태그는 5개까지만 선택가능합니다",
   };
 
-  // 모달 상태 체크
-  const showModal = useAppSelector((state) => {
-    return state.PublicModal;
-  });
-
   // 전달받아온 함수를 실행해서 창끄기
   const closeModal = () => {
     // onClickHiddenBtn();
@@ -69,27 +74,27 @@ const UpdateRoomInfo = ({
   };
 
   // 태그 리스트
-  const [choiceTagList, setChoiceTagList] = useState<number[]>([]);
-
+  const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
+  console.log('태그리스트',choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
-    index: number,
+    tag: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
-      dispatch(showPublicModal(true));
+    if (!choiceTagList.includes(tag) && choiceTagList.length >= 5) {
+      setShowModal(true);
       return;
     }
-    if (choiceTagList.includes(index)) {
+    if (choiceTagList.includes(tag)) {
       setChoiceTagList((prev) => {
         const ttest = prev.filter((data) => {
-          return data !== index;
+          return data !== tag;
         });
         console.log(ttest);
         return ttest;
       });
-    } else if (!choiceTagList.includes(index)) {
-      setChoiceTagList((prev) => [...prev, index]);
+    } else if (!choiceTagList.includes(tag)) {
+      setChoiceTagList((prev) => [...prev, tag]);
     }
 
     const data = event.target as HTMLElement;
@@ -125,7 +130,42 @@ const UpdateRoomInfo = ({
   const createRoomThemeCheck = useAppSelector((state) => {
     return state.createRoomThemeCheck;
   });
-  
+
+  // 현재 포차 정보 요청
+  const getPochaInfo = async () => {
+    try {
+      const { data } = await axios({
+        url: `https://i8e201.p.ssafy.io/api/pocha/${Number(pochaId)}`,
+      });
+      setPochaInfo(data.data);
+      // 그냥 로딩중 보여주기
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+      // console.log("태그", data.data.tagList);
+      const tags = data.data.tagList;
+      // 현재 포차의 선택된 태그들 표시해주기
+      // ref로 잡아온 리스트 for문 돌리고
+      selectTags.current.forEach((tag) => {
+        // 현재 포차 태그리스트로 2중 for문
+        tags.forEach((tagName: any) => {
+          if (tag.innerText === tagName) {
+            tag.classList.toggle(`${style.selectBtn}`);
+            // 이렇게 찾아낸건 처음값으로 세팅해준다
+            dispatch(changeCreateRoomChoiceAddTag(tagName));
+            setChoiceTagList((prev) => [...prev, tagName]);
+          }
+        });
+      });
+    } catch (error) {
+      console.log("포차 정보 받아오기", error);
+    }
+  };
+
+  useEffect(() => {
+    getPochaInfo();
+  }, []);
+
   // 포차 정보 업데이트 요청
   const updateRoom = async () => {
     try {
@@ -143,7 +183,7 @@ const UpdateRoomInfo = ({
       });
       console.log("포차정보수정????", updateInfo);
       socket.emit("pocha_change", pochaId);
-    } catch(error) {
+    } catch (error) {
       console.log("포차정보수정", error);
     }
     closeModal();
@@ -151,20 +191,12 @@ const UpdateRoomInfo = ({
     dispatch(changeCreateRoomChoiceTagReset());
   };
 
-  // // ----- 포차 설정 변경 이벤트 -----
-  // function handlePochaUpdate() {
-  //   // 설정값 입력.
-  //   let pocha_config = {};
-
-  //   // axios를 통해 포차 설정 변경. (await 사용해야할 듯?)
-    
-  // }
-
   return (
     <>
       {roomTheme === 1 ? (
         <>
-          {showModal && <PublicModal data={modalData} />}
+          {showModal && <PublicModal data={modalData} fx={onClickModalState} />}
+          {isLoading && <Loading />}
           <div
             className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >
@@ -176,12 +208,32 @@ const UpdateRoomInfo = ({
               >
                 {roomTitle}
               </div>
-              <MainCreateRoomPeople selectOption={peopleOption} />
+              {pochaInfo && (
+                <MainCreateRoomPeople
+                  selectOption={peopleOption}
+                  pochaInfo={pochaInfo}
+                />
+              )}
               <div className="flex justify-start w-full">
-                <MainCreateRoomSelect selectOption={ageOption} />
-                <MainCreateRoomSelect selectOption={regionOption} />
+                {pochaInfo && (
+                  <MainCreateRoomSelect
+                    selectOption={ageOption}
+                    pochaInfo={pochaInfo}
+                  />
+                )}
+                {pochaInfo && (
+                  <MainCreateRoomSelect
+                    selectOption={regionOption}
+                    pochaInfo={pochaInfo}
+                  />
+                )}
               </div>
-              <MainCreateRoomTheme selectOption={themeOption} />
+              {pochaInfo && (
+                <MainCreateRoomTheme
+                  selectOption={themeOption}
+                  pochaInfo={pochaInfo}
+                />
+              )}
               <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">
                 태그
               </div>
@@ -189,9 +241,12 @@ const UpdateRoomInfo = ({
                 {tagList.map((tag, index) => {
                   return (
                     <div
-                      onClick={(event) => onSelectTag(index, event)}
+                      onClick={(event) => onSelectTag(tag, event)}
                       key={index}
                       className={`${style.tagBox}`}
+                      ref={(tag) => {
+                        selectTags.current[index] = tag;
+                      }}
                     >
                       {tag}
                     </div>
@@ -220,57 +275,80 @@ const UpdateRoomInfo = ({
           </div>
         </>
       ) : (
-        <div className={`bg-black bg-opacity-90 absolute h-screen text-white`}>
+        <>
+          {showModal && <PublicModal data={modalData} fx={onClickModalState} />}
           <div
-            className={`${style.tagListbox} ${style.boxShadow} min-w-[44rem] bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}
+            className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >
             <div
-              className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}
+              className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl absolute top-20`}
             >
-              {roomTitle}
-            </div>
-            {roomTheme === 3 ? (
-              <MainCreateRoomPeople selectOption={huntingPeopleOption} />
-            ) : (
-              <MainCreateRoomPeople selectOption={peopleOption} />
-            )}
-            <MainCreateRoomSelect selectOption={ageOption} />
-            <MainCreateRoomSelect selectOption={regionOption} />
-            <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">
-              태그
-            </div>
-            <div className="flex justify-center flex-wrap">
-              {tagList.map((tag, index) => {
-                return (
-                  <div
-                    onClick={(event) => onSelectTag(index, event)}
-                    // ref={(tag) => {
-                    //   selectTags.current[index] = tag;
-                    // }}
-                    key={index}
-                    className={`${style.tagBox}`}
-                  >
-                    {tag}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex justify-end w-full mt-10">
-              <input
-              onClick={updateRoom}
-                className={`${style.createBtn} cursor-pointer`}
-                type="button"
-                value="정보수정"
-              />
-              <input
-                onClick={closeModal}
-                className={`${style.cancelBtn} cursor-pointer`}
-                type="button"
-                value="취소"
-              />
+              <div
+                className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}
+              >
+                {roomTitle}
+              </div>
+              {roomTheme === 3
+                ? pochaInfo && (
+                    <MainCreateRoomPeople
+                      selectOption={huntingPeopleOption}
+                      pochaInfo={pochaInfo}
+                    />
+                  )
+                : pochaInfo && (
+                    <MainCreateRoomPeople
+                      selectOption={peopleOption}
+                      pochaInfo={pochaInfo}
+                    />
+                  )}
+              {pochaInfo && (
+                <MainCreateRoomSelect
+                  selectOption={ageOption}
+                  pochaInfo={pochaInfo}
+                />
+              )}
+              {pochaInfo && (
+                <MainCreateRoomSelect
+                  selectOption={regionOption}
+                  pochaInfo={pochaInfo}
+                />
+              )}
+              <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">
+                태그
+              </div>
+              <div className="flex justify-center flex-wrap">
+                {tagList.map((tag, index) => {
+                  return (
+                    <div
+                      onClick={(event) => onSelectTag(tag, event)}
+                      ref={(tag) => {
+                        selectTags.current[index] = tag;
+                      }}
+                      key={index}
+                      className={`${style.tagBox}`}
+                    >
+                      {tag}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex justify-end w-full mt-10">
+                <input
+                  onClick={updateRoom}
+                  className={`${style.createBtn} cursor-pointer`}
+                  type="button"
+                  value="정보수정"
+                />
+                <input
+                  onClick={closeModal}
+                  className={`${style.cancelBtn} cursor-pointer`}
+                  type="button"
+                  value="취소"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

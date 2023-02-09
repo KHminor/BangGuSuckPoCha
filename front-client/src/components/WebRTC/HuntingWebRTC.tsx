@@ -9,7 +9,13 @@ import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
-const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function }) => {
+const WebRTC = ({
+  pochaId,
+  propSocket,
+}: {
+  pochaId: string;
+  propSocket: Function;
+}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // webRTC관련
@@ -61,10 +67,10 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
-    console.log(pochaId)
+    console.log(pochaId);
     try {
       const {
-        data: { data }
+        data: { data },
       } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
       });
@@ -73,7 +79,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
       // setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
-    } catch(error) {
+    } catch (error) {
       console.log("포차 참여유저 데이터 axios error", error);
     }
   }
@@ -84,7 +90,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   let cameraOff = false;
   // let userCount = 1;
 
-  // 최초실행 
+  // 최초실행
   useEffect(() => {
     propSocket(socket);
     getUsersProfile();
@@ -411,9 +417,6 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   });
 
   // ------------ 포차 기능 code --------------
-  const ssulTitle = useRef<HTMLDivElement>(null);
-  const [ssul, setSsul] = useState<string>("");
-
   //  axios
   const api = axios.create({
     baseURL: "https://i8e201.p.ssafy.io/api",
@@ -426,23 +429,14 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
     // 방 설정 다시 불러오기!!! 테스트
     let pochaInfo = {};
     try {
-      await api.get(`/pocha/${pochaId}`).then((result) => {
+      await api.get(`/pocha/${pochaId}`).then((result: any) => {
         pochaInfo = result.data.data;
       });
       console.log(pochaInfo);
-    } catch(error) {
+    } catch (error) {
       console.log("방설정 다시불러오기 error", error);
     }
   }
-
-  // 썰 변경! : 방 설정 다시 불러오기.
-  socket.on("ssul_change", async (ssul) => {
-    console.log("썰 변경!----------------------");
-    setSsul(ssul);
-    // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
-  });
-
   // 포차 설정 변경! : 방 설정 다시 불러오기.
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
@@ -463,7 +457,6 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
   //   // 방 설정 다시 불러오기!!! 테스트
   //   // await pocha_config_update("3");
   // });
-
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -559,9 +552,12 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
           {isRoomUserProfile && userProfileData && (
             <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
           )}
-          <div className="text-white grid" style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}>
+          <div
+            className="text-white grid"
+            style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}
+          >
             <div className="flex flex-col justify-between items-center">
-            {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
+              {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
               {/* 내 비디오 공간 */}
               <video
                 className="w-[30rem] h-80 py-3"
@@ -582,20 +578,16 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
                 ref={peerFace4}
                 playsInline
                 autoPlay
-                >
-              </video>
+              ></video>
+            </div>
+            {/* 게임 공간 */}
+            <div className="grid" style={{ gridTemplateColumns: "0.98fr" }}>
+              <div className="flex justify-center h-240 items-center border-2 border-blue-400 rounded-[20px]">
+                2
               </div>
-              {/* 게임 공간 */}
-              <div
-                className="grid"
-                style={{ gridTemplateColumns: "0.98fr" }}
-              >
-                <div className="flex justify-center h-240 items-center border-2 border-blue-400 rounded-[20px]">
-                  2
-                </div>
-              </div>
-              {/* 사람 공간 */}
-              <div className="flex flex-col justify-between items-center">
+            </div>
+            {/* 사람 공간 */}
+            <div className="flex flex-col justify-between items-center">
               <video
                 onClick={ShowUserProfile}
                 className="w-[30rem] h-80 py-3 cursor-pointer"
@@ -617,7 +609,7 @@ const WebRTC = ({ pochaId, propSocket }: { pochaId: string, propSocket: Function
                 playsInline
                 autoPlay
               ></video>
-              </div>
+            </div>
             <div className="flex w-fit">
               {/* 뮤트 */}
               <button
