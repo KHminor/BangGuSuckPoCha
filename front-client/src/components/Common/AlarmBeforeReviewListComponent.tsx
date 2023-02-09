@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../store/hooks";
 import StarReview from "./StarReview";
 
 // 리뷰 리스트
-function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any):JSX.Element {
+function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername, to_profile}:any):JSX.Element {
   // 이모지 클릭 여부
   const dispatch = useAppDispatch()
   
@@ -15,6 +15,7 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
       url: `https://i8e201.p.ssafy.io/api/user/info/${toUsername}`,
     })
     .then((r)=> {
+      console.log('리뷰전 ',r.data)
       dispatch(changeNavAlarmReviewEmojiUserData(r.data))
       dispatch(showRoomUserProfile())
     })
@@ -26,7 +27,7 @@ function AlarmBeforeReviewListComponent({to_nickname, reviewId, toUsername}:any)
 
       {/* 유저 이모지 */}
       <div className="flex justify-center items-start">
-        <img className="w-[2rem] h-[2rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" onClick={UserStateSearch}/>
+        <img className="w-[2rem] h-[2rem] cursor-pointer" src={to_profile} alt="" onClick={UserStateSearch}/>
       </div>
       {/* 별점 및 평가하기 */}
       <div className="grid" style={{gridTemplateRows: '1fr 1fr'}}>

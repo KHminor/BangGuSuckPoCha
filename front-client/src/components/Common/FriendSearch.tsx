@@ -17,7 +17,7 @@ function FriendSearch(): JSX.Element {
         ref={searchFriend}
         onClick={(e)=> {
           if (e.target === searchFriend.current) {
-            dispatch(changeFriendSearchState())
+            dispatch(changeFriendSearchState(false))
           }
         }}
       >

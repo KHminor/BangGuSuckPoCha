@@ -41,13 +41,13 @@ function FriendList(): JSX.Element {
   // 친구 요청 검색 모달
   const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
 
-  function UserStateSearch(user_nickname:any) {
+  function UserStateSearch(f_username:any) {
     axios({
       method: 'get',
-      url: `https://i8e201.p.ssafy.io/api/user/info/${user_nickname}`,
+      url: `https://i8e201.p.ssafy.io/api/user/info/${f_username}`,
     })
     .then((r)=> {
-      console.log('넣어따')
+      console.log('넣어따', r.data)
       dispatch(changeNavAlarmReviewEmojiUserData(r.data))
       dispatch(showRoomUserProfile())
     })
@@ -87,7 +87,6 @@ function FriendList(): JSX.Element {
     }}
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
-    
     const chat_id = e.chat_id;
     return (
       <div
@@ -96,8 +95,9 @@ function FriendList(): JSX.Element {
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
       >
         <div className="flex justify-center items-center h-full pl-2">
-          <img className="object-contain h-[80%] " src={emoji} alt="" onClick={()=>{
-            UserStateSearch(e.user_nickname)
+          <img className="object-contain h-[80%] " src={e.f_profile} alt="" onClick={()=>{
+            console.log(e)
+            UserStateSearch(e.f_username)
           }}/>
         </div>
         <div
@@ -181,7 +181,7 @@ function FriendList(): JSX.Element {
                       if (menuFriendClickCheck) {
                         dispatch(changeMenuFriendState());
                       }
-                      dispatch(changeFriendSearchState())
+                      dispatch(changeFriendSearchState(false))
                     }}
                   />
                 </div>
@@ -218,7 +218,7 @@ function FriendList(): JSX.Element {
                 </div>
                 <div><span className={`cursor-pointer ${styles.friendName}`} onClick={()=> {
                   // 친구 요청 검색 모달 상태
-                  dispatch(changeFriendSearchState())
+                  dispatch(changeFriendSearchState(true))
                 }}>친구요청</span></div>
               </div>
             </div>

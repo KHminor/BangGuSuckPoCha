@@ -4,7 +4,12 @@ import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { changeAlarmApiDataState, changeNavAlarmReviewEmojiUserData, showRoomUserProfile } from "src/store/store";
+import FriendChat from "../Common/FriendChat";
+import FriendList from "../Common/FriendList";
+import FriendSearch from "../Common/FriendSearch";
 import Navbar from "../Common/Navbar";
+import NavbarAlarm from "../Common/NavbarAlarm";
+import NavbarMenu from "../Common/NavbarMenu";
 import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
 import styles from "../Main/Main.module.css";
 import './ReviewPage.css'
@@ -20,6 +25,23 @@ function ReviewPage():JSX.Element {
   const RoomUserProfileClickCheck: any = useAppSelector((state: any) => {
     return state.RoomUserProfileClickCheck;
   });
+  //  메뉴 -> 친구 클릭 -> 채팅 상태
+  const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
+    return state.menuFriendChatClickCheck;
+  });
+   // 메뉴 클릭 상태
+  const checkMenuState: any = useAppSelector((state: any) => {
+    return state.menuClickCheck;
+  });
+  // 알람 클릭 상태
+  const alarmClickCheck: any = useAppSelector((state: any) => {
+    return state.alarmClickCheck;
+  });
+
+  // 친구 요청 검색 모달
+  const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
+
+  
   useEffect(()=> {
     axios({ 
       method: 'get',
@@ -61,10 +83,22 @@ function ReviewPage():JSX.Element {
 
   return (
     <>
+      <FriendList />
+      {
+        alarmClickCheck? <NavbarAlarm/> :null
+      }
+      {
+        checkMenuState? <NavbarMenu/> :null
+      }
+
+
+      {menuFriendChatClickCheck ? <FriendChat /> : null}
       {RoomUserProfileClickCheck ? (
         <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData} />
       ) : null}
       
+        
+
       <div
         className={`grid w-screen min-w-[75rem] h-screen ${styles.hideScroll}`}
         style={{
@@ -171,7 +205,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                     dispatch(showRoomUserProfile())         
                   })
                 }}>
-                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={to_profile} alt="" />
                 </div>
                 <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}
@@ -252,7 +286,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                     dispatch(showRoomUserProfile())         
                   })
                 }}>
-                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={require('../../assets/myPage/sunglassEmoji.png')} alt="" />
+                  <img className="w-[4rem] h-[4rem] cursor-pointer" src={to_profile} alt="" />
                 </div>
                 <div className="flex justify-start items-center pl-3 overflow-x-scroll hideScroll nickNameNeon cursor-pointer">
                   {to_nickname}

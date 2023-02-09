@@ -192,6 +192,17 @@ const roomAddFriendModalCheck = createSlice({
   },
 });
 
+// 친구 삭제 클릭 여부
+const roomDeleteFriendModalCheck = createSlice({
+  name: "roomDeleteFriendModalCheck",
+  initialState: false,
+  reducers: {
+    changeRoomDeleteFriendModalCheck(state) {
+      return !state;
+    },
+  },
+});
+
 // Room에 있는 유저 강퇴 클릭 여부
 const RoomUserBanClickCheck = createSlice({
   name: "RoomUserBanCheck",
@@ -396,8 +407,8 @@ const friendSearchState = createSlice({
   name: "friendSearchState",
   initialState: false,
   reducers: {
-    changeFriendSearchState(state) {
-      return !state
+    changeFriendSearchState(state,action) {
+      return state = action.payload
     },
   },
 });
@@ -451,6 +462,8 @@ export const store = configureStore({
     inviteFriendModal: inviteFriendModal.reducer,
     // 친구 요청 검색 모달
     friendSearchState: friendSearchState.reducer,
+    // 친구 삭제 모달 클릭 여부
+    roomDeleteFriendModalCheck: roomDeleteFriendModalCheck.reducer,
   },
 });
 //주석추가
@@ -506,6 +519,8 @@ export const { showUpdateRoom } = updateRoomInfo.actions;
 export const { inviteMyFriend } = inviteFriendModal.actions;
 // 친구 요청 검색 모달
 export const { changeFriendSearchState } = friendSearchState.actions;
+// 친구 삭제 모달 클릭 여부
+export const { changeRoomDeleteFriendModalCheck } = roomDeleteFriendModalCheck.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
