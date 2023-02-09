@@ -1,29 +1,58 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useAppDispatch } from "../../store/hooks";
-import { changeCreateRoomChoiceAge, changeCreateRoomChoiceRegion } from "../../store/store";
+import {
+  changeCreateRoomChoiceAge,
+  changeCreateRoomChoiceRegion,
+} from "../../store/store";
 import style from "./MainCreateRoom.module.css";
 
-const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => { 
-  const dispatch = useAppDispatch()
-  const [selectTitle, selectAge, selectRegion] = selectOption;
+const MainCreateRoomSelect = ({
+  selectOption,
+  pochaInfo,
+}: {
+  selectOption: string[];
+  pochaInfo?: any;
+}) => {
+  const dispatch = useAppDispatch();
+  const [selectTitle, selectFirst, selectSecond] = selectOption;
 
   const selectChoiceAge = useRef<any>(null);
   const selectRegionCity = useRef<any>(null);
 
+  // 처음에 실행
+  useEffect(() => {
+    // 포차 정보 있을때
+    if (pochaInfo) {
+      if (pochaInfo.age !== 0 && selectTitle === "나이") {
+        selectChoiceAge.current.classList.remove("text-black");
+        selectChoiceAge.current.classList.remove("bg-white");
+        selectRegionCity.current.classList.add("text-black");
+        selectRegionCity.current.classList.add("bg-white");
+      }
+      if (pochaInfo.region !== "전국" && selectTitle === "지역") {
+        selectChoiceAge.current.classList.remove("text-black");
+        selectChoiceAge.current.classList.remove("bg-white");
+        selectRegionCity.current.classList.add("text-black");
+        selectRegionCity.current.classList.add("bg-white");
+      }
+      // 우선 받아온 포차정보대로 값세팅 그래야 선택된것처럼 보이는값 들어가니
+      dispatch(changeCreateRoomChoiceAge(pochaInfo.age));
+      dispatch(changeCreateRoomChoiceRegion(pochaInfo.region));
+    }
+  }, []);
+
   // 선택한 나이에 따른 state 변경
-  const onSelectAge = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    selectChoiceAge.current.classList.toggle("text-black");
-    selectChoiceAge.current.classList.toggle("bg-white");
-    selectRegionCity.current.classList.toggle("text-black");
-    selectRegionCity.current.classList.toggle("bg-white");
-    const chlickAge = event.target as HTMLElement;
-    if (chlickAge.innerText[-1] === '대') {
-      const sendData = (chlickAge.innerText).substring(0,2)
-      dispatch(changeCreateRoomChoiceAge(sendData))
-    } else {
-      dispatch(changeCreateRoomChoiceAge(chlickAge.innerText))
+  const onSelectAge = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    selectChoiceAge.current.classList.add("text-black");
+    selectChoiceAge.current.classList.add("bg-white");
+    selectRegionCity.current.classList.remove("text-black");
+    selectRegionCity.current.classList.remove("bg-white");
+    switch (selectTitle) {
+      case "나이":
+        dispatch(changeCreateRoomChoiceAge(0));
+        break;
+      case "지역":
+        dispatch(changeCreateRoomChoiceRegion("전국"));
     }
   };
 
@@ -31,12 +60,20 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
   const onSelectRegion = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    selectChoiceAge.current.classList.toggle("text-black");
-    selectChoiceAge.current.classList.toggle("bg-white");
-    selectRegionCity.current.classList.toggle("text-black");
-    selectRegionCity.current.classList.toggle("bg-white");
-    const clickRegion = event.target as HTMLElement;
-    dispatch(changeCreateRoomChoiceRegion(clickRegion.innerText))
+    selectChoiceAge.current.classList.remove("text-black");
+    selectChoiceAge.current.classList.remove("bg-white");
+    selectRegionCity.current.classList.add("text-black");
+    selectRegionCity.current.classList.add("bg-white");
+    const clickData = event.currentTarget;
+    switch (selectTitle) {
+      case "나이":
+        const sendData: number = Number(clickData.innerText.substring(0, 2));
+        dispatch(changeCreateRoomChoiceAge(sendData));
+        break;
+      case "지역":
+        dispatch(changeCreateRoomChoiceRegion(clickData.innerText));
+        break;
+    }
   };
 
   return (
@@ -47,14 +84,14 @@ const MainCreateRoomSelect = ({selectOption} : {selectOption : string[]}) => {
         ref={selectChoiceAge}
         className={`${style.selectHover} border border-white bg-white w-[6.5rem] h-full text-black text-lg flex justify-center items-center cursor-pointer`}
       >
-        {selectAge}
+        {selectFirst}
       </div>
       <div
         onClick={onSelectRegion}
         ref={selectRegionCity}
         className={`${style.selectHover} border border-white w-[6.5rem] h-full text-lg flex justify-center items-center cursor-pointer`}
       >
-        {selectRegion}
+        {selectSecond}
       </div>
     </div>
   );
