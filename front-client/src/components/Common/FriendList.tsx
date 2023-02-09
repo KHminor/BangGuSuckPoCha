@@ -4,13 +4,19 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeMenuFriendChatState,
   changemenuFriendClickUserData,
+  changeMenuFriendListApiDataState,
   changeMenuFriendState,
 } from "../../store/store";
 import styles from "./Common.module.css";
 
 
 function FriendList(): JSX.Element {
-  
+
+  // 친구 검색
+  const [searchFriend,setSearchFriend] = useState<any>()
+  // 나를 확인할 유저 아이디
+  const username = localStorage.getItem('Username')
+
   // 메뉴 클릭시
   const dispatch = useAppDispatch();
   const friendListIcon = useRef<any>(null);
@@ -46,10 +52,22 @@ function FriendList(): JSX.Element {
   const [checkChatId, setCheckChatId] = useState();
 
   
-
-  
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      console.log(searchFriend)
+      console.log(username)
+      axios({
+        method: 'get',
+        url: `https://i8e201.p.ssafy.io/api/user/friend/${username}/${searchFriend}`,
+      }).then((r)=> {
+        console.log('요청한 친구: ',r.data.data)
+        dispatch(changeMenuFriendListApiDataState(r.data.data));
+        setSearchFriend("") 
+      })
+    }}
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
+    
     const chat_id = e.chat_id;
     return (
       <div
@@ -150,6 +168,11 @@ function FriendList(): JSX.Element {
                 className="w-[84%] h-full text-base text-black font-bold pl-3 "
                 style={{ borderRadius: "100% 0px 0px 100%" }}
                 type="text"
+                onChange={(e)=> {
+                  console.log(e.target.value)
+                  setSearchFriend(e.target.value)
+                }}
+                onKeyDown={handleKeyPress}
               />
               <div className="w-[5%]"></div>
               <div className="w-[11%] cursor-pointer">

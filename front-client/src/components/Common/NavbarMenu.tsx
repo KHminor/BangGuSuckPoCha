@@ -109,6 +109,7 @@ function NavbarMenu(): JSX.Element {
                   setFriendData.push(e);
                 }
               });
+              console.log(setFriendData)
               dispatch(changeMenuFriendState());
               dispatch(changeMenuFriendListApiDataState(setFriendData));
             });
