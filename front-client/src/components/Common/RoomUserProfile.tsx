@@ -10,7 +10,7 @@ import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
 import RoomUserReportModal from "./RoomUserReportModal";
 
-const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string }) => {
+const RoomUserProfile = ({ userData, pochaId, isHost }: { userData: any, pochaId: string, isHost?: boolean }) => {
   let dispatch = useAppDispatch();
   let { manner, gender, birth, region, comment, profile } = userData.data;
   const { nickname } = userData.data;
@@ -33,12 +33,22 @@ const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string
   ];
 
   // 유저 아래 친추, 강퇴, 신고하기 등
-  const userInfoFootIcons = [
+  let userInfoFootIcons : any[];
+  let userInfoFootTitle : string[];
+  if (isHost) {
+    userInfoFootIcons = [
+      require("../../assets/roomIcon/add-user.png"),
+      require("../../assets/roomIcon/exclamation-mark.png"),
+      require("../../assets/roomIcon/report.png"),
+    ];
+    userInfoFootTitle = ["친구신청", "강퇴하기", "신고하기"];
+  }
+  userInfoFootIcons = [
     require("../../assets/roomIcon/add-user.png"),
-    require("../../assets/roomIcon/exclamation-mark.png"),
     require("../../assets/roomIcon/report.png"),
   ];
-  const userInfoFootTitle = ["친구신청", "강퇴하기", "신고하기"];
+  userInfoFootTitle = ["친구신청", "신고하기"];
+
 
   // 유저 정보
   const userInfosData = userDataReBuild();
