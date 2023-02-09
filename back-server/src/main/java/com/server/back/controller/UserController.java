@@ -49,7 +49,11 @@ public class UserController {
         TokenDto oauthToken = naverService.getAccessToken(code);
         User saveUser = naverService.saveUser(oauthToken.getAccess_token());
         if (saveUser.getRole().equals("SECESSION") || saveUser.getRole().equals("BAN")){
-            String target = "https://i8e201.p.ssafy.io/loginloading?Role=SECESSION&Username=" + saveUser.getUsername();
+            String target = "https://i8e201.p.ssafy.io/loginloading?Role="+ saveUser.getRole() + "&Username=" + saveUser.getUsername();
+            RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+            redirectStrategy.sendRedirect(request, response, target);
+        } else if (saveUser.getRole().equals("TEENAGER")){
+            String target = "https://i8e201.p.ssafy.io/loginloading?Role="+ saveUser.getRole() + "&Username=" + saveUser.getUsername();
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
             redirectStrategy.sendRedirect(request, response, target);
         } else if (saveUser.getRole().equals("NEWBIE")){
@@ -73,6 +77,7 @@ public class UserController {
             redirectStrategy.sendRedirect(request, response, target);
         }
     }
+
     @GetMapping("/check")
     public Map<String, String> checkcheck(){
         Map<String, String> map = new LinkedHashMap<>();
