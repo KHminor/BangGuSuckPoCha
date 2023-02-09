@@ -60,7 +60,7 @@ public class NaverService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
+        System.out.println("-----------------네이버서비스다------------"+response);
         //json형태로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         TokenDto tokenDto =null;
