@@ -1,5 +1,7 @@
 import axios from 'axios'
 import {useEffect, useState, useRef} from 'react'
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAppDispatch } from 'src/store/hooks'
 import {
   changeMainCreateRoomList,
@@ -9,8 +11,9 @@ import styles from './Tag.module.css'
 function Tag(): JSX.Element {
 
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const username = localStorage.getItem('Username')
-  const [filter, setFilter] = useState<any>({isAll:true ,age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'관심사'})
+  const [filter, setFilter] = useState<any>({isAll:true ,age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'관심사', speedEnter: false})
   const [ageRegion, setAgeRegion] = useState<any>({age:null, region:null})
   const ageRef = useRef<any>(null)
   const regionRef = useRef<any>(null)
@@ -38,7 +41,7 @@ function Tag(): JSX.Element {
   
 
   useEffect(()=> {
-    console.log(ageRegion)
+    console.log(ageRegion, setAgeRegion)
     console.log('갱신해따!!')
     if (filter.isAll) {
       console.log('원상복구')
@@ -46,7 +49,7 @@ function Tag(): JSX.Element {
       regionRef.current.value = '지역'
       themeRef.current.value = '테마'
       sulRef.current.value = '술'
-      hobbyRef.current.value = '관심사'
+      hobbyRef.current.value = '태그'
       axios.get('https://i8e201.p.ssafy.io/api/pocha/all').then((r)=> {
         const currenDataFirst = r.data.data.reverse()
         console.log(r.data)
@@ -103,9 +106,48 @@ function Tag(): JSX.Element {
           age:age, region:region,themeId:theme,tag:hobby
         }
       }).then((r)=> {
-        dispatch(changeMainCreateRoomList(r.data.data));
-        console.log(r.data)
+        if (filter.speedEnter) {
+          // 전체로 선택되어있을 수도 있기에 조회된 방 데이터를 가지고 
+          // 연령(All(0)||본인 연령(ageRegion.age)), 지역(전국,본인 지역(ageRegion.region)), 잠금여부, 인원수(입장가능한 인원수) 필터해서
+          // 이후 해당 pochaId에 맞는 방으로 이동 (포차테마에 따라 다른 방으로 이동)
+          const roomData:any[] = r.data.data
+          const enterPossibleRoomList:any[] = roomData.filter((data:any)=> {
+            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.is_private === false) && (data.limit_user>data.total_count))
+          })
+          // 입장 가능한 방을 랜덤으로 하나 골라서 
+          const randomPickRoom:any = enterPossibleRoomList[Math.floor(Math.random()*enterPossibleRoomList.length)]
+          // 입장 요청
+          const username = localStorage.getItem('Username')
+          const themeId = randomPickRoom.theme_id
+          const pochaId = randomPickRoom.pocha_id
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              // 초대 받은거를 승인하는거라 false
+              "isHost": 'false',
+              "pochaId": randomPickRoom.pocha_id,
+              'username': username
+              }
+            })
+            .then((r)=> {
+              
+              if (themeId.slice(0,2) === 'T0') {
+                navigate(`/storyroom/${pochaId}`)
+              } else if (themeId.slice(0,2) === 'T1') {
+                navigate(`/gameroom/${pochaId}`)
+              } else {
+                navigate(`/meetingroom/${pochaId}`)
+              }
+            })
+
+        } else {
+          // 그냥 방 해당 태그에 맞게 갱신해주기
+          dispatch(changeMainCreateRoomList(r.data.data));
+          console.log(r.data)
+        }
       }).catch((e)=> {
+        toast.error("다시 시도해주세요");
         console.log('에러다: ',e)
       })
     }
@@ -121,7 +163,7 @@ function Tag(): JSX.Element {
           setFilter((preState:any)=> {
             return {...preState, isAll:true, age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'관심사'}
           })
-        }}>ALL</div>
+        }}>전체</div>
         {/* 연령 */}
         <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3 select-wrap">
           <select ref={ageRef} className={`flex justify-center items-center cursor-pointer ${styles.select}`} name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
@@ -129,7 +171,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false, age: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="연령">{filter.age}</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="연령" disabled>연령</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="ALL">ALL</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.age}>{ageRegion.age}</option>
           </select>
@@ -141,7 +183,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,region: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="지역">{filter.region}</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="지역" disabled>지역</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="전국">전국</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.region}>{ageRegion.region}</option>
           </select>
@@ -153,7 +195,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,theme: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="테마">{filter.theme}</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="테마" disabled>테마</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="소통포차">소통포차</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="게임포차">게임포차</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="헌팅포차">헌팅포차</option>
@@ -166,11 +208,12 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,sul: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="술">{filter.sul}</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="술" disabled>술</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="소주">소주</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="맥주">맥주</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="양주">양주</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="와인">와인</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="위스키">위스키</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="보드카">보드카</option>
           </select>
         </div>
         <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
@@ -179,22 +222,27 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,hobby: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="관심사">{filter.hobby}</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="태그" disabled>태그</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="애니메이션">애니메이션</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="게임">게임</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="연애">연애</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="영화">영화</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="음악">음악</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="연예인">연예인</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="축구">축구</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="직장">직장</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="잡담">잡담</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="운동">운동</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="뜨개질">뜨개질</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="코딩">코딩</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="프로젝트">프로젝트</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="축구">축구</option>
           </select>
         </div>
       </div>
-      <div className="w-full">
+      <div className="flex justify-end items-center w-full h-full">
+        <div className={`flex justify-center items-center text-white rounded-3xl cursor-pointer w-[6rem] h-[2.65rem] ${styles.cancelBtn}`} onClick={()=> {
+          setFilter((preState:any)=> {
+            return {...preState, speedEnter: true}
+          })
 
+        }}>빠른 입장</div>
       </div>
     </div>
     

@@ -10,9 +10,23 @@ import styles from "../Main/Main.module.css";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Navbar(): JSX.Element {
   const navigate = useNavigate()
+  const [myData,setMyData] = useState({profile:null, nickname:null})
+  useEffect(()=> {
+    const username = localStorage.getItem('Username')
+    axios({
+      method: 'get',
+      url: `https://i8e201.p.ssafy.io/${username}`
+    })
+    .then((r)=> {
+      setMyData({profile:r.data.data.profile, nickname:r.data.data.nickname})
+    })
+  },[])
+
+
   return (
     // <div className="h-[11rem] min-w-[75rem] sticky top-0 w-full" >
     <div className="h-[11rem] min-w-[75rem] fixed w-full">
@@ -30,7 +44,7 @@ function Navbar(): JSX.Element {
         <div className="grid grid-cols-1 " style={{ width: "18%" }}>
           <div></div>
           <div></div>
-          <MenuOption />
+          <MenuOption profile={myData.profile} nickname={myData.nickname}/>
         </div>
       </div>
     </div>
@@ -38,7 +52,7 @@ function Navbar(): JSX.Element {
 }
 
 // menu component
-function MenuOption(): JSX.Element {
+function MenuOption({profile, nickname}:any): JSX.Element {
   let dispatch = useAppDispatch();
   const username = localStorage.getItem("Username");
   const menuFriendClickCheck = useAppSelector((state) => {
@@ -56,13 +70,13 @@ function MenuOption(): JSX.Element {
             <img
               className="object-contain"
               style={{ width: "1.5rem", height: "1.5rem" }}
-              src={require("src/assets/logoIcon/shop.png")}
-              alt="shop"
+              src={profile}
+              alt="my"
             />
             <p
               className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}
             >
-              상점
+              {nickname}
             </p>
           </div>
         </div>

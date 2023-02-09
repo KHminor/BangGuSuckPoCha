@@ -188,9 +188,11 @@ function Main(): JSX.Element {
 }
 export default Main;
 
+
+
 function Room({ mainCreateRoomList }: any): JSX.Element {
 
-
+  console.log('생성된 방 리스트: ',mainCreateRoomList)
   const navigate = useNavigate();
   // 내 아이디
   const username = localStorage.getItem("Username");
@@ -276,6 +278,8 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
               ssulTitle={SSulTitle}
               isPrivate={e.isPrivate}
               alcohol={e.alcohol}
+              totalCount={e.totalCount}
+              limitUser={e.limitUser}
             />
           </div>
           <div></div>
