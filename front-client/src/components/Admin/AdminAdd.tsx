@@ -52,8 +52,8 @@ const AdminAdd = () => {
                       method: "post",
                       url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
                       data: {
-                        changeName: Nickname,
-                        nowName: nowName,
+                        // changeName: Nickname,
+                        // nowName: nowName,
                       },
                     }).then((r) => {
                       const isDouble = r.data.data;

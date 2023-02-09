@@ -28,202 +28,205 @@ const ProfileSelectModal = ({ profileData }: { profileData: any }) => {
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileImgSelectModal}
-        className={`z-10 bg-slate-800 bg-opacity-50 fixed top-0 right-0 bottom-0 left-0 flex flex-row justify-center items-center text-white`}
+        className={`z-10 bg-slate-800 bg-opacity-75 fixed top-0 right-0 bottom-0 left-0 flex flex-col justify-center items-center text-white`}
       >
-        {profileList ? (
-          <>
-            <div className="">
-              <div className="p-16 ">
-                <div
-                  className="cursor-pointer  "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[0].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[0].src}`}
-                      alt="1번"
-                    />
+        <div className="text-5xl">프로필 이미지를 선택해주세요</div>
+        <div className="flex flex-row">
+          {profileList ? (
+            <>
+              <div className="">
+                <div className="p-16 ">
+                  <div
+                    className="cursor-pointer  "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[0].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[0].src}`}
+                        alt="1번"
+                      />
+                    </div>
+                    선택{" "}
                   </div>
-                  선택{" "}
+                </div>
+                <div className="p-16">
+                  <div
+                    className="cursor-pointer  "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[1].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[1].src}`}
+                        alt="2번"
+                      />
+                    </div>
+                    선택{" "}
+                  </div>
                 </div>
               </div>
-              <div className="p-16">
-                <div
-                  className="cursor-pointer  "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[1].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[1].src}`}
-                      alt="2번"
-                    />
+              <div>
+                <div className="p-16">
+                  <div
+                    className="cursor-pointer "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[2].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[2].src}`}
+                        alt="1번"
+                      />
+                    </div>
+                    선택{" "}
                   </div>
-                  선택{" "}
+                </div>
+                <div className="p-16">
+                  <div
+                    className="cursor-pointer "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[3].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[3].src}`}
+                        alt="2번"
+                      />
+                    </div>
+                    선택{" "}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="p-16">
-                <div
-                  className="cursor-pointer "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[2].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[2].src}`}
-                      alt="1번"
-                    />
+              <div>
+                <div className="p-16">
+                  <div
+                    className="cursor-pointer  "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[4].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[4].src}`}
+                        alt="1번"
+                      />
+                    </div>
+                    선택{" "}
                   </div>
-                  선택{" "}
+                </div>
+                <div className="p-16">
+                  <div
+                    className="cursor-pointer  "
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[5].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[5].src}`}
+                        alt="2번"
+                      />
+                    </div>
+                    선택{" "}
+                  </div>
                 </div>
               </div>
-              <div className="p-16">
-                <div
-                  className="cursor-pointer "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[3].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[3].src}`}
-                      alt="2번"
-                    />
+              <div>
+                <div className=" p-16">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[6].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[6].src}`}
+                        alt="1번"
+                      />
+                    </div>
+                    선택{" "}
                   </div>
-                  선택{" "}
+                </div>
+                <div className=" p-16">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[7].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[7].src}`}
+                        alt="2번"
+                      />
+                    </div>
+                    선택{" "}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="p-16">
-                <div
-                  className="cursor-pointer  "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[4].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[4].src}`}
-                      alt="1번"
-                    />
+              <div>
+                <div className=" p-16">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[8].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[8].src}`}
+                        alt="1번"
+                      />
+                    </div>
+                    선택{" "}
                   </div>
-                  선택{" "}
+                </div>
+                <div className=" p-16">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch(changeMyPageProfile(profileList[9].src));
+                      dispatch(showMyPageProfileSelect());
+                    }}
+                  >
+                    <div>
+                      <img
+                        className="w-[5rem] rounded-full"
+                        src={`${profileList[9].src}`}
+                        alt="2번"
+                      />
+                    </div>
+                    선택{" "}
+                  </div>
                 </div>
               </div>
-              <div className="p-16">
-                <div
-                  className="cursor-pointer  "
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[5].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[5].src}`}
-                      alt="2번"
-                    />
-                  </div>
-                  선택{" "}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className=" p-16">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[6].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[6].src}`}
-                      alt="1번"
-                    />
-                  </div>
-                  선택{" "}
-                </div>
-              </div>
-              <div className=" p-16">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[7].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[7].src}`}
-                      alt="2번"
-                    />
-                  </div>
-                  선택{" "}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className=" p-16">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[8].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[8].src}`}
-                      alt="1번"
-                    />
-                  </div>
-                  선택{" "}
-                </div>
-              </div>
-              <div className=" p-16">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    dispatch(changeMyPageProfile(profileList[9].src));
-                    dispatch(showMyPageProfileSelect());
-                  }}
-                >
-                  <div>
-                    <img
-                      className="w-[5rem] rounded-full"
-                      src={`${profileList[9].src}`}
-                      alt="2번"
-                    />
-                  </div>
-                  선택{" "}
-                </div>
-              </div>
-            </div>
-          </>
-        ) : null}
+            </>
+          ) : null}
+        </div>
       </div>
       {console.log("나등장!")}
     </>
