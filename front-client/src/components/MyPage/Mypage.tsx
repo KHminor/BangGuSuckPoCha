@@ -212,6 +212,7 @@ function Mypage(): JSX.Element {
   }, []);
   return (
     <>
+      {/* 친구창 그리고 탈퇴창 */}
       <Navbar />
       {SecessionClickCheck ? <SecessionModal userData={userData} /> : null}
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
