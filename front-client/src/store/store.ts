@@ -28,6 +28,27 @@ const myInfo = createSlice({
   },
 });
 
+// 마이페이지에 있는 유저 프로필설정 클릭 여부
+const MyPageProfileClickCheck = createSlice({
+  name: "MyPageProfileClickCheck",
+  initialState: false,
+  reducers: {
+    showMyPageProfileSelect(state) {
+      return !state;
+    },
+  },
+});
+
+const SelectProfile = createSlice({
+  name: "SelectProfile",
+  initialState: "",
+  reducers: {
+    changeMyPageProfile(state, action) {
+      return state = action.payload;
+    },
+  },
+})
+
 //유저이름
 const userName = createSlice({
   name: "userName",
@@ -428,6 +449,8 @@ export const store = configureStore({
     DetailUser: DetailUser.reducer,
     SelectDetailUser: SelectDetailUser.reducer,
     DetailRoom: DetailRoom.reducer,
+    MyPageProfileClickCheck: MyPageProfileClickCheck.reducer,
+    SelectProfile: SelectProfile.reducer,
 
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
@@ -473,6 +496,8 @@ export const { showPublicModal } = PublicModal.actions;
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions;
 export const { changeMyInfo } = myInfo.actions;
+export const { showMyPageProfileSelect } = MyPageProfileClickCheck.actions;
+export const { changeMyPageProfile } = SelectProfile.actions
 // username
 export const { changeUserName } = userName.actions;
 // userList
