@@ -18,6 +18,16 @@ const menuClickCheck = createSlice({
   },
 });
 
+const myInfo = createSlice({
+  name: "myInfo",
+  initialState: "",
+  reducers: {
+    changeMyInfo(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 //유저이름
 const userName = createSlice({
   name: "userName",
@@ -409,6 +419,7 @@ export const store = configureStore({
     PublicModal: PublicModal.reducer,
     // 관리자
     mainCreateRoomList: mainCreateRoomList.reducer,
+    myInfo: myInfo.reducer,
     // username
     userName: userName.reducer,
     // userList
@@ -461,6 +472,7 @@ export const { changemenuFriendClickUserData } =
 export const { showPublicModal } = PublicModal.actions;
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions;
+export const { changeMyInfo } = myInfo.actions;
 // username
 export const { changeUserName } = userName.actions;
 // userList
@@ -479,7 +491,6 @@ export const { isRtcLoading } = webRtcLoading.actions;
 // room
 export const { showUpdateRoom } = updateRoomInfo.actions;
 export const { inviteMyFriend } = inviteFriendModal.actions;
-
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
