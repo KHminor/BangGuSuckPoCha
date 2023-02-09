@@ -8,4 +8,6 @@ public interface PochaRepository extends JpaRepository<Pocha, Long> {
     Pocha findByPochaId(Long pochaId);
 
     List<Pocha> findByAgeAndRegion(Integer age, String region);
+
+    List<Pocha> findByIsEnd(Boolean isEnd);
 }
