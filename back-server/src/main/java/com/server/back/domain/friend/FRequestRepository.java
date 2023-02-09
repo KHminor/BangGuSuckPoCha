@@ -17,4 +17,8 @@ public interface FRequestRepository extends JpaRepository<FRequest, Long> {
 
 	FRequest findByFromId_userIdAndToId_userId(Long from_id, Long to_id);
 
+	FRequest findByFromId_usernameAndToId_nickname(String username, String nickname);
+
+	FRequest findByFromId_nicknameAndToId_username(String nickname, String username);
+
 }
