@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -116,7 +117,7 @@ public class NaverService {
                     .username(profile.response.id)
                     .password("0")
                     .nickname(profile.response.id)
-                    .profile("._.")
+                    .profile("../../assets/profile/icon_0001.png")
                     .comment(null)
                     .gender(profile.response.gender)
                     .birth(profile.response.birthyear+"."+profile.response.birthday.replace("-","."))
@@ -130,8 +131,12 @@ public class NaverService {
                     .build();
 
             userRepository.save(user);
+        }else {
+            if (user.getTime().toLocalDate().isBefore(LocalDate.now())){
+                user.setRole("TODAY");
+            }
+            user.setTime(LocalDateTime.now());
         }
-
         return user;
     }
 }

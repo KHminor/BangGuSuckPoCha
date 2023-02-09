@@ -32,6 +32,7 @@ public class PochaResponseDto {
     private Integer maleCount;
     private Integer femaleCount;
     private Boolean isEnd;
+    private Boolean isWaiting;
     private LocalDateTime createAt;
     private LocalDateTime endAt;
 
@@ -56,6 +57,7 @@ public class PochaResponseDto {
         }
         this.totalCount = this.maleCount + this.femaleCount;
         this.isEnd = e.getIsEnd();
+        this.isWaiting = e.getIsWaiting();
         this.createAt = e.getCreateAt();
         this.endAt = e.getEndAt();
     }

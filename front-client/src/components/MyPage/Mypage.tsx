@@ -1,45 +1,49 @@
 import axios from "axios";
-import { time } from "console";
+import { log } from "console";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { changeMyPageCheck } from "src/store/store";
+import {
+  changeMyInfo,
+  changeMyPageCheck,
+  showSecessionModal,
+} from "src/store/store";
+import FriendChat from "../Common/FriendChat";
+import FriendList from "../Common/FriendList";
 import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
+import SecessionModal from "./SecessionModal";
+
+//최초 호출시 내 지역 보여주기 / profile 보여주기
 
 function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [Selected, setSelected] = useState<any>();
-  const [Selected2, setSelected2] = useState<any>("0000000000");
+
+  //첫번째 Select박스에 넣을 state
+  const [SelectedFirst, setSelected] = useState<any>();
+  //두번째 Select박스에 넣을 state
+  const [Selected2, setSelected2] = useState<any>();
+  //첫번째 Select박스가 선택되었다는 것을 알릴 state
   const [isSelected, setIsSelected] = useState<any>();
+  //광역시를 담을 state
   const [city, setCity] = useState<any>();
 
-  const handleSelect = (event: any) => {
-    console.log("e의 타겟밸류ㅠㅠㅠㅠ", event.target.value);
-    setSelected(event.target.value);
-    setIsSelected(false);
-    city.map((it: any) => {
-      if (it.regionCode === Selected) {
-        console.log(
-          `${it.regionCode}비슷한값이 있나요?${Selected}`,
-          isSelected
-        );
-        setIsSelected(true);
-      }
-    });
-  };
+  //내정보 지역코드
+  const [regioncode, setRegioncode] = useState();
+  //지역코드 전체 목록(시도)
+  const [regionlist, setRegionlist] = useState<any | null>();
+  
+  //지역코드 전체 목록(구군)
+  const [regionlist2, setRegionlist2] = useState<any | null>();
 
-  const handleSelect2 = (event: any) => {
-    console.log(event.target.value);
 
-    setSelected2(event.target.value);
-  };
+  //중복확인
   const [modifydisplay, setModifydisplay] = useState(false);
   //바뀔이름
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState<any>();
   //이름
   const [nowName, setNowName] = useState();
   //생일
@@ -57,43 +61,87 @@ function Mypage(): JSX.Element {
   //매너온도
   const [manner, setManner] = useState();
   //프로필경로
-  const [profile, setProfile] = useState("string");
+  const [profile, setProfile] = useState();
+  //모달에 넣을정보
+  const [userData, setUserData] = useState();
 
-  // //regionList(하드코딩으로 넣은 지역코드)에서 들고오는 지역코드 앞에서 2자리
-  // const [regionfirst, setRegionfirst] = useState<any | null>("");
-  // //내 정보 중 지역의 첫번째 구분
-  // const [firstselect, setFirstselect]: any = useState<any | null | undefined>();
-  // //내 지역의 두번쨰 구분이 있으면 두번째
-  // const [secondselect, setSecondselect] = useState<any | null>();
-
-  //내정보 지역코드
-  const [regioncode, setRegioncode] = useState();
-  //지역코드 전체 목록(시도)
-  const [regionlist, setRegionlist] = useState<any | null>();
-  //지역코드 전체 목록(구군)
-  const [regionlist2, setRegionlist2] = useState<any | null>();
+  //localStorage
   const Username: any = localStorage.getItem("Username");
 
+  //Store
+  let myInfo: any = useAppSelector((state: any) => {
+    console.log("store에 넣은 내정보", state.myInfo);
+    return state.myInfo;
+  });
+  //  메뉴 -> 친구 클릭 -> 채팅 상태
+  const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
+    return state.menuFriendChatClickCheck;
+  });
+  // 강퇴 확인 모달 상태 체크
+  const SecessionClickCheck = useAppSelector((state) => {
+    return state.SecessionClickCheck;
+  });
+
+  // click 함수
   const onChangeNikename = (event: any) => {
     // console.log(event.target.value);
     setNickname(event.target.value);
   };
+
   const onChangeComment = (event: any) => {
     // console.log(event.target.value);
     setComment(event.target.value);
   };
-  // console.log("firstselect값", firstselect);
-  // console.log("secondselect값이 undifine?", secondselect === undefined);
+
+  const handleSelect = (event: any) => {
+    console.log("select1의 선택은?", event.target.value);
+    setSelected(event.target.value);
+    setIsSelected(false);
+    city.map((it: any): any => {
+      if (it.regionCode === event.target.value) {
+        setIsSelected(true);
+      }
+    });
+  }; 
+
+  const handleSelect2 = (event: any) => {
+    console.log(event.target.value);
+    setSelected2(event.target.value);
+  };
+
+  function show(temp: any): any {
+    console.log("나 저장됩니다!", temp);
+  }
+
+  // 탈퇴 묻는 모달 띄우기
+  const clickSecession = () => {
+    dispatch(showSecessionModal());
+  };
 
   useEffect(() => {
+    console.log("profile바뀌나?", profile);
+  }, [profile]);
+
+  useEffect(() => {
+    console.log("SelectedFirst가 바뀌었습니다!", SelectedFirst);
+  }, [SelectedFirst]);
+
+  //최초 호출시 axios호출
+  useEffect(() => {
+    console.log("useEffect실행");
+
     axios({
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
     }).then((r) => {
-      console.log("내정보 : ");
-      console.log(r.data.data);
+        console.log("1번째 axios 실행");
+
+      console.log("내정보 : ", r.data.data);
+      dispatch(changeMyInfo(r.data.data));
+      setUserData(r.data);
+      show(r.data);
       //data내용
-      let a = r.data.data;
+      const a = r.data.data;
       setNickname(a.nickname);
       setNowName(a.nickname);
       const birth = a.birth;
@@ -111,22 +159,33 @@ function Mypage(): JSX.Element {
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-      // console.log("age2 : " + age);
       setBirth(birth);
       setAge(age);
+      console.log("내 지역입니다!", a.region);
       setRegion(a.region);
-      setRegioncode(a.regionCode);
-      setSelected(a.regionCode);
+      setRegioncode(a.regioncode);
+      setSelected(a.regioncode);
+      console.log("a.regionCode가 들어왔어", a.regioncode);
+      if (a.regioncode.substr(2, 8) !== "00000000") {
+        setIsSelected(false);
+      } else {
+        setIsSelected(true);
+      }
+      setSelected2(a.regioncode);
       setComment(a.comment);
       setPoint(a.point);
       setManner(a.manner.toFixed(1));
       setProfile(a.profile);
+      console.log("첫번째 axios끝");
     });
 
+    //광역시 랑 (도/시) 구분
     axios({
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
     }).then((r) => {
+      console.log("2번째 axios 시작");
+
       const result = r.data.data;
 
       let rlist1 = new Array();
@@ -146,18 +205,20 @@ function Mypage(): JSX.Element {
         }
       }
       setRegionlist(rlist1);
-
       setCity(rlist1.slice(0, 7));
-      console.log("도시", city);
       setRegionlist2(rlist2);
-      console.log("rlist1---------------------", rlist1);
-      console.log("rlist2---------------------", rlist2);      
+      console.log("2번째 axios 끝");
     });
   }, []);
-
   return (
     <>
+      {/* 친구창 그리고 탈퇴창 */}
       <Navbar />
+      {SecessionClickCheck ? <SecessionModal userData={userData} /> : null}
+      {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
+      <FriendList />
+
+      {menuFriendChatClickCheck ? <FriendChat /> : null}
       <div>
         <div
           className="grid w-screen h-screen font-nanum "
@@ -178,19 +239,49 @@ function Mypage(): JSX.Element {
               }}
             >
               {/* 이모지 및 변경 아이콘 */}
-              <div className="flex justify-center items-end h-full">
+              <div className="flex flex-row justify-center  items-end h-full">
+                <div className="ml-30 right-7 w-[7rem] " />
+                <div className="right-7 w-[3rem] " />
+                <div className="h-[1.5rem] w-[1.5rem]" />
+                {profile ? (
+                  (console.log("사진경로", profile),
+                  console.log("profile type", typeof profile),
+                  (
+                    <img
+                      className=" h-[9rem] w-[9rem] ml-6 rounded-full"
+                      style={{ objectFit: "contain" }}
+                      src={`${profile}`}
+                      alt=""
+                    />
+                  ))
+                ) : (
+                  <img
+                    className="h-[9rem] w-[9rem] ml-6 rounded-full"
+                    style={{ objectFit: "contain" }}
+                    // src={"/profile/icon_0003.png"}
+                    alt="로딩중"
+                  />
+                )}
                 <img
-                  className="h-[9rem] w-[9rem] ml-6 rounded-full"
-                  style={{ objectFit: "contain" }}
-                  src={require("../../assets/profile/icon_0001.png")}
-                  alt=""
-                />
-                <img
-                  className="h-[1.5rem] w-[1.5rem]"
+                  className="h-[1.5rem] w-[1.5rem] cursor-pointer"
                   style={{ objectFit: "contain" }}
                   src={require("../../assets/myPage/settings.png")}
                   alt=""
+                  onClick={() => {}}
                 />
+                <div className="right-7 w-[3rem] " />
+                <div className="flex flex-col items-start">
+                  <div
+                    className="ml-30 right-7 w-[7rem] border-white border-2 text-white cursor-pointer"
+                    onClick={() => {
+                      clickSecession();
+                    }}
+                  >
+                    탈퇴하기
+                  </div>
+                  <div className="h-[3rem]" />
+                  <div className="h-[3rem]" />
+                </div>
               </div>
               {/* 닉네임 */}
               <div className="grid grid-cols-7 flex justify-center items-center ">
@@ -198,34 +289,39 @@ function Mypage(): JSX.Element {
                 <div></div>
                 <input
                   className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
-                  placeholder={nickname}
+                  value={nickname}
                   type="text"
+                  maxLength={8}
                   onChange={onChangeNikename}
                 />
                 <div
                   className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
                   onClick={() => {
-                    console.log(nickname);
-                    console.log(nowName);
-                    axios({
-                      method: "post",
-                      url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
-                      data: {
-                        changeName: nickname,
-                        nowName: nowName,
-                      },
-                    }).then((r) => {
-                      const isDouble = r.data.data;
-                      if (isDouble) {
-                        toast.success(
-                          `${nickname}(은)는 수정가능한 닉네임입니다`
-                        );
-                        setModifydisplay(isDouble);
-                      } else {
-                        toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
-                        setModifydisplay(isDouble);
-                      }
-                    });
+                    if (nickname.length < 2) {
+                      toast.warning(`2글자 이상 입력바랍니다`);
+                    } else {
+                      axios({
+                        method: "post",
+                        url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
+                        data: {
+                          changeName: nickname,
+                          nowName: nowName,
+                        },
+                      }).then((r) => {
+                        const isDouble = r.data.data;
+                        if (isDouble) {
+                          toast.success(
+                            `${nickname}(은)는 수정가능한 닉네임입니다`
+                          );
+                          setModifydisplay(isDouble);
+                        } else {
+                          toast.warning(
+                            `${nickname}(은)는 중복된 닉네임입니다`
+                          );
+                          setModifydisplay(isDouble);
+                        }
+                      });
+                    }
                   }}
                 >
                   중복확인
@@ -337,19 +433,30 @@ function Mypage(): JSX.Element {
                       className="grid  border-purple-300 w-[90%] mr-[10%]"
                       style={{ gridTemplateColumns: "1fr 1fr" }}
                     >
-                      <select
-                        className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
-                        onChange={handleSelect}
-                        value={Selected}
-                      >
-                        {regionlist
-                          ? regionlist.map((it: any): any => (
-                              <option value={it.regionCode}>
-                                {it.sidoName}
-                              </option>
-                            ))
-                          : null}
-                      </select>
+                      {SelectedFirst !== undefined ? (
+                        <select
+                          className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                          onChange={handleSelect}
+                          // value={SelectedFirst}
+                        >
+                          {regionlist
+                            ? regionlist.map((it: any): any =>
+                                it.regionCode.substr(0, 2) ===
+                                SelectedFirst.substr(0, 2) ? (
+                                  <option value={it.regionCode} selected>
+                                    {it.sidoName}
+                                  </option>
+                                ) : (
+                                  // ))
+                                  <option value={it.regionCode}>
+                                    {it.sidoName}
+                                  </option>
+                                )
+                              )
+                            : null}
+                        </select>
+                      ) : null}
+
                       {isSelected === false ? (
                         <select
                           className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
@@ -358,7 +465,7 @@ function Mypage(): JSX.Element {
                         >
                           {regionlist2
                             ? regionlist2.map((it: any): any =>
-                                Selected.substr(0, 2) ===
+                                SelectedFirst.substr(0, 2) ===
                                 it.regionCode.substr(0, 2) ? (
                                   <option value={it.regionCode}>
                                     {it.gugunName}
@@ -400,7 +507,7 @@ function Mypage(): JSX.Element {
                 </div>
                 <input
                   className="flex justify-start items-center text-white text-[1rem] text-center my-auto bg-black h-[70%] w-[95.8%] border-2 caret-white"
-                  placeholder={comment}
+                  value={comment}
                   type="text"
                   onChange={onChangeComment}
                 />
@@ -443,7 +550,7 @@ function Mypage(): JSX.Element {
                         //수정가능
 
                         const Code =
-                          Selected.substr(0, 2) + Selected2.substr(2, 8);
+                          SelectedFirst.substr(0, 2) + Selected2.substr(2, 8);
 
                         axios({
                           method: "put",
@@ -481,7 +588,7 @@ function Mypage(): JSX.Element {
                 </div>
               </div>
             </div>
-            <div className="bg-black ">3</div>
+            <div className="bg-black "></div>
           </div>
           {/* 메뉴 클릭시 보이기 */}
           <NavbarMenu />
