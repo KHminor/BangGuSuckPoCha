@@ -17,6 +17,7 @@ import LoginLoading from "./components/Login/LoginLoading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReviewPage from "./components/ReviewPage/ReviewPage";
+import FriendSearch from "./components/Common/FriendSearch";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
         <Route path="/roomlist" element={<RoomList />} />
         <Route path="/loginloading" element={<LoginLoading />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/friendsearch" element={<FriendSearch />} />
       </Routes>
     </div>
   );

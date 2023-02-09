@@ -391,6 +391,17 @@ const inviteFriendModal = createSlice({
   },
 });
 
+// 친구 요청 검색 모달 켜고 끄는 함수
+const friendSearchState = createSlice({
+  name: "friendSearchState",
+  initialState: false,
+  reducers: {
+    changeFriendSearchState(state) {
+      return !state
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -438,6 +449,8 @@ export const store = configureStore({
     // room관련
     updateRoomInfo: updateRoomInfo.reducer,
     inviteFriendModal: inviteFriendModal.reducer,
+    // 친구 요청 검색 모달
+    friendSearchState: friendSearchState.reducer,
   },
 });
 //주석추가
@@ -491,6 +504,8 @@ export const { isRtcLoading } = webRtcLoading.actions;
 // room
 export const { showUpdateRoom } = updateRoomInfo.actions;
 export const { inviteMyFriend } = inviteFriendModal.actions;
+// 친구 요청 검색 모달
+export const { changeFriendSearchState } = friendSearchState.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

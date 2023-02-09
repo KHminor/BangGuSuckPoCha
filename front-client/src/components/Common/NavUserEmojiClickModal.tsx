@@ -89,22 +89,11 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
     return state.roomAddFriendModalCheck;
   });
 
-  // 강퇴 확인 모달 상태 체크
-  const RoomUserBanClickCheck = useAppSelector((state) => {
-    return state.RoomUserBanClickCheck;
-  });
-
-  // 신고 확인 모달 상태 체크
-  const RoomUserReportClickCheck = useAppSelector((state) => {
-    return state.RoomUserReportClickCheck;
-  });
-
   return (
     <>
       {roomAddFriendModalCheck ? (
         <RoomUserFriendModal userData={userData} />
       ) : null}
-      {RoomUserReportClickCheck ? <RoomUserReportModal userData={userData} /> : null}
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}
