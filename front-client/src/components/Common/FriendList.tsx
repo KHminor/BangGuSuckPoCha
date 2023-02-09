@@ -62,7 +62,7 @@ function FriendList(): JSX.Element {
       }).then((r)=> {
         console.log('요청한 친구: ',r.data.data)
         dispatch(changeMenuFriendListApiDataState(r.data.data));
-        setSearchFriend("")
+        setSearchFriend("") 
       })
     }}
 
