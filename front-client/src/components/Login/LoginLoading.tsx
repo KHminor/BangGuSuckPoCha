@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import { changeUserName } from "../../store/store";
 
@@ -13,7 +14,7 @@ function LoginLoading(): React.ReactElement {
 
     console.log("urlStr : " + urlStr);
     const url = new URL(urlStr);
-    
+
     const urlParams = url.searchParams;
 
     const Auth: any = urlParams.get("Auth");
@@ -26,7 +27,6 @@ function LoginLoading(): React.ReactElement {
 
     const Username: any = urlParams.get("Username");
 
-    
     // console.log("Username : " + Username);
 
     // Auth : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxcnZ2d29Wb2h3T2xuOUpFbkdtd1lGNzBfOUt3LVprQk0xN2tpY3gzSGRZIiwiZXhwIjoxNjc1MTgxMTU3LCJ1c2VySWQiOjMsInVzZXJuYW1lIjoiMXJ2dndvVm9od09sbjlKRW5HbXdZRjcwXzlLdy1aa0JNMTdraWN4M0hkWSJ9.zk-eGoa1Q00e2HG3puEYN8-6v8S_KWXIDTJgFaBO2SXiYfg8yp5bBDetycTYkwDVpJSwVLpAGCDOracEbDhOOg
@@ -36,7 +36,7 @@ function LoginLoading(): React.ReactElement {
     // Role : NEWBIE/USER/SECESSION/ADMIN
 
     // Username : "1rvvwoVohwOln9JEnGmwYF70_9Kw-ZkBM17kicx3HdY"
-//test지워도됨
+    //test지워도됨
     //로컬에 토큰 저장 / store에 Username 저장
     if (Role === "NEWBIE") {
       localStorage.setItem("accessToken", Auth);
@@ -49,11 +49,14 @@ function LoginLoading(): React.ReactElement {
       //기존유저
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
-      localStorage.setItem("Username", Username);      
+      localStorage.setItem("Username", Username);
       dispatch(changeUserName(Username));
       navigate("/main");
     } else if (Role === "SECESSION") {
-      alert("탈퇴된 회원입니다.");
+      toast.error("탈퇴 회원입니다.");
+      navigate("/");
+    } else if (Role === "BAN") {
+      toast.error("정지된 회원입니다.");
       navigate("/");
     } else if (Role === "ADMIN") {
       localStorage.setItem("accessToken", Auth);

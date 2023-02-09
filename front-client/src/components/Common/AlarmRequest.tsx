@@ -31,7 +31,8 @@ function AlarmRequest():JSX.Element {
       // 유저 리뷰를 하기 위한 컴포넌트
       setApiDataList(alarmApiData.map((e:any)=> {
         return (
-          <AlarmBeforeReviewListComponent to_nickname={e.to_nickname} reviewId={e.reviewId} toUsername={e.to_username}/>
+          <AlarmBeforeReviewListComponent to_nickname={e.to_nickname} reviewId={e.reviewId} toUsername={e.to_username} to_profile={e.to_profile}
+          />
           // <StarRating/>
         )
       }))
