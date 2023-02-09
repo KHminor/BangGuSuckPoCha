@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -296,16 +293,18 @@ public class PochaServiceImpl implements PochaService{
     }
 
     @Override
-    public boolean pochaInviteAccept(Long inviteId, Long pochaId) {
+    public Map<String, Object> pochaInviteAccept(Long inviteId, Long pochaId) {
         Invite invite = inviteRepository.findById(inviteId).orElse(null);
 
         inviteRepository.deleteById(invite.getInviteId());
+        Map<String, Object> response = new HashMap<>();
         if(invite != null) {
             User user = invite.getToUser();
             Pocha pocha = invite.getPocha();
 
             if(pocha.getIsEnd()){
-                return false;
+                response.put("message", "fail");
+                return response;
             }
 
             // 참여 인원 수 계산
@@ -316,12 +315,14 @@ public class PochaServiceImpl implements PochaService{
             // 참여가 가능하다면 참여.
             if(pocha.getLimitUser() > participantToal) {
                 pochaEnter(PochaParticipantRequestDto.builder().pochaId(pocha.getPochaId()).username(user.getUsername()).isHost(false).build());
-
-                return true;
+                response.put("data", new PochaResponseDto(pocha));
+                response.put("message", "success");
+                return response;
             }
         }
 
         // 불가능하다면 불참.
-        return false;
+        response.put("message", "fail");
+        return response;
     }
 }

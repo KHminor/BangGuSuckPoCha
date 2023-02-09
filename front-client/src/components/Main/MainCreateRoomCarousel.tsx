@@ -1,6 +1,6 @@
 import styles from "./Main.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards, Navigation } from "swiper";
+import { EffectCards, Navigation, EffectCoverflow  } from "swiper";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -32,19 +32,19 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
     <div
       ref={bgDiv}
       onMouseDown={CloseCarouselModal}
-      className="bg-black bg-opacity-90 absolute h-screen w-screen grid z-10"
+      className="bg-zinc-900 bg-opacity-90 absolute h-screen w-screen grid z-10"
       style={{ gridTemplateRows: "1fr 5fr 1fr" }}
     >
       <div
-        className={`bg-black text-white flex justify-center items-end  font-nanum font-bold text-[2rem] pb-0 `}
+        className={`bg-zinc-900 bg-opacity-90  text-white flex justify-center items-end  font-nanum font-bold text-[2rem] pb-0 `}
       >
         포차를 선택해주세요
       </div>
       <Swiper
-        effect={"cards"}
+        effect={"slide"}
         grabCursor={true}
         speed={800}
-        modules={[EffectCards, Navigation]}
+        modules={[EffectCards, Navigation, EffectCoverflow ]}
         className="mySwiper"
         style={{
           backgroundColor: "rgab(0,0,0,0)",
@@ -68,7 +68,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
-            src={require("../../assets/img/HuntingCard.png")}
+            src={require("src/assets/img/Talk.png")}
             alt=""
             onClick={() => {
               dispatch(changeCarouselState());
@@ -86,7 +86,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
-            src={require("../../assets/img/HuntingCard.png")}
+            src={require("src/assets/img/Game.png")}
             alt=""
             onClick={() => {
               dispatch(changeCarouselState());
@@ -104,7 +104,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
             style={{ objectFit: "contain", width: "70%", height: "100%" }}
-            src={require("../../assets/img/HuntingCard.png")}
+            src={require("src/assets/img/Meeting.png")}
             alt=""
             onClick={() => {
               dispatch(changeCarouselState());

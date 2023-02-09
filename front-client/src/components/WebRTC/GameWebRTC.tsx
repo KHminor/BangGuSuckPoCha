@@ -12,9 +12,11 @@ import RoomUserProfile from "../Common/RoomUserProfile";
 const WebRTC = ({
   pochaId,
   propSocket,
+  getPochaInfo,
 }: {
   pochaId: string;
   propSocket: Function;
+  getPochaInfo: Function;
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -156,7 +158,7 @@ const WebRTC = ({
         await getCameras();
       }
     } catch (e) {
-      console.log("1", e);
+      console.log("마이스트림 에러", e);
     }
   }
 
@@ -166,9 +168,9 @@ const WebRTC = ({
       .getAudioTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!muted) {
-      muteBtn.current!.innerText = "Unmute";
+      muteBtn.current!.innerText = "🔊";
     } else {
-      muteBtn.current!.innerText = "Mute";
+      muteBtn.current!.innerText = "🔈";
     }
     muted = !muted;
   }
@@ -180,9 +182,9 @@ const WebRTC = ({
       .getVideoTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!cameraOff) {
-      cameraBtn.current!.innerText = "Turn Camera On";
+      cameraBtn.current!.innerText = "Camera On";
     } else {
-      cameraBtn.current!.innerText = "Turn Camera Off";
+      cameraBtn.current!.innerText = "Camera Off";
     }
     cameraOff = !cameraOff;
   }
@@ -201,25 +203,6 @@ const WebRTC = ({
       }
     });
   }
-
-  // muteBtn.addEventListener("click", handleMuteClick);
-  // cameraBtn.addEventListener("click", handleCameraClick);
-  // cameraSelect.addEventListener("input", handleCameraChange);
-
-  // ---Welcome Form (join a room)---
-  // const welcome = document.getElementById("welcome");
-  // const welcomeForm = useRef<HTMLFormElement>(null);
-  // const welcomeInput = useRef<HTMLInputElement>(null);
-
-  // const peerFace1 = useRef<any>(null);
-  // const peerFace2 = useRef<any>(null);
-  // const peerFace3 = useRef<any>(null);
-
-  // async function initCall() {
-  //   // welcome.hidden = true;
-  //   // call.hidden = false;
-
-  // }
 
   async function handleWelcomeSubmit(userData: any) {
     // event : React.FormEvent<HTMLFormElement>
@@ -261,7 +244,10 @@ const WebRTC = ({
       username: user.username,
       nickname: user.nickname,
     };
-    console.log("환영!!!!----------------------------");
+    console.log(
+      "환영!!!!----------------------------",
+      myPeerConnections.current[socketId]
+    );
 
     const offer = await myPeerConnections.current[socketId][
       "peer"
@@ -360,25 +346,6 @@ const WebRTC = ({
         myPeerConnections.current[socketID].username,
         myPeerConnections.current[socketID].nickname
       );
-
-      // peerFace.current[indexData - 1].srcObject = media;
-      // if (userCount.current === 1) {
-      //   peerFace.current[0].srcObject = media;
-      // } else if (userCount.current === 2) {
-      //   peerFace.current[1].srcObject = media;
-      // } else if (userCount.current === 3) {
-      //   peerFace.current[2].srcObject = media;
-      // }
-      // if (userCount.current === 1) {
-      //   peerFace1.current.srcObject = media;
-      // } else if (userCount.current === 2) {
-      //   peerFace2.current.srcObject = media;
-      // } else if (userCount.current === 3) {
-      //   peerFace3.current.srcObject = media;
-      // }
-      // userCount += 1;
-      // setUserCount((prev) => prev + 1);
-      // userCount.current += 1;
     }
 
     console.log(userCount + "==================");
@@ -443,22 +410,17 @@ const WebRTC = ({
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
     // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
+    getPochaInfo();
+    toast.success("포차 정보가 변경되었습니다");
+    // await pocha_config_update("3");
   });
 
   // 포차 시간 연장! : 방 설정 다시 불러오기.
   socket.on("pocha_extension", async () => {
     console.log("포차 시간 연장!----------------------");
     // 방 설정 다시 불러오기!!! 테스트
-    await pocha_config_update("3");
+    // await pocha_config_update("3");
   });
-
-  // // 포차 짠! 기능 : 방 설정 다시 불러오기.
-  // socket.on("pocha_cheers", async () => {
-  //   console.log("포차 짠!!!!!----------------------");
-  //   // 방 설정 다시 불러오기!!! 테스트
-  //   // await pocha_config_update("3");
-  // });
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -507,19 +469,19 @@ const WebRTC = ({
     // }
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
-      peerFace1.current.value = username;
+      peerFace1.current.id = username;
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
-      peerFace2.current.value = username;
+      peerFace2.current.id = username;
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
-      peerFace3.current.value = username;
+      peerFace3.current.id = username;
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
-      peerFace4.current.value = username;
+      peerFace4.current.id = username;
     } else if (userCount.current === 5) {
       peerFace5.current.srcObject = stream;
-      peerFace5.current.value = username;
+      peerFace5.current.id = username;
     }
 
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
@@ -534,14 +496,14 @@ const WebRTC = ({
 
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    const username = (event.target as any).value;
+    const username = event.currentTarget.id;
+    console.log("모달용 데이터 닉?", username);
     const { data } = await axios({
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
     console.log("모달용 데이터?", data);
     setUserProfileData(data);
     // dispatch(isRtcLoading(false));
-    // console.log("오냐??????", (event.target as any).value);
     dispatch(showRoomUserProfile());
   };
 
@@ -554,65 +516,64 @@ const WebRTC = ({
           {isRoomUserProfile && userProfileData && (
             <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
           )}
-          <div
-            className="text-white grid"
-            style={{ gridTemplateColumns: "1fr 1.8fr 1fr" }}
-          >
-            <div className="flex flex-col justify-between items-center">
+          <div className="text-white w-full min-h-[85vh] flex justify-center">
+            <div className="flex flex-col justify-evenly items-center">
               {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
               {/* 내 비디오 공간 */}
               <video
-                className="w-[30rem] h-80 py-3"
+                className=" h-[17rem] py-3"
                 ref={myFace}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className=" h-[17rem] py-3 cursor-pointer"
                 ref={peerFace2}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className=" h-[17rem] py-3 cursor-pointer"
                 ref={peerFace4}
                 playsInline
                 autoPlay
               ></video>
             </div>
             {/* 게임 공간 */}
-            <div className="grid" style={{ gridTemplateColumns: "0.98fr" }}>
-              <div className="flex justify-center h-240 items-center border-2 border-blue-400 rounded-[20px]">
-                2
-              </div>
+
+            <div className="flex justify-center w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
+              2
             </div>
+
             {/* 사람 공간 */}
-            <div className="flex flex-col justify-between items-center">
+            <div className="flex flex-col justify-evenly items-center">
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className=" h-[17rem] py-3 cursor-pointer"
                 ref={peerFace1}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className=" h-[17rem] py-3 cursor-pointer"
                 ref={peerFace3}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className=" h-[17rem] py-3 cursor-pointer"
                 ref={peerFace5}
                 playsInline
                 autoPlay
               ></video>
             </div>
-            <div className="flex w-fit">
+          </div>
+          <div className="flex justify-center items-center ">
+            <div className="flex w-fit text-white">
               {/* 뮤트 */}
               <button
                 className="border-2 px-3"

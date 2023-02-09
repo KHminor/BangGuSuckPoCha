@@ -50,10 +50,74 @@
   transition: all 0.5s;
   text-shadow: 0 0 5px rgba(0, 26, 255, 0.5),
               0 0 15px rgba(0, 26, 255, 0.5);
-
 }
 
 .createBtn:hover {
   color: rgb(150, 183, 255);
 }
 
+
+.friendRequest {
+  transition: all 0.5s;
+  color: whitesmoke;
+  font-weight: 600;
+  text-shadow: 0 0 1px #ffffff;
+}
+
+.friendName {
+  color: #D8B9FF;
+  transition: all 0.5s;
+  
+}
+
+.friendName:hover {
+  text-shadow: 0 0 3px #7300ff,
+              0 0 8px #a962ff,
+              0 0 15px #d45dff;
+}
+
+.friendSendMsg {
+  box-shadow: 0 0 3px #ffffff,
+              0 0 8px #a962ff,
+              0 0 15px #d45dff;
+  transition: all 0.5s;
+}
+
+.friendSendMsg:hover {
+  color: rgb(150, 183, 255);
+  box-shadow: 0 0 3px #ffffff,
+              0 0 8px #a962ff,
+              0 0 35px rgba(0, 26, 255, 0.5);
+}
+
+
+.friendInput {
+  color: white;
+  caret-color: #D8B9FF;
+}
+
+
+@keyframes blink-effect {
+  10% {
+    opacity: 10;
+  }
+
+  50% {
+    opacity: 40;
+  }
+
+  60% {
+    opacity: 10;
+  }
+  70% {
+    opacity: 30;
+  }
+  90% {
+    opacity: 20;
+  }
+}
+
+.friednSentence {
+  animation: blink-effect 1s step-end infinite;
+
+}

@@ -5,14 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showPublicModal, showRoomUserProfile } from "../../store/store";
+import {
+  isRtcLoading,
+  showPublicModal,
+  showRoomUserProfile,
+} from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
 const WebRTC = ({
   pochaId,
   propSocket,
-  getPochaInfo
+  getPochaInfo,
 }: {
   pochaId: string;
   propSocket: Function;
@@ -37,7 +41,7 @@ const WebRTC = ({
   // 짠 카운트
   const [count, setCount] = useState<string>("");
   // 정보 변경 업데이트용 변수
-  const [updateCheck, setUpdateCheck] = useState<boolean>(false);
+  // const [updateCheck, setUpdateCheck] = useState<boolean>(false);
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -101,7 +105,6 @@ const WebRTC = ({
     propSocket(socket);
     getUsersProfile();
   }, []);
-
 
   const getCameras = async () => {
     try {
@@ -173,9 +176,9 @@ const WebRTC = ({
       .getAudioTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!muted) {
-      muteBtn.current!.innerText = "Unmute";
+      muteBtn.current!.innerText = "🔊";
     } else {
-      muteBtn.current!.innerText = "Mute";
+      muteBtn.current!.innerText = "🔈";
     }
     muted = !muted;
   }
@@ -209,25 +212,7 @@ const WebRTC = ({
     });
   }
 
-  // muteBtn.addEventListener("click", handleMuteClick);
-  // cameraBtn.addEventListener("click", handleCameraClick);
-  // cameraSelect.addEventListener("input", handleCameraChange);
-
   // ---Welcome Form (join a room)---
-  // const welcome = document.getElementById("welcome");
-  // const welcomeForm = useRef<HTMLFormElement>(null);
-  // const welcomeInput = useRef<HTMLInputElement>(null);
-
-  // const peerFace1 = useRef<any>(null);
-  // const peerFace2 = useRef<any>(null);
-  // const peerFace3 = useRef<any>(null);
-
-  // async function initCall() {
-  //   // welcome.hidden = true;
-  //   // call.hidden = false;
-
-  // }
-
   async function handleWelcomeSubmit(userData: any) {
     // event : React.FormEvent<HTMLFormElement>
     // event.preventDefault();
@@ -241,8 +226,6 @@ const WebRTC = ({
     // roomName = welcomeInput.current?.value;
     // welcomeInput.current!.value = "";
   }
-
-  // welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
   // ------ Socket Code ------
   // Socket Code
@@ -269,7 +252,10 @@ const WebRTC = ({
       username: user.username,
       nickname: user.nickname,
     };
-    console.log("환영!!!!----------------------------", myPeerConnections.current[socketId]);
+    console.log(
+      "환영!!!!----------------------------",
+      myPeerConnections.current[socketId]
+    );
 
     const offer = await myPeerConnections.current[socketId][
       "peer"
@@ -455,7 +441,6 @@ const WebRTC = ({
     // await pocha_config_update("3");
   });
 
-
   // 포차 짠 함수
   const jjan = () => {
     let time: number = 3;
@@ -519,29 +504,31 @@ const WebRTC = ({
     // peerFace.current[indexData - 1].classList.toggle("hidden");
     // peerFace.current[indexData - 1].srcObject = stream;
     console.log("사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ", indexData);
-    // if (userCount.current === 1) {
-    //   peerFace.current[0].srcObject = data.stream;
-    // } else if (userCount.current === 2) {
-    //   peerFace.current[1].srcObject = data.stream;
-    // } else if (userCount.current === 3) {
-    //   peerFace.current[2].srcObject = data.stream;
-    // }
+
     if (userCount.current === 1) {
+      peerFace2.current.classList.add("hidden");
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
-      console.log('비디오 아이디 유저네임1', username);
+      console.log("비디오 아이디 유저네임1", username);
     } else if (userCount.current === 2) {
+      peerFace2.current.classList.remove("hidden");
+      peerFace3.current.classList.add("hidden");
       peerFace2.current.srcObject = stream;
       peerFace2.current.id = username;
-      console.log('비디오 아이디 유저네임2', username);
+      console.log("비디오 아이디 유저네임2", username);
     } else if (userCount.current === 3) {
+      peerFace3.current.classList.remove("hidden");
+      peerFace4.current.classList.add("hidden");
       peerFace3.current.srcObject = stream;
       peerFace3.current.id = username;
-      console.log('비디오 아이디 유저네임3', username);
+      console.log("비디오 아이디 유저네임3", username);
     } else if (userCount.current === 4) {
+      peerFace4.current.classList.remove("hidden");
+      peerFace5.current.classList.add("hidden");
       peerFace4.current.srcObject = stream;
       peerFace4.current.id = username;
     } else if (userCount.current === 5) {
+      peerFace5.current.classList.remove("hidden");
       peerFace5.current.srcObject = stream;
       peerFace5.current.id = username;
     }
@@ -559,7 +546,7 @@ const WebRTC = ({
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
     const username = event.currentTarget.id;
-    console.log("모달용 데이터 닉?", peerFace2.current.id);
+    console.log("모달용 데이터 닉?", username);
     const { data } = await axios({
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
@@ -583,12 +570,12 @@ const WebRTC = ({
               <div className="text-7xl font-bold text-white">{count}</div>
             </div>
           )}
-          <div className="text-white">
+          <div className="text-white w-full min-h-[85vh]">
             <span
               className="font-bold text-3xl fixed left-0 right-0 top-10"
               ref={ssulTitle}
             >{`:: ${ssul} ::`}</span>
-            <div className="flex flex-wrap justify-evenly items-center p-24">
+            <div className="flex flex-wrap justify-evenly items-center p-24 min-h-[85vh]">
               {/* 내 비디오 공간 */}
               <video
                 className="w-[30rem] h-80 py-3"
@@ -597,17 +584,6 @@ const WebRTC = ({
                 autoPlay
               ></video>
               {/* 다른 사람들 비디오 공간 */}
-              {/* {currentUsers.current.map((vide: number, index: number) => {
-          return (
-            <video
-              key={index}
-              className="w-[30rem] h-80 py-3"
-              ref={(element) => (peerFace.current[index] = element)}
-              playsInline
-              autoPlay
-            ></video>
-          );
-        })} */}
               <video
                 onClick={ShowUserProfile}
                 className="w-[30rem] h-80 py-3 cursor-pointer"
@@ -617,58 +593,60 @@ const WebRTC = ({
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
                 ref={peerFace2}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
                 ref={peerFace3}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
                 ref={peerFace4}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
                 ref={peerFace5}
                 playsInline
                 autoPlay
               ></video>
             </div>
-            <div className="flex w-fit">
-              {/* 뮤트 */}
-              <button
-                className="border-2 px-3"
-                onClick={handleMuteClick}
-                ref={muteBtn}
-              >
-                Mute
-              </button>
-              {/* 카메라 */}
-              <button
-                className="border-2 px-3"
-                onClick={handleCameraClick}
-                ref={cameraBtn}
-              >
-                Camera Off
-              </button>
-              {/* 카메라 옵션 */}
-              <select
-                className="text-black"
-                onInput={handleCameraChange}
-                ref={cameraSelect}
-              >
-                {optionList}
-              </select>
+            <div className="flex justify-center items-center ">
+              <div className="flex w-fit">
+                {/* 뮤트 */}
+                <button
+                  className="border-2 px-3"
+                  onClick={handleMuteClick}
+                  ref={muteBtn}
+                >
+                  🔊
+                </button>
+                {/* 카메라 */}
+                <button
+                  className="border-2 px-3"
+                  onClick={handleCameraClick}
+                  ref={cameraBtn}
+                >
+                  Camera Off
+                </button>
+                {/* 카메라 옵션 */}
+                <select
+                  className="text-black"
+                  onInput={handleCameraChange}
+                  ref={cameraSelect}
+                >
+                  {optionList}
+                </select>
+              </div>
             </div>
           </div>
         </>

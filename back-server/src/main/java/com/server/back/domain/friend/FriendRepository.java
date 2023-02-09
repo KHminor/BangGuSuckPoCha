@@ -16,4 +16,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long>{
 
 	Friend findByYourId(Long to_id);
 
+	Friend findByMyId_usernameAndYourId_nickname(String username, String nickname);
+
 }
