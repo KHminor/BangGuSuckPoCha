@@ -47,28 +47,53 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                 })
                 .then((r)=> {
                   console.log('초대 승인해따', r.data);
-                  const pochaId = r.data.data.pochaId
-                  const themeId = r.data.data.themeId
-                  axios({
-                    method: 'post',
-                    url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
-                    data: {
-                      // 초대 받은거를 승인하는거라 false
-                      "isHost": 'false',
-                      "pochaId": pochaId,
-                      'username': username
+                  // 못들어 갈 경우
+                  if (r.data.message === 'fail') {
+                    toast.error('만료된 요청입니다')
+                    // 다시 데이터 갱신시켜주기
+                    axios({
+                      method:'get',
+                      url: `https://i8e201.p.ssafy.io/api/pocha/invite/${username}`
+                    })
+                    .then((r)=> {
+                      // 포차Id에 따른 중복제거 후 데이터 보내기
+                      const checkpochaId:number[] = []
+                      const setData:(number|string)[] = []
+                      const data:(number|string)[] = r.data.data
+                      data.forEach((e:any)=> {
+                        if (checkpochaId.includes(e.pochaId)!== true) {
+                          checkpochaId.push(e.pochaId)
+                          setData.push(e)
+                        }
+                      })
+                      dispatch(changeAlarmClickState(1))
+                      dispatch(changeAlarmApiDataState(setData))
+                    })
+                  } else {
+                    // 요청에 성공해서 들어가려고 할 때
+                    const pochaId = r.data.data.pochaId
+                    const themeId = r.data.data.themeId
+                    axios({
+                      method: 'post',
+                      url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+                      data: {
+                        // 초대 받은거를 승인하는거라 false
+                        "isHost": 'false',
+                        "pochaId": pochaId,
+                        'username': username
+                        }
+                      })
+                      .then((r)=> {
+                        if (themeId.slice(0,2) === 'T0') {
+                          navigate(`/storyroom/${pochaId}`)
+                        } else if (themeId.slice(0,2) === 'T1') {
+                          navigate(`/gameroom/${pochaId}`)
+                        } else {
+                          navigate(`/meetingroom/${pochaId}`)
+                        }
+                      })
                     }
-                  })
-                  .then((r)=> {
-                    if (themeId.slice(0,2) === 'T0') {
-                      navigate(`/storyroom/${pochaId}`)
-                    } else if (themeId.slice(0,2) === 'T1') {
-                      navigate(`/gameroom/${pochaId}`)
-                    } else {
-                      navigate(`/meetingroom/${pochaId}`)
-                    }
-
-                  })
+                  
                 })
               }
             }}/>
