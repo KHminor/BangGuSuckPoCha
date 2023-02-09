@@ -3,6 +3,7 @@ package com.server.back.service.pocha;
 import com.server.back.dto.pocha.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PochaService {
     List<PochaResponseDto> pochaList(PochaRequestDto requestDto);
@@ -33,7 +34,7 @@ public interface PochaService {
 
     void pochaInviteRefuse(Long inviteId);
 
-    boolean pochaInviteAccept(Long inviteId, Long pochaId);
+    Map<String, Object> pochaInviteAccept(Long inviteId, Long pochaId);
 
     void pochaHuntingStart(Long pochaId);
 
