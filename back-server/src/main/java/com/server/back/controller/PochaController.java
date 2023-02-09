@@ -186,11 +186,12 @@ public class PochaController {
     @PostMapping("/invite/accept/{invite_id}/{pocha_id}")
     public ResponseEntity<Map<String, Object>> pochaInviteAccept(@PathVariable(value = "invite_id") Long inviteId, @PathVariable(value = "pocha_id") Long pochaId){
         Map<String, Object> response = new HashMap<>();
-
-        if(pochaService.pochaInviteAccept(inviteId, pochaId)){
-            response.put("message", "success");
+        Map<String, Object> result = pochaService.pochaInviteAccept(inviteId, pochaId);
+        if(((String) result.get("message")).equals("success")){
+            response.put("data", result.get("data"));
+            response.put("message", result.get("message"));
         }else{
-            response.put("message", "fail");
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);

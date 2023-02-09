@@ -192,6 +192,58 @@ public class FriendServiceImpl implements FriendService {
 			return false;
 		}
 	}
+
+	@Override
+	public Boolean checkFriendToNickname(String username, String nickname) {
+		Friend isFriend = friendRepository.findByMyId_usernameAndYourId_nickname(username, nickname);
+		if(isFriend != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean checkFriendRequestToNickname(String username, String nickname) {
+		FRequest isFrequest1 = fRequestRepository.findByFromId_usernameAndToId_nickname(username, nickname);
+		FRequest isFrequest2 = fRequestRepository.findByFromId_nicknameAndToId_username(nickname, username);
+		if(isFrequest1 != null || isFrequest2 != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public void requestFriendToNickname(String username, String nickname) {
+		User toId = userRepository.findByUsername(username);
+		User fromId = userRepository.findByNickname(nickname);
+		FRequestDto requestDto = new FRequestDto();
+		fRequestRepository.save(requestDto.toEntity(toId, fromId));
+		
+	}
+
+	@Override
+	public Boolean checkUser(String username, String nickname) {
+		User isUser = userRepository.findByNickname(nickname);
+		
+		if(isUser != null) {
+			if(!isUser.getUsername().equals(username)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+
+	
 	
 	
 	

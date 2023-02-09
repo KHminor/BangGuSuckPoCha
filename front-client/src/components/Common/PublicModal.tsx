@@ -97,7 +97,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
       });
       navigate(`/main`);
       window.location.reload();
-      toast.success("방에서 나오셨습니다");
+      setTimeout(() => {
+        toast.success("방에서 나오셨습니다");
+      }, 1000)
     } catch (error) {
       console.log("포차나가기 error", error);
     }
