@@ -12,7 +12,7 @@ import RoomUserProfile from "../Common/RoomUserProfile";
 const WebRTC = ({
   pochaId,
   // propSocket,
-  socket
+  socket,
 }: {
   pochaId: string;
   // propSocket: Function;
@@ -99,7 +99,7 @@ const WebRTC = ({
 
     // ------ Socket Code ------
     // Socket Code
-    socket.on("users_of_room", async (users : any) => {
+    socket.on("users_of_room", async (users: any) => {
       console.log("--------------------");
       await users.forEach((user: any) => {
         console.log(user);
@@ -113,7 +113,7 @@ const WebRTC = ({
       // await pocha_config_update(3);
     });
 
-    socket.on("welcome", async (socketId : any, user : any) => {
+    socket.on("welcome", async (socketId: any, user: any) => {
       let myPeer = makeConnection();
 
       myPeerConnections.current[socketId] = {
@@ -147,7 +147,7 @@ const WebRTC = ({
       });
     });
 
-    socket.on("offer", async (offer : any, socketId : any, userInfo : any) => {
+    socket.on("offer", async (offer: any, socketId: any, userInfo: any) => {
       console.log("received the offer");
       myPeerConnections.current[socketId]["peer"] = makeConnection();
       myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
@@ -293,6 +293,19 @@ const WebRTC = ({
     });
     ////////////////////////////////////////////
 
+    // ------------ 연결 해제 --------------
+    return () => {
+      socket.off("users_of_room");
+      socket.off("welcome");
+      socket.off("offer");
+      socket.off("answer");
+      socket.off("ice");
+      socket.off("user_exit");
+      socket.off("room_full");
+      socket.off("pocha_change");
+      socket.off("pocha_extension");
+    };
+    ////////////////////////////////////////////
   }, []);
 
   const getCameras = async () => {
