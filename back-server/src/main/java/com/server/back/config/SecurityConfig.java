@@ -30,8 +30,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("logout","/refreshToken","/js/**","/css/**","/error");
+//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
 
         return http.csrf().disable()
                 .cors().and()
@@ -41,11 +49,12 @@ public class SecurityConfig {
                 .httpBasic().disable() //Bearer 방식 사용 -> header 에 authentication 에 토큰을 넣어 전달하는 방식
                 .addFilter(config.corsFilter())
                 .apply(new MyCustomDsl())
+
                 .and()
 
                 .authorizeRequests()
-                    .antMatchers("**").permitAll()
-//                    .antMatchers("/user/**").hasAuthority("USER")
+//                    .antMatchers("**").permitAll()
+                    .antMatchers("/api/user/oauth2/**").permitAll()
 //                    .antMatchers("/api/v1/manager/**").hasAuthority("MANAGER")
 //                    .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                     .anyRequest().permitAll()
