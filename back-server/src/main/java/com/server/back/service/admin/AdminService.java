@@ -42,4 +42,5 @@ public interface AdminService {
     void adminLiarUpdate(Long liarId,LiarRequestDto requestDto);
     void adminBalanceUpdate(Long balanceId, BalanceRequestDto requestDto);
     List<RegionResponseDto> regionAll();
+    boolean adminNicknameCheck(String nickname);
 }
