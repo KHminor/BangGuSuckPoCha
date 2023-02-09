@@ -124,6 +124,38 @@ public class FriendController {
 		
 	}
 
+	@ApiOperation(value = "닉네임으로 친구 요청 ")
+	@PostMapping("/request/{username}/{nickname}")
+	public ResponseEntity<Map<String, Object>> friendRequestNickname(@PathVariable(value = "username") String username, @PathVariable(value = "nickname") String nickname) {
+		Map<String, Object> response = new HashMap<>();
+		
+		// 유저 찾기
+		Boolean isUser = friendService.checkUser(username,nickname);
+		if(isUser) {
+			// 친구 유무 확인
+			Boolean isFriend = friendService.checkFriendToNickname(username,nickname);
+			// 친구 요청 확인 
+			Boolean isFRequest = friendService.checkFriendRequestToNickname(username,nickname);
+			
+			if(isFriend) {
+				response.put("message", "isFriend");	
+			}
+			else if(isFRequest) {
+				response.put("message", "isFRequest");
+			}
+			else {
+				friendService.requestFriendToNickname(username, nickname);
+				response.put("message", "success");
+			}
+		}
+		else {
+			response.put("message", "checkNickname");
+		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+	}	
+	
+	
 	@ApiOperation(value = "친구 요청 수락")
 	@PostMapping("/accept/{f_request_id}")
 	public ResponseEntity<Map<String, Object>> friendRequestAccept(

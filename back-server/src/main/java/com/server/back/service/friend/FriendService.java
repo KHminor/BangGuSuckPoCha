@@ -35,4 +35,12 @@ public interface FriendService  {
 
 	Boolean checkFriendRequest(FRequestDto requestDto);
 
+	Boolean checkFriendToNickname(String username, String nickname);
+
+	Boolean checkFriendRequestToNickname(String username, String nickname);
+
+	void requestFriendToNickname(String username, String nickname);
+
+	Boolean checkUser(String username, String nickname);
+
 }
