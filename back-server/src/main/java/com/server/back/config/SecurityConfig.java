@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .formLogin().disable() //formLogin(form)방식 사용 안함 , json방식으로 전달
                 .httpBasic().disable() //Bearer 방식 사용 -> header 에 authentication 에 토큰을 넣어 전달하는 방식
                 .addFilter(config.corsFilter())
-//                .apply(new MyCustomDsl())
-//                .and()
+                .apply(new MyCustomDsl())
+                .and()
 
                 .authorizeRequests()
                     .antMatchers("**").permitAll()
@@ -64,7 +64,6 @@ public class SecurityConfig {
                 .addFilter(config.corsFilter())
                     .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtService)) //AuthenticationManger가 있어야 된다.(파라미터로)
                     .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtService));
-
         }
     }
 }
