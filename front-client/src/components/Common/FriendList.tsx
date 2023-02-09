@@ -58,8 +58,9 @@ function FriendList(): JSX.Element {
       console.log(username)
       axios({
         method: 'get',
-        url: `https://i8e201.p.ssafy.io/api/friend/${username}/${searchFriend}`,
+        url: `https://i8e201.p.ssafy.io/api/user/friend/${username}/${searchFriend}`,
       }).then((r)=> {
+        console.log('요청한 친구: ',r.data.data)
         dispatch(changeMenuFriendListApiDataState(r.data.data));
         setSearchFriend("")
       })
