@@ -86,10 +86,10 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
               <div></div>
               {/* 비밀방 여부 */}
               <div className="flex justify-center items-center">
-                <img className="h-[1.5rem] w-[1.5rem]" src={require(`../../assets/mainIcon/${themeType}Lock.png`)} alt="" />
-                {/* {
+                {/* <img className="h-[1.5rem] w-[1.5rem]" src={require(`../../assets/mainIcon/${themeType}Lock.png`)} alt="" /> */}
+                {
                   isPrivate? <img className="h-[1.5rem] w-[1.5rem]" src={require(`../../assets/mainIcon/${themeType}Lock.png`)} alt="" /> : null
-                } */}
+                }
               </div>
             </div>
             {/* 썰 or 기본 문구 */}

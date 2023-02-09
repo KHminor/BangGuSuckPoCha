@@ -46,12 +46,14 @@ function ReviewPage():JSX.Element {
         const review_create_at = new Date(((data.create_at).split('T'))[0])
         return ((data.review_at === null)&&(review_create_at<=nowYMD)&&(threeBeforeYMD<=review_create_at))
       })
-      setReviewBefore(Beforedata)
+      const currentBeforedata = Beforedata.reverse() 
+      setReviewBefore(currentBeforedata)
       // 리뷰 이후
       const Afterdata:any = datas.filter((data)=> {
         return  data.review_at !== null
       })
-      setReviewAfter(Afterdata)
+      const currentAfterReview = Afterdata.reverse() 
+      setReviewAfter(currentAfterReview)
     })
   },[])
 
@@ -196,7 +198,7 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                   })
                   .then(()=> {
                     toast.success(`${to_nickname}님을 평가 완료하였습니다`);
-                    axios({
+                    axios({ 
                       method: 'get',
                       url: `https://i8e201.p.ssafy.io/api/user/review/${username}`
                     })
@@ -221,12 +223,14 @@ function StartReviewComponent({userData, clickReviewState , setReviewBefore, set
                         const review_create_at = new Date(((data.create_at).split('T'))[0])
                         return ((data.review_at === null)&&(review_create_at<=nowYMD)&&(threeBeforeYMD<=review_create_at))
                       })
-                      setReviewBefore(Beforedata)
+                      const currentBeforedata = Beforedata.reverse() 
+                      setReviewBefore(currentBeforedata)
                       // 리뷰 이후
                       const Afterdata:any = datas.filter((data)=> {
                         return  data.review_at !== null
                       })
-                      setReviewAfter(Afterdata)
+                      const currentAfterReview = Afterdata.reverse() 
+                      setReviewAfter(currentAfterReview)
                     })
                   })
                   
