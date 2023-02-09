@@ -99,6 +99,7 @@ function NavbarMenu(): JSX.Element {
               method: "get",
               url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
             }).then((r) => {
+              console.log('친구 리스트 조회: ',r.data)
               // 중복된 친구 등록으로 인해 생길 수 있는 현상 방지
               const data = r.data.data;
               const checkFriendId: string[] = [];

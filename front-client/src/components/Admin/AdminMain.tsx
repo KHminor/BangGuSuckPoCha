@@ -35,7 +35,7 @@ function AdminMain(): React.ReactElement {
               navigate("/userList");
             }}
           >
-            user list
+            유저 정보
           </div>
           <div
             className="cursor-pointer "
@@ -50,17 +50,24 @@ function AdminMain(): React.ReactElement {
               navigate("/roomlist");
             }}
           >
-            room list
+            현재 방 목록
           </div>
           <div
             className="cursor-pointer "
-            onClick={() => {              
+            onClick={() => {
               navigate("/userreport/wait");
             }}
           >
-            report list
+            신고 목록
           </div>
-          <div className="">Default Item list</div>
+          <div
+            className="cursor-pointer "
+            onClick={() => {
+              navigate("/adminadd");
+            }}
+          >
+            관리자 추가
+          </div>
           <div className="">test2</div>
         </div>
         <div></div>

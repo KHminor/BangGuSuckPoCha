@@ -9,8 +9,10 @@ import {
 import styles from "../Main/Main.module.css";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useNavigate } from "react-router-dom";
 
 function Navbar(): JSX.Element {
+  const navigate = useNavigate()
   return (
     // <div className="h-[11rem] min-w-[75rem] sticky top-0 w-full" >
     <div className="h-[11rem] min-w-[75rem] fixed w-full">
@@ -19,7 +21,10 @@ function Navbar(): JSX.Element {
         <img
           src={require("src/assets/logo/Logo.png")}
           alt="logo"
-          className=" object-contain w-[32%]"
+          className=" object-contain w-[32%] cursor-pointer"
+          onClick={()=> {
+            navigate('/main')
+          }}
         />
         <div className="" style={{ width: "16%" }}></div>
         <div className="grid grid-cols-1 " style={{ width: "18%" }}>

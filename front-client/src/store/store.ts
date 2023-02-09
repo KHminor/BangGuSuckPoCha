@@ -28,6 +28,27 @@ const myInfo = createSlice({
   },
 });
 
+// 마이페이지에 있는 유저 프로필설정 클릭 여부
+const MyPageProfileClickCheck = createSlice({
+  name: "MyPageProfileClickCheck",
+  initialState: false,
+  reducers: {
+    showMyPageProfileSelect(state) {
+      return !state;
+    },
+  },
+});
+
+const SelectProfile = createSlice({
+  name: "SelectProfile",
+  initialState: "",
+  reducers: {
+    changeMyPageProfile(state, action) {
+      return state = action.payload;
+    },
+  },
+})
+
 //유저이름
 const userName = createSlice({
   name: "userName",
@@ -187,6 +208,17 @@ const roomAddFriendModalCheck = createSlice({
   initialState: false,
   reducers: {
     roomAddFriendModalState(state) {
+      return !state;
+    },
+  },
+});
+
+// 친구 삭제 클릭 여부
+const roomDeleteFriendModalCheck = createSlice({
+  name: "roomDeleteFriendModalCheck",
+  initialState: false,
+  reducers: {
+    changeRoomDeleteFriendModalCheck(state) {
       return !state;
     },
   },
@@ -391,6 +423,17 @@ const inviteFriendModal = createSlice({
   },
 });
 
+// 친구 요청 검색 모달 켜고 끄는 함수
+const friendSearchState = createSlice({
+  name: "friendSearchState",
+  initialState: false,
+  reducers: {
+    changeFriendSearchState(state,action) {
+      return state = action.payload
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -428,6 +471,8 @@ export const store = configureStore({
     DetailUser: DetailUser.reducer,
     SelectDetailUser: SelectDetailUser.reducer,
     DetailRoom: DetailRoom.reducer,
+    MyPageProfileClickCheck: MyPageProfileClickCheck.reducer,
+    SelectProfile: SelectProfile.reducer,
 
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
@@ -438,6 +483,10 @@ export const store = configureStore({
     // room관련
     updateRoomInfo: updateRoomInfo.reducer,
     inviteFriendModal: inviteFriendModal.reducer,
+    // 친구 요청 검색 모달
+    friendSearchState: friendSearchState.reducer,
+    // 친구 삭제 모달 클릭 여부
+    roomDeleteFriendModalCheck: roomDeleteFriendModalCheck.reducer,
   },
 });
 //주석추가
@@ -473,6 +522,8 @@ export const { showPublicModal } = PublicModal.actions;
 // 관리자
 export const { changeMainCreateRoomList } = mainCreateRoomList.actions;
 export const { changeMyInfo } = myInfo.actions;
+export const { showMyPageProfileSelect } = MyPageProfileClickCheck.actions;
+export const { changeMyPageProfile } = SelectProfile.actions
 // username
 export const { changeUserName } = userName.actions;
 // userList
@@ -491,6 +542,10 @@ export const { isRtcLoading } = webRtcLoading.actions;
 // room
 export const { showUpdateRoom } = updateRoomInfo.actions;
 export const { inviteMyFriend } = inviteFriendModal.actions;
+// 친구 요청 검색 모달
+export const { changeFriendSearchState } = friendSearchState.actions;
+// 친구 삭제 모달 클릭 여부
+export const { changeRoomDeleteFriendModalCheck } = roomDeleteFriendModalCheck.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

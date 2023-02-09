@@ -12,7 +12,7 @@ import RoomUserReportModal from "./RoomUserReportModal";
 
 const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string }) => {
   let dispatch = useAppDispatch();
-  let { manner, gender, birth, region, comment } = userData.data;
+  let { manner, gender, birth, region, comment, profile } = userData.data;
   const { nickname } = userData.data;
   // 백그라운드 div
   const bgDiv = useRef<any>();
@@ -125,7 +125,7 @@ const RoomUserProfile = ({ userData, pochaId }: { userData: any, pochaId: string
           <div className={`w-full h-24 flex justify-center items-center`}>
             <img
               className={`h-full`}
-              src={require("../../assets/myPage/sunglassEmoji.png")}
+              src={profile}
               alt="sunglass"
             />
           </div>

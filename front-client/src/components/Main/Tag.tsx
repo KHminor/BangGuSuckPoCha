@@ -4,6 +4,7 @@ import { useAppDispatch } from 'src/store/hooks'
 import {
   changeMainCreateRoomList,
 } from "../../store/store";
+import styles from './Tag.module.css'
 
 function Tag(): JSX.Element {
 
@@ -121,8 +122,8 @@ function Tag(): JSX.Element {
           })
         }}>ALL</div>
         {/* 연령 */}
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
-          <select ref={ageRef} className='flex justify-center items-center cursor-pointer' name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
+        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3 select-wrap">
+          <select ref={ageRef} className={`flex justify-center items-center cursor-pointer ${styles.select}`} name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
             setFilter((preState:any)=> {
               return {...preState, isAll:false, age: e.target.value}
             } )

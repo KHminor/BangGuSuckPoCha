@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
   changeMyInfo,
   changeMyPageCheck,
+  changeMyPageProfile,
+  showMyPageProfileSelect,
   showSecessionModal,
 } from "src/store/store";
 import FriendChat from "../Common/FriendChat";
@@ -15,6 +17,10 @@ import Navbar from "../Common/Navbar";
 import NavbarAlarm from "../Common/NavbarAlarm";
 import NavbarMenu from "../Common/NavbarMenu";
 import SecessionModal from "./SecessionModal";
+import ProfileImg from "./ProfileImg";
+
+import Loading from "../Common/Loading";
+import ProfileSelectModal from "./ProfileSelectModal";
 
 //최초 호출시 내 지역 보여주기 / profile 보여주기
 
@@ -22,8 +28,9 @@ function Mypage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  // -----------state-------------
   //첫번째 Select박스에 넣을 state
-  const [SelectedFirst, setSelected] = useState<any>();
+  const [SelectedFirst, setSelectedFirst] = useState<any>();
   //두번째 Select박스에 넣을 state
   const [Selected2, setSelected2] = useState<any>();
   //첫번째 Select박스가 선택되었다는 것을 알릴 state
@@ -35,10 +42,9 @@ function Mypage(): JSX.Element {
   const [regioncode, setRegioncode] = useState();
   //지역코드 전체 목록(시도)
   const [regionlist, setRegionlist] = useState<any | null>();
-  
+
   //지역코드 전체 목록(구군)
   const [regionlist2, setRegionlist2] = useState<any | null>();
-
 
   //중복확인
   const [modifydisplay, setModifydisplay] = useState(false);
@@ -65,21 +71,32 @@ function Mypage(): JSX.Element {
   //모달에 넣을정보
   const [userData, setUserData] = useState();
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   //localStorage
   const Username: any = localStorage.getItem("Username");
 
   //Store
   let myInfo: any = useAppSelector((state: any) => {
-    console.log("store에 넣은 내정보", state.myInfo);
+    // console.log("store에 넣은 내정보", state.myInfo);
     return state.myInfo;
   });
   //  메뉴 -> 친구 클릭 -> 채팅 상태
   const menuFriendChatClickCheck: any = useAppSelector((state: any) => {
     return state.menuFriendChatClickCheck;
   });
-  // 강퇴 확인 모달 상태 체크
+  // 탈퇴 확인 모달 상태 체크
   const SecessionClickCheck = useAppSelector((state) => {
     return state.SecessionClickCheck;
+  });
+
+  // 프로필 설정 클릭 체크
+  const MyPageProfileClickCheck = useAppSelector((state) => {
+    return state.MyPageProfileClickCheck;
+  });
+
+  const MyPageProfileImg = useAppSelector((state) => {
+    return state.SelectProfile;
   });
 
   // click 함수
@@ -94,23 +111,23 @@ function Mypage(): JSX.Element {
   };
 
   const handleSelect = (event: any) => {
-    console.log("select1의 선택은?", event.target.value);
-    setSelected(event.target.value);
+    // console.log("select1의 선택은?", event.target.value);
+    setSelectedFirst(event.target.value);
     setIsSelected(false);
     city.map((it: any): any => {
       if (it.regionCode === event.target.value) {
         setIsSelected(true);
       }
     });
-  }; 
+  };
 
   const handleSelect2 = (event: any) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setSelected2(event.target.value);
   };
 
   function show(temp: any): any {
-    console.log("나 저장됩니다!", temp);
+    // console.log("나 저장됩니다!", temp);
   }
 
   // 탈퇴 묻는 모달 띄우기
@@ -119,8 +136,16 @@ function Mypage(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log("profile바뀌나?", profile);
+    // console.log("profile바뀌나?", profile);
   }, [profile]);
+
+  useEffect(() => {
+    console.log("나바뀌었소", MyPageProfileClickCheck);
+  }, [MyPageProfileClickCheck]);
+
+  useEffect(() => {
+    console.log("region바뀌나?", region);
+  }, [region]);
 
   useEffect(() => {
     console.log("SelectedFirst가 바뀌었습니다!", SelectedFirst);
@@ -128,15 +153,15 @@ function Mypage(): JSX.Element {
 
   //최초 호출시 axios호출
   useEffect(() => {
-    console.log("useEffect실행");
+    // console.log("useEffect실행");
 
     axios({
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
     }).then((r) => {
-        console.log("1번째 axios 실행");
+      // console.log("1번째 axios 실행");
 
-      console.log("내정보 : ", r.data.data);
+      // console.log("내정보 : ", r.data.data);
       dispatch(changeMyInfo(r.data.data));
       setUserData(r.data);
       show(r.data);
@@ -146,6 +171,8 @@ function Mypage(): JSX.Element {
       setNowName(a.nickname);
       const birth = a.birth;
       setGender(a.gender);
+
+      
       const today = new Date();
 
       const birthDate = new Date(
@@ -161,22 +188,26 @@ function Mypage(): JSX.Element {
       }
       setBirth(birth);
       setAge(age);
-      console.log("내 지역입니다!", a.region);
+      // console.log("내 지역입니다!", a.region);
       setRegion(a.region);
       setRegioncode(a.regioncode);
-      setSelected(a.regioncode);
-      console.log("a.regionCode가 들어왔어", a.regioncode);
+      setSelectedFirst(a.regioncode);
+      // console.log("a.regionCode가 들어왔어", a.regioncode);
       if (a.regioncode.substr(2, 8) !== "00000000") {
         setIsSelected(false);
       } else {
         setIsSelected(true);
       }
+      dispatch(changeMyPageProfile(a.profile));
       setSelected2(a.regioncode);
       setComment(a.comment);
       setPoint(a.point);
       setManner(a.manner.toFixed(1));
       setProfile(a.profile);
-      console.log("첫번째 axios끝");
+      // console.log("첫번째 axios끝");
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     });
 
     //광역시 랑 (도/시) 구분
@@ -184,10 +215,8 @@ function Mypage(): JSX.Element {
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
     }).then((r) => {
-      console.log("2번째 axios 시작");
-
+      // console.log("2번째 axios 시작");
       const result = r.data.data;
-
       let rlist1 = new Array();
       let rlist2 = new Array();
       for (var i = 0; i < result.length; i++) {
@@ -207,395 +236,435 @@ function Mypage(): JSX.Element {
       setRegionlist(rlist1);
       setCity(rlist1.slice(0, 7));
       setRegionlist2(rlist2);
-      console.log("2번째 axios 끝");
+      // console.log("2번째 axios 끝");
     });
   }, []);
   return (
     <>
-      {/* 친구창 그리고 탈퇴창 */}
-      <Navbar />
-      {SecessionClickCheck ? <SecessionModal userData={userData} /> : null}
-      {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
-      <FriendList />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Navbar />
+          {SecessionClickCheck ? <SecessionModal userData={userData} /> : null}
+          {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
+          <FriendList />
+          {menuFriendChatClickCheck ? <FriendChat /> : null}
+          {MyPageProfileClickCheck ? (
+            <ProfileSelectModal profileData={ProfileImg} />
+          ) : null}
 
-      {menuFriendChatClickCheck ? <FriendChat /> : null}
-      <div>
-        <div
-          className="grid w-screen h-screen font-nanum "
-          style={{ gridTemplateRows: "11rem 1fr 0.1fr" }}
-        >
-          <div className="h-48"></div>
-          <div
-            className="grid w-full "
-            style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
-          >
-            <div className="bg-black "></div>
-            {/* 회원 정보 */}
+          <div>
             <div
-              className="grid h-full border-white border-4 border-opacity-40"
-              style={{
-                gridTemplateRows: "1.7fr 0.7fr 4.2fr 0.9fr 1.3fr",
-                borderRadius: "24px 24px 24px 24px",
-              }}
+              className="grid w-screen h-screen font-nanum "
+              style={{ gridTemplateRows: "11rem 1fr 0.1fr" }}
             >
-              {/* 이모지 및 변경 아이콘 */}
-              <div className="flex flex-row justify-center  items-end h-full">
-                <div className="ml-30 right-7 w-[7rem] " />
-                <div className="right-7 w-[3rem] " />
-                <div className="h-[1.5rem] w-[1.5rem]" />
-                {profile ? (
-                  (console.log("사진경로", profile),
-                  console.log("profile type", typeof profile),
-                  (
-                    <img
-                      className=" h-[9rem] w-[9rem] ml-6 rounded-full"
-                      style={{ objectFit: "contain" }}
-                      src={`${profile}`}
-                      alt=""
-                    />
-                  ))
-                ) : (
-                  <img
-                    className="h-[9rem] w-[9rem] ml-6 rounded-full"
-                    style={{ objectFit: "contain" }}
-                    // src={"/profile/icon_0003.png"}
-                    alt="로딩중"
-                  />
-                )}
-                <img
-                  className="h-[1.5rem] w-[1.5rem] cursor-pointer"
-                  style={{ objectFit: "contain" }}
-                  src={require("../../assets/myPage/settings.png")}
-                  alt=""
-                  onClick={() => {}}
-                />
-                <div className="right-7 w-[3rem] " />
-                <div className="flex flex-col items-start">
-                  <div
-                    className="ml-30 right-7 w-[7rem] border-white border-2 text-white cursor-pointer"
-                    onClick={() => {
-                      clickSecession();
-                    }}
-                  >
-                    탈퇴하기
-                  </div>
-                  <div className="h-[3rem]" />
-                  <div className="h-[3rem]" />
-                </div>
-              </div>
-              {/* 닉네임 */}
-              <div className="grid grid-cols-7 flex justify-center items-center ">
-                <div></div>
-                <div></div>
-                <input
-                  className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
-                  value={nickname}
-                  type="text"
-                  maxLength={8}
-                  onChange={onChangeNikename}
-                />
-                <div
-                  className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
-                  onClick={() => {
-                    if (nickname.length < 2) {
-                      toast.warning(`2글자 이상 입력바랍니다`);
-                    } else {
-                      axios({
-                        method: "post",
-                        url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
-                        data: {
-                          changeName: nickname,
-                          nowName: nowName,
-                        },
-                      }).then((r) => {
-                        const isDouble = r.data.data;
-                        if (isDouble) {
-                          toast.success(
-                            `${nickname}(은)는 수정가능한 닉네임입니다`
-                          );
-                          setModifydisplay(isDouble);
-                        } else {
-                          toast.warning(
-                            `${nickname}(은)는 중복된 닉네임입니다`
-                          );
-                          setModifydisplay(isDouble);
-                        }
-                      });
-                    }
-                  }}
-                >
-                  중복확인
-                </div>
-                <div></div>
-              </div>
-              {/* 정보 */}
-              <div className="grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
-                {/* 나이, 생일, 매너온도 */}
-                <div
-                  className="grid  w-full h-full"
-                  style={{ gridTemplateRows: "1fr 1fr 1fr" }}
-                >
-                  {/* 나이 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      나이
-                    </div>
-                    <div
-                      className="grid  border-purple-300 w-[90%] mr-[10%]"
-                      style={{ gridTemplateColumns: "1fr 1fr" }}
-                    >
-                      <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                        {age}
-                      </div>
-                    </div>
-                  </div>
-                  {/* 생일 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      생일
-                    </div>
-                    <div
-                      className="grid  border-purple-300 w-[90%] mr-[10%]"
-                      style={{ gridTemplateColumns: "1fr 1fr" }}
-                    >
-                      <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                        {birth.split(".")[1]}월 {birth.split(".")[2]}일
-                      </div>
-                    </div>
-                  </div>
-                  {/* 매너온도 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      매너온도
-                    </div>
-                    <div
-                      className="grid  border-purple-300 w-[90%] mr-[10%]"
-                      style={{ gridTemplateColumns: "1fr 1fr" }}
-                    >
-                      <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                        {manner} ℃
-                      </div>
-                      <div></div>
-                    </div>
-                  </div>
-                </div>
-                {/* 성별, 지역, 포인트 */}
-                <div
-                  className="grid  w-full h-full"
-                  style={{ gridTemplateRows: "1fr 1fr 1fr" }}
-                >
-                  {/* 성별 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      성별
-                    </div>
-                    {gender === "F" ? (
-                      <div
-                        className="grid  border-purple-300 w-[90%] mr-[10%]"
-                        style={{ gridTemplateColumns: "1fr 1fr" }}
-                      >
-                        <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                          여
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        className="grid  border-purple-300 w-[90%] mr-[10%]"
-                        style={{ gridTemplateColumns: "1fr 1fr" }}
-                      >
-                        <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                          남
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {/* 지역위치보기 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      지역
-                    </div>
-                    <div
-                      className="grid  border-purple-300 w-[90%] mr-[10%]"
-                      style={{ gridTemplateColumns: "1fr 1fr" }}
-                    >
-                      {SelectedFirst !== undefined ? (
-                        <select
-                          className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
-                          onChange={handleSelect}
-                          // value={SelectedFirst}
-                        >
-                          {regionlist
-                            ? regionlist.map((it: any): any =>
-                                it.regionCode.substr(0, 2) ===
-                                SelectedFirst.substr(0, 2) ? (
-                                  <option value={it.regionCode} selected>
-                                    {it.sidoName}
-                                  </option>
-                                ) : (
-                                  // ))
-                                  <option value={it.regionCode}>
-                                    {it.sidoName}
-                                  </option>
-                                )
-                              )
-                            : null}
-                        </select>
-                      ) : null}
-
-                      {isSelected === false ? (
-                        <select
-                          className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
-                          onChange={handleSelect2}
-                          value={Selected2}
-                        >
-                          {regionlist2
-                            ? regionlist2.map((it: any): any =>
-                                SelectedFirst.substr(0, 2) ===
-                                it.regionCode.substr(0, 2) ? (
-                                  <option value={it.regionCode}>
-                                    {it.gugunName}
-                                  </option>
-                                ) : null
-                              )
-                            : null}
-                        </select>
-                      ) : null}
-                    </div>
-                  </div>
-                  {/* 포인트 */}
-                  <div
-                    className="grid  w-full h-[40%] my-auto "
-                    style={{ gridTemplateColumns: "1.2fr 2fr" }}
-                  >
-                    <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
-                      포인트
-                    </div>
-                    <div
-                      className="grid w-[90%] mr-[10%]"
-                      style={{ gridTemplateColumns: "1fr 1fr" }}
-                    >
-                      <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
-                        {point}
-                      </div>
-                      <div></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* 자기소개 */}
+              <div className="h-48"></div>
               <div
-                className="grid w-full h-[100%] "
-                style={{ gridTemplateColumns: "0.45fr 2fr" }}
+                className="grid w-full "
+                style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
               >
-                <div className="flex justify-start items-center text-white text-[1.4rem] font-bold  h-[100%] w-full pl-[1rem]">
-                  자기소개
-                </div>
-                <input
-                  className="flex justify-start items-center text-white text-[1rem] text-center my-auto bg-black h-[70%] w-[95.8%] border-2 caret-white"
-                  value={comment}
-                  type="text"
-                  onChange={onChangeComment}
-                />
-              </div>
-              {/* Navfooter */}
-              <div className="flex justify-center items-end h-full w-full">
+                <div className="bg-black "></div>
+                {/* 회원 정보 */}
                 <div
-                  className="grid h-[70%] w-[40%] border-2 border-white border-b-0 "
+                  className="grid h-full border-white border-4 border-opacity-40"
                   style={{
-                    gridTemplateColumns: "1fr 1fr",
-                    border: "solid 2px white",
-                    borderBottom: "solid 0px",
-                    borderTopLeftRadius: "10px",
-                    borderTopRightRadius: "10px",
+                    gridTemplateRows: "1.7fr 0.7fr 4.2fr 0.9fr 1.3fr",
+                    borderRadius: "24px 24px 24px 24px",
                   }}
                 >
-                  <div
-                    className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer "
-                    onClick={() => {
-                      navigate("/main");
-                    }}
-                  >
+                  {/* 이모지 및 변경 아이콘 */}
+                  <div className="flex flex-row justify-center  items-end h-full">
+                    <div className="ml-30 right-7 w-[7rem] " />
+                    <div className="right-7 w-[3rem] " />
+                    <div className="h-[1.5rem] w-[1.5rem]" />
+                    {profile ? (
+                      // console.log("사진경로", profile),
+                      // console.log("profile type", typeof profile),
+                      <img
+                        className=" h-[9rem] w-[9rem] ml-6 rounded-full"
+                        style={{ objectFit: "contain" }}
+                        src={`${MyPageProfileImg}`}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        className="h-[9rem] w-[9rem] ml-6 rounded-full"
+                        style={{ objectFit: "contain" }}
+                        // src={"/profile/icon_0003.png"}
+                        alt="로딩중"
+                      />
+                    )}
                     <img
-                      className="h-[2.5rem]"
-                      src={require("../../assets/myPage/back.png")}
+                      className="h-[1.5rem] w-[1.5rem] cursor-pointer"
+                      style={{ objectFit: "contain" }}
+                      src={require("../../assets/myPage/settings.png")}
                       alt=""
+                      onClick={() => {
+                        //톱니바퀴 클릭하면 modal클릭변경
+                        console.log("클릭했다");
+                        dispatch(showMyPageProfileSelect());
+                        console.log("안녕");
+                      }}
                     />
-                    <span className="text-white my-1">뒤로가기</span>
+                    <div className="right-7 w-[3rem] " />
+                    <div className="flex flex-col items-start">
+                      <div
+                        className="ml-30 right-7 w-[7rem] border-white border-2 text-white cursor-pointer"
+                        onClick={() => {
+                          clickSecession();
+                        }}
+                      >
+                        탈퇴하기
+                      </div>
+                      <div className="h-[3rem]" />
+                      <div className="h-[3rem]" />
+                    </div>
                   </div>
-                  {/*
+                  {/* 닉네임 */}
+                  <div className="grid grid-cols-7 flex justify-center items-center ">
+                    <div></div>
+                    <div></div>
+                    <input
+                      className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
+                      value={nickname}
+                      type="text"
+                      maxLength={8}
+                      onChange={onChangeNikename}
+                    />
+                    <div
+                      className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
+                      onClick={() => {
+                        if (nickname.length < 2) {
+                          toast.warning(`2글자 이상 입력바랍니다`);
+                        } else {
+                          axios({
+                            method: "post",
+                            url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
+                            data: {
+                              changeName: nickname,
+                              nowName: nowName,
+                            },
+                          }).then((r) => {
+                            const isDouble = r.data.data;
+                            if (isDouble) {
+                              toast.success(
+                                `${nickname}(은)는 수정가능한 닉네임입니다`
+                              );
+                              setModifydisplay(isDouble);
+                            } else {
+                              toast.warning(
+                                `${nickname}(은)는 중복된 닉네임입니다`
+                              );
+                              setModifydisplay(isDouble);
+                            }
+                          });
+                        }
+                      }}
+                    >
+                      중복확인
+                    </div>
+                    <div></div>
+                  </div>
+                  {/* 정보 */}
+                  <div
+                    className="grid"
+                    style={{ gridTemplateColumns: "1fr 1fr" }}
+                  >
+                    {/* 나이, 생일, 매너온도 */}
+                    <div
+                      className="grid  w-full h-full"
+                      style={{ gridTemplateRows: "1fr 1fr 1fr" }}
+                    >
+                      {/* 나이 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          나이
+                        </div>
+                        <div
+                          className="grid  border-purple-300 w-[90%] mr-[10%]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                            {age}
+                          </div>
+                        </div>
+                      </div>
+                      {/* 생일 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          생일
+                        </div>
+                        <div
+                          className="grid  border-purple-300 w-[90%] mr-[10%]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                            {birth.split(".")[1]}월 {birth.split(".")[2]}일
+                          </div>
+                        </div>
+                      </div>
+                      {/* 매너온도 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          매너온도
+                        </div>
+                        <div
+                          className="grid  border-purple-300 w-[90%] mr-[10%]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                            {manner} ℃
+                          </div>
+                          <div></div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* 성별, 지역, 포인트 */}
+                    <div
+                      className="grid  w-full h-full"
+                      style={{ gridTemplateRows: "1fr 1fr 1fr" }}
+                    >
+                      {/* 성별 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          성별
+                        </div>
+                        {gender === "F" ? (
+                          <div
+                            className="grid  border-purple-300 w-[90%] mr-[10%]"
+                            style={{ gridTemplateColumns: "1fr 1fr" }}
+                          >
+                            <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                              여
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            className="grid  border-purple-300 w-[90%] mr-[10%]"
+                            style={{ gridTemplateColumns: "1fr 1fr" }}
+                          >
+                            <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                              남
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      {/* 지역위치보기 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          지역
+                        </div>
+                        <div
+                          className="grid  border-purple-300 w-[90%] mr-[10%]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          {/* {SelectedFirst !== undefined ? (
+                            <select
+                              className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                              onChange={handleSelect}
+                              value={region}
+                            >
+                              {regionlist
+                                ? regionlist.map((it: any): any =>
+                                    it.regionCode.substr(0, 2) ===
+                                    region.substr(0, 2) ? (
+                                      <option value={it.regionCode} selected>
+                                        {it.sidoName}
+                                      </option>
+                                    ) : (
+                                      // ))
+                                      <option value={it.regionCode}>
+                                        {it.sidoName}
+                                      </option>
+                                    )
+                                  )
+                                : null}
+                            </select>
+                          ) : null} */}
+
+                          <select
+                            className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                            onChange={handleSelect}
+                            value={SelectedFirst}
+                          >
+                            {regionlist
+                              ? regionlist.map((it: any): any =>
+                                  it.regionCode.substr(0, 2) ===
+                                  region.substr(0, 2) ? (
+                                    <option value={it.regionCode} selected>
+                                      {it.sidoName}
+                                    </option>
+                                  ) : (
+                                    // ))
+                                    <option value={it.regionCode}>
+                                      {it.sidoName}
+                                    </option>
+                                  )
+                                )
+                              : null}
+                          </select>
+
+                          {isSelected === false ? (
+                            <select
+                              className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                              onChange={handleSelect2}
+                              value={Selected2}
+                            >
+                              {regionlist2
+                                ? regionlist2.map((it: any): any =>
+                                    SelectedFirst.substr(0, 2) ===
+                                    it.regionCode.substr(0, 2) ? (
+                                      <option value={it.regionCode}>
+                                        {it.gugunName}
+                                      </option>
+                                    ) : null
+                                  )
+                                : null}
+                            </select>
+                          ) : null}
+                        </div>
+                      </div>
+                      {/* 포인트 */}
+                      <div
+                        className="grid  w-full h-[40%] my-auto "
+                        style={{ gridTemplateColumns: "1.2fr 2fr" }}
+                      >
+                        <div className="flex justify-center items-center text-white text-[1.4rem] font-bold w-[80%] mx-auto">
+                          포인트
+                        </div>
+                        <div
+                          className="grid w-[90%] mr-[10%]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          <div className="flex justify-center items-center text-white text-[1rem] text-center bg-black h-full border-2">
+                            {point}
+                          </div>
+                          <div></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* 자기소개 */}
+                  <div
+                    className="grid w-full h-[100%] "
+                    style={{ gridTemplateColumns: "0.45fr 2fr" }}
+                  >
+                    <div className="flex justify-start items-center text-white text-[1.4rem] font-bold  h-[100%] w-full pl-[1rem]">
+                      자기소개
+                    </div>
+                    <input
+                      className="flex justify-start items-center text-white text-[1rem] text-center my-auto bg-black h-[70%] w-[95.8%] border-2 caret-white"
+                      value={comment}
+                      type="text"
+                      onChange={onChangeComment}
+                    />
+                  </div>
+                  {/* Navfooter */}
+                  <div className="flex justify-center items-end h-full w-full">
+                    <div
+                      className="grid h-[70%] w-[40%] border-2 border-white border-b-0 "
+                      style={{
+                        gridTemplateColumns: "1fr 1fr",
+                        border: "solid 2px white",
+                        borderBottom: "solid 0px",
+                        borderTopLeftRadius: "10px",
+                        borderTopRightRadius: "10px",
+                      }}
+                    >
+                      <div
+                        className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer "
+                        onClick={() => {
+                          navigate("/main");
+                        }}
+                      >
+                        <img
+                          className="h-[2.5rem]"
+                          src={require("../../assets/myPage/back.png")}
+                          alt=""
+                        />
+                        <span className="text-white my-1">뒤로가기</span>
+                      </div>
+                      {/*
                수정버튼 
                modifydisplay : true => display
                modifydisplay : false => display
                 */}
-                  {modifydisplay === true ? (
-                    <div
-                      className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
-                      onClick={() => {
-                        console.log("modifydisplay : " + modifydisplay);
-                        //수정가능
+                      {modifydisplay === true ? (
+                        <div
+                          className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
+                          onClick={() => {
+                            // console.log("modifydisplay : " + modifydisplay);
+                            //수정가능
 
-                        const Code =
-                          SelectedFirst.substr(0, 2) + Selected2.substr(2, 8);
+                            console.log("앞쪽꺼", SelectedFirst.substr(0, 2));
+                            console.log("뒤쪽꺼", Selected2.substr(2, 8));
 
-                        axios({
-                          method: "put",
-                          url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
-                          data: {
-                            comment: comment,
-                            nickname: nickname,
-                            profile: profile,
-                            regionCode: Code,
-                          },
-                        }).then((r) => {
-                          console.log("성공");
-                          toast.success("수정에 성공하셨습니다");
-                          navigate("/main");
-                        });
-                      }}
-                    >
-                      <img
-                        className="h-[2.5rem]"
-                        src={require("../../assets/myPage/save.png")}
-                        alt=""
-                      />
-                      <span className="text-white my-1">수정</span>
+                            const Code =
+                              SelectedFirst.substr(0, 2) +
+                              Selected2.substr(2, 8);
+
+                            axios({
+                              method: "put",
+                              url: `https://i8e201.p.ssafy.io/api/user/${Username}`,
+                              data: {
+                                comment: comment,
+                                nickname: nickname,
+                                profile: MyPageProfileImg,
+                                regionCode: Code,
+                              },
+                            }).then((r) => {
+                              // console.log("성공");
+                              toast.success("수정에 성공하셨습니다");
+                              navigate("/main");
+                            });
+                          }}
+                        >
+                          <img
+                            className="h-[2.5rem]"
+                            src={require("../../assets/myPage/save.png")}
+                            alt=""
+                          />
+                          <span className="text-white my-1">수정</span>
+                        </div>
+                      ) : (
+                        <div className="opacity-50 flex flex-col justify-end items-center w-[80%] h-full mx-auto">
+                          <img
+                            className="h-[2.5rem]"
+                            src={require("../../assets/myPage/save.png")}
+                            alt=""
+                          />
+                          <span className="text-white my-1">수정</span>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="opacity-50 flex flex-col justify-end items-center w-[80%] h-full mx-auto">
-                      <img
-                        className="h-[2.5rem]"
-                        src={require("../../assets/myPage/save.png")}
-                        alt=""
-                      />
-                      <span className="text-white my-1">수정</span>
-                    </div>
-                  )}
+                  </div>
                 </div>
+                <div className="bg-black "></div>
               </div>
+              {/* 메뉴 클릭시 보이기 */}
+              <NavbarMenu />
+              {/* 알림 클릭시 보이기 */}
+              <NavbarAlarm />
             </div>
-            <div className="bg-black "></div>
           </div>
-          {/* 메뉴 클릭시 보이기 */}
-          <NavbarMenu />
-          {/* 알림 클릭시 보이기 */}
-          <NavbarAlarm />
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }
