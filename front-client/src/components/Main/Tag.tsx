@@ -39,6 +39,7 @@ function Tag(): JSX.Element {
 
   useEffect(()=> {
     console.log(ageRegion)
+    console.log('갱신해따!!')
     if (filter.isAll) {
       console.log('원상복구')
       ageRef.current.value = '연령'

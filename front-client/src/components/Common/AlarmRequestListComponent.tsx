@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { changeAlarmApiDataState, changeAlarmClickState } from "../../store/store";
@@ -7,7 +8,7 @@ import styles from './Common.module.css'
 // 요청리스트
 function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_request_id}:any):JSX.Element {
   const dispatch = useAppDispatch()
-  
+  const navigate = useNavigate()
   const username = localStorage.getItem('Username')
 
   const alarmClickState = useAppSelector((state:any)=> {return state.alarmClickState})
@@ -45,8 +46,29 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   url: `https://i8e201.p.ssafy.io/api/pocha/invite/accept/${invite_id}/${pocha_id}`
                 })
                 .then((r)=> {
-                  console.log('초대 승인해따', r);
-                  // 승인한 방으로 navigate() 사용하여 보내줄거니깐 목록 재랜더링 안시킴
+                  console.log('초대 승인해따', r.data);
+                  const pochaId = r.data.data.pochaId
+                  const themeId = r.data.data.themeId
+                  axios({
+                    method: 'post',
+                    url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+                    data: {
+                      // 초대 받은거를 승인하는거라 false
+                      "isHost": 'false',
+                      "pochaId": pochaId,
+                      'username': username
+                    }
+                  })
+                  .then((r)=> {
+                    if (themeId.slice(0,2) === 'T0') {
+                      navigate(`/storyroom/${pochaId}`)
+                    } else if (themeId.slice(0,2) === 'T1') {
+                      navigate(`/gameroom/${pochaId}`)
+                    } else {
+                      navigate(`/meetingroom/${pochaId}`)
+                    }
+
+                  })
                 })
               }
             }}/>
