@@ -30,6 +30,7 @@ const MainCreateRoom = ({
   const username = localStorage.getItem("Username");
 
   const roomTitle = ["소통포차", "게임포차", "헌팅포차"];
+  // 후에 내 지역과 내 나이 세팅해야함
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
   const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
@@ -200,7 +201,7 @@ const MainCreateRoom = ({
                         console.log(r.data);
                         navigate(`/storyroom/${PochaId}`);
                         // 방 만들기 창 종료
-                        dispatch(changeThemeRoomState(0)); 
+                        dispatch(changeThemeRoomState(0));
                       });
                     });
                   }}
@@ -220,56 +221,61 @@ const MainCreateRoom = ({
           </div>
         </>
       ) : (
-        <div className={`bg-black bg-opacity-90 absolute h-screen text-white`}>
+        <>
+          {showModal && <PublicModal data={modalData} />}
           <div
-            className={`${style.tagListbox} ${style.boxShadow} min-w-[44rem] bg-black w-5/12 px-16 py-10 rounded-3xl relative top-1/2 left-1/2`}
+            className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >
             <div
-              className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}
+              className={`${style.boxShadow} flex-col items-center bg-black max-w-[48rem] px-16 py-10 rounded-3xl absolute top-20`}
             >
-              {roomTitle[roomTheme - 1]}
-            </div>
-            {roomTheme === 3 ? (
-              <MainCreateRoomPeople selectOption={huntingPeopleOption} />
-            ) : (
-              <MainCreateRoomPeople selectOption={peopleOption} />
-            )}
-            <MainCreateRoomSelect selectOption={ageOption} />
-            <MainCreateRoomSelect selectOption={regionOption} />
-            <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">
-              태그
-            </div>
-            <div className="flex justify-center flex-wrap">
-              {tagList.map((tag, index) => {
-                return (
-                  <div
-                    onClick={(event) => onSelectTag(index, event)}
-                    // ref={(tag) => {
-                    //   selectTags.current[index] = tag;
-                    // }}
-                    key={index}
-                    className={`${style.tagBox}`}
-                  >
-                    {tag}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex justify-end w-full mt-10">
-              <input
-                className={`${style.createBtn} cursor-pointer`}
-                type="submit"
-                value="포차생성"
-              />
-              <input
-                onClick={closeModal}
-                className={`${style.cancelBtn} cursor-pointer`}
-                type="submit"
-                value="취소"
-              />
+              <div
+                className={`${style.neonTitle} font-extrabold text-5xl tracking-wide h-28`}
+              >
+                {roomTitle[roomTheme - 1]}
+              </div>
+              {roomTheme === 3 ? (
+                <MainCreateRoomPeople selectOption={huntingPeopleOption} />
+              ) : (
+                <MainCreateRoomPeople selectOption={peopleOption} />
+              )}
+              <MainCreateRoomSelect selectOption={ageOption} />
+              <MainCreateRoomSelect selectOption={regionOption} />
+              <div className="text-left w-full text-xl font-bold mt-2 pt-3 border-t-2">
+                태그
+              </div>
+              <div className="flex justify-center flex-wrap">
+                {tagList.map((tag, index) => {
+                  return (
+                    <div
+                      onClick={(event) => onSelectTag(index, event)}
+                      // ref={(tag) => {
+                      //   selectTags.current[index] = tag;
+                      // }}
+                      key={index}
+                      className={`${style.tagBox}`}
+                    >
+                      {tag}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex justify-end w-full mt-10">
+                <input
+                  className={`${style.createBtn} cursor-pointer`}
+                  type="submit"
+                  value="포차생성"
+                />
+                <input
+                  onClick={closeModal}
+                  className={`${style.cancelBtn} cursor-pointer`}
+                  type="submit"
+                  value="취소"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

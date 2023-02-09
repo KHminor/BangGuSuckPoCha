@@ -8,6 +8,7 @@ import {
   changeMenuFriendListApiDataState,
   changeMenuFriendState,
   changeMenuState,
+  changeMyInfo,
 } from "../../store/store";
 
 function NavbarMenu(): JSX.Element {
@@ -71,7 +72,14 @@ function NavbarMenu(): JSX.Element {
           className="ml-5 cursor-pointer"
           style={{ height: "52%" }}
           onClick={() => {
-            navigate("/mypage");
+            axios({
+              method: "get",
+              url: `https://i8e201.p.ssafy.io/api/user/myinfo/${username}`,
+            }).then((r) => {
+              console.log("내정보 : ", r.data.data);
+              dispatch(changeMyInfo(r.data.data));
+              navigate("/mypage");
+            });
           }}
         >
           <img
@@ -101,6 +109,7 @@ function NavbarMenu(): JSX.Element {
                   setFriendData.push(e);
                 }
               });
+              console.log(setFriendData)
               dispatch(changeMenuFriendState());
               dispatch(changeMenuFriendListApiDataState(setFriendData));
             });
