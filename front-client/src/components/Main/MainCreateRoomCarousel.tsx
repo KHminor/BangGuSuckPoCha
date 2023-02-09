@@ -32,7 +32,7 @@ function MainCreateRoomCarousel({onClickHiddenBtn} : {onClickHiddenBtn: any}) {
     <div
       ref={bgDiv}
       onMouseDown={CloseCarouselModal}
-      className="bg-black bg-opacity-90 absolute h-screen w-screen grid z-10"
+      className="bg-slate-800 bg-opacity-50 absolute h-screen w-screen grid z-10"
       style={{ gridTemplateRows: "1fr 5fr 1fr" }}
     >
       <div
