@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
-const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
+const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Function }) => {
   console.log("여기까지는 오니??ㅇㅇ", data)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -96,6 +96,7 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
         waiting: false,
       });
       navigate(`/main`);
+      window.location.reload();
       toast.success("방에서 나오셨습니다");
     } catch (error) {
       console.log("포차나가기 error", error);
@@ -123,6 +124,9 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
   const BgCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === bgDiv.current) {
       dispatch(showPublicModal(false));
+      if(fx) {
+        fx!();
+      }
     }
   };
 
@@ -130,6 +134,9 @@ const PublicModal = ({ data, socket }: { data: any; socket?: any }) => {
   const onClickConfirm = () => {
     switch (data.type) {
       case "tag":
+        if(fx) {
+          fx!();
+        }
         break;
       case "addTime":
         handlePochaExtension();

@@ -36,4 +36,6 @@ public interface PochaService {
     boolean pochaInviteAccept(Long inviteId, Long pochaId);
 
     void pochaHuntingStart(Long pochaId);
+
+    List<PochaResponseDto> allPochaList();
 }

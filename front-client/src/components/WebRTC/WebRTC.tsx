@@ -12,9 +12,11 @@ import RoomUserProfile from "../Common/RoomUserProfile";
 const WebRTC = ({
   pochaId,
   propSocket,
+  getPochaInfo
 }: {
   pochaId: string;
   propSocket: Function;
+  getPochaInfo: Function;
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -161,7 +163,7 @@ const WebRTC = ({
         await getCameras();
       }
     } catch (e) {
-      console.log("1", e);
+      console.log("마이스트림 에러", e);
     }
   }
 
@@ -185,9 +187,9 @@ const WebRTC = ({
       .getVideoTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!cameraOff) {
-      cameraBtn.current!.innerText = "Turn Camera On";
+      cameraBtn.current!.innerText = "Camera On";
     } else {
-      cameraBtn.current!.innerText = "Turn Camera Off";
+      cameraBtn.current!.innerText = "Camera Off";
     }
     cameraOff = !cameraOff;
   }
@@ -439,7 +441,8 @@ const WebRTC = ({
   // 포차 설정 변경! : 방 설정 다시 불러오기.
   socket.on("pocha_change", async () => {
     console.log("포차 설정 변경!----------------------");
-    setUpdateCheck((prev) => !prev);
+    // setUpdateCheck((prev) => !prev);
+    getPochaInfo();
     toast.success("포차 정보가 변경되었습니다");
     // 방 설정 다시 불러오기!!! 테스트
     // await pocha_config_update("3");
