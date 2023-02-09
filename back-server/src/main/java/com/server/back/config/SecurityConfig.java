@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,12 +31,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("logout","/refreshToken","/js/**","/css/**","/error");
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .antMatchers("/join","/", "/home","/refresh/**")
+                .antMatchers("/login/oauth2/code/naver","/user/oauth2/token/naver", "/api/user/oauth2/token/naver","/api/login/oauth2/code/naver");
+
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,17 +49,18 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable() //formLogin(form)방식 사용 안함 , json방식으로 전달
                 .httpBasic().disable() //Bearer 방식 사용 -> header 에 authentication 에 토큰을 넣어 전달하는 방식
-                .addFilter(config.corsFilter())
+//                .addFilter(config.corsFilter())
                 .apply(new MyCustomDsl())
 
                 .and()
 
                 .authorizeRequests()
-//                    .antMatchers("**").permitAll()
-                    .antMatchers("/api/user/oauth2/**").permitAll()
+                    .antMatchers("**").permitAll()
+//                    .antMatchers("/api/user/oauth2/**").hasAuthority("USER")
+//                    .antMatchers("/api/user/oauth2/**").permitAll()
 //                    .antMatchers("/api/v1/manager/**").hasAuthority("MANAGER")
 //                    .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
 
                 .and()
                 .build();
