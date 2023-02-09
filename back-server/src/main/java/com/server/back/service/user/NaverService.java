@@ -117,7 +117,7 @@ public class NaverService {
                     .username(profile.response.id)
                     .password("0")
                     .nickname(profile.response.id)
-                    .profile("../../assets/profile/icon_0001.png")
+                    .profile("/profile/icon_0002.png")
                     .comment(null)
                     .gender(profile.response.gender)
                     .birth(profile.response.birthyear+"."+profile.response.birthday.replace("-","."))
