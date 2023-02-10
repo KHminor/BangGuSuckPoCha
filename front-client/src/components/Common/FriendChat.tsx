@@ -153,7 +153,7 @@ function FriendChat():JSX.Element {
               { 
                 message&&message.map((chat:any)=>{
                   // console.log(chat)
-                  return (
+                  return ( 
                     <div className="w-full h-full my-[0.35rem]">
                       {
                         chat.user_nickname === f_nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
