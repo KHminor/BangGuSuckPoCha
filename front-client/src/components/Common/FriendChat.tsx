@@ -91,27 +91,27 @@ function FriendChat():JSX.Element {
 
   function MyChat({content}:any):JSX.Element {
     return (
-      <div className="flex justify-end items-center my-1 ">
+      // <div className="flex justify-end items-center my-[0.25rem] ">
         <div className="grid w-full " style={{gridTemplateColumns: '3fr 2fr'}}>
           <div className="inline-flex justify-start items-center whitespace-normal">
-            <span className="text-gray-50 rounded-lg bg-orange-400 font-medium">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+            <span className="text-white rounded-lg bg-gray-500/70  font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
           </div>
           <div className=""></div>
         </div>
-      </div>
+      // </div>
     )
   }
 
   function OtherChat({content}:any):JSX.Element {
     return (
-      <div className="flex justify-end items-center my-1 ">
+      // <div className="flex justify-end items-center my-[0.25rem] ">
         <div className="grid w-full " style={{gridTemplateColumns: '2fr 3fr'}}>
           <div className=""></div>
           <div className="inline-flex justify-end items-center whitespace-normal">
-            <span className="text-gray-50 rounded-lg bg-blue-400 font-medium">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+            <span className="text-white rounded-lg bg-green-400/80 font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
           </div>
         </div>
-      </div>
+      // </div>
     )
   }
 
@@ -126,7 +126,11 @@ function FriendChat():JSX.Element {
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter') {
       publish(inputChat)
-      scrollToBottom()
+
+      setTimeout(() => {
+        scrollToBottom()
+      }, 3000);
+      
       setInputChat("");
     }
   };
@@ -139,12 +143,12 @@ function FriendChat():JSX.Element {
             <div className="flex justify-center items-center h-[1.8rem] max-h-[1.8rem] w-full  text-white rounded-[100px] ">Chat</div>
             <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}></div>
             {/* 채팅 공간 */}
-            <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`}>
+            <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`} style={{gridAutoRows: '2.5rem'}}>
               {
                 message&&message.map((chat:any)=>{
                   // console.log(chat)
                   return (
-                    <div className="flex flex-col justify-start w-full h-full ">
+                    <div className="w-full h-full ">
                       {
                         chat.user_nickname === f_nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
                       }
@@ -162,7 +166,9 @@ function FriendChat():JSX.Element {
               <div className="my-auto mr-[10%] h-[55%] w-[90%] mx-auto">
                 <img className="cursor-pointer" src={require('../../assets/friendChatIcon/dm.png')} alt="" onClick={()=>{
                   publish(inputChat)
-                  scrollToBottom()
+                  setTimeout(() => {
+                    scrollToBottom()
+                  }, 3000);
                   // setsendCheck(sendCheck+1)
                 }}/>
               </div>
