@@ -3,9 +3,11 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import WebRTC from "../WebRTC/WebRTC";
 import axios from "axios";
+import { io } from "socket.io-client";
 import Loading from "../Common/Loading";
 
 //  axios 요청
+
 const api = axios.create({
   baseURL: "https://i8e201.p.ssafy.io/api",
   headers: {
@@ -13,10 +15,12 @@ const api = axios.create({
   },
 });
 
+const socket = io("https://pocha.online");
+
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
-  const [socket, setSocket] = useState<any>(null);
+  // const [socket, setSocket] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
@@ -32,9 +36,9 @@ function StoryRoom(): JSX.Element {
 
   console.log("pochaInfo", pochaInfo);
 
-  const propSocket = (socket: any) => {
-    setSocket(socket);
-  };
+  // const propSocket = (socket: any) => {
+  //   setSocket(socket);
+  // };
   const propIsHost = (isHost: boolean) => {
     setIsHost(isHost);
   };
@@ -92,7 +96,8 @@ function StoryRoom(): JSX.Element {
           <div className="min-h-[90vh]">
             <WebRTC
               pochaId={PochaId!}
-              propSocket={propSocket}
+              // propSocket={propSocket}
+              socket={socket}
               propIsHost={propIsHost}
               getPochaInfo={getPochaInfo}
             />
