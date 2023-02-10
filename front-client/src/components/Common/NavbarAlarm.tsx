@@ -20,6 +20,7 @@ function NavbarAlarm(): JSX.Element {
   const checkMenuState: any = useAppSelector((state: any) => {
     return state.menuClickCheck;
   });
+  const alarmClickState = useAppSelector((state:any)=> {return state.alarmClickState})
 
   // 알람 클릭시 조건 분기
   useEffect(()=> {
@@ -42,7 +43,15 @@ function NavbarAlarm(): JSX.Element {
           <div></div>
           {/* 새로고침 */}
           <div className="flex justify-center items-center">
-            <img className="h-[40%]" src={require('../../assets/NavIcon/reset.png')} alt="" />
+            <img className="h-[40%]" src={require('../../assets/NavIcon/reset.png')} alt="" onClick={()=> {
+              if (alarmClickState === 0) {
+                
+              } else if (alarmClickState === 1) {
+
+              } else if (alarmClickState === 2) {
+                
+              }
+            }}/>
           </div>
         </div>
         {/* 요청 */}

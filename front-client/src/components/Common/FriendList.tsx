@@ -164,7 +164,7 @@ function FriendList(): JSX.Element {
                 style={{ gridTemplateColumns: "2fr 1.2fr 1fr 1fr" }}
               >
                 <div></div>
-                <div className="flex justify-center items-center h-full">
+                <div className="flex justify-center items-center h-full text-sm">
                   친구목록
                 </div>
                 <div></div>

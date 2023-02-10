@@ -3,7 +3,7 @@ import styles from "./Main.module.css";
 import './CardInside.css'
 
 // 카드 내부
-function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulTitle, isPrivate, alcohol}: any): JSX.Element {
+function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulTitle, isPrivate, alcohol, totalCount, limitUser}: any): JSX.Element {
   const [isOver, setIsOver] = useState(false);
 
   // 테마에 따른 테마 컬러변경
@@ -144,7 +144,9 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
               >
                 {themeType}
               </div>
-              <div className="col-span-7 "></div>
+              <div className="col-span-1 "></div>
+              <div className="flex justify-center items-center col-span-1 "><img className="w-[1rem] h-[1rem]" src={require('../../assets/tagIcon/stayPerson.png')} alt="" /><span className="pl-2">{totalCount}/{limitUser}</span></div>
+              {/* <div className="col-span-5 "></div> */}
             </div>
             {/* 문구 한줄 */}
             <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">
