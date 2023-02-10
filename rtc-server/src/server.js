@@ -74,10 +74,15 @@ wsServer.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    let roomID;
+    let username;
     if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
-      const roomID = socketToRoom[socket.id];
+      roomID = socketToRoom[socket.id];
       delete socketToRoom[socket.id];
       let room = users[roomID];
+      room.forEach((user) => {
+        if (user.id == socket.id) username = user.username;
+      });
       socket.leave(roomID);
       if (room) {
         room = room.filter((user) => user.id !== socket.id);
@@ -89,9 +94,12 @@ wsServer.on("connection", (socket) => {
       }
       socket.to(roomID).emit("user_exit", { id: socket.id });
     } else {
-      const roomID = waitToRoom[socket.id];
+      roomID = waitToRoom[socket.id];
       delete waitToRoom[socket.id];
       let room = waitUsers[roomID];
+      room.forEach((user) => {
+        if (user.id == socket.id) username = user.username;
+      });
       if (room) {
         room = room.filter((user) => user.id !== socket.id);
         waitUsers[roomID] = room;
@@ -104,6 +112,18 @@ wsServer.on("connection", (socket) => {
         wsServer.to(element.id).emit("wait_update");
       });
     }
+    axios({
+      url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
+      method: "put",
+      data() {
+        return {
+          isHost: false,
+          pochaId: roomID,
+          username: username,
+          waiting: false,
+        };
+      },
+    });
   });
 
   /////////////////////////////////////////////////
@@ -186,20 +206,20 @@ wsServer.on("connection", (socket) => {
   // 룰렛
   socket.on("game_roulette", (roomName, random) => {
     wsServer.to(roomName).emit("game_roulette", random);
-  })
+  });
 
   // 밸런스게임
   socket.on("game_balance", (roomName) => {
     wsServer.to(roomName).emit("game_balance");
-  })
+  });
 
   // 손병호 게임
   // 게임 시작 신호
-  socket.on("game_son", roomName => {
+  socket.on("game_son", (roomName) => {
     wsServer.to(roomName).emit("game_son");
-  })
+  });
   // 손가락 접기
   socket.on("game_son_fold", (roomName, socketId) => {
     wsServer.to(roomName).emit("game_son_fold", socketId);
-  })
+  });
 });
