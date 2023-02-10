@@ -9,6 +9,8 @@ const AdminAdd = () => {
 
   const [NickName, setNickName] = useState<any>();
   const [PASSWORD, setPASSWORD] = useState();
+  //중복확인
+  const [modifydisplay, setModifydisplay] = useState(false);
 
   const ChangeNickName = (event: any) => {
     console.log(event.target.value);
@@ -58,16 +60,16 @@ const AdminAdd = () => {
                         accessToken: `${accessToken}`,
                       },
                     }).then((r) => {
-                      console.log(r.data);                      
+                      console.log(r.data);
                       const isDouble = r.data.data;
                       if (isDouble) {
                         toast.success(
                           `${NickName}(은)는 수정가능한 닉네임입니다`
                         );
-                        // setModifydisplay(isDouble);
+                        setModifydisplay(isDouble);
                       } else {
                         toast.warning(`${NickName}(은)는 중복된 닉네임입니다`);
-                        // setModifydisplay(isDouble);
+                        setModifydisplay(isDouble);
                       }
                     });
                   }
@@ -102,34 +104,23 @@ const AdminAdd = () => {
             <div className="col-span-4"></div>
             <div
               onClick={() => {
-                console.log(NickName);
-                console.log(PASSWORD);
-
+                console.log("닉네임", NickName);
+                console.log("USERNAME", USERNAME);
+                console.log("PASSWORD", PASSWORD);
                 axios({
                   method: "post",
-                  url: `https://i8e201.p.ssafy.io/api/login`,
+                  url: "https://i8e201.p.ssafy.io/api/admin/join",
                   data: {
                     nickname: NickName,
                     username: USERNAME,
                     password: PASSWORD,
-                    // token: localStorage.getItem("accessToken"),
                   },
                 }).then((r) => {
                   console.log(r.data);
-                  const Info = r.data;
-                  if (Info.status === "200") {
-                    // console.log(Info.accessToken);
-                    localStorage.setItem("accessToken", Info.accessToken);
-                    // console.log(Info.refreshToken);
-                    localStorage.setItem("refreshToken", Info.refreshToken);
-                  } else {
-                    toast.warning("로그인실패");
-                  }
                 });
-                // navigate("/adminmain");
               }}
             >
-              Login
+              관리자 추가
             </div>
             <div></div>
           </div>

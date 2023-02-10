@@ -88,8 +88,6 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                           navigate(`/storyroom/${pochaId}`)
                         } else if (themeId.slice(0,2) === 'T1') {
                           navigate(`/gameroom/${pochaId}`)
-                        } else {
-                          navigate(`/meetingroom/${pochaId}`)
                         }
                       })
                     }
