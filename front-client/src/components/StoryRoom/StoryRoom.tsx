@@ -6,15 +6,6 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import Loading from "../Common/Loading";
 
-//  axios 요청
-
-const api = axios.create({
-  baseURL: "https://i8e201.p.ssafy.io/api",
-  headers: {
-    "Content-Type": "application/json;charset=utf-8",
-  },
-});
-
 const socket = io("https://pocha.online");
 
 function StoryRoom(): JSX.Element {
@@ -31,6 +22,13 @@ function StoryRoom(): JSX.Element {
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
 
+  //  axios 요청
+  const api = axios.create({
+    baseURL: "https://i8e201.p.ssafy.io/api",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
   // 내 아이디
   const myName = localStorage.getItem("Username");
 
