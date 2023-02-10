@@ -35,7 +35,7 @@ function RoomFooterNav({
       setRoomTheme(1);
     } else if (url.indexOf("game") !== -1) {
       setRoomTheme(2);
-    } else if (url.indexOf("hunting") !== -1) {
+    } else if (url.indexOf("meeting") !== -1) {
       setRoomTheme(3);
     }
     setTimeout(() => {

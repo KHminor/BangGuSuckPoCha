@@ -43,7 +43,7 @@ const UpdateRoomInfo = ({
   const ageOption = ["나이", "ALL", "20대"];
   const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
-  const huntingPeopleOption = ["인원", "2", "4", "6"];
+  const meetingPeopleOption = ["인원", "2", "4", "6"];
   const tagList = [
     "애니메이션",
     "게임",
@@ -75,7 +75,7 @@ const UpdateRoomInfo = ({
 
   // 태그 리스트
   const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
-  console.log('태그리스트',choiceTagList);
+  console.log('업데이트할 태그리스트',choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
     tag: string,
@@ -178,7 +178,7 @@ const UpdateRoomInfo = ({
           isPrivate: false,
           limitUser: createRoomChoicePeople,
           region: createRoomChoiceRegion,
-          tagList: createRoomChoiceTag,
+          tagList: choiceTagList,
           themeId: createRoomThemeCheck,
         },
       });
@@ -293,7 +293,7 @@ const UpdateRoomInfo = ({
               {roomTheme === 3
                 ? pochaInfo && (
                     <MainCreateRoomPeople
-                      selectOption={huntingPeopleOption}
+                      selectOption={meetingPeopleOption}
                       pochaInfo={pochaInfo}
                     />
                   )

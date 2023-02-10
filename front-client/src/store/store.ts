@@ -434,6 +434,17 @@ const friendSearchState = createSlice({
   },
 });
 
+// Roulette 결과 모달 켜고 끄는 함수
+const rouletteResultModal = createSlice({
+  name: "rouletteResultModal",
+  initialState: false,
+  reducers: {
+    showRouletteResultModal(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -487,6 +498,8 @@ export const store = configureStore({
     friendSearchState: friendSearchState.reducer,
     // 친구 삭제 모달 클릭 여부
     roomDeleteFriendModalCheck: roomDeleteFriendModalCheck.reducer,
+    // Game관련
+    rouletteResultModal : rouletteResultModal.reducer,
   },
 });
 //주석추가
@@ -546,6 +559,8 @@ export const { inviteMyFriend } = inviteFriendModal.actions;
 export const { changeFriendSearchState } = friendSearchState.actions;
 // 친구 삭제 모달 클릭 여부
 export const { changeRoomDeleteFriendModalCheck } = roomDeleteFriendModalCheck.actions;
+// Game관련
+export const { showRouletteResultModal } = rouletteResultModal.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;
