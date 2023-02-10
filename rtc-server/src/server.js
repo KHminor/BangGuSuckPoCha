@@ -192,4 +192,14 @@ wsServer.on("connection", (socket) => {
   socket.on("game_balance", (roomName) => {
     wsServer.to(roomName).emit("game_balance");
   })
+
+  // 손병호 게임
+  // 게임 시작 신호
+  socket.on("game_son", roomName => {
+    wsServer.to(roomName).emit("game_son");
+  })
+  // 손가락 접기
+  socket.on("game_son_fold", (roomName, socketId) => {
+    wsServer.to(roomName).emit("game_son_fold", socketId);
+  })
 });

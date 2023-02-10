@@ -17,6 +17,8 @@ function Roulette({
   // Public모달 데이터
   const [modalData, setModalData] = useState<any>(null);
 
+  const [random, setRando] = useState<number>(0);
+  console.log("소케에에에에에엣 여기는 룰렛",socket)
   const product = [
     " 벌칙주 2잔",
     " 벌칙주 1잔",
@@ -43,9 +45,8 @@ function Roulette({
   useEffect(() => {
     console.log("이거있냐?", canvasSketch);
     setCtx(canvasSketch.current!.getContext(`2d`));
-
     socket.on("game_roulette", async (random: number) => {
-      console.log("룰렛 돌아가냐!!!@!@??");
+      console.log("룰렛 돌아가냐!!!@!@여기는 룰렛??", random);
       rotate(random);
     })
     return () => {
@@ -101,19 +102,19 @@ function Roulette({
     newMake();
   }
 
+
+  
+
   const rotate = (random : number) => {
     canvasSketch.current!.style.transform = `initial`;
     canvasSketch.current!.style.transition = `initial`;
-
-
     
-
     const arc = 360 / product.length;
     const rotate = random * arc + 3600 + arc * 3 - arc / 4;
 
     canvasSketch.current!.style.transform = `rotate(-${rotate}deg)`;
     canvasSketch.current!.style.transition = `2s`;
-
+   
     // 모달에 전달할 데이터
     setModalData({
       type: "roulette",
@@ -130,7 +131,7 @@ function Roulette({
     console.log("서버로 룰렛가냐?")
     const random = Math.floor(Math.random() * product.length);
     const roomName = pochaId;
-    console.log(roomName);
+    console.log("랜덤값",random);
     socket.emit("game_roulette", roomName, random);
   }
 

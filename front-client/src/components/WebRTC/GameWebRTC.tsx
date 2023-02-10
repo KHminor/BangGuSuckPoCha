@@ -10,6 +10,8 @@ import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
+// webRTC관련
+const socket = io("https://pocha.online");
 
 const WebRTC = ({
   pochaId,
@@ -25,8 +27,6 @@ const WebRTC = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const myUserName = localStorage.getItem("Username");
-  // webRTC관련
-  const socket = io("https://pocha.online");
   // 나의 비디오 ref
   const myFace = useRef<HTMLVideoElement>(null);
   // 음소거 버튼
@@ -436,7 +436,10 @@ const WebRTC = ({
       // 방 설정 다시 불러오기!!! 테스트
       // await pocha_config_update("3");
     });
-
+    // socket.on("game_roulette", async (random: number) => {
+    //   console.log("룰렛 돌아가냐!!!여기는 게임웹악ㄹ시티??", random);
+    //   // rotate(random);
+    // })
 
     return () => {
       socket.off("pocha_change");
