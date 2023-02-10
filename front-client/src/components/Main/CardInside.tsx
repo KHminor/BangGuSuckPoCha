@@ -3,7 +3,7 @@ import styles from "./Main.module.css";
 import './CardInside.css'
 
 // 카드 내부
-function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulTitle, isPrivate, alcohol}: any): JSX.Element {
+function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulTitle, isPrivate, alcohol, totalCount, limitUser}: any): JSX.Element {
   const [isOver, setIsOver] = useState(false);
 
   // 테마에 따른 테마 컬러변경
@@ -70,7 +70,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
             <img
               src={imgUrl}
               alt=""
-              className="h-[15rem] w-[25rem] object-fill"
+              className="h-[15rem] min-h-full w-[25rem] min-w-full object-fill"
               style={{ borderRadius: "16px 16px 0px 0px " ,transition: 'all 0.5s'}}
             />
           </div>
@@ -124,7 +124,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
             <img
               src={imgUrl}
               alt=""
-              className="h-[21rem] w-[25rem] object-fill"
+              className="h-[21rem] min-h-[100%] w-[25rem] min-w-[100%] object-fill"
               style={{ borderRadius: "16px 16px 0px 0px " }}
             />
           </div>
@@ -144,7 +144,9 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
               >
                 {themeType}
               </div>
-              <div className="col-span-7 "></div>
+              <div className="col-span-1 "></div>
+              <div className="flex justify-center items-center col-span-1 "><img className="w-[1rem] h-[1rem]" src={require('../../assets/tagIcon/stayPerson.png')} alt="" /><span className="pl-2">{totalCount}/{limitUser}</span></div>
+              {/* <div className="col-span-5 "></div> */}
             </div>
             {/* 문구 한줄 */}
             <div className="w-full min-w-[100%] max-w-[100%] grid grid-rows-1 items-center overflow-hidden">

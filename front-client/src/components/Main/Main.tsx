@@ -51,6 +51,8 @@ function Main(): JSX.Element {
 
   // 방 생성 관련
   const createBtn = useRef<any>(null);
+  // 메인 페이지 클릭 여부
+  const mainRef = useRef<any>(null);
   // 포차 종류 캐러셀
   const mainCreateRoomCarouselCheck: any = useAppSelector(
     (state: any) => state.mainCreateRoomCarouselCheck
@@ -95,6 +97,7 @@ function Main(): JSX.Element {
     }
   }
 
+  
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
@@ -132,6 +135,7 @@ function Main(): JSX.Element {
         <div
           className="grid"
           style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
+          
         >
           <div></div>
           <div
@@ -184,7 +188,11 @@ function Main(): JSX.Element {
 }
 export default Main;
 
+
+
 function Room({ mainCreateRoomList }: any): JSX.Element {
+
+  console.log('생성된 방 리스트: ',mainCreateRoomList)
   const navigate = useNavigate();
   // 내 아이디
   const username = localStorage.getItem("Username");
@@ -202,8 +210,9 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     "흥청망청 취해보자👾",
   ];
   // 방에 입장하는 함수
-  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>) => {
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>,e:any) => {
     const pochaId = event.currentTarget.id;
+    console.log('여기 방은?',e.themeId )
     try {
       await axios({
         method: "POST",
@@ -215,7 +224,14 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
           waiting: false,
         },
       });
-      navigate(`/storyroom/${pochaId}`);
+      let roomTheme = (e.themeId).slice(0,2) 
+      if (roomTheme === 'T0') {
+        navigate(`/storyroom/${pochaId}`);
+      } else if (roomTheme === 'T1') {
+        navigate(`/gameroom/${pochaId}`);
+      } else {
+        navigate(`/meetingroom/${pochaId}`);
+      }
     } catch (error) {
       console.log("포차 입장 에러", error);
     }
@@ -246,9 +262,6 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
 
     return (
       <div
-        onClick={enterRoom}
-        key={e.pochaId}
-        id={e.pochaId}
         className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
       >
         <div
@@ -257,7 +270,14 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
         >
           <div></div>
           {/* 카드 내부 */}
-          <div>
+          <div 
+            onClick={(event)=> {
+              enterRoom(event,e)
+            }}
+            
+            key={e.pochaId}
+            id={e.pochaId}
+          >
             <CardInside
               TagList={TagList}
               themeType={themeType}
@@ -267,6 +287,8 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
               ssulTitle={SSulTitle}
               isPrivate={e.isPrivate}
               alcohol={e.alcohol}
+              totalCount={e.totalCount}
+              limitUser={e.limitUser}
             />
           </div>
           <div></div>
@@ -275,7 +297,7 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     );
   });
   return (
-    <div className="grid w-full min-w-[75rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 ">
+    <div className="grid w-full min-w-[96rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 ">
       {cards}
     </div>
   );

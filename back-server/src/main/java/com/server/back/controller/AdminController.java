@@ -293,7 +293,7 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "닉네임 중복 체크", notes="닉네임 사용 가능하면 true")
-    @GetMapping ("/check/nickname")
+    @GetMapping ("/check/{nickname}")
     public ResponseEntity<Map<String, Object>> adminNicknameCheck(String nickname){
         Map<String, Object> response = new HashMap<>();
         Boolean nicknamecheck = adminService.adminNicknameCheck(nickname);

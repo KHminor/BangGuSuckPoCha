@@ -53,3 +53,25 @@
   transform: scale(1.18);
   z-index: 100;
 }
+
+.myemoji {
+  animation: 3s infinite alternate sliedin;
+}
+
+@keyframes sliedin {
+  10% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}

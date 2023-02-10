@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
-import { showPublicModal } from "../../store/store";
+import { showPublicModal, showRouletteResultModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
 const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Function }) => {
@@ -42,6 +42,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
     switch (data.type) {
       case "tag":
         break;
+      case "host":
+        setNickName(nickname);
+        break;
       case "addTime":
         setRoomName(pochaId);
         setIsCancelBtn(true);
@@ -60,6 +63,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
         setNickName(nickname);
         setToUserName(username);
         setIsCancelBtn(true);
+        break;
+      case "roulette":
+        break;
     }
   }, []);
 
@@ -129,6 +135,8 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
       if(fx) {
         fx!();
       }
+      // Roulette방에서 모달끄기
+      dispatch(showRouletteResultModal(false));
     }
   };
 
@@ -139,6 +147,8 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
         if(fx) {
           fx!();
         }
+        break;
+      case "host":
         break;
       case "addTime":
         handlePochaExtension();
@@ -152,13 +162,18 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
       case "invite":
         inviteMyFriend();
         break;
+      case "roulette":
+        dispatch(showRouletteResultModal(false));
+        break;
     }
-    // 모달 끄기
+    // RoomFooterNavbar에서 모달 끄기
     dispatch(showPublicModal(false));
+    
   };
 
   // 취소 클릭시 모달 끄는 함수
   const onClickCancel = () => {
+    // RoomFooterNavbar에서 모달 끄기
     dispatch(showPublicModal(false));
   };
 

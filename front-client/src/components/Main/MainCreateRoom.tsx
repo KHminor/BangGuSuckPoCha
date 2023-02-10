@@ -35,23 +35,23 @@ const MainCreateRoom = ({
   const ageOption = ["나이", "ALL", "20대"];
   const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
-  const huntingPeopleOption = ["인원", "2", "4", "6"];
+  const meetingPeopleOption = ["인원", "2", "4", "6"];
   const tagList = [
+    "소주",
+    "맥주",
+    "와인",
+    "위스키",
+    "보드카",
     "애니메이션",
     "게임",
     "연애",
-    "결혼",
     "영화",
-    "가수",
-    "축구",
+    "음악",
     "연예인",
-    "타로",
-    "노래",
+    "직장",
+    "잡담",
     "운동",
-    "소주",
-    "맥주",
-    "막걸리",
-    "기타",
+    "축구",
   ];
   // 5개 제한 태그 관련
   const modalData = {
@@ -70,27 +70,27 @@ const MainCreateRoom = ({
   };
 
   // 태그 리스트
-  const [choiceTagList, setChoiceTagList] = useState<number[]>([]);
-
+  const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
+  console.log('태그리스트',choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
-    index: number,
+    tag: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
+    if (!choiceTagList.includes(tag) && choiceTagList.length >= 5) {
       dispatch(showPublicModal(true));
       return;
     }
-    if (choiceTagList.includes(index)) {
+    if (choiceTagList.includes(tag)) {
       setChoiceTagList((prev) => {
         const ttest = prev.filter((data) => {
-          return data !== index;
+          return data !== tag;
         });
         console.log(ttest);
         return ttest;
       });
-    } else if (!choiceTagList.includes(index)) {
-      setChoiceTagList((prev) => [...prev, index]);
+    } else if (!choiceTagList.includes(tag)) {
+      setChoiceTagList((prev) => [...prev, tag]);
     }
 
     const data = event.target as HTMLElement;
@@ -151,7 +151,7 @@ const MainCreateRoom = ({
                 {tagList.map((tag, index) => {
                   return (
                     <div
-                      onClick={(event) => onSelectTag(index, event)}
+                      onClick={(event) => onSelectTag(tag, event)}
                       // ref={(tag) => {
                       //   selectTags.current[index] = tag;
                       // }}
@@ -183,7 +183,7 @@ const MainCreateRoom = ({
                         isPrivate: false,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
-                        tagList: createRoomChoiceTag,
+                        tagList: choiceTagList,
                         themeId: createRoomThemeCheck,
                       },
                     }).then((r) => {
@@ -234,7 +234,7 @@ const MainCreateRoom = ({
                 {roomTitle[roomTheme - 1]}
               </div>
               {roomTheme === 3 ? (
-                <MainCreateRoomPeople selectOption={huntingPeopleOption} />
+                <MainCreateRoomPeople selectOption={meetingPeopleOption} />
               ) : (
                 <MainCreateRoomPeople selectOption={peopleOption} />
               )}
@@ -247,7 +247,7 @@ const MainCreateRoom = ({
                 {tagList.map((tag, index) => {
                   return (
                     <div
-                      onClick={(event) => onSelectTag(index, event)}
+                      onClick={(event) => onSelectTag(tag, event)}
                       // ref={(tag) => {
                       //   selectTags.current[index] = tag;
                       // }}
@@ -270,7 +270,12 @@ const MainCreateRoom = ({
                     console.log("방 허용 지역", createRoomChoiceRegion);
                     console.log("클릭한 태그", createRoomChoiceTag);
                     console.log("클릭한 테마Id", createRoomThemeCheck);
-
+                    let themeId; 
+                    if (roomTheme === 2) {
+                      themeId = "T1B0"
+                    } else {
+                      themeId = "T2B0"
+                    }
                     axios({
                       method: "post",
                       url: "https://i8e201.p.ssafy.io/api/pocha",
@@ -279,8 +284,8 @@ const MainCreateRoom = ({
                         isPrivate: false,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
-                        tagList: createRoomChoiceTag,
-                        themeId: createRoomThemeCheck,
+                        tagList: choiceTagList,
+                        themeId: themeId,
                       },
                     }).then((r) => {
                       const PochaId = r.data.data;
@@ -296,7 +301,7 @@ const MainCreateRoom = ({
                         if (roomTheme === 2) {
                           navigate(`/gameroom/${PochaId}`);
                         } else if (roomTheme === 3) {
-                          navigate(`/huntingroom/${PochaId}`);
+                          navigate(`/meetingroom/${PochaId}`);
                         } 
                         // 방 만들기 창 종료
                         dispatch(changeThemeRoomState(0));

@@ -4,29 +4,36 @@ import http from "http";
 // import { instrument } from "@socket.io/admin-ui";
 import SocketIO from "socket.io";
 import express from "express";
-import cors from "cors"; 
+import cors from "cors";
+import axios from "axios";
 
 const app = express();
 
 app.use("/public", express.static(__dirname + "/public"));
-app.use(cors({
-  origin: "*"
-}))
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: {
     origin: "*",
     credentials: true,
-    methods: ['GET', 'PUT', 'POST', "HEAD", "PATCH", "DELETE"]
-  }
+    methods: ["GET", "PUT", "POST", "HEAD", "PATCH", "DELETE"],
+  },
 });
 
-const handleListen = () => console.log("Listening on https://pocha.online:4000");
+const handleListen = () =>
+  console.log("Listening on https://pocha.online:4000");
 httpServer.listen(4000, handleListen);
 
-let users = {};
+let waitRoom = {};
+let waitToRoom = {};
+let waitUsers = {};
 
+let users = {};
 let socketToRoom = {};
 
 const maximum = 6;
@@ -67,19 +74,36 @@ wsServer.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const roomID = socketToRoom[socket.id];
-    delete socketToRoom[socket.id];
-    let room = users[roomID];
-    socket.leave(roomID);
-    if (room) {
-      room = room.filter((user) => user.id !== socket.id);
-      users[roomID] = room;
-      if (room.length === 0) {
-        delete users[roomID];
-        return;
+    if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
+      const roomID = socketToRoom[socket.id];
+      delete socketToRoom[socket.id];
+      let room = users[roomID];
+      socket.leave(roomID);
+      if (room) {
+        room = room.filter((user) => user.id !== socket.id);
+        users[roomID] = room;
+        if (room.length === 0) {
+          delete users[roomID];
+          return;
+        }
       }
+      socket.to(roomID).emit("user_exit", { id: socket.id });
+    } else {
+      const roomID = waitToRoom[socket.id];
+      delete waitToRoom[socket.id];
+      let room = waitUsers[roomID];
+      if (room) {
+        room = room.filter((user) => user.id !== socket.id);
+        waitUsers[roomID] = room;
+        if (room.length === 0) {
+          delete waitUsers[roomID];
+          return;
+        }
+      }
+      room.forEach((element) => {
+        wsServer.to(element.id).emit("wait_update");
+      });
     }
-    socket.to(roomID).emit("user_exit", { id: socket.id });
   });
 
   /////////////////////////////////////////////////
@@ -104,5 +128,78 @@ wsServer.on("connection", (socket) => {
   socket.on("pocha_cheers", (roomName) => {
     wsServer.to(roomName).emit("pocha_cheers");
   });
+
+  // 포차 대기
+  socket.on("wait", async (info) => {
+    if (
+      waitRoom[info.roomName] == null ||
+      waitRoom[info.roomName] == undefined
+    ) {
+      waitRoom[info.roomName] = info.limit;
+    }
+
+    const roomName = info.roomName;
+
+    if (waitUsers[roomName]) {
+      const length = waitUsers[roomName].length;
+      if (length == waitRoom[roomName]) {
+        socket.emit("room_full");
+        return;
+      }
+      waitUsers[roomName].push({
+        id: socket.id,
+        username: info.username,
+        nickname: info.nickname,
+      });
+    } else {
+      waitUsers[roomName] = [
+        { id: socket.id, username: info.username, nickname: info.nickname },
+      ];
+    }
+    waitToRoom[socket.id] = roomName;
+
+    // 대기 인원이 가득 찼는지 확인.
+    if (waitUsers[roomName].length == waitRoom[roomName]) {
+      // await axios : 미팅 포차 시작.
+      await axios({
+        url: `https://i8e201.p.ssafy.io/api/pocha/meeting/start/${roomName}`,
+        method: "put",
+      });
+
+      const now = new Date();
+
+      waitUsers[roomName].forEach((element) => {
+        wsServer.to(element.id).emit("wait_end", now);
+        delete waitToRoom[element.id];
+      });
+      delete waitUsers[roomName];
+      delete waitRoom[roomName];
+    } else {
+      waitUsers[roomName].forEach((element) => {
+        wsServer.to(element.id).emit("wait_update");
+      });
+    }
+  });
   /////////////////////////////////////////////////
+
+  // 게임 기능!!
+  // 룰렛
+  socket.on("game_roulette", (roomName, random) => {
+    wsServer.to(roomName).emit("game_roulette", random);
+  })
+
+  // 밸런스게임
+  socket.on("game_balance", (roomName) => {
+    wsServer.to(roomName).emit("game_balance");
+  })
+
+  // 손병호 게임
+  // 게임 시작 신호
+  socket.on("game_son", roomName => {
+    wsServer.to(roomName).emit("game_son");
+  })
+  // 손가락 접기
+  socket.on("game_son_fold", (roomName, socketId) => {
+    wsServer.to(roomName).emit("game_son_fold", socketId);
+  })
 });
