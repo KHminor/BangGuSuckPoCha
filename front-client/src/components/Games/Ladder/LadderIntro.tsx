@@ -1,6 +1,6 @@
 import styles from "./Ladder.module.css"
 
-function LadderIntro(): React.ReactElement {
+function LadderIntro({socket} : {socket: any}): React.ReactElement {
   const onClickClose = () => {
     console.log("클릭!!")
   } 
