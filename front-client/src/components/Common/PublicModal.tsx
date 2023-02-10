@@ -103,12 +103,12 @@ const PublicModal = ({
   // 포차 나가기 요청
   async function handlePochaExit() {
     try {
-      // await api.put("/pocha/exit", {
-      //   isHost: false,
-      //   pochaId: roomName,
-      //   username: myName, // << 여기 내 유저네임 가져와야함
-      //   waiting: false,
-      // });
+      await api.put("/pocha/exit", {
+        isHost: false,
+        pochaId: roomName,
+        username: myName, // << 여기 내 유저네임 가져와야함
+        waiting: false,
+      });
       navigate(`/main`);
       window.location.reload();
       setTimeout(() => {

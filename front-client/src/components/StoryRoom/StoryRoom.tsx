@@ -73,12 +73,12 @@ function StoryRoom(): JSX.Element {
 
   useEffect(() => {
     return () => {
-      api.put("/pocha/exit", {
-        isHost: false,
-        pochaId: PochaId,
-        username: myName, // << 여기 내 유저네임 가져와야함
-        waiting: false,
-      });
+      // api.put("/pocha/exit", {
+      //   isHost: false,
+      //   pochaId: PochaId,
+      //   username: myName, // << 여기 내 유저네임 가져와야함
+      //   waiting: false,
+      // });
     };
   }, []);
 
