@@ -18,12 +18,14 @@ const socket = io("https://pocha.online");
 
 const WebRTC = ({
   pochaId,
-  propSocket,
+  // propSocket,
+  socket,
   propIsHost,
   getPochaInfo,
 }: {
   pochaId: string;
-  propSocket: Function;
+  // propSocket: Function;
+  socket: any;
   propIsHost: Function;
   getPochaInfo: Function;
 }) => {
@@ -93,12 +95,12 @@ const WebRTC = ({
       console.log("참여 유저들 데이터?", data);
 
       // 방장 여부 체크
-      data.forEach((user : any) => {
+      data.forEach((user: any) => {
         if (user.username === myUserName) {
           setIsHost(user.isHost);
           propIsHost(user.isHost);
         }
-      })
+      });
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
     } catch (error) {
@@ -114,7 +116,7 @@ const WebRTC = ({
 
   // 최초실행
   useEffect(() => {
-    propSocket(socket);
+    //propSocket(socket);
     getUsersProfile();
   }, []);
 
@@ -243,7 +245,7 @@ const WebRTC = ({
   // ------ Socket Code ------
   // Socket Code
   useEffect(() => {
-    socket.on("users_of_room", async (users) => {
+    socket.on("users_of_room", async (users: any) => {
       console.log("--------------------");
       await users.forEach((user: any) => {
         console.log(user);
@@ -258,7 +260,7 @@ const WebRTC = ({
       });
     });
 
-    socket.on("welcome", async (socketId, user) => {
+    socket.on("welcome", async (socketId: any, user: any) => {
       let myPeer = makeConnection();
 
       myPeerConnections.current[socketId] = {
@@ -295,7 +297,7 @@ const WebRTC = ({
       });
     });
 
-    socket.on("offer", async (offer, socketId, userInfo) => {
+    socket.on("offer", async (offer: any, socketId: any, userInfo: any) => {
       console.log("received the offer");
       myPeerConnections.current[socketId]["peer"] = makeConnection();
       myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
@@ -320,12 +322,12 @@ const WebRTC = ({
       console.log("sent the answer");
     });
 
-    socket.on("answer", (answer, socketId) => {
+    socket.on("answer", (answer: any, socketId: any) => {
       console.log("received the answer");
       myPeerConnections.current[socketId]["peer"].setRemoteDescription(answer);
     });
 
-    socket.on("ice", (ice, socketId) => {
+    socket.on("ice", (ice: any, socketId: any) => {
       console.log("received the candidate");
       if (
         myPeerConnections.current[socketId]["peer"] === null ||
@@ -336,7 +338,7 @@ const WebRTC = ({
       myPeerConnections.current[socketId]["peer"].addIceCandidate(ice);
     });
 
-    socket.on("user_exit", ({ id }) => {
+    socket.on("user_exit", ({ id }: any) => {
       delete myPeerConnections.current[id];
       // 사람수 - 2 해야 마지막인덱스값
       // const lastIndex = userCount.current - 2;
@@ -447,7 +449,7 @@ const WebRTC = ({
 
   useEffect(() => {
     // 썰 변경! : 방 설정 다시 불러오기.
-    socket.on("ssul_change", async (ssul) => {
+    socket.on("ssul_change", async (ssul: any) => {
       console.log("썰 변경!----------------------");
       setSsul(ssul);
       // 방 설정 다시 불러오기!!! 테스트
@@ -573,7 +575,11 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost} />
+            <RoomUserProfile
+              userData={userProfileData}
+              pochaId={pochaId}
+              isHost={isHost}
+            />
           )}
           {count && (
             <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">

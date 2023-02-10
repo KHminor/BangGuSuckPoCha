@@ -115,13 +115,11 @@ wsServer.on("connection", (socket) => {
     axios({
       url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
       method: "put",
-      data() {
-        return {
-          isHost: false,
-          pochaId: roomID,
-          username: username,
-          waiting: false,
-        };
+      data: {
+        isHost: false,
+        pochaId: Number(roomID),
+        username: username,
+        waiting: false,
       },
     });
   });
