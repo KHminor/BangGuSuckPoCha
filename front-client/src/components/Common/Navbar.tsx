@@ -10,9 +10,23 @@ import styles from "../Main/Main.module.css";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Navbar(): JSX.Element {
   const navigate = useNavigate()
+  const [myData,setMyData] = useState({profile:null, nickname:null})
+  useEffect(()=> {
+    const username = localStorage.getItem('Username')
+    axios({
+      method: 'get',
+      url: `https://i8e201.p.ssafy.io/api/user/myinfo/${username}`
+    })
+    .then((r)=> {
+      setMyData({profile:r.data.data.profile, nickname:r.data.data.nickname})
+    })
+  },[])
+
+
   return (
     // <div className="h-[11rem] min-w-[75rem] sticky top-0 w-full" >
     <div className="h-[11rem] min-w-[75rem] fixed w-full">
@@ -30,7 +44,7 @@ function Navbar(): JSX.Element {
         <div className="grid grid-cols-1 " style={{ width: "18%" }}>
           <div></div>
           <div></div>
-          <MenuOption />
+          <MenuOption myData={myData} profile={myData.profile} nickname={myData.nickname}/>
         </div>
       </div>
     </div>
@@ -38,8 +52,9 @@ function Navbar(): JSX.Element {
 }
 
 // menu component
-function MenuOption(): JSX.Element {
+function MenuOption({profile, nickname, myData}:any): JSX.Element {
   let dispatch = useAppDispatch();
+  console.log('마이데이터: ',myData)
   const username = localStorage.getItem("Username");
   const menuFriendClickCheck = useAppSelector((state) => {
     return state.menuFriendClickCheck;
@@ -53,16 +68,18 @@ function MenuOption(): JSX.Element {
       <div className="flex justify-evenly" style={{ width: "70%" }}>
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer ">
-            <img
-              className="object-contain"
-              style={{ width: "1.5rem", height: "1.5rem" }}
-              src={require("src/assets/logoIcon/shop.png")}
-              alt="shop"
-            />
+            <div className="flex justify-center items-center ">
+              <img
+                className={`object-contain ${styles.myemoji}`}
+                style={{ width: "1.8rem", height: "1.8rem" }}
+                src={profile}
+                alt="my"
+              />
+            </div>
             <p
-              className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}
+              className={`text-white  sm:text-xs md:text-xm lg:text-sm flex justify-center items-center  ${styles.NanumGothic}`}
             >
-              상점
+              {nickname}
             </p>
           </div>
         </div>

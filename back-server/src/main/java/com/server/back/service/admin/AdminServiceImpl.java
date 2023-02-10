@@ -217,7 +217,7 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     public boolean adminNicknameCheck(String nickname) {
-        User entity = userRepository.findByNickname(nickname);
+        User entity = userRepository.findByNickname("관리자"+nickname);
         if (entity == null){
             return true;
         }
