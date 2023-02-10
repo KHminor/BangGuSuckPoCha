@@ -18,7 +18,7 @@ const AdminAdd = () => {
     console.log(event.target.value);
     setPASSWORD(event.target.value);
   };
-
+  const accessToken = localStorage.getItem("accessToken");
   const ChangeUSERNAME = (event: any) => {
     console.log(event.target.value);
     setUSERNAME(event.target.value);
@@ -48,22 +48,25 @@ const AdminAdd = () => {
                   if (NickName.length < 2) {
                     toast.warning(`2글자 이상 입력바랍니다`);
                   } else {
+                    console.log(NickName);
+                    console.log("accessToken", accessToken);
+
                     axios({
-                      method: "post",
-                      url: `https://i8e201.p.ssafy.io/api/user/auth/check/nickname`,
-                      data: {
-                        // changeName: Nickname,
-                        // nowName: nowName,
+                      method: "get",
+                      url: `https://i8e201.p.ssafy.io/api/admin/check/${NickName}`,
+                      headers: {
+                        accessToken: `${accessToken}`,
                       },
                     }).then((r) => {
+                      console.log(r.data);                      
                       const isDouble = r.data.data;
                       if (isDouble) {
-                        // toast.success(
-                        //   `${nickname}(은)는 수정가능한 닉네임입니다`
-                        // );
+                        toast.success(
+                          `${NickName}(은)는 수정가능한 닉네임입니다`
+                        );
                         // setModifydisplay(isDouble);
                       } else {
-                        // toast.warning(`${nickname}(은)는 중복된 닉네임입니다`);
+                        toast.warning(`${NickName}(은)는 중복된 닉네임입니다`);
                         // setModifydisplay(isDouble);
                       }
                     });

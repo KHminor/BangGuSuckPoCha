@@ -1,13 +1,10 @@
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { isRtcLoading, showRoomUserProfile } from "../../store/store";
-import RoomUserProfile from "../Common/RoomUserProfile";
 import Loading from "../Common/Loading";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./GameRoom.module.css";
-import RoomGameFooterNav from "../Common/RoomGameFooterNav";
 import GameWebRTC from "../WebRTC/GameWebRTC";
+import RoomFooterNav from "../Common/RoomFooterNav";
 
 function GameRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
@@ -16,11 +13,16 @@ function GameRoom(): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
+  // 방장 여부
+  const [isHost, setIsHost] = useState<boolean>(false);
 
   const propSocket = (socket: any) => {
     setSocket(socket);
   };
-  
+  const propIsHost = (isHost: boolean) => {
+    setIsHost(isHost);
+  };
+
   console.log("pochaInfo", pochaInfo);
 
   const getPochaInfo = async () => {
@@ -29,9 +31,7 @@ function GameRoom(): JSX.Element {
         url: `https://i8e201.p.ssafy.io/api/pocha/${Number(PochaId)}`,
       });
       setPochaInfo(data.data);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     } catch (error) {
       console.log("포차 정보 받아오기", error);
     }
@@ -54,11 +54,18 @@ function GameRoom(): JSX.Element {
             <GameWebRTC
               pochaId={PochaId!}
               propSocket={propSocket}
+              propIsHost={propIsHost}
               getPochaInfo={getPochaInfo}
             />
           </div>
           <div className="relative bottom-0 left-0 right-0">
-            {socket && <RoomGameFooterNav pochaId={PochaId!} socket={socket} />}
+            {socket && (
+              <RoomFooterNav
+                pochaId={PochaId!}
+                socket={socket}
+                isHost={isHost}
+              />
+            )}
           </div>
         </div>
       )}

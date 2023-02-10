@@ -215,4 +215,12 @@ public class AdminServiceImpl implements AdminService {
                 .collect(Collectors.toList());
         return responseDtoList;
     }
+    @Override
+    public boolean adminNicknameCheck(String nickname) {
+        User entity = userRepository.findByNickname("관리자"+nickname);
+        if (entity == null){
+            return true;
+        }
+        return false;
+    }
 }

@@ -8,18 +8,22 @@ import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
+import LadderIntro from "../Games/Ladder/LadderIntro";
 
 const WebRTC = ({
   pochaId,
   propSocket,
+  propIsHost,
   getPochaInfo,
 }: {
   pochaId: string;
   propSocket: Function;
+  propIsHost: Function;
   getPochaInfo: Function;
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const myUserName = localStorage.getItem("Username");
   // webRTC관련
   const socket = io("https://pocha.online");
   // 나의 비디오 ref
@@ -51,6 +55,9 @@ const WebRTC = ({
   // const [userCount, setUserCount] = useState<number>(1);
   const userCount = useRef<number>(1);
 
+  // 방장 체크
+  const [isHost, setIsHost] = useState<boolean>(false);
+
   // webRTC Loading 상태 가져옴
   const isLoading = useAppSelector((state) => {
     return state.webRtcLoading;
@@ -78,6 +85,13 @@ const WebRTC = ({
       });
       const lastIndex = data.length - 1;
       console.log("참여 유저들 데이터?", data);
+      // 방장 여부 체크
+      data.forEach((user : any) => {
+        if (user.username === myUserName) {
+          setIsHost(user.isHost);
+          propIsHost(user.isHost);
+        }
+      })
       // setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
@@ -168,9 +182,9 @@ const WebRTC = ({
       .getAudioTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!muted) {
-      muteBtn.current!.innerText = "🔊";
-    } else {
       muteBtn.current!.innerText = "🔈";
+    } else {
+      muteBtn.current!.innerText = "🔊";
     }
     muted = !muted;
   }
@@ -222,205 +236,211 @@ const WebRTC = ({
 
   // ------ Socket Code ------
   // Socket Code
-  socket.on("users_of_room", async (users) => {
-    console.log("--------------------");
-    await users.forEach((user: any) => {
-      console.log(user);
-      myPeerConnections.current[user.id] = {
+  useEffect(() => {
+    socket.on("users_of_room", async (users) => {
+      console.log("--------------------");
+      await users.forEach((user: any) => {
+        console.log(user);
+        myPeerConnections.current[user.id] = {
+          username: user.username,
+          nickname: user.nickname,
+        };
+        console.log(
+          "방 입장--------------",
+          myPeerConnections.current[user.id]
+        );
+      });
+    });
+
+    socket.on("welcome", async (socketId, user) => {
+      let myPeer = makeConnection();
+
+      myPeerConnections.current[socketId] = {
+        peer: myPeer,
         username: user.username,
         nickname: user.nickname,
       };
-    });
+      console.log(
+        "환영!!!!----------------------------",
+        myPeerConnections.current[socketId]
+      );
 
-    console.log("방 입장--------------");
-    // await pocha_config_update(3);
-  });
+      const offer = await myPeerConnections.current[socketId][
+        "peer"
+      ].createOffer();
+      myPeerConnections.current[socketId]["peer"].setLocalDescription(offer);
 
-  socket.on("welcome", async (socketId, user) => {
-    let myPeer = makeConnection();
-
-    myPeerConnections.current[socketId] = {
-      peer: myPeer,
-      username: user.username,
-      nickname: user.nickname,
-    };
-    console.log(
-      "환영!!!!----------------------------",
-      myPeerConnections.current[socketId]
-    );
-
-    const offer = await myPeerConnections.current[socketId][
-      "peer"
-    ].createOffer();
-    myPeerConnections.current[socketId]["peer"].setLocalDescription(offer);
-
-    const receivers =
-      myPeerConnections.current[socketId]["peer"].getReceivers();
-    const peerStream = new MediaStream([
-      receivers[0].track,
-      receivers[1].track,
-    ]);
-    handleAddStream(
-      peerStream,
-      myPeerConnections.current[socketId].username,
-      myPeerConnections.current[socketId].nickname
-    );
-    console.log("sent the offer");
-
-    socket.emit("offer", offer, socketId, roomName, {
-      username: user.username,
-      nickname: user.nickname,
-    });
-  });
-
-  socket.on("offer", async (offer, socketId, userInfo) => {
-    console.log("received the offer");
-    myPeerConnections.current[socketId]["peer"] = makeConnection();
-    myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
-    const answer = await myPeerConnections.current[socketId][
-      "peer"
-    ].createAnswer();
-
-    myPeerConnections.current[socketId]["peer"].setLocalDescription(answer);
-    const receivers =
-      myPeerConnections.current[socketId]["peer"].getReceivers();
-    const peerStream = new MediaStream([
-      receivers[0].track,
-      receivers[1].track,
-    ]);
-    handleAddStream(
-      peerStream,
-      myPeerConnections.current[socketId].username,
-      myPeerConnections.current[socketId].nickname
-    );
-
-    socket.emit("answer", answer, socketId, roomName);
-    console.log("sent the answer");
-  });
-
-  socket.on("answer", (answer, socketId) => {
-    console.log("received the answer");
-    myPeerConnections.current[socketId]["peer"].setRemoteDescription(answer);
-  });
-
-  socket.on("ice", (ice, socketId) => {
-    console.log("received the candidate");
-    if (
-      myPeerConnections.current[socketId]["peer"] === null ||
-      myPeerConnections.current[socketId]["peer"] === undefined
-    ) {
-      return;
-    }
-    myPeerConnections.current[socketId]["peer"].addIceCandidate(ice);
-  });
-
-  socket.on("user_exit", ({ id }) => {
-    delete myPeerConnections.current[id];
-    // 사람수 - 2 해야 마지막인덱스값
-    // const lastIndex = userCount.current - 2;
-    // const lastIndex = userCount - 2
-    // peerFace.current[lastIndex].classList.toggle("hidden");
-
-    console.log("==============>방 탈출!!!");
-    console.log(id);
-
-    // userCount = 1;
-    // setUserCount(1);
-    userCount.current = 1;
-    // setUserCount(1);
-
-    const keys = Object.keys(myPeerConnections.current);
-    for (let socketID of keys) {
-      console.log("---------");
-      console.log(myPeerConnections.current[socketID]);
-      // console.log(myPeerConnections.current[socketID].getReceivers());
-      console.log("---------");
       const receivers =
-        myPeerConnections.current[socketID]["peer"].getReceivers();
+        myPeerConnections.current[socketId]["peer"].getReceivers();
       const peerStream = new MediaStream([
         receivers[0].track,
         receivers[1].track,
       ]);
       handleAddStream(
         peerStream,
-        myPeerConnections.current[socketID].username,
-        myPeerConnections.current[socketID].nickname
+        myPeerConnections.current[socketId].username,
+        myPeerConnections.current[socketId].nickname
       );
-    }
+      console.log("sent the offer");
 
-    console.log(userCount + "==================");
-    let temp = userCount.current;
-    // let temp = userCount;
-    if (temp < 6) {
-      while (temp < 6) {
-        // peerFace.current[temp - 1].srcObject = null;
-        // if (temp === 1) {
-        //   peerFace.current[0].srcObject = null;
-        // } else if (temp === 2) {
-        //   peerFace.current[1].srcObject = null;
-        // } else if (temp === 3) {
-        //   peerFace.current[2].srcObject = null;
-        // }
-        if (temp === 1) {
-          peerFace1.current.srcObject = null;
-        } else if (temp === 2) {
-          peerFace2.current.srcObject = null;
-        } else if (temp === 3) {
-          peerFace3.current.srcObject = null;
-        } else if (temp === 4) {
-          peerFace4.current.srcObject = null;
-        } else if (temp === 5) {
-          peerFace5.current.srcObject = null;
-        }
-        temp += 1;
+      socket.emit("offer", offer, socketId, roomName, {
+        username: user.username,
+        nickname: user.nickname,
+      });
+    });
+
+    socket.on("offer", async (offer, socketId, userInfo) => {
+      console.log("received the offer");
+      myPeerConnections.current[socketId]["peer"] = makeConnection();
+      myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
+      const answer = await myPeerConnections.current[socketId][
+        "peer"
+      ].createAnswer();
+
+      myPeerConnections.current[socketId]["peer"].setLocalDescription(answer);
+      const receivers =
+        myPeerConnections.current[socketId]["peer"].getReceivers();
+      const peerStream = new MediaStream([
+        receivers[0].track,
+        receivers[1].track,
+      ]);
+      handleAddStream(
+        peerStream,
+        myPeerConnections.current[socketId].username,
+        myPeerConnections.current[socketId].nickname
+      );
+
+      socket.emit("answer", answer, socketId, roomName);
+      console.log("sent the answer");
+    });
+
+    socket.on("answer", (answer, socketId) => {
+      console.log("received the answer");
+      myPeerConnections.current[socketId]["peer"].setRemoteDescription(answer);
+    });
+
+    socket.on("ice", (ice, socketId) => {
+      console.log("received the candidate");
+      if (
+        myPeerConnections.current[socketId]["peer"] === null ||
+        myPeerConnections.current[socketId]["peer"] === undefined
+      ) {
+        return;
       }
-    }
-  });
+      myPeerConnections.current[socketId]["peer"].addIceCandidate(ice);
+    });
 
-  socket.on("room_full", () => {
-    toast.info("응 풀방이야~");
-    navigate(`/main`);
-    // location.href = "http://localhost:3000";
-  });
+    socket.on("user_exit", ({ id }) => {
+      delete myPeerConnections.current[id];
+      // 사람수 - 2 해야 마지막인덱스값
+      // const lastIndex = userCount.current - 2;
+      // const lastIndex = userCount - 2
+      // peerFace.current[lastIndex].classList.toggle("hidden");
+
+      console.log("==============>방 탈출!!!");
+      console.log(id);
+
+      // userCount = 1;
+      // setUserCount(1);
+      userCount.current = 1;
+      // setUserCount(1);
+
+      const keys = Object.keys(myPeerConnections.current);
+      for (let socketID of keys) {
+        console.log("---------");
+        console.log(myPeerConnections.current[socketID]);
+        // console.log(myPeerConnections.current[socketID].getReceivers());
+        console.log("---------");
+        const receivers =
+          myPeerConnections.current[socketID]["peer"].getReceivers();
+        const peerStream = new MediaStream([
+          receivers[0].track,
+          receivers[1].track,
+        ]);
+        handleAddStream(
+          peerStream,
+          myPeerConnections.current[socketID].username,
+          myPeerConnections.current[socketID].nickname
+        );
+      }
+
+      console.log(userCount + "==================");
+      let temp = userCount.current;
+      // let temp = userCount;
+      if (temp < 6) {
+        while (temp < 6) {
+          // peerFace.current[temp - 1].srcObject = null;
+          // if (temp === 1) {
+          //   peerFace.current[0].srcObject = null;
+          // } else if (temp === 2) {
+          //   peerFace.current[1].srcObject = null;
+          // } else if (temp === 3) {
+          //   peerFace.current[2].srcObject = null;
+          // }
+          if (temp === 1) {
+            peerFace1.current.srcObject = null;
+          } else if (temp === 2) {
+            peerFace2.current.srcObject = null;
+          } else if (temp === 3) {
+            peerFace3.current.srcObject = null;
+          } else if (temp === 4) {
+            peerFace4.current.srcObject = null;
+          } else if (temp === 5) {
+            peerFace5.current.srcObject = null;
+          }
+          temp += 1;
+        }
+      }
+    });
+
+    socket.on("room_full", () => {
+      toast.info("응 풀방이야~");
+      navigate(`/main`);
+    });
+
+    return () => {
+      socket.off("welcome");
+      socket.off("users_of_room");
+      socket.off("offer");
+      socket.off("answer");
+      socket.off("ice");
+      socket.off("user_exit");
+      socket.off("room_full");
+    };
+  }, []);
 
   // ------------ 포차 기능 code --------------
 
   //  axios
-  const api = axios.create({
-    baseURL: "https://i8e201.p.ssafy.io/api",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-  });
+  // const api = axios.create({
+  //   baseURL: "https://i8e201.p.ssafy.io/api",
+  //   headers: {
+  //     "Content-Type": "application/json;charset=utf-8",
+  //   },
+  // });
 
-  async function pocha_config_update(pochaId: string) {
-    // 방 설정 다시 불러오기!!! 테스트
-    let pochaInfo = {};
-    try {
-      await api.get(`/pocha/${pochaId}`).then((result) => {
-        pochaInfo = result.data.data;
-      });
-      console.log(pochaInfo);
-    } catch (error) {
-      console.log("방설정 다시불러오기 error", error);
-    }
-  }
+  useEffect(() => {
+    // 포차 설정 변경! : 방 설정 다시 불러오기.
+    socket.on("pocha_change", async () => {
+      console.log("포차 설정 변경!----------------------");
+      // 방 설정 다시 불러오기!!! 테스트
+      getPochaInfo();
+      toast.success("포차 정보가 변경되었습니다");
+      // await pocha_config_update("3");
+    });
+  
+    // 포차 시간 연장! : 방 설정 다시 불러오기.
+    socket.on("pocha_extension", async () => {
+      console.log("포차 시간 연장!----------------------");
+      // 방 설정 다시 불러오기!!! 테스트
+      // await pocha_config_update("3");
+    });
+    return () => {
+      socket.off("pocha_change");
+      socket.off("pocha_extension");
+    };
+  }, [])
 
-  // 포차 설정 변경! : 방 설정 다시 불러오기.
-  socket.on("pocha_change", async () => {
-    console.log("포차 설정 변경!----------------------");
-    // 방 설정 다시 불러오기!!! 테스트
-    getPochaInfo();
-    toast.success("포차 정보가 변경되었습니다");
-    // await pocha_config_update("3");
-  });
-
-  // 포차 시간 연장! : 방 설정 다시 불러오기.
-  socket.on("pocha_extension", async () => {
-    console.log("포차 시간 연장!----------------------");
-    // 방 설정 다시 불러오기!!! 테스트
-    // await pocha_config_update("3");
-  });
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -514,7 +534,7 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} />
+            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost}/>
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
@@ -543,8 +563,8 @@ const WebRTC = ({
             </div>
             {/* 게임 공간 */}
 
-            <div className="flex justify-center w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
-              2
+            <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
+              <LadderIntro />
             </div>
 
             {/* 사람 공간 */}
@@ -580,7 +600,7 @@ const WebRTC = ({
                 onClick={handleMuteClick}
                 ref={muteBtn}
               >
-                Mute
+                🔊
               </button>
               {/* 카메라 */}
               <button
