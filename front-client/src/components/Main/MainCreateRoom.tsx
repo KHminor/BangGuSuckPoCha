@@ -270,7 +270,12 @@ const MainCreateRoom = ({
                     console.log("방 허용 지역", createRoomChoiceRegion);
                     console.log("클릭한 태그", createRoomChoiceTag);
                     console.log("클릭한 테마Id", createRoomThemeCheck);
-
+                    let themeId; 
+                    if (roomTheme === 2) {
+                      themeId = "T1B0"
+                    } else {
+                      themeId = "T2B0"
+                    }
                     axios({
                       method: "post",
                       url: "https://i8e201.p.ssafy.io/api/pocha",
@@ -280,7 +285,7 @@ const MainCreateRoom = ({
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
                         tagList: choiceTagList,
-                        themeId: createRoomThemeCheck,
+                        themeId: themeId,
                       },
                     }).then((r) => {
                       const PochaId = r.data.data;

@@ -9,6 +9,7 @@ import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 import LadderIntro from "../Games/Ladder/LadderIntro";
+import Roulette from "../Games/Roulette/Roulette";
 
 const WebRTC = ({
   pochaId,
@@ -72,7 +73,7 @@ const WebRTC = ({
   const [userProfileData, setUserProfileData] = useState(null);
 
   // 요청한 포차참여 유저들 데이터
-  // const [pochaUsers, setPochaUsers] = useState<any>(null);
+  const [pochaUsers, setPochaUsers] = useState<any>(null);
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
@@ -92,7 +93,7 @@ const WebRTC = ({
           propIsHost(user.isHost);
         }
       });
-      // setPochaUsers(data);
+      setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
     } catch (error) {
@@ -435,6 +436,8 @@ const WebRTC = ({
       // 방 설정 다시 불러오기!!! 테스트
       // await pocha_config_update("3");
     });
+
+
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
@@ -573,7 +576,8 @@ const WebRTC = ({
             {/* 게임 공간 */}
 
             <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
-              <LadderIntro socket={socket}/>
+              {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
+              {pochaUsers && <Roulette socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} />}
             </div>
 
             {/* 사람 공간 */}
