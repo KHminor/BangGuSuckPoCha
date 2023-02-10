@@ -210,8 +210,9 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     "흥청망청 취해보자👾",
   ];
   // 방에 입장하는 함수
-  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>) => {
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>,e:any) => {
     const pochaId = event.currentTarget.id;
+    console.log('여기 방은?',e.themeId )
     try {
       await axios({
         method: "POST",
@@ -223,7 +224,14 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
           waiting: false,
         },
       });
-      navigate(`/storyroom/${pochaId}`);
+      let roomTheme = (e.themeId).slice(0,2) 
+      if (roomTheme === 'T0') {
+        navigate(`/storyroom/${pochaId}`);
+      } else if (roomTheme === 'T1') {
+        navigate(`/gameroom/${pochaId}`);
+      } else {
+        navigate(`/meetingroom/${pochaId}`);
+      }
     } catch (error) {
       console.log("포차 입장 에러", error);
     }
@@ -263,8 +271,8 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
           <div></div>
           {/* 카드 내부 */}
           <div 
-            onClick={(e)=> {
-              enterRoom(e)
+            onClick={(event)=> {
+              enterRoom(event,e)
             }}
             
             key={e.pochaId}
