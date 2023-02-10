@@ -61,6 +61,9 @@ function MeetingRoom(): JSX.Element {
 
   useEffect(() => {
     getPochaInfo();
+    return () => { 
+      localStorage.removeItem("MyIntroduce");
+    }
   }, []);
 
   return (
