@@ -5,6 +5,14 @@ import WebRTC from "../WebRTC/WebRTC";
 import axios from "axios";
 import Loading from "../Common/Loading";
 
+//  axios 요청
+const api = axios.create({
+  baseURL: "https://i8e201.p.ssafy.io/api",
+  headers: {
+    "Content-Type": "application/json;charset=utf-8",
+  },
+});
+
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
@@ -18,6 +26,9 @@ function StoryRoom(): JSX.Element {
   const [urlImg, setUrlImg] = useState<any>("bg-rain");
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
+
+  // 내 아이디
+  const myName = localStorage.getItem("Username");
 
   console.log("pochaInfo", pochaInfo);
 
@@ -54,6 +65,18 @@ function StoryRoom(): JSX.Element {
 
   useEffect(() => {
     getPochaInfo();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      // console.log("나가기 동작 하나요???????");
+      // api.put("/pocha/exit", {
+      //   isHost: false,
+      //   pochaId: PochaId,
+      //   username: myName, // << 여기 내 유저네임 가져와야함
+      //   waiting: false,
+      // });
+    };
   }, []);
 
   return (
