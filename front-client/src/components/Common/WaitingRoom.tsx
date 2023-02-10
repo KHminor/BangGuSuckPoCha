@@ -18,34 +18,42 @@ function WaitingRoom({
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const getPochaInfo = async () => {
+  
+  const getPochaInfo = async (flag : boolean) => {
     try {
       const { data } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/${Number(pochaId)}`,
       });
       setPochaInfo(data.data);
-      setIsLoading(false);
+      
+      if(flag){
+        setIsLoading(false);
+        socket.emit('wait', { roomName: pochaId, limit: data.data.limitUser });
+      }
       console.log(data);
     } catch (error) {
       console.log("포차 정보 받아오기", error);
     }
   };
-
   useEffect(() => {
-    getPochaInfo();
+    getPochaInfo(true);
+
     socket.on("wait_update", () => {
-      getPochaInfo();
+      getPochaInfo(false);
     });
     socket.on("wait_end", (time: string) => {
       alert("참여 인원 모집 완료! 30초 후 이동합니다");
-      getPochaInfo();
+      getPochaInfo(false);
       let goal = new Date(time);
 
       goal.setSeconds(goal.getSeconds() + 5);
       const waitTime = goal.getTime();
       const startTime = new Date().getTime();
+      console.log("시간 비교!!!!!");
+      console.log(waitTime);
+      console.log(startTime);
 
-      setTimeout(waitEnd(), waitTime - startTime);
+      setTimeout(waitEnd, waitTime - startTime);
     });
 
     // ------------ 연결 해제 --------------
