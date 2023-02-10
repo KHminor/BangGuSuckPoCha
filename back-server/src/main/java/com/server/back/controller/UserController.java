@@ -64,8 +64,8 @@ public class UserController {
             redirectStrategy.sendRedirect(request, response, target);
         } else if (saveUser.getRole().equals("TODAY")){
             TokenRequestDto tokenRequestDto = jwtService.joinJwtToken(saveUser.getUsername());
-            String target = "https://i8e201.p.ssafy.io/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole()+"&Username=" + saveUser.getUsername();
             userService.roleChange(saveUser.getUsername());
+            String target = "https://i8e201.p.ssafy.io/loginloading?Auth=" + tokenRequestDto.getAccessToken() + "&Refresh=" + tokenRequestDto.getRefreshToken() + "&Role=" + saveUser.getRole()+"&Username=" + saveUser.getUsername();
             PointRequestDto requestDto = new PointRequestDto(500, "Welcome to BangGuSuck Pocha!");
             userService.usePoint(saveUser.getUsername(), requestDto);
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
