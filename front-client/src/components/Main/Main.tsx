@@ -288,7 +288,7 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     );
   });
   return (
-    <div className="grid w-full min-w-[75rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 ">
+    <div className="grid w-full min-w-[96rem] grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 ">
       {cards}
     </div>
   );
