@@ -181,4 +181,15 @@ wsServer.on("connection", (socket) => {
     }
   });
   /////////////////////////////////////////////////
+
+  // 게임 기능!!
+  // 룰렛
+  socket.on("game_roulette", (roomName, random) => {
+    wsServer.to(roomName).emit("game_roulette", random);
+  })
+
+  // 밸런스게임
+  socket.on("game_balance", (roomName) => {
+    wsServer.to(roomName).emit("game_balance");
+  })
 });

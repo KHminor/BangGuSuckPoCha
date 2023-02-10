@@ -70,27 +70,27 @@ const MainCreateRoom = ({
   };
 
   // 태그 리스트
-  const [choiceTagList, setChoiceTagList] = useState<number[]>([]);
-
+  const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
+  console.log('태그리스트',choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
-    index: number,
+    tag: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    if (!choiceTagList.includes(index) && choiceTagList.length >= 5) {
+    if (!choiceTagList.includes(tag) && choiceTagList.length >= 5) {
       dispatch(showPublicModal(true));
       return;
     }
-    if (choiceTagList.includes(index)) {
+    if (choiceTagList.includes(tag)) {
       setChoiceTagList((prev) => {
         const ttest = prev.filter((data) => {
-          return data !== index;
+          return data !== tag;
         });
         console.log(ttest);
         return ttest;
       });
-    } else if (!choiceTagList.includes(index)) {
-      setChoiceTagList((prev) => [...prev, index]);
+    } else if (!choiceTagList.includes(tag)) {
+      setChoiceTagList((prev) => [...prev, tag]);
     }
 
     const data = event.target as HTMLElement;
@@ -151,7 +151,7 @@ const MainCreateRoom = ({
                 {tagList.map((tag, index) => {
                   return (
                     <div
-                      onClick={(event) => onSelectTag(index, event)}
+                      onClick={(event) => onSelectTag(tag, event)}
                       // ref={(tag) => {
                       //   selectTags.current[index] = tag;
                       // }}
@@ -183,7 +183,7 @@ const MainCreateRoom = ({
                         isPrivate: false,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
-                        tagList: createRoomChoiceTag,
+                        tagList: choiceTagList,
                         themeId: createRoomThemeCheck,
                       },
                     }).then((r) => {
@@ -247,7 +247,7 @@ const MainCreateRoom = ({
                 {tagList.map((tag, index) => {
                   return (
                     <div
-                      onClick={(event) => onSelectTag(index, event)}
+                      onClick={(event) => onSelectTag(tag, event)}
                       // ref={(tag) => {
                       //   selectTags.current[index] = tag;
                       // }}
@@ -270,7 +270,12 @@ const MainCreateRoom = ({
                     console.log("방 허용 지역", createRoomChoiceRegion);
                     console.log("클릭한 태그", createRoomChoiceTag);
                     console.log("클릭한 테마Id", createRoomThemeCheck);
-
+                    let themeId; 
+                    if (roomTheme === 2) {
+                      themeId = "T1B0"
+                    } else {
+                      themeId = "T2B0"
+                    }
                     axios({
                       method: "post",
                       url: "https://i8e201.p.ssafy.io/api/pocha",
@@ -279,8 +284,8 @@ const MainCreateRoom = ({
                         isPrivate: false,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
-                        tagList: createRoomChoiceTag,
-                        themeId: createRoomThemeCheck,
+                        tagList: choiceTagList,
+                        themeId: themeId,
                       },
                     }).then((r) => {
                       const PochaId = r.data.data;
