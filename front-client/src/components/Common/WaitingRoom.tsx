@@ -18,7 +18,13 @@ function WaitingRoom({
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
+  const [introduce, setIntroduce] = useState<string>("");
+
+  const ChangeIntroduce = (event: any) => {
+    console.log(event.target.value);
+    setIntroduce(event.target.value);
+  };
+
   const getPochaInfo = async (flag : boolean) => {
     try {
       const { data } = await axios({
@@ -35,6 +41,21 @@ function WaitingRoom({
       console.log("포차 정보 받아오기", error);
     }
   };
+
+  const setMyIntroduce = async () => {
+    if (introduce === "" || introduce == null || introduce == undefined) return;
+    let myIntroduce = [];
+    let localIntroduce = localStorage.getItem("MyIntroduce");
+    if (localIntroduce != null && localIntroduce != undefined) {
+      myIntroduce = JSON.parse(localIntroduce);
+    }
+
+    myIntroduce.push(introduce);
+    localStorage.setItem("MyIntroduce", JSON.stringify(myIntroduce));
+
+    setIntroduce("");
+  }
+
   useEffect(() => {
     getPochaInfo(true);
 
@@ -46,14 +67,16 @@ function WaitingRoom({
       getPochaInfo(false);
       let goal = new Date(time);
 
-      goal.setSeconds(goal.getSeconds() + 5);
+      goal.setSeconds(goal.getSeconds() + 30);
       const waitTime = goal.getTime();
       const startTime = new Date().getTime();
       console.log("시간 비교!!!!!");
       console.log(waitTime);
       console.log(startTime);
 
-      setTimeout(waitEnd, waitTime - startTime);
+      const diff = waitTime - startTime;
+
+      setTimeout(waitEnd, diff);
     });
 
     // ------------ 연결 해제 --------------
@@ -75,6 +98,23 @@ function WaitingRoom({
             <h3>
               {pochaInfo.totalCount} / {pochaInfo.limitUser}
             </h3>
+            <div className="text-center pl-5 text-3xl ">Introduce :</div>
+            <input
+              type="text"
+              className="col-span-4 bg-black border-2 caret-white"
+              placeholder="소개할 정보를 입력하세요"
+              value={introduce}
+              onChange={ChangeIntroduce}
+              />
+            <div
+              className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
+              onClick={setMyIntroduce}
+            >
+              입력
+            </div>
+            <div>
+              {localStorage.getItem("MyIntroduce")}  
+            </div>
           </div>
         </>
       )}
