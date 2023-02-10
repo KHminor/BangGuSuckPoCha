@@ -65,7 +65,7 @@ function AlarmRequest():JSX.Element {
             <div className="flex justify-center items-center text-sm pl-4">
               <span className="cursor-pointer reviewpage inline-block blink" onClick={()=> {
                 navigate('/review')
-              }}>more ...</span>
+              }}>more</span>
             </div>
           </div>
         )
