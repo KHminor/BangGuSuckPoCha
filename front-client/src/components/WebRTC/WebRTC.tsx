@@ -14,7 +14,7 @@ import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 
 // webRTC관련
-const socket = io("https://pocha.online");
+// const socket = io("https://pocha.online");
 
 const WebRTC = ({
   pochaId,
