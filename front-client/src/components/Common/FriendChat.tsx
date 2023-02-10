@@ -40,6 +40,9 @@ function FriendChat():JSX.Element {
     const chat_id = localStorage.getItem('chat_id')
     axios.get(`https://i8e201.p.ssafy.io/api/user/friend/chat/${chat_id}`).then((r)=> {
       setMessage(r.data.data)
+      setTimeout(() => {
+        scrollToBottom()
+      }, 100);
     })
   },[])
 
