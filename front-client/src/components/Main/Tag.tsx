@@ -70,7 +70,7 @@ function Tag(): JSX.Element {
             data: {
               // 초대 받은거를 승인하는거라 false
               isHost: 'false',
-              pochaId: randomPickRoom.pocha_id,
+              pochaId: pochaId,
               username: username
               }
             })
@@ -178,7 +178,7 @@ function Tag(): JSX.Element {
             data: {
               // 초대 받은거를 승인하는거라 false
               isHost: 'false',
-              pochaId: randomPickRoom.pocha_id,
+              pochaId: pochaId,
               username: username
               }
             })
