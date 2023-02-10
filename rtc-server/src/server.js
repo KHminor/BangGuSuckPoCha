@@ -112,16 +112,6 @@ wsServer.on("connection", (socket) => {
         wsServer.to(element.id).emit("wait_update");
       });
     }
-    axios({
-      url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
-      method: "put",
-      data: {
-        isHost: false,
-        pochaId: Number(roomID),
-        username: username,
-        waiting: false,
-      },
-    });
   });
 
   /////////////////////////////////////////////////
