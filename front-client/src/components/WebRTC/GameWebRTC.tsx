@@ -9,6 +9,7 @@ import { isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 import LadderIntro from "../Games/Ladder/LadderIntro";
+import Roulette from "../Games/Roulette/Roulette";
 
 const WebRTC = ({
   pochaId,
@@ -72,7 +73,7 @@ const WebRTC = ({
   const [userProfileData, setUserProfileData] = useState(null);
 
   // 요청한 포차참여 유저들 데이터
-  // const [pochaUsers, setPochaUsers] = useState<any>(null);
+  const [pochaUsers, setPochaUsers] = useState<any>(null);
 
   // 포차 참여유저 데이터 axios 요청
   async function getUsersProfile() {
@@ -86,13 +87,13 @@ const WebRTC = ({
       const lastIndex = data.length - 1;
       console.log("참여 유저들 데이터?", data);
       // 방장 여부 체크
-      data.forEach((user : any) => {
+      data.forEach((user: any) => {
         if (user.username === myUserName) {
           setIsHost(user.isHost);
           propIsHost(user.isHost);
         }
-      })
-      // setPochaUsers(data);
+      });
+      setPochaUsers(data);
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
     } catch (error) {
@@ -428,19 +429,20 @@ const WebRTC = ({
       toast.success("포차 정보가 변경되었습니다");
       // await pocha_config_update("3");
     });
-  
+
     // 포차 시간 연장! : 방 설정 다시 불러오기.
     socket.on("pocha_extension", async () => {
       console.log("포차 시간 연장!----------------------");
       // 방 설정 다시 불러오기!!! 테스트
       // await pocha_config_update("3");
     });
+
+
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
     };
-  }, [])
-
+  }, []);
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -534,62 +536,79 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost}/>
+            <RoomUserProfile
+              userData={userProfileData}
+              pochaId={pochaId}
+              isHost={isHost}
+            />
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
               {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
               {/* 내 비디오 공간 */}
-              <video
-                className=" h-[17rem] py-3"
-                ref={myFace}
-                playsInline
-                autoPlay
-              ></video>
-              <video
-                onClick={ShowUserProfile}
-                className=" h-[17rem] py-3 cursor-pointer"
-                ref={peerFace2}
-                playsInline
-                autoPlay
-              ></video>
-              <video
-                onClick={ShowUserProfile}
-                className=" h-[17rem] py-3 cursor-pointer"
-                ref={peerFace4}
-                playsInline
-                autoPlay
-              ></video>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  className="h-[17rem]"
+                  ref={myFace}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  onClick={ShowUserProfile}
+                  className=" h-[17rem] cursor-pointer"
+                  ref={peerFace2}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  onClick={ShowUserProfile}
+                  className=" h-[17rem] cursor-pointer"
+                  ref={peerFace4}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
             </div>
             {/* 게임 공간 */}
 
             <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
-              <LadderIntro />
+              {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
+              {pochaUsers && <Roulette socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} />}
             </div>
 
             {/* 사람 공간 */}
             <div className="flex flex-col justify-evenly items-center">
-              <video
-                onClick={ShowUserProfile}
-                className=" h-[17rem] py-3 cursor-pointer"
-                ref={peerFace1}
-                playsInline
-                autoPlay
-              ></video>
-              <video
-                onClick={ShowUserProfile}
-                className=" h-[17rem] py-3 cursor-pointer"
-                ref={peerFace3}
-                playsInline
-                autoPlay
-              ></video>
-              <video
-                onClick={ShowUserProfile}
-                className=" h-[17rem] py-3 cursor-pointer"
-                ref={peerFace5}
-                playsInline
-                autoPlay
-              ></video>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  onClick={ShowUserProfile}
+                  className=" h-[17rem] cursor-pointer"
+                  ref={peerFace1}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  onClick={ShowUserProfile}
+                  className=" h-[17rem] cursor-pointer"
+                  ref={peerFace3}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
+              <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
+                <video
+                  onClick={ShowUserProfile}
+                  className=" h-[17rem] cursor-pointer"
+                  ref={peerFace5}
+                  playsInline
+                  autoPlay
+                ></video>
+              </div>
             </div>
           </div>
           <div className="flex justify-center items-center ">
