@@ -18,7 +18,7 @@ public class Participant{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantId;
     @ManyToOne(targetEntity = Pocha.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pocah_id")
+    @JoinColumn(name = "pocha_id")
     private Pocha pocha;
     // 이용자 식별자
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)

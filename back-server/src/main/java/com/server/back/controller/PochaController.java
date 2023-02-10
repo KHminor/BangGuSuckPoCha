@@ -120,11 +120,11 @@ public class PochaController {
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @ApiOperation(value = "헌팅 포차 시작")
-    @PutMapping("/hunting/start/{pocha_id}")
-    public ResponseEntity<Map<String, Object>> pochaHuntingStart(@RequestBody @PathVariable(value = "pocha_id") Long pochaId){
+    @ApiOperation(value = "미팅 포차 시작")
+    @PutMapping("/meeting/start/{pocha_id}")
+    public ResponseEntity<Map<String, Object>> pochaMeetingStart(@RequestBody @PathVariable(value = "pocha_id") Long pochaId){
         Map<String, Object> response = new HashMap<>();
-        pochaService.pochaHuntingStart(pochaId);
+        pochaService.pochaMeetingStart(pochaId);
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
