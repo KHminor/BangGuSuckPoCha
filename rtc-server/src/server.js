@@ -162,7 +162,7 @@ wsServer.on("connection", (socket) => {
     if (waitUsers[roomName].length == waitRoom[roomName]) {
       // await axios : 미팅 포차 시작.
       await axios({
-        url: `https://i8e201.p.ssafy.io/api/pocha/hunting/start/${roomName}`,
+        url: `https://i8e201.p.ssafy.io/api/pocha/meeting/start/${roomName}`,
         method: "put",
       });
 
