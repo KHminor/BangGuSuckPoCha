@@ -36,7 +36,7 @@ public interface PochaService {
 
     Map<String, Object> pochaInviteAccept(Long inviteId, Long pochaId);
 
-    void pochaHuntingStart(Long pochaId);
-
     List<PochaResponseDto> allPochaList();
+
+    void pochaMeetingStart(Long pochaId);
 }
