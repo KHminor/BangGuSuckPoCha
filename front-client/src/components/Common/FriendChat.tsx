@@ -146,12 +146,12 @@ function FriendChat():JSX.Element {
             <div className="flex justify-center items-center h-[1.8rem] max-h-[1.8rem] w-full  text-white rounded-[100px] ">Chat</div>
             <div className={`flex justify-center items-center h-[2.6rem] max-h-[2.6rem] w-full  rounded-[15px] text-lg tracking-wide ${styles.nickNameNeon}`}></div>
             {/* 채팅 공간 */}
-            <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`} style={{gridAutoRows: '2.5rem'}}>
+            <div ref={chatArea} className={`grid w-full bg-black h-full text-white overflow-scroll ${styles.hideScroll}`} style={{gridAutoRows: 'auto'}}>
               {
                 message&&message.map((chat:any)=>{
                   // console.log(chat)
                   return (
-                    <div className="w-full h-full ">
+                    <div className="w-full h-full my-[0.35rem]">
                       {
                         chat.user_nickname === f_nickname? <MyChat content={chat.content}/>: <OtherChat content={chat.content}/>
                       }
