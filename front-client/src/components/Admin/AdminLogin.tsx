@@ -1,5 +1,5 @@
 import axios from "axios";
-import { info } from "console";
+import { info, log } from "console";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, useToastContainer } from "react-toastify";
@@ -52,7 +52,6 @@ function AdminLogin(): React.ReactElement {
               onClick={() => {
                 console.log(ID);
                 console.log(PASSWORD);
-
                 axios({
                   method: "post",
                   url: `https://i8e201.p.ssafy.io/api/login`,
@@ -62,19 +61,37 @@ function AdminLogin(): React.ReactElement {
                     // token: localStorage.getItem("accessToken"),
                   },
                 }).then((r) => {
-                  console.log(r.data);
+                  console.log("r.data", r.data);
                   const Info = r.data;
                   if (Info.status === "200") {
-                    // console.log(Info.accessToken);
+                    console.log(
+                      "이전 accessToken",
+                      localStorage.getItem("accessToken")
+                    );
                     localStorage.setItem("accessToken", Info.accessToken);
-                    // console.log(Info.refreshToken);
+                    const newlocalaccess = localStorage.getItem("accessToken");
+                    console.log(
+                      "이전이랑 같나요 엑세스?",
+                      newlocalaccess === Info.accessToken
+                    );
+
+                    console.log(
+                      "이전 refreshToken",
+                      localStorage.getItem("refreshToken")
+                    );
                     localStorage.setItem("refreshToken", Info.refreshToken);
-                  }
-                  else{
+                    const newlocalrefresh =
+                      localStorage.getItem("refreshToken");
+                    console.log(
+                      "이전이랑 같나요? 리프레쉬",
+                      newlocalrefresh === Info.refreshToken
+                    );
+                    navigate("/adminmain");
+                  } else {
                     toast.warning("로그인실패");
-                  }                  
+                  }
                 });
-                // navigate("/adminmain");
+                
               }}
             >
               Login

@@ -154,10 +154,47 @@ function Mypage(): JSX.Element {
   //최초 호출시 axios호출
   useEffect(() => {
     // console.log("useEffect실행");
+    //토큰처리
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    // axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+    // axios
+    //   .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`)
+    //   .then((r) => {
+    //     console.log("성공인가요?", r.data);
+    //   });
 
     axios({
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
+      headers: {
+        accessToken: `${accessToken}`,
+      },
+    }).then((r) => {
+      console.log("성공인가요?", r.data);
+
+      //
+      axios({
+        method: "post",
+        url: `https://i8e201.p.ssafy.io/api/user/auth/refresh/${Username}`,
+        headers: {
+          accessToken: `${accessToken}`,
+        },
+      }).then((r) => {
+        console.log(r.data);
+      });
+    });
+
+    axios({
+      method: "get",
+      url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
+      data: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+      headers: {
+        accessToken: `${accessToken}`,
+      },
     }).then((r) => {
       // console.log("1번째 axios 실행");
 
@@ -172,7 +209,6 @@ function Mypage(): JSX.Element {
       const birth = a.birth;
       setGender(a.gender);
 
-      
       const today = new Date();
 
       const birthDate = new Date(
@@ -214,6 +250,9 @@ function Mypage(): JSX.Element {
     axios({
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/admin/region",
+      headers: {
+        accessToken: `${accessToken}`,
+      },
     }).then((r) => {
       // console.log("2번째 axios 시작");
       const result = r.data.data;

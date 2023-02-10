@@ -7,7 +7,7 @@ import { showPublicModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
 const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Function }) => {
-  console.log("여기까지는 오니??ㅇㅇ", data)
+  // console.log("여기까지는 오니??ㅇㅇ", data)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // 내 아이디
@@ -41,6 +41,9 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
     setMessage(msg);
     switch (data.type) {
       case "tag":
+        break;
+      case "host":
+        setNickName(nickname);
         break;
       case "addTime":
         setRoomName(pochaId);
@@ -139,6 +142,8 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
         if(fx) {
           fx!();
         }
+        break;
+      case "host":
         break;
       case "addTime":
         handlePochaExtension();
