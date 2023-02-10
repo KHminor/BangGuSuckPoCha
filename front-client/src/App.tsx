@@ -35,7 +35,7 @@ function App() {
             case "success":
               return "🗨";
             case "error":
-              return "🖕";
+              return "💙";
             case "info":
               return "🗨";
           }

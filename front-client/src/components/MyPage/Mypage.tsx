@@ -154,6 +154,7 @@ function Mypage(): JSX.Element {
   //최초 호출시 axios호출
   useEffect(() => {
     // console.log("useEffect실행");
+    //토큰처리
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
     // axios.defaults.headers.common["Authorization"] = `${accessToken}`;
