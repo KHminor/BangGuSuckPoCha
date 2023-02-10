@@ -39,6 +39,39 @@ const MyPageProfileClickCheck = createSlice({
   },
 });
 
+//GameSetting Modal clickcheck
+const YanggameSettingModalClickCheck = createSlice({
+  name: "YanggameSettingModalClickCheck",
+  initialState: false,
+  reducers: {
+    showYanggameSettingModal(state) {
+      return !state;
+    },
+  },
+});
+
+const BalancegameSettingModalClickCheck = createSlice({
+  name: "BalancegameSettingModalClickCheck",
+  initialState: false,
+  reducers: {
+    showBalancegameeSettingModal(state) {
+      return !state;
+    },
+  },
+});
+
+const LiargameSettingModalClickCheck = createSlice({
+  name: "LiargameSettingModalClickCheck",
+  initialState: false,
+  reducers: {
+    showLiargameSettingModal(state) {
+      return !state;
+    },
+  },
+});
+
+//GameSetting Modal clickcheck
+
 const SelectProfile = createSlice({
   name: "SelectProfile",
   initialState: "",
@@ -428,7 +461,7 @@ const friendSearchState = createSlice({
   name: "friendSearchState",
   initialState: false,
   reducers: {
-    changeFriendSearchState(state,action) {
+    changeFriendSearchState(state, action) {
       return state = action.payload
     },
   },
@@ -485,6 +518,12 @@ export const store = configureStore({
     MyPageProfileClickCheck: MyPageProfileClickCheck.reducer,
     SelectProfile: SelectProfile.reducer,
 
+    //GameSettingModal
+    YanggameSettingModalClickCheck: YanggameSettingModalClickCheck.reducer,
+    BalancegameSettingModalClickCheck: BalancegameSettingModalClickCheck.reducer,
+    LiargameSettingModalClickCheck: LiargameSettingModalClickCheck.reducer,
+
+
     // EmojiClickUserData
     navAlarmReviewEmojiUserData: navAlarmReviewEmojiUserData.reducer,
 
@@ -537,6 +576,13 @@ export const { changeMainCreateRoomList } = mainCreateRoomList.actions;
 export const { changeMyInfo } = myInfo.actions;
 export const { showMyPageProfileSelect } = MyPageProfileClickCheck.actions;
 export const { changeMyPageProfile } = SelectProfile.actions
+
+//adminGameSetting
+export const { showBalancegameeSettingModal } = BalancegameSettingModalClickCheck.actions;
+export const { showLiargameSettingModal } = LiargameSettingModalClickCheck.actions;
+export const { showYanggameSettingModal } = YanggameSettingModalClickCheck.actions;
+
+
 // username
 export const { changeUserName } = userName.actions;
 // userList

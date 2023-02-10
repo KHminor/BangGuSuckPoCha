@@ -68,7 +68,14 @@ function AdminMain(): React.ReactElement {
           >
             관리자 추가
           </div>
-          <div className="">test2</div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              navigate("/admingamesetting");
+            }}
+          >
+            게임 관리
+          </div>
         </div>
         <div></div>
       </form>

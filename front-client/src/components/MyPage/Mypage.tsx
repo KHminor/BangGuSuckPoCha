@@ -59,7 +59,7 @@ function Mypage(): JSX.Element {
   //본인만나이
   const [age, setAge] = useState<any | null>();
   //본인 지역
-  const [region, setRegion] = useState("지역 구");
+  const [region, setRegion] = useState("3000000000");
   //포인트
   const [point, setPoint] = useState();
   //자기소개
@@ -227,6 +227,7 @@ function Mypage(): JSX.Element {
       // console.log("내 지역입니다!", a.region);
       setRegion(a.region);
       setRegioncode(a.regioncode);
+      // 일단 내 regioncode를 받는다
       setSelectedFirst(a.regioncode);
       // console.log("a.regionCode가 들어왔어", a.regioncode);
       if (a.regioncode.substr(2, 8) !== "00000000") {
@@ -368,7 +369,7 @@ function Mypage(): JSX.Element {
                       className="col-span-3 text-center rounded-lg text-lg w-[80%] h-[60%] mx-auto my-auto bg-black caret-white"
                       value={nickname}
                       type="text"
-                      maxLength={8}
+                      maxLength={6}
                       onChange={onChangeNikename}
                     />
                     <div
@@ -513,47 +514,32 @@ function Mypage(): JSX.Element {
                           className="grid  border-purple-300 w-[90%] mr-[10%]"
                           style={{ gridTemplateColumns: "1fr 1fr" }}
                         >
-                          {/* {SelectedFirst !== undefined ? (
-                            <select
-                              className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
-                              onChange={handleSelect}
-                              value={region}
-                            >
-                              {regionlist
-                                ? regionlist.map((it: any): any =>
+                          <select
+                            className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
+                            onChange={handleSelect}
+                          >
+                            {regionlist
+                              ? regionlist.map(
+                                  (it: any): any => (
+                                    console.log("Selected는", SelectedFirst),
+                                    console.log(
+                                      "Selected는",
+                                      SelectedFirst.substr(0, 2)
+                                    ),
+                                    console.log(
+                                      "비교할거",
+                                      it.regionCode.substr(0, 2)
+                                    ),
                                     it.regionCode.substr(0, 2) ===
-                                    region.substr(0, 2) ? (
+                                    SelectedFirst.substr(0, 2) ? (
                                       <option value={it.regionCode} selected>
                                         {it.sidoName}
                                       </option>
                                     ) : (
-                                      // ))
                                       <option value={it.regionCode}>
                                         {it.sidoName}
                                       </option>
                                     )
-                                  )
-                                : null}
-                            </select>
-                          ) : null} */}
-
-                          <select
-                            className="text-white text-[1rem] text-center bg-black border-2 max-w-[6rem] overflow-auto "
-                            onChange={handleSelect}
-                            value={SelectedFirst}
-                          >
-                            {regionlist
-                              ? regionlist.map((it: any): any =>
-                                  it.regionCode.substr(0, 2) ===
-                                  region.substr(0, 2) ? (
-                                    <option value={it.regionCode} selected>
-                                      {it.sidoName}
-                                    </option>
-                                  ) : (
-                                    // ))
-                                    <option value={it.regionCode}>
-                                      {it.sidoName}
-                                    </option>
                                   )
                                 )
                               : null}
@@ -652,11 +638,19 @@ function Mypage(): JSX.Element {
                             //수정가능
 
                             console.log("앞쪽꺼", SelectedFirst.substr(0, 2));
-                            console.log("뒤쪽꺼", Selected2.substr(2, 8));
+                            city.map((it: any) => {
+                              if (
+                                it.substr(0, 2) === SelectedFirst.substr(0, 2)
+                              ) {
+                                setSelected2("0000000000");
+                                console.log("뒤쪽꺼", Selected2.substr(2, 8));
+                              }
+                            });
 
                             const Code =
                               SelectedFirst.substr(0, 2) +
                               Selected2.substr(2, 8);
+                            console.log("수정될Code입니다", Code);
 
                             axios({
                               method: "put",
