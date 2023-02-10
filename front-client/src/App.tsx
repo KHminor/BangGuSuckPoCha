@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ReviewPage from "./components/ReviewPage/ReviewPage";
 import FriendSearch from "./components/Common/FriendSearch";
 import AdminAdd from "./components/Admin/AdminAdd";
+import AdminGameSetting from "./components/Admin/AdminGameSetting";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
         <Route path="/loginloading" element={<LoginLoading />} />
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/friendsearch" element={<FriendSearch />} />
+        <Route path="/admingamesetting" element={<AdminGameSetting />} />
       </Routes>
     </div>
   );

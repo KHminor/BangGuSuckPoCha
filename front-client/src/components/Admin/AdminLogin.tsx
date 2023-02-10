@@ -58,7 +58,6 @@ function AdminLogin(): React.ReactElement {
                   data: {
                     username: ID,
                     password: PASSWORD,
-                    // token: localStorage.getItem("accessToken"),
                   },
                 }).then((r) => {
                   console.log("r.data", r.data);
@@ -91,7 +90,6 @@ function AdminLogin(): React.ReactElement {
                     toast.warning("로그인실패");
                   }
                 });
-                
               }}
             >
               Login
