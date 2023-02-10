@@ -129,7 +129,7 @@ function FriendChat():JSX.Element {
 
       setTimeout(() => {
         scrollToBottom()
-      }, 3000);
+      }, 1000);
       
       setInputChat("");
     }
@@ -168,7 +168,7 @@ function FriendChat():JSX.Element {
                   publish(inputChat)
                   setTimeout(() => {
                     scrollToBottom()
-                  }, 3000);
+                  }, 1000);
                   // setsendCheck(sendCheck+1)
                 }}/>
               </div>
