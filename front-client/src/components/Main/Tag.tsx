@@ -13,7 +13,7 @@ function Tag(): JSX.Element {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const username = localStorage.getItem('Username')
-  const [filter, setFilter] = useState<any>({isAll:true ,age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'관심사', speedEnter: false})
+  const [filter, setFilter] = useState<any>({isAll:true ,age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'태그', speedEnter: false})
   const [ageRegion, setAgeRegion] = useState<any>({age:null, region:null})
   const ageRef = useRef<any>(null)
   const regionRef = useRef<any>(null)
@@ -51,9 +51,48 @@ function Tag(): JSX.Element {
       sulRef.current.value = '술'
       hobbyRef.current.value = '태그'
       axios.get('https://i8e201.p.ssafy.io/api/pocha/all').then((r)=> {
-        const currenDataFirst = r.data.data.reverse()
-        console.log(r.data)
-        dispatch(changeMainCreateRoomList(currenDataFirst));
+        if (filter.speedEnter) {
+          const roomData:any[] = r.data.data
+          const enterPossibleRoomList:any[] = roomData.filter((data:any)=> {
+            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.isPrivate === false) && (data.limitUser>data.totalCount))
+          })
+          // 입장 가능한 방을 랜덤으로 하나 골라서 
+          const randomPickRoom:any = enterPossibleRoomList[Math.floor(Math.random()*enterPossibleRoomList.length)]
+          // 입장 요청
+          const username = localStorage.getItem('Username')
+          console.log('픽한 방: ', randomPickRoom)
+          const themeId = randomPickRoom.themeId
+          const pochaId = randomPickRoom.pochaId
+          console.log('==============','username:', username, 'pochaId: ', pochaId, 'themeId: ', themeId)
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              // 초대 받은거를 승인하는거라 false
+              isHost: 'false',
+              pochaId: randomPickRoom.pocha_id,
+              username: username
+              }
+            })
+            .then(()=> {
+              console.log('슬라이싱값: ',themeId.slice(0,2))
+              if (themeId.slice(0,2) === 'T0') {
+                console.log('소통방입장')
+                navigate(`/storyroom/${pochaId}`)
+              } else if (themeId.slice(0,2) === 'T1') {
+                console.log('게임방입장')
+                navigate(`/gameroom/${pochaId}`)
+              } else {
+                console.log('미팅방입장')
+                navigate(`/meetingroom/${pochaId}`)
+              }
+            })
+
+        } else {
+          const currenDataFirst = r.data.data.reverse()
+          console.log(r.data)
+          dispatch(changeMainCreateRoomList(currenDataFirst));
+        }
       }) 
     } else {
       console.log('현재 클릭한 태그정보: ',filter)
@@ -62,6 +101,8 @@ function Tag(): JSX.Element {
       let theme
       let sul
       let hobby
+      let fastClick
+      const tagList:any[] = []
       for (const [key,value] of Object.entries(filter)) {
         if (key === 'age') {
           if ((value === '연령') || (value === 'ALL')) {
@@ -88,22 +129,29 @@ function Tag(): JSX.Element {
               sul = null
             } else {
               sul = value
+              tagList.push(value)
             }
         } else if (key === 'hobby') {
-            if (value === '관심사') {
+            if (value === '태그') {
               hobby = null
             } else {
               hobby = value
+              tagList.push(value)
             }
+        } else if (key === 'speedEnter') {
+          fastClick = value
+          
         }
         console.log(key,value)
       }
-      console.log(age,region,theme,sul,hobby)
+      // console.log('빠른입장 ',)
+      console.log('포차 조사',filter.isAll,age,region,theme,sul,hobby, tagList,'빠른 입장 유무', fastClick)
+      const sendTagList = tagList.join(',')
       axios({
         method: 'get',
         url: 'https://i8e201.p.ssafy.io/api/pocha',
         params: {
-          age:age, region:region,themeId:theme,tag:hobby
+          age:age, region:region,themeId:theme,tag:sendTagList
         }
       }).then((r)=> {
         if (filter.speedEnter) {
@@ -111,37 +159,45 @@ function Tag(): JSX.Element {
           // 연령(All(0)||본인 연령(ageRegion.age)), 지역(전국,본인 지역(ageRegion.region)), 잠금여부, 인원수(입장가능한 인원수) 필터해서
           // 이후 해당 pochaId에 맞는 방으로 이동 (포차테마에 따라 다른 방으로 이동)
           const roomData:any[] = r.data.data
+          
           const enterPossibleRoomList:any[] = roomData.filter((data:any)=> {
-            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.is_private === false) && (data.limit_user>data.total_count))
+            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.isPrivate === false) && (data.limitUser>data.totalCount))
           })
+          
           // 입장 가능한 방을 랜덤으로 하나 골라서 
           const randomPickRoom:any = enterPossibleRoomList[Math.floor(Math.random()*enterPossibleRoomList.length)]
           // 입장 요청
           const username = localStorage.getItem('Username')
-          const themeId = randomPickRoom.theme_id
-          const pochaId = randomPickRoom.pocha_id
+          console.log('픽한 방: ', randomPickRoom)
+          const themeId = randomPickRoom.themeId
+          const pochaId = randomPickRoom.pochaId
+          console.log('==============','username:', username, 'pochaId: ', pochaId, 'themeId: ', themeId)
           axios({
             method: 'post',
             url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
             data: {
               // 초대 받은거를 승인하는거라 false
-              "isHost": 'false',
-              "pochaId": randomPickRoom.pocha_id,
-              'username': username
+              isHost: 'false',
+              pochaId: randomPickRoom.pocha_id,
+              username: username
               }
             })
-            .then((r)=> {
-              
+            .then(()=> {
+              console.log('슬라이싱값: ',themeId.slice(0,2))
               if (themeId.slice(0,2) === 'T0') {
+                console.log('소통방입장')
                 navigate(`/storyroom/${pochaId}`)
               } else if (themeId.slice(0,2) === 'T1') {
+                console.log('게임방입장')
                 navigate(`/gameroom/${pochaId}`)
               } else {
+                console.log('미팅방입장')
                 navigate(`/meetingroom/${pochaId}`)
               }
             })
 
         } else {
+          console.log("스피드 아님")
           // 그냥 방 해당 태그에 맞게 갱신해주기
           dispatch(changeMainCreateRoomList(r.data.data));
           console.log(r.data)
@@ -161,7 +217,7 @@ function Tag(): JSX.Element {
         {/* All */}
         <div className="flex justify-center items-center font-normal border-0 rounded-full h-1/3 w-full cursor-pointer" style={{ backgroundColor: "rgb(233, 61, 107)" }} onClick={()=> {
           setFilter((preState:any)=> {
-            return {...preState, isAll:true, age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'관심사'}
+            return {...preState, isAll:true, age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'태그', speedEnter: false}
           })
         }}>전체</div>
         {/* 연령 */}
@@ -171,7 +227,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false, age: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="연령" disabled>연령</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="연령">연령</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="ALL">ALL</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.age}>{ageRegion.age}</option>
           </select>
@@ -183,7 +239,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,region: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="지역" disabled>지역</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="지역">지역</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="전국">전국</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.region}>{ageRegion.region}</option>
           </select>
@@ -195,7 +251,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,theme: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="테마" disabled>테마</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="테마">테마</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="소통포차">소통포차</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="게임포차">게임포차</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="헌팅포차">헌팅포차</option>
@@ -208,7 +264,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,sul: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="술" disabled>술</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="술">술</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="소주">소주</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="맥주">맥주</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="와인">와인</option>
@@ -222,7 +278,7 @@ function Tag(): JSX.Element {
               return {...preState, isAll:false ,hobby: e.target.value}
             } )
           }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="태그" disabled>태그</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="태그">태그</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="애니메이션">애니메이션</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="게임">게임</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="연애">연애</option>
@@ -241,7 +297,6 @@ function Tag(): JSX.Element {
           setFilter((preState:any)=> {
             return {...preState, speedEnter: true}
           })
-
         }}>빠른 입장</div>
       </div>
     </div>

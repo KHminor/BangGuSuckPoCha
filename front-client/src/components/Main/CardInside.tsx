@@ -144,8 +144,8 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
               >
                 {themeType}
               </div>
-              {/* <div className="col-span-1 "></div> */}
-              <div className="col-span-2 "><img className="w-[1.4rem] h-[1.4rem]" src={require('../../assets/tagIcon/stay-person.png')} alt="" /><span className="pl-2">{totalCount}/{limitUser}</span></div>
+              <div className="col-span-1 "></div>
+              <div className="flex justify-center items-center col-span-1 "><img className="w-[1rem] h-[1rem]" src={require('../../assets/tagIcon/stayPerson.png')} alt="" /><span className="pl-2">{totalCount}/{limitUser}</span></div>
               {/* <div className="col-span-5 "></div> */}
             </div>
             {/* 문구 한줄 */}

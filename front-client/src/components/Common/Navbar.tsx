@@ -19,7 +19,7 @@ function Navbar(): JSX.Element {
     const username = localStorage.getItem('Username')
     axios({
       method: 'get',
-      url: `https://i8e201.p.ssafy.io/${username}`
+      url: `https://i8e201.p.ssafy.io/api/user/myinfo/${username}`
     })
     .then((r)=> {
       setMyData({profile:r.data.data.profile, nickname:r.data.data.nickname})
@@ -44,7 +44,7 @@ function Navbar(): JSX.Element {
         <div className="grid grid-cols-1 " style={{ width: "18%" }}>
           <div></div>
           <div></div>
-          <MenuOption profile={myData.profile} nickname={myData.nickname}/>
+          <MenuOption myData={myData} profile={myData.profile} nickname={myData.nickname}/>
         </div>
       </div>
     </div>
@@ -52,8 +52,9 @@ function Navbar(): JSX.Element {
 }
 
 // menu component
-function MenuOption({profile, nickname}:any): JSX.Element {
+function MenuOption({profile, nickname, myData}:any): JSX.Element {
   let dispatch = useAppDispatch();
+  console.log('마이데이터: ',myData)
   const username = localStorage.getItem("Username");
   const menuFriendClickCheck = useAppSelector((state) => {
     return state.menuFriendClickCheck;
@@ -67,14 +68,16 @@ function MenuOption({profile, nickname}:any): JSX.Element {
       <div className="flex justify-evenly" style={{ width: "70%" }}>
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer ">
-            <img
-              className="object-contain"
-              style={{ width: "1.5rem", height: "1.5rem" }}
-              src={profile}
-              alt="my"
-            />
+            <div className="flex justify-center items-center ">
+              <img
+                className={`object-contain ${styles.myemoji}`}
+                style={{ width: "1.8rem", height: "1.8rem" }}
+                src={profile}
+                alt="my"
+              />
+            </div>
             <p
-              className={`text-white mt-1 sm:text-xs md:text-xm lg:text-sm text-xs ${styles.NanumGothic}`}
+              className={`text-white  sm:text-xs md:text-xm lg:text-sm flex justify-center items-center  ${styles.NanumGothic}`}
             >
               {nickname}
             </p>
