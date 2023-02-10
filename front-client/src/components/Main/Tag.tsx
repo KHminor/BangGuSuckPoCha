@@ -54,7 +54,7 @@ function Tag(): JSX.Element {
         if (filter.speedEnter) {
           const roomData:any[] = r.data.data
           const enterPossibleRoomList:any[] = roomData.filter((data:any)=> {
-            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.isPrivate === false) && (data.limitUser>data.totalCount))
+            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.themeId !== "T2B0") && (data.isPrivate === false) && (data.limitUser>data.totalCount))
           })
           // 입장 가능한 방을 랜덤으로 하나 골라서 
           const randomPickRoom:any = enterPossibleRoomList[Math.floor(Math.random()*enterPossibleRoomList.length)]
@@ -82,9 +82,6 @@ function Tag(): JSX.Element {
               } else if (themeId.slice(0,2) === 'T1') {
                 console.log('게임방입장')
                 navigate(`/gameroom/${pochaId}`)
-              } else {
-                console.log('미팅방입장')
-                navigate(`/meetingroom/${pochaId}`)
               }
             })
 
@@ -98,7 +95,7 @@ function Tag(): JSX.Element {
       console.log('현재 클릭한 태그정보: ',filter)
       let age
       let region
-      let theme
+      let theme:any
       let sul
       let hobby
       let fastClick
@@ -161,7 +158,8 @@ function Tag(): JSX.Element {
           const roomData:any[] = r.data.data
           
           const enterPossibleRoomList:any[] = roomData.filter((data:any)=> {
-            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.isPrivate === false) && (data.limitUser>data.totalCount))
+            console.log('방목록: ',data)
+            return ((data.age === 0 || data.age === ageRegion.age) && (data.region === '전국' || data.region === ageRegion.region) && (data.themeId !== "T2B0") && (data.isPrivate === false) && (data.limitUser>data.totalCount))
           })
           
           // 입장 가능한 방을 랜덤으로 하나 골라서 
@@ -190,9 +188,6 @@ function Tag(): JSX.Element {
               } else if (themeId.slice(0,2) === 'T1') {
                 console.log('게임방입장')
                 navigate(`/gameroom/${pochaId}`)
-              } else {
-                console.log('미팅방입장')
-                navigate(`/meetingroom/${pochaId}`)
               }
             })
 

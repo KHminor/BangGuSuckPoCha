@@ -70,7 +70,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
             <img
               src={imgUrl}
               alt=""
-              className="h-[15rem] w-[25rem] object-fill"
+              className="h-[15rem] min-h-full w-[25rem] min-w-full object-fill"
               style={{ borderRadius: "16px 16px 0px 0px " ,transition: 'all 0.5s'}}
             />
           </div>
@@ -124,7 +124,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
             <img
               src={imgUrl}
               alt=""
-              className="h-[21rem] w-[25rem] object-fill"
+              className="h-[21rem] min-h-[100%] w-[25rem] min-w-[100%] object-fill"
               style={{ borderRadius: "16px 16px 0px 0px " }}
             />
           </div>

@@ -254,12 +254,6 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
 
     return (
       <div
-        onClick={(e)=> {
-          enterRoom(e)
-        }}
-        
-        key={e.pochaId}
-        id={e.pochaId}
         className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
       >
         <div
@@ -268,7 +262,14 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
         >
           <div></div>
           {/* 카드 내부 */}
-          <div>
+          <div 
+            onClick={(e)=> {
+              enterRoom(e)
+            }}
+            
+            key={e.pochaId}
+            id={e.pochaId}
+          >
             <CardInside
               TagList={TagList}
               themeType={themeType}
