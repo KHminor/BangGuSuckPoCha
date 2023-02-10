@@ -30,7 +30,7 @@ public interface PochaService {
 
     List<InviteResponseDto> pochaInviteList(String username);
 
-    void pochaInvite(InviteRequestDto requestDto);
+    boolean pochaInvite(InviteRequestDto requestDto);
 
     void pochaInviteRefuse(Long inviteId);
 

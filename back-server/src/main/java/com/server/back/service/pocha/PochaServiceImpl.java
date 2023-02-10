@@ -122,7 +122,7 @@ public class PochaServiceImpl implements PochaService{
     public PochaResponseDto pochaInfo(Long pochaId) {
         Pocha entity = pochaRepository.findByPochaId(pochaId);
 
-        PochaResponseDto responseDto = new PochaResponseDto(entity);
+        PochaResponseDto  responseDto = new PochaResponseDto(entity);
 
         return responseDto;
     }
@@ -168,7 +168,8 @@ public class PochaServiceImpl implements PochaService{
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
         User user = userRepository.findByUsername(requestDto.getUsername());
 
-        Participant entity = participantRepository.findByPochaAndUser(pocha, user).get(0);
+        List<Participant> entityList = participantRepository.findByPochaAndUser(pocha, user);
+        Participant entity = entityList.get(entityList.size() - 1);
         entity.updateExit();
 
         // 유저 평가 추가!!!
@@ -270,11 +271,12 @@ public class PochaServiceImpl implements PochaService{
     }
 
     @Override
-    public void pochaInvite(InviteRequestDto requestDto) {
+    public boolean pochaInvite(InviteRequestDto requestDto) {
         User fromUser = userRepository.findByUsername(requestDto.getFromUsername());
         User toUser = userRepository.findByUserId(requestDto.getYouId());
         Pocha pocha = pochaRepository.findByPochaId(requestDto.getPochaId());
 
+        // 이미 보낸 초대가 없을 경우에만 보냄.
         if(inviteRepository.findByToUserAndPocha(toUser, pocha) == null) {
             Invite invite = Invite.builder()
                     .fromUser(fromUser)
@@ -284,6 +286,9 @@ public class PochaServiceImpl implements PochaService{
 
             // 초대 추가.
             Invite entity = inviteRepository.save(invite);
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -303,18 +308,19 @@ public class PochaServiceImpl implements PochaService{
             User user = invite.getToUser();
             Pocha pocha = invite.getPocha();
 
+            // 포차가 닫히 경우 제거.
             if(pocha.getIsEnd()){
                 response.put("message", "fail");
                 return response;
             }
 
             // 참여 인원 수 계산
-            int participantToal = 0;
+            int participantTotal = 0;
             for(Participant p : pocha.getParticipant()){
-                if(p.getExitAt() == null) participantToal++;
+                if(p.getExitAt() == null) participantTotal++;
             }
             // 참여가 가능하다면 참여.
-            if(pocha.getLimitUser() > participantToal) {
+            if(pocha.getLimitUser() > participantTotal) {
                 pochaEnter(PochaParticipantRequestDto.builder().pochaId(pocha.getPochaId()).username(user.getUsername()).isHost(false).build());
                 response.put("data", new PochaResponseDto(pocha));
                 response.put("message", "success");
