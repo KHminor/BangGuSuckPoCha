@@ -169,8 +169,12 @@ public class PochaController {
     @PostMapping("/invite")
     public ResponseEntity<Map<String, Object>> pochaInvite(@RequestBody InviteRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        pochaService.pochaInvite(requestDto);
-        response.put("message", "success");
+
+        if(pochaService.pochaInvite(requestDto)) {
+            response.put("message", "success");
+        }else{
+            response.put("message", "fail");
+        }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
