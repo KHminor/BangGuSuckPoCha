@@ -564,7 +564,7 @@ const WebRTC = ({
             {/* 게임 공간 */}
 
             <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
-              <LadderIntro />
+              {/* <LadderIntro /> */}
             </div>
 
             {/* 사람 공간 */}
