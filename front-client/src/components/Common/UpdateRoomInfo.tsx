@@ -146,11 +146,12 @@ const UpdateRoomInfo = ({
       const tags = data.data.tagList;
       // 현재 포차의 선택된 태그들 표시해주기
       // ref로 잡아온 리스트 for문 돌리고
+      console.log("현재 방 태그들",tags);
       selectTags.current.forEach((tag) => {
         // 현재 포차 태그리스트로 2중 for문
         tags.forEach((tagName: any) => {
           if (tag.innerText === tagName) {
-            tag.classList.toggle(`${style.selectBtn}`);
+            tag.classList.add(`${style.selectBtn}`);
             // 이렇게 찾아낸건 처음값으로 세팅해준다
             dispatch(changeCreateRoomChoiceAddTag(tagName));
             setChoiceTagList((prev) => [...prev, tagName]);
@@ -277,6 +278,7 @@ const UpdateRoomInfo = ({
       ) : (
         <>
           {showModal && <PublicModal data={modalData} fx={onClickModalState} />}
+          {isLoading && <Loading />}
           <div
             className={`bg-black bg-opacity-90 overflow-y-auto z-10 fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center text-white`}
           >

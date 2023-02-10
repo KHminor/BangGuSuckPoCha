@@ -58,6 +58,9 @@ function LoginLoading(): React.ReactElement {
     } else if (Role === "BAN") {
       toast.error("정지된 회원입니다.");
       navigate("/");
+    } else if (Role === "TEENAGER") {
+      toast.error("미성년자는 입장할 수 없습니다.");
+      navigate("/");
     } else if (Role === "ADMIN") {
       localStorage.setItem("accessToken", Auth);
       localStorage.setItem("refreshToken", Refresh);
