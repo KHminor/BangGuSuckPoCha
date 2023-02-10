@@ -20,7 +20,7 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: {
     origin: "*",
-    credentials: true,
+    //credentials: true,
     methods: ["GET", "PUT", "POST", "HEAD", "PATCH", "DELETE"],
   },
 });
