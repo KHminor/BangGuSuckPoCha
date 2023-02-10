@@ -57,6 +57,9 @@ function FriendChat():JSX.Element {
         client.current.subscribe("/sub/chat/"+ chat_id, function(newMessage:any) {
           const msg = JSON.parse(newMessage.body)
           setMessage((_chat_list:any)=> [..._chat_list, msg])
+          setTimeout(() => {
+            scrollToBottom()
+          }, 100);
         });
       },
     });
@@ -93,8 +96,8 @@ function FriendChat():JSX.Element {
     return (
       // <div className="flex justify-end items-center my-[0.25rem] ">
         <div className="grid w-full " style={{gridTemplateColumns: '3fr 2fr'}}>
-          <div className="inline-flex justify-start items-center whitespace-normal">
-            <span className="text-white rounded-lg bg-gray-500/70  font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+          <div className="inline-flex justify-start items-center whitespace-normal ">
+            <span className="text-white rounded-lg h-[100%] py-1 bg-gray-500/70  font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
           </div>
           <div className=""></div>
         </div>
@@ -107,8 +110,8 @@ function FriendChat():JSX.Element {
       // <div className="flex justify-end items-center my-[0.25rem] ">
         <div className="grid w-full " style={{gridTemplateColumns: '2fr 3fr'}}>
           <div className=""></div>
-          <div className="inline-flex justify-end items-center whitespace-normal">
-            <span className="text-white rounded-lg bg-green-400/80 font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
+          <div className="inline-flex justify-end items-center whitespace-normal ">
+            <span className="text-white rounded-lg h-[100%] py-1 bg-green-400/80 font-medium text-[1.2rem]">&nbsp;&nbsp;{content}&nbsp;&nbsp;</span>
           </div>
         </div>
       // </div>
@@ -129,7 +132,7 @@ function FriendChat():JSX.Element {
 
       setTimeout(() => {
         scrollToBottom()
-      }, 1000);
+      }, 100);
       
       setInputChat("");
     }
@@ -168,7 +171,7 @@ function FriendChat():JSX.Element {
                   publish(inputChat)
                   setTimeout(() => {
                     scrollToBottom()
-                  }, 1000);
+                  }, 100);
                   // setsendCheck(sendCheck+1)
                 }}/>
               </div>
