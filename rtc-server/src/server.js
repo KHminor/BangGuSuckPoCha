@@ -20,7 +20,7 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: {
     origin: "*",
-    //credentials: true,
+    credentials: true,
     methods: ["GET", "PUT", "POST", "HEAD", "PATCH", "DELETE"],
   },
 });
@@ -74,15 +74,10 @@ wsServer.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    let roomID;
-    let username;
     if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
-      roomID = socketToRoom[socket.id];
+      const roomID = socketToRoom[socket.id];
       delete socketToRoom[socket.id];
       let room = users[roomID];
-      room.forEach((user) => {
-        if (user.id == socket.id) username = user.username;
-      });
       socket.leave(roomID);
       if (room) {
         room = room.filter((user) => user.id !== socket.id);
@@ -94,12 +89,9 @@ wsServer.on("connection", (socket) => {
       }
       socket.to(roomID).emit("user_exit", { id: socket.id });
     } else {
-      roomID = waitToRoom[socket.id];
+      const roomID = waitToRoom[socket.id];
       delete waitToRoom[socket.id];
       let room = waitUsers[roomID];
-      room.forEach((user) => {
-        if (user.id == socket.id) username = user.username;
-      });
       if (room) {
         room = room.filter((user) => user.id !== socket.id);
         waitUsers[roomID] = room;

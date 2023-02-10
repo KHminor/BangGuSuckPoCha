@@ -3,15 +3,12 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import WebRTC from "../WebRTC/WebRTC";
 import axios from "axios";
-import { io } from "socket.io-client";
 import Loading from "../Common/Loading";
-
-const socket = io("https://pocha.online");
 
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
-  // const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
@@ -22,21 +19,11 @@ function StoryRoom(): JSX.Element {
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
 
-  //  axios 요청
-  const api = axios.create({
-    baseURL: "https://i8e201.p.ssafy.io/api",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-  });
-  // 내 아이디
-  const myName = localStorage.getItem("Username");
-
   console.log("pochaInfo", pochaInfo);
 
-  // const propSocket = (socket: any) => {
-  //   setSocket(socket);
-  // };
+  const propSocket = (socket: any) => {
+    setSocket(socket);
+  };
   const propIsHost = (isHost: boolean) => {
     setIsHost(isHost);
   };
@@ -69,17 +56,6 @@ function StoryRoom(): JSX.Element {
     getPochaInfo();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      // api.put("/pocha/exit", {
-      //   isHost: false,
-      //   pochaId: PochaId,
-      //   username: myName, // << 여기 내 유저네임 가져와야함
-      //   waiting: false,
-      // });
-    };
-  }, []);
-
   return (
     <>
       {isLoading ? (
@@ -93,8 +69,7 @@ function StoryRoom(): JSX.Element {
           <div className="min-h-[90vh]">
             <WebRTC
               pochaId={PochaId!}
-              // propSocket={propSocket}
-              socket={socket}
+              propSocket={propSocket}
               propIsHost={propIsHost}
               getPochaInfo={getPochaInfo}
             />
