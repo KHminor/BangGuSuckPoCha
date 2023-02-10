@@ -224,12 +224,13 @@ public class PochaServiceImpl implements PochaService{
     }
 
     @Override
-    public void pochaHuntingStart(Long pochaId) {
+    public void pochaMeetingStart(Long pochaId) {
         Pocha entity = pochaRepository.findByPochaId(pochaId);
 
         entity.startHuntingPocha();
         for(Participant p : entity.getParticipant()){
-            if(p.getExitAt() == null) continue;
+            if(p.getExitAt() != null) continue;
+            System.out.println("미팅 포차 시작 확인");
             p.updateCreate();
         }
     }
