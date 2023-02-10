@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { showPublicModal } from "src/store/store";
 import PublicModal from "./PublicModal";
 
-function RoomHuntingFooterNav({
+function RoomMeetingFooterNav({
   pochaId,
   socket,
 }: {
@@ -207,4 +207,4 @@ function RoomHuntingFooterNav({
     </>
   );
 }
-export default RoomHuntingFooterNav;
+export default RoomMeetingFooterNav;
