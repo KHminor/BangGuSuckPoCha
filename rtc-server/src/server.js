@@ -73,13 +73,28 @@ wsServer.on("connection", (socket) => {
     socket.to(roomName).emit("ice", ice, socket.id);
   });
 
+  // 포차 나가기를 socket 서버에서 실행.
   socket.on("disconnect", () => {
+    let roomID;
+    let username;
     if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
-      const roomID = socketToRoom[socket.id];
+      roomID = socketToRoom[socket.id];
       delete socketToRoom[socket.id];
       let room = users[roomID];
       socket.leave(roomID);
       if (room) {
+        username = room.filter((user) => user.id == socket.id)[0].username;
+        axios({
+          url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
+          method: "put",
+          data: {
+            isHost: true,
+            pochaId: Number(roomID),
+            username: username,
+            waiting: true,
+          },
+        });
+
         room = room.filter((user) => user.id !== socket.id);
         users[roomID] = room;
         if (room.length === 0) {
@@ -89,10 +104,22 @@ wsServer.on("connection", (socket) => {
       }
       socket.to(roomID).emit("user_exit", { id: socket.id });
     } else {
-      const roomID = waitToRoom[socket.id];
+      roomID = waitToRoom[socket.id];
       delete waitToRoom[socket.id];
       let room = waitUsers[roomID];
       if (room) {
+        username = room.filter((user) => user.id == socket.id)[0].username;
+        axios({
+          url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
+          method: "put",
+          data: {
+            isHost: true,
+            pochaId: Number(roomID),
+            username: username,
+            waiting: true,
+          },
+        });
+
         room = room.filter((user) => user.id !== socket.id);
         waitUsers[roomID] = room;
         if (room.length === 0) {
