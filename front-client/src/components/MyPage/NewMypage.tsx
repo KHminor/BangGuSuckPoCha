@@ -123,7 +123,7 @@ const NewMyPage = () => {
     setSelectSecond(event.target.value);
   };
 
-  //------------useEffect------------------  
+  //------------useEffect------------------
 
   useEffect(() => {
     //토큰처리
@@ -139,7 +139,7 @@ const NewMyPage = () => {
       },
     }).then((r) => {
       dispatch(changeMyInfo(r.data.data));
-      setMyInfo(r.data.data);      
+      setMyInfo(r.data.data);
 
       //data내용
       const a = r.data.data;
@@ -465,7 +465,14 @@ const NewMyPage = () => {
                       </div>
                       <div className="w-[25%] pt-3 pb-[27px] pr-3 ">
                         <div className="h-full pt-3 border-2 cursor-pointer">
-                          <div className="h-[80%]">나가기</div>
+                          <div
+                            className="h-[80%]"
+                            onClick={() => {
+                              navigate("/main");
+                            }}
+                          >
+                            나가기
+                          </div>
                         </div>
                       </div>
                       <div className="w-[25%] pt-3 pb-[27px] pr-3 ">

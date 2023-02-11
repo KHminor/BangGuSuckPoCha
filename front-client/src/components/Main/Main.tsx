@@ -23,32 +23,49 @@ import Tag from "./Tag";
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
+  const [myState,setMyState] = useState<any>({ age: 0, region:'전국', gender: '',})
   const mainCreateRoomList: any = useAppSelector((state) => {
     return state.mainCreateRoomList;
   });
 
-  // 메인 페이지 들어올 시 현재 userId가 localStorage에 저장이 안되어있을 경우 axios 요청하여 넣어주기
+  // 메인 페이지 들어올 시 현재 Username에 대한 유저정보 저장
   useEffect(() => {
     const userName = localStorage.getItem("Username");
-    if (localStorage.getItem("userId") === null) {
-      axios
-        .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
-        .then((r) => {
-          localStorage.setItem("userId", r.data.data.userId);
-        });
-    }
+    axios
+      .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
+      .then((r) => {
+        localStorage.setItem("userId", r.data.data.userId);
+        console.log('나의 데이터',r.data.data)
+        const now:any = new Date
+        const myData:any = r.data.data
+        const birth:string[] = myData.birth.split('.')
+        let age:number 
+        if (Number(birth[1]) > now.getMonth()) {
+          age = Math.floor((now.getFullYear() - Number(birth[0])-1)/10)*10
+        } else {
+          age = Math.floor((now.getFullYear() - Number(birth[0]))/10)*10
+        }
+        // console.log('내 나이는?',age)
+        localStorage.setItem('age',`${age}`)
+        localStorage.setItem('region',`${myData.region}`)
+        localStorage.setItem('gender',`${myData.gender}`)
+        setMyState((preState:any)=> {
+          return {...preState, age: age, region: myData.region, gender:myData.gender}
+        })
+      });
   }, []);
 
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: "https://i8e201.p.ssafy.io/api/pocha/",
-    }).then((r) => {
-      console.log(r.data);
-      // dispatch(changeMainCreateRoomList(r.data.data));
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios({
+  //     method: "get",
+  //     url: "https://i8e201.p.ssafy.io/api/pocha/",
+  //   }).then((r) => {
+  //     console.log(r.data)
+  //     dispatch(changeMainCreateRoomList(r.data.data));
+
+  //   });
+  // }, []);
 
   // 메인 입장시 나오는것과 강퇴당한것 구분
   useEffect(() => {
@@ -170,7 +187,7 @@ function Main(): JSX.Element {
               className="grid grid-cols-1 w-full min-w-[75rem]"
               style={{ backgroundColor: "rgb(25, 25, 25)" }}
             >
-              <Room mainCreateRoomList={mainCreateRoomList} />
+              <Room mainCreateRoomList={mainCreateRoomList} myState={myState}/>
             </div>
           </div>
           <div></div>
@@ -203,8 +220,9 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-function Room({ mainCreateRoomList }: any): JSX.Element {
-  console.log("생성된 방 리스트: ", mainCreateRoomList);
+function Room({ mainCreateRoomList, myState }: any): JSX.Element {
+
+  console.log('생성된 방 리스트: ',mainCreateRoomList)
   const navigate = useNavigate();
   // 내 아이디
   const username = localStorage.getItem("Username");
@@ -212,40 +230,97 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
   const randomTitleList = [
     "즐겁게 웃으며 한잔😛",
     "이거 마시면 나랑 사귀는거다?😏",
-    "오늘 여기 오길 참 잘 해따😵",
-    "술이 달아서 네 생각이 나🤬",
+    "오늘 여기 오길 참 잘 해따💕",
+    "술이 달아서 네 생각이 나👭",
     "흥청망청 취해보자👾",
-    "즐겁게 웃으며 한잔😛",
-    "이거 마시면 나랑 사귀는거다?😏",
-    "오늘 여기 오길 참 잘 해따😵",
-    "술이 달아서 네 생각이 나🤬",
-    "흥청망청 취해보자👾",
+    "흥해도 청춘 망해도 청춘🥂",
+    "넌 예쁘니까 예쁜 것만 먹어라🍷",
+    "저녁은 춥고 술은 달아서🍹",
+    "오늘따라 밤이 더 아름답다🌙",
+    "잘했고,잘하고있고,잘할거야💪",
   ];
   // 방에 입장하는 함수
   const enterRoom = async (event: React.MouseEvent<HTMLDivElement>, e: any) => {
     const pochaId = event.currentTarget.id;
-    console.log("여기 방은?", e.themeId);
-    try {
-      await axios({
-        method: "POST",
-        url: `https://i8e201.p.ssafy.io/api/pocha/enter`,
-        data: {
-          isHost: false,
-          pochaId: pochaId,
-          username: username,
-          waiting: false,
-        },
-      });
-      let roomTheme = e.themeId.slice(0, 2);
-      if (roomTheme === "T0") {
-        navigate(`/storyroom/${pochaId}`);
-      } else if (roomTheme === "T1") {
-        navigate(`/gameroom/${pochaId}`);
-      } else {
-        navigate(`/meetingroom/${pochaId}`);
-      }
-    } catch (error) {
-      console.log("포차 입장 에러", error);
+    // console.log('클릭한 포차 데이터: ', e);
+    
+    // console.log('포차 아이디',pochaId)
+    // console.log('나의 데이터: ',myState)
+    const themeId = e.themeId.slice(0,2) 
+    const age = e.age
+    const region = e.region
+    const isPrivate = e.isPrivate
+    const limitUser = e.limitUser
+    const totalCount = e.totalCount
+    const maleCount = e.maleCount
+    const femaleCount = e.femaleCount
+    console.log(isPrivate,limitUser,totalCount,maleCount,femaleCount);
+    // { age: 0, region:'전국', gender: '',}
+    // 헌팅방 입장
+    if (themeId === 'T2') {
+      // 나이,지역,잠금,총인원수,성비 체크
+      if ((myState.gender === 'M')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
+        (limitUser > totalCount) && (limitUser/2 >maleCount)) {
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              isHost: false,
+              pochaId: pochaId,
+              username: username,
+            }
+          }).then(()=> {
+            if (themeId === 'T0') {
+              navigate(`/storyroom/${pochaId}`);
+            } else if (themeId === 'T1') {
+                navigate(`/gameroom/${pochaId}`);
+              }
+          })
+        } else if ((myState.gender === 'F')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
+        (limitUser > totalCount) && (limitUser/2 >femaleCount)) {
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              isHost: false,
+              pochaId: pochaId,
+              username: username,
+            }
+          }).then(()=> {
+            if (themeId === 'T0') {
+              navigate(`/storyroom/${pochaId}`);
+            } else if (themeId === 'T1') {
+                navigate(`/gameroom/${pochaId}`);
+              }
+          })
+        } else {
+          toast.error('입장할 수 없는 방입니다')
+        }
+
+    } else {
+        // 소통&게임방
+        // 나이,지역,잠금,총인원수 체크
+        if ((age===0 || age===myState.age) && (region === '전국' || region === myState.region) 
+          && (isPrivate === false) && (limitUser > totalCount)) {
+            axios({
+              method: 'post',
+              url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+              data: {
+                isHost: false,
+                pochaId: pochaId,
+                username: username,
+              }
+            }).then(()=> {
+              if (themeId === 'T0') {
+                navigate(`/storyroom/${pochaId}`);
+              } else if (themeId === 'T1') {
+                  navigate(`/gameroom/${pochaId}`);
+                } 
+            })
+        } else {
+          toast.error('입장할 수 없는 방입니다')
+        }
+      
     }
   };
 
