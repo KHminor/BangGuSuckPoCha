@@ -50,26 +50,20 @@ function Main(): JSX.Element {
     });
   }, []);
 
+  // 메인 입장시 나오는것과 강퇴당한것 구분
   useEffect(() => {
-    console.log(localStorage.getItem("reloadExit"),'@@@@ 리롵에싯')
-    console.log(localStorage.getItem("reloadBan"),'@@@@ 리롵에싯')
-    // console.log(sessionStorage.reloadBan,'@@@@ 뱁냅냅내')
-    if (localStorage.getItem("reloadExit") === "true") {
+    if (localStorage.getItem("reloadExit")) {
       toast.success("방에서 나오셨습니다");
       setTimeout(() => {
         localStorage.removeItem("reloadExit");
       }, 500)
     }
-    if (localStorage.getItem("reloadBan") === "true") {
-      toast.success("방에서 나오셨습니다");
+    if (localStorage.getItem("reloadBan")) {
+      toast.error("방에서 강퇴당하셨습니다");
       setTimeout(() => {
         localStorage.removeItem("reloadBan");
       }, 500)
     }
-    // if (sessionStorage.reloadBan === "true") {
-    //   toast.error("방에서 강퇴 당하셨습니다");
-    //   sessionStorage.reloadBan = "false";
-    // }
   }, []);
 
   // 방 생성 관련

@@ -482,7 +482,7 @@ const WebRTC = ({
     socket.on("ban", (username) => {
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
-        localStorage.setItem("reloadExit", "true");
+        localStorage.setItem("reloadBan", "true");
         navigate(`/main`);
         window.location.reload();
       }
