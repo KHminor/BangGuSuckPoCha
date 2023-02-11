@@ -4,11 +4,12 @@ import { showRoomUserBanModal } from "../../store/store";
 import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
 
-const RoomUserBanModal = ({ userData, pochaId }: { userData: any, pochaId: string }) => {
+const RoomUserBanModal = ({ userData, pochaId, socket }: { userData: any, pochaId: string, socket: any }) => {
   let dispatch = useAppDispatch();
   const { nickname, username } = userData.data;
   const pochaID = Number(pochaId);
-  console.log(' vhck vj',pochaID);
+  const roomName = pochaId;
+  // console.log(' 유유유저데이터j', userData);
   // 강퇴하는 함수
   const banUser = async () => {
     try {
@@ -22,10 +23,11 @@ const RoomUserBanModal = ({ userData, pochaId }: { userData: any, pochaId: strin
           waiting: true,
         },
       });
+      socket.emit("ban", roomName, username);
       toast.success(`${nickname}을 강퇴하였습니다`);
-      console.log("bban", bban);
+      console.log("강퇴성공", bban, "유저네임 :" , username);
     } catch (error) {
-      console.log(error);
+      console.log("강퇴에러", error);
     }
     dispatch(showRoomUserBanModal());
   };

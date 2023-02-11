@@ -175,6 +175,7 @@ const WebRTC = ({
       }
       console.log("마이스트림 오냐?", myStream.current);
       myFace.current!.srcObject = myStream.current;
+      myFace.current!.volume = 0;
       if (!deviceId) {
         await getCameras();
       }
@@ -476,12 +477,22 @@ const WebRTC = ({
       console.log("포차 짠!!!!!------------ㅇ----------");
       jjan();
     });
+
+    // 포차 강퇴 기능 : 이름찾아서 내보내기
+    socket.on("ban", (username) => {
+      console.log(username, "강퇴!!!!-------");
+      if (myUserName === username) {
+        navigate(`/main`);
+      }
+    })
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
       socket.off("pocha_cheers");
+      // socket.off("ban");
     };
   }, []);
+
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -554,16 +565,18 @@ const WebRTC = ({
 
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    const username = event.currentTarget.id;
-
-    // console.log("모달용 데이터 닉?", username);
-    const { data } = await axios({
-      url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
-    });
-    console.log("모달용 데이터?", data);
-    setUserProfileData(data);
-    // dispatch(isRtcLoading(false));
-    dispatch(showRoomUserProfile());
+    if(userCount.current >= 2) {
+      const username = event.currentTarget.id;
+  
+      // console.log("모달용 데이터 닉?", username);
+      const { data } = await axios({
+        url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
+      });
+      console.log("모달용 데이터?", data);
+      setUserProfileData(data);
+      // dispatch(isRtcLoading(false));
+      dispatch(showRoomUserProfile());
+    }
   };
 
   return (
@@ -577,6 +590,7 @@ const WebRTC = ({
               userData={userProfileData}
               pochaId={pochaId}
               isHost={isHost}
+              socket={socket}
             />
           )}
           {count && (

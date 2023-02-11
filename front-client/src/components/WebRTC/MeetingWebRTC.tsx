@@ -535,7 +535,7 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost}/>
+            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost} socket={socket} />
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
