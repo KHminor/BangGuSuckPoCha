@@ -570,6 +570,11 @@ const WebRTC = ({
 
     // 게임 선택창으로 돌아오기
     socket.on("game_back_select", () => {
+      console.log("선택창돌아오기오냐--------")
+      // 룰렛 결과창 끄기
+      dispatch(showRouletteResultModal(false));
+      // 퍼블릭 모달 끄기
+      dispatch(showPublicModal(false));
       // 진행중인 게임 닫기
       dispatch(selectGame("exit"));
       // 게임 선택창 켜기

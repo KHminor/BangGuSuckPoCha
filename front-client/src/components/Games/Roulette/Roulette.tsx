@@ -118,6 +118,7 @@ function Roulette({
     setModalData({
       type: "roulette",
       msg: product[random],
+      pochaId: pochaId,
     });
     setTimeout(() =>  {
       // 모달 켜는 dispatch
