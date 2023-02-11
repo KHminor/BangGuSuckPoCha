@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showRoomUserProfile } from "../../store/store";
+import {
+  isRtcLoading,
+  showPublicModal,
+  showRoomUserProfile,
+} from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
+import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
 // webRTC관련
@@ -37,8 +42,8 @@ const WebRTC = ({
   const cameraSelect = useRef<HTMLSelectElement>(null);
   // 옵션 태그 리스트
   const [optionList, setOptionList] = useState<any[]>([]);
-  // 사람수 체크 리스트(카메라 생성용);
-  // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
+  // 짠 카운트
+  const [count, setCount] = useState<string>("");
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -395,7 +400,7 @@ const WebRTC = ({
     });
 
     socket.on("room_full", () => {
-      toast.info("응 풀방이야~");
+      toast.info("풀방입니다");
       navigate(`/main`);
     });
 
@@ -419,6 +424,23 @@ const WebRTC = ({
   //     "Content-Type": "application/json;charset=utf-8",
   //   },
   // });
+  //  포차 짠 함수
+  const jjan = () => {
+    let time: number = 3;
+    setCount(String(time));
+    const interval = setInterval(() => {
+      time -= 1;
+      setCount(String(time));
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+      setCount("짠!!!!");
+    }, 3900);
+    setTimeout(() => {
+      setCount("");
+      dispatch(showPublicModal(false));
+    }, 5000);
+  };
 
   useEffect(() => {
     // 포차 설정 변경! : 방 설정 다시 불러오기.
@@ -437,19 +459,26 @@ const WebRTC = ({
       // await pocha_config_update("3");
     });
 
+    // 포차 짠! 기능 : 방 설정 다시 불러오기.
+    socket.on("pocha_cheers", async () => {
+      console.log("포차 짠!!!!!------------ㅇ----------");
+      jjan();
+    });
+
     // 포차 강퇴 기능 : 이름찾아서 내보내기
     socket.on("ban", (username) => {
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
+        localStorage.setItem("reloadBan", "true");
         navigate(`/main`);
-        sessionStorage.reloadBan = true;
         window.location.reload();
       }
-    })
+    });
 
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
+      socket.off("pocha_cheers");
       socket.off("ban");
     };
   }, []);
@@ -527,9 +556,9 @@ const WebRTC = ({
   }
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    if(userCount.current >= 2) {
+    if (userCount.current >= 2) {
       const username = event.currentTarget.id;
-  
+
       // console.log("모달용 데이터 닉?", username);
       const { data } = await axios({
         url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
@@ -554,6 +583,11 @@ const WebRTC = ({
               isHost={isHost}
               socket={socket}
             />
+          )}
+          {count && (
+            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
+              <div className="text-7xl font-bold text-white">{count}</div>
+            </div>
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
@@ -588,9 +622,16 @@ const WebRTC = ({
             </div>
             {/* 게임 공간 */}
 
-            <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
+            <div className="flex justify-center overflow-hidden min-w-fit w-[47vw] mt-5 items-center border-2 border-blue-400 rounded-[20px]">
               {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
-              {pochaUsers && <Roulette socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} />}
+              {<GameSelect socket={socket} pochaId={pochaId}/>}
+              {/* {pochaUsers && (
+                <Roulette
+                  socket={socket}
+                  pochaId={pochaId}
+                  pochaUsers={pochaUsers}
+                />
+              )} */}
             </div>
 
             {/* 사람 공간 */}

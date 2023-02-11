@@ -401,7 +401,7 @@ const WebRTC = ({
     });
 
     socket.on("room_full", () => {
-      toast.info("응 풀방이야~");
+      toast.info("풀방입니다");
       navigate(`/main`);
     });
 
@@ -482,7 +482,7 @@ const WebRTC = ({
     socket.on("ban", (username) => {
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
-        localStorage.setItem("reloadExit", "true");
+        localStorage.setItem("reloadBan", "true");
         navigate(`/main`);
         window.location.reload();
       }
