@@ -62,6 +62,14 @@ function MenuOption({profile, nickname, myData}:any): JSX.Element {
   const menuFriendChatClickCheck = useAppSelector((state) => {
     return state.menuFriendChatClickCheck;
   });
+  // 메뉴 클릭 상태
+  const checkMenuState: any = useAppSelector((state: any) => {
+    return state.menuClickCheck;
+  });
+  // 알람 클릭 상태
+  const alarmClickCheck: any = useAppSelector((state: any) => {
+    return state.alarmClickCheck;
+  });
   return (
     <div className="flex w-full">
       <div style={{ width: "20%" }}></div>
@@ -102,7 +110,6 @@ function MenuOption({profile, nickname, myData}:any): JSX.Element {
                     setData.push(e);
                   }
                 });
-                dispatch(changeAlarmState());
                 dispatch(changeAlarmClickState(0));
                 dispatch(changeAlarmApiDataState(setData));
                 if (menuFriendClickCheck) {
@@ -110,6 +117,9 @@ function MenuOption({profile, nickname, myData}:any): JSX.Element {
                 }
                 if (menuFriendChatClickCheck) {
                   dispatch(changeMenuFriendChatState(false));
+                }
+                if (!alarmClickCheck) {
+                  dispatch(changeAlarmState());
                 }
               });
             }}
@@ -138,7 +148,9 @@ function MenuOption({profile, nickname, myData}:any): JSX.Element {
               if (menuFriendChatClickCheck) {
                 dispatch(changeMenuFriendChatState(false));
               }
-              dispatch(changeMenuState());
+              if (!checkMenuState) {
+                dispatch(changeMenuState());
+              }
             }}
           >
             <img
