@@ -57,6 +57,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                     }  
@@ -84,6 +87,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                 }}
