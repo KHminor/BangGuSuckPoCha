@@ -45,9 +45,10 @@ function GameSelect({
 
   // 게임 선택할때
   const selectGame = (event: React.MouseEvent<HTMLImageElement>) => {
+    console.log("클릭?");
     const gameId = event.currentTarget.id;
     socket.emit("game_select", roomName, gameId);
-  }
+  };
 
   useEffect(() => {
     setImgLists([balance, ladder, son, yang, liar, roul]);
@@ -81,6 +82,7 @@ function GameSelect({
             ref={balance}
           />
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
@@ -92,6 +94,7 @@ function GameSelect({
         </div>
         <div className="flex justify-evenly">
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
@@ -101,6 +104,7 @@ function GameSelect({
             ref={liar}
           />
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
@@ -112,6 +116,7 @@ function GameSelect({
         </div>
         <div className="flex justify-evenly">
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
@@ -121,6 +126,7 @@ function GameSelect({
             ref={ladder}
           />
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}

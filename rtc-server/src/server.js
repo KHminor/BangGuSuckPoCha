@@ -226,6 +226,11 @@ wsServer.on("connection", (socket) => {
   socket.on("game_select", (roomName, gameId) => {
     wsServer.to(roomName).emit("game_select", gameId);
   })
+  // 게임 선택창으로 돌아가기
+  socket.on("game_back_select", (roomName) => {
+    wsServer.to(roomName).emit("game_back_select");
+  })
+
   // 룰렛
   socket.on("game_roulette", (roomName, random) => {
     wsServer.to(roomName).emit("game_roulette", random);
