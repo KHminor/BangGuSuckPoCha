@@ -436,14 +436,21 @@ const WebRTC = ({
       // 방 설정 다시 불러오기!!! 테스트
       // await pocha_config_update("3");
     });
-    // socket.on("game_roulette", async (random: number) => {
-    //   console.log("룰렛 돌아가냐!!!여기는 게임웹악ㄹ시티??", random);
-    //   // rotate(random);
-    // })
+
+    // 포차 강퇴 기능 : 이름찾아서 내보내기
+    socket.on("ban", (username) => {
+      console.log(username, "강퇴!!!!-------");
+      if (myUserName === username) {
+        navigate(`/main`);
+        sessionStorage.reloadBan = true;
+        window.location.reload();
+      }
+    })
 
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
+      socket.off("ban");
     };
   }, []);
 
