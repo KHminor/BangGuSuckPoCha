@@ -10,10 +10,12 @@ function WaitingRoom({
   pochaId,
   socket,
   waitEnd,
+  myInfo,
 }: {
   pochaId: string;
   socket: any;
   waitEnd: Function;
+  myInfo: any;
 }): JSX.Element {
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
@@ -25,16 +27,21 @@ function WaitingRoom({
     setIntroduce(event.target.value);
   };
 
-  const getPochaInfo = async (flag : boolean) => {
+  const getPochaInfo = async (flag: boolean) => {
     try {
       const { data } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/${Number(pochaId)}`,
       });
       setPochaInfo(data.data);
-      
-      if(flag){
+
+      if (flag) {
         setIsLoading(false);
-        socket.emit('wait', { roomName: pochaId, limit: data.data.limitUser });
+        socket.emit("wait", {
+          roomName: pochaId,
+          username: myInfo.username,
+          nickname: myInfo.nickname,
+          limit: data.data.limitUser,
+        });
       }
       console.log(data);
     } catch (error) {
@@ -43,10 +50,11 @@ function WaitingRoom({
   };
 
   const setMyIntroduce = async () => {
-    if (introduce === "" || introduce == null || introduce == undefined) return;
+    if (introduce === "" || introduce == null || introduce === undefined)
+      return;
     let myIntroduce = [];
     let localIntroduce = localStorage.getItem("MyIntroduce");
-    if (localIntroduce != null && localIntroduce != undefined) {
+    if (localIntroduce != null && localIntroduce !== undefined) {
       myIntroduce = JSON.parse(localIntroduce);
     }
 
@@ -54,7 +62,7 @@ function WaitingRoom({
     localStorage.setItem("MyIntroduce", JSON.stringify(myIntroduce));
 
     setIntroduce("");
-  }
+  };
 
   useEffect(() => {
     getPochaInfo(true);
@@ -105,16 +113,14 @@ function WaitingRoom({
               placeholder="소개할 정보를 입력하세요"
               value={introduce}
               onChange={ChangeIntroduce}
-              />
+            />
             <div
               className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
               onClick={setMyIntroduce}
             >
               입력
             </div>
-            <div>
-              {localStorage.getItem("MyIntroduce")}  
-            </div>
+            <div>{localStorage.getItem("MyIntroduce")}</div>
           </div>
         </>
       )}
