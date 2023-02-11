@@ -44,7 +44,7 @@ function LoginLoading(): React.ReactElement {
       localStorage.setItem("Username", Username);
       dispatch(changeUserName(Username));
       //뉴비는 mypage로 가라!
-      navigate("/mypage");
+      navigate("/newmypage");
     } else if (Role === "USER") {
       //기존유저
       localStorage.setItem("accessToken", Auth);
