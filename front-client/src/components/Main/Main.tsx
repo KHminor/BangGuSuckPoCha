@@ -56,14 +56,37 @@ function Main(): JSX.Element {
   }, []);
 
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
+  // useEffect(() => {
+  //   axios({
+  //     method: "get",
+  //     url: "https://i8e201.p.ssafy.io/api/pocha/",
+  //   }).then((r) => {
+  //     console.log(r.data)
+  //     dispatch(changeMainCreateRoomList(r.data.data));
+
+  //   });
+  // }, []);
+
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "https://i8e201.p.ssafy.io/api/pocha/",
-    }).then((r) => {
-      console.log(r.data)
-      dispatch(changeMainCreateRoomList(r.data.data));
-    });
+    console.log(localStorage.getItem("reloadExit"),'@@@@ 리롵에싯')
+    console.log(localStorage.getItem("reloadBan"),'@@@@ 리롵에싯')
+    // console.log(sessionStorage.reloadBan,'@@@@ 뱁냅냅내')
+    if (localStorage.getItem("reloadExit") === "true") {
+      toast.success("방에서 나오셨습니다");
+      setTimeout(() => {
+        localStorage.removeItem("reloadExit");
+      }, 500)
+    }
+    if (localStorage.getItem("reloadBan") === "true") {
+      toast.success("방에서 나오셨습니다");
+      setTimeout(() => {
+        localStorage.removeItem("reloadBan");
+      }, 500)
+    }
+    // if (sessionStorage.reloadBan === "true") {
+    //   toast.error("방에서 강퇴 당하셨습니다");
+    //   sessionStorage.reloadBan = "false";
+    // }
   }, []);
 
   // 방 생성 관련
@@ -114,7 +137,6 @@ function Main(): JSX.Element {
     }
   }
 
-  
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
@@ -152,7 +174,6 @@ function Main(): JSX.Element {
         <div
           className="grid"
           style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
-          
         >
           <div></div>
           <div
@@ -205,8 +226,6 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-
-
 function Room({ mainCreateRoomList, myState }: any): JSX.Element {
 
   console.log('생성된 방 리스트: ',mainCreateRoomList)
@@ -227,12 +246,12 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
     "잘했고,잘하고있고,잘할거야💪",
   ];
   // 방에 입장하는 함수
-  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>,e:any) => {
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>, e: any) => {
     const pochaId = event.currentTarget.id;
-    console.log('클릭한 포차 데이터: ', e);
+    // console.log('클릭한 포차 데이터: ', e);
     
-    console.log('포차 아이디',pochaId)
-    console.log('나의 데이터: ',myState)
+    // console.log('포차 아이디',pochaId)
+    // console.log('나의 데이터: ',myState)
     const themeId = e.themeId.slice(0,2) 
     const age = e.age
     const region = e.region
@@ -335,20 +354,17 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
     }
 
     return (
-      <div
-        className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
-      >
+      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
         <div
           className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
           style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
         >
           <div></div>
           {/* 카드 내부 */}
-          <div 
-            onClick={(event)=> {
-              enterRoom(event,e)
+          <div
+            onClick={(event) => {
+              enterRoom(event, e);
             }}
-            
             key={e.pochaId}
             id={e.pochaId}
           >

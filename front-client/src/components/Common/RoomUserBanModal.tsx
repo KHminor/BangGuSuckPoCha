@@ -1,18 +1,19 @@
 import axios from "axios";
 import { useAppDispatch } from "../../store/hooks";
-import { showRoomUserBanModal } from "../../store/store";
+import { showRoomUserBanModal, showRoomUserProfile } from "../../store/store";
 import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
 
-const RoomUserBanModal = ({ userData, pochaId }: { userData: any, pochaId: string }) => {
+const RoomUserBanModal = ({ userData, pochaId, socket }: { userData: any, pochaId: string, socket: any }) => {
   let dispatch = useAppDispatch();
   const { nickname, username } = userData.data;
   const pochaID = Number(pochaId);
-  console.log(' vhck vj',pochaID);
+  const roomName = pochaId;
+  // console.log(' 유유유저데이터j', userData);
   // 강퇴하는 함수
   const banUser = async () => {
     try {
-      const bban = await axios({
+      await axios({
         method: "PUT",
         url: "https://i8e201.p.ssafy.io/api/pocha/exit",
         data: {
@@ -22,12 +23,13 @@ const RoomUserBanModal = ({ userData, pochaId }: { userData: any, pochaId: strin
           waiting: true,
         },
       });
+      socket.emit("ban", roomName, username);
       toast.success(`${nickname}을 강퇴하였습니다`);
-      console.log("bban", bban);
     } catch (error) {
-      console.log(error);
+      console.log("강퇴에러", error);
     }
     dispatch(showRoomUserBanModal());
+    dispatch(showRoomUserProfile());
   };
 
   // 취소 클릭시 모달 끄는 함수

@@ -12,7 +12,6 @@ import AdminMain from "./components/Admin/AdminMain";
 import UserList from "./components/Admin/UserList";
 import UserReport from "./components/Admin/UserReport";
 import UserReportWait from "./components/Admin/UserReportWait";
-import Mypage from "./components/MyPage/Mypage";
 import RoomList from "./components/Admin/RoomList";
 import LoginLoading from "./components/Login/LoginLoading";
 import { ToastContainer } from "react-toastify";
@@ -21,6 +20,7 @@ import ReviewPage from "./components/ReviewPage/ReviewPage";
 import FriendSearch from "./components/Common/FriendSearch";
 import AdminAdd from "./components/Admin/AdminAdd";
 import AdminGameSetting from "./components/Admin/AdminGameSetting";
+import NewMyPage from "./components/MyPage/NewMypage";
 
 function App() {
   return (
@@ -58,8 +58,8 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/gameroom/:PochaId" element={<GameRoom />} />
         <Route path="/storyroom/:PochaId" element={<StoryRoom />} />
-        <Route path="/meetingroom/:PochaId" element={<MeetingRoom />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/meetingroom/:PochaId" element={<MeetingRoom />} />        
+        <Route path="/newmypage" element={<NewMyPage />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
         <Route path="/adminadd" element={<AdminAdd />} />
