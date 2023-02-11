@@ -12,21 +12,39 @@ function GameSelect({
   pochaId: string;
 }): React.ReactElement {
   const roomName = pochaId;
-  const hoverBtn = (event: React.MouseEvent<HTMLImageElement>) => {
-    event.currentTarget.classList.toggle(`${styles.gameBox}`);
+  // 이미지들 잡자
+  const balance = useRef<HTMLImageElement>(null);
+  const ladder = useRef<HTMLImageElement>(null);
+  const son = useRef<HTMLImageElement>(null);
+  const yang = useRef<HTMLImageElement>(null);
+  const liar = useRef<HTMLImageElement>(null);
+  const roul = useRef<HTMLImageElement>(null);
+  // 이미지들 리스트
+  const [imgLists, setImgLists] = useState<any[]>([]);
+
+  const hoverBtn = (elementId: string) => {
+    imgLists.forEach((img) => {
+      if (img.current!.id === elementId) {
+        img.current!.classList.toggle(`${styles.gameBox}`);
+      }
+    });
   };
 
   const goWebRTC = (event: React.MouseEvent<HTMLImageElement>) => {
-    const element = event.currentTarget;
-    socket.emit("game_select", roomName, element);
-  }
+    const elementId = event.currentTarget.id;
+    socket.emit("game_select", roomName, elementId);
+  };
 
   useEffect(() => {
+    setImgLists([balance, ladder, son, yang, liar, roul]);
 
+    socket.on("game_select", (elementId: string) => {
+      hoverBtn(elementId);
+    });
     return () => {
       socket.off("game_select");
     };
-  }, [])
+  }, []);
 
   return (
     <div className=" w-full h-full bg-zinc-900">
@@ -38,19 +56,22 @@ function GameSelect({
       <div className="flex flex-col h-[90%] justify-evenly">
         <div className="flex justify-evenly">
           <img
-            // onMouseOver={goWebRTC}
-            // onMouseLeave={goWebRTC}
-            onClick={goWebRTC}
+            onMouseOver={goWebRTC}
+            onMouseLeave={goWebRTC}
             className={`transition-all duration-500 rounded-lg cursor-pointer`}
             src={require("src/assets/game_select/bal.png")}
             alt="bal"
+            id="bal"
+            ref={balance}
           />
           <img
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
-            src={require("src/assets/game_select/ladder.png")}
-            alt="ladder"
+            src={require("src/assets/game_select/son.png")}
+            alt="son"
+            id="son"
+            ref={son}
           />
         </div>
         <div className="flex justify-evenly">
@@ -58,15 +79,19 @@ function GameSelect({
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
-            src={require("src/assets/game_select/son.png")}
-            alt="son"
+            src={require("src/assets/game_select/ladder.png")}
+            alt="ladder"
+            id="ladder"
+            ref={ladder}
           />
           <img
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
             src={require("src/assets/game_select/yang.png")}
-            alt="bal"
+            alt="yang"
+            id="yang"
+            ref={yang}
           />
         </div>
         <div className="flex justify-evenly">
@@ -76,6 +101,8 @@ function GameSelect({
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
             src={require("src/assets/game_select/liar.png")}
             alt="liar"
+            id="liar"
+            ref={liar}
           />
           <img
             onMouseOver={goWebRTC}
@@ -83,6 +110,8 @@ function GameSelect({
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
             src={require("src/assets/game_select/roul.png")}
             alt="roul"
+            id="roul"
+            ref={roul}
           />
         </div>
       </div>
