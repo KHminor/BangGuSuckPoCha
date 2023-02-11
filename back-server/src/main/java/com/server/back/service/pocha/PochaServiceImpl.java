@@ -225,15 +225,20 @@ public class PochaServiceImpl implements PochaService{
     }
 
     @Override
-    public void pochaMeetingStart(Long pochaId) {
+    public boolean pochaMeetingStart(Long pochaId) {
         Pocha entity = pochaRepository.findByPochaId(pochaId);
 
-        entity.startHuntingPocha();
-        for(Participant p : entity.getParticipant()){
-            if(p.getExitAt() != null) continue;
-            System.out.println("미팅 포차 시작 확인");
-            p.updateCreate();
+        // 포차가 대기중인 경우에만 시작 요청 활성화.
+        if(entity.getIsWaiting()){
+            entity.startHuntingPocha();
+            for(Participant p : entity.getParticipant()){
+                if(p.getExitAt() != null) continue;
+                System.out.println("미팅 포차 시작 확인");
+                p.updateCreate();
+            }
+            return true;
         }
+        return false;
     }
 
     @Override
