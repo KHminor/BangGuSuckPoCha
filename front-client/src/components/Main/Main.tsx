@@ -156,8 +156,7 @@ function Main(): JSX.Element {
 
         <div
           className="grid"
-          style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
-          
+          style={{ gridTemplateColumns: "12rem 1fr 12rem" }}          
         >
           <div></div>
           <div

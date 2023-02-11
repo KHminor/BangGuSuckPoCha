@@ -8,9 +8,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 const SecessionModal = ({ userData }: { userData: any }) => {
   const navigate = useNavigate();
   let dispatch = useAppDispatch();
-  console.log(userData.data);
+  console.log(userData);
 
-  const { nickname, username } = userData.data;
+  const { nickname, username } = userData;
   // 탈퇴하는 함수
   const SecessionUser = async () => {
     try {
