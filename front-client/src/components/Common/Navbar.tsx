@@ -69,8 +69,9 @@ function MenuOption({profile, nickname, myData}:any): JSX.Element {
         <div className="flex justify-center items-end mb-2">
           <div className="cursor-pointer ">
             <div className="flex justify-center items-center ">
+              {/* 이모지 */}
               <img
-                className={`object-contain ${styles.myemoji}`}
+                className={`object-fill ${styles.myemoji} rounded-full`}
                 style={{ width: "1.8rem", height: "1.8rem" }}
                 src={profile}
                 alt="my"
