@@ -1,14 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeCarouselState,
   changeMenuState,
   changeAlarmState,
   changeMainCreateRoomList,
-  changeMenuFriendState,
-  changeMenuFriendChatState,
 } from "../../store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
@@ -46,9 +45,20 @@ function Main(): JSX.Element {
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/pocha/",
     }).then((r) => {
-      console.log(r.data)
+      console.log(r.data);
       // dispatch(changeMainCreateRoomList(r.data.data));
     });
+  }, []);
+
+  useEffect(() => {
+    if (sessionStorage.reloadExit) {
+      toast.success("방에서 나오셨습니다");
+      sessionStorage.reloadAfterPageLoad = false;
+    }
+    if (sessionStorage.reloadBan) {
+      toast.error("방에서 강퇴 당하셨습니다");
+      sessionStorage.reloadBan = false;
+    }
   }, []);
 
   // 방 생성 관련
@@ -90,11 +100,6 @@ function Main(): JSX.Element {
     return state.RoomUserProfileClickCheck;
   });
 
-  // 메뉴 -> 친구 클릭 상태
-  const menuFriendClickCheck = useAppSelector((state) => {
-    return state.menuFriendClickCheck;
-  });
-
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
     if (checkMenuState) {
@@ -104,7 +109,6 @@ function Main(): JSX.Element {
     }
   }
 
-  
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
@@ -136,27 +140,12 @@ function Main(): JSX.Element {
           gridTemplateRows: "11rem 1fr",
           overflow: "auto",
         }}
-        onClick={()=> {
-          // 메뉴 클릭한 상태의 경우 없애기
-          if (checkMenuState) {
-            dispatch(changeMenuState());
-          }
-          if (alarmClickCheck) {
-            dispatch(changeAlarmState());
-          }
-          if (menuFriendClickCheck) {
-            dispatch(changeMenuFriendState());
-          }
-          if (menuFriendChatClickCheck) {
-            dispatch(changeMenuFriendChatState(false));
-          }
-        }}
       >
         <Navbar />
 
         <div
           className="grid"
-          style={{ gridTemplateColumns: "12rem 1fr 12rem" }}          
+          style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
         >
           <div></div>
           <div
@@ -209,11 +198,8 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-
-
 function Room({ mainCreateRoomList }: any): JSX.Element {
-
-  console.log('생성된 방 리스트: ',mainCreateRoomList)
+  console.log("생성된 방 리스트: ", mainCreateRoomList);
   const navigate = useNavigate();
   // 내 아이디
   const username = localStorage.getItem("Username");
@@ -231,9 +217,9 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     "흥청망청 취해보자👾",
   ];
   // 방에 입장하는 함수
-  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>,e:any) => {
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>, e: any) => {
     const pochaId = event.currentTarget.id;
-    console.log('여기 방은?',e.themeId )
+    console.log("여기 방은?", e.themeId);
     try {
       await axios({
         method: "POST",
@@ -245,10 +231,10 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
           waiting: false,
         },
       });
-      let roomTheme = (e.themeId).slice(0,2) 
-      if (roomTheme === 'T0') {
+      let roomTheme = e.themeId.slice(0, 2);
+      if (roomTheme === "T0") {
         navigate(`/storyroom/${pochaId}`);
-      } else if (roomTheme === 'T1') {
+      } else if (roomTheme === "T1") {
         navigate(`/gameroom/${pochaId}`);
       } else {
         navigate(`/meetingroom/${pochaId}`);
@@ -282,20 +268,17 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     }
 
     return (
-      <div
-        className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
-      >
+      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
         <div
           className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
           style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
         >
           <div></div>
           {/* 카드 내부 */}
-          <div 
-            onClick={(event)=> {
-              enterRoom(event,e)
+          <div
+            onClick={(event) => {
+              enterRoom(event, e);
             }}
-            
             key={e.pochaId}
             id={e.pochaId}
           >

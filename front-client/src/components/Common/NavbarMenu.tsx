@@ -113,9 +113,7 @@ function NavbarMenu(): JSX.Element {
               })
               console.log('베프: ',bestFriend)
               console.log('친구: ',normalFriend)
-              if (checkMenuState) {
-                dispatch(changeMenuState());
-              }
+              
               dispatch(changeMenuFriendState());
               dispatch(changeMenuFriendListApiDataState([...bestFriend,...normalFriend]));
             });

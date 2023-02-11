@@ -209,6 +209,12 @@ wsServer.on("connection", (socket) => {
       });
     }
   });
+
+  // 포차 강퇴 기능.
+  socket.on("ban", (roomName, username) => {
+    wsServer.to(roomName).emit("ban", username);
+  });
+
   /////////////////////////////////////////////////
 
   // 게임 기능!!

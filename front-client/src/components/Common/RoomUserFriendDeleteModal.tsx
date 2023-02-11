@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAppDispatch } from "../../store/hooks";
-import { changeRoomDeleteFriendModalCheck, roomAddFriendModalState } from "../../store/store";
+import { changeRoomDeleteFriendModalCheck, roomAddFriendModalState, showRoomUserProfile } from "../../store/store";
 import { toast } from "react-toastify";
 import styles from "./RoomUserProfile.module.css";
 
@@ -32,12 +32,13 @@ const RoomUserFriendDeleteModal = ({ userData }: { userData: any }) => {
       console.log(error);
     }
     dispatch(changeRoomDeleteFriendModalCheck());
+    // dispatch(showRoomUserProfile())
     
   };
 
   // 취소 클릭시 모달 끄는 함수
   const closeFriendModal = () => {
-    dispatch(roomAddFriendModalState());
+    dispatch(changeRoomDeleteFriendModalCheck());
   };
 
   return (
@@ -50,7 +51,12 @@ const RoomUserFriendDeleteModal = ({ userData }: { userData: any }) => {
           님을 삭제 하시겠습니까?
         </div>
         <input
-          onClick={removeFriend}
+          onClick={()=> {
+            removeFriend()
+            setTimeout(() => {
+              dispatch(showRoomUserProfile())
+            }, 100);
+          }}
           className={`${styles.createBtn} cursor-pointer`}
           type="submit"
           value="신청"
