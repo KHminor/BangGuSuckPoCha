@@ -124,8 +124,8 @@ public class PochaController {
     @PutMapping("/meeting/start/{pocha_id}")
     public ResponseEntity<Map<String, Object>> pochaMeetingStart(@RequestBody @PathVariable(value = "pocha_id") Long pochaId){
         Map<String, Object> response = new HashMap<>();
-        pochaService.pochaMeetingStart(pochaId);
-        response.put("message", "success");
+        if(pochaService.pochaMeetingStart(pochaId)) response.put("message", "success");
+        else response.put("message", "fail");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "주량 카운트")

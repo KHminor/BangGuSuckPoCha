@@ -38,5 +38,5 @@ public interface PochaService {
 
     List<PochaResponseDto> allPochaList();
 
-    void pochaMeetingStart(Long pochaId);
+    boolean pochaMeetingStart(Long pochaId);
 }
