@@ -20,9 +20,11 @@ function GameSelect({
   const liar = useRef<HTMLImageElement>(null);
   const roul = useRef<HTMLImageElement>(null);
   // 이미지들 리스트
-  const [imgLists, setImgLists] = useState<any[]>([]);
+  const [imgLists, setImgLists] = useState<any[]>([balance, ladder, son, yang, liar, roul]);
 
   const hoverBtn = (elementId: string) => {
+    console.log("여긴오나?ㅋㅋ");
+    console.log(imgLists);
     imgLists.forEach((img) => {
       if (img.current!.id === elementId) {
         img.current!.classList.toggle(`${styles.gameBox}`);
@@ -37,8 +39,9 @@ function GameSelect({
 
   useEffect(() => {
     setImgLists([balance, ladder, son, yang, liar, roul]);
-
+    
     socket.on("game_select", (elementId: string) => {
+      console.log("오냐?")
       hoverBtn(elementId);
     });
     return () => {
