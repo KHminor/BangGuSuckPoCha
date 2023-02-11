@@ -478,6 +478,28 @@ const rouletteResultModal = createSlice({
   },
 });
 
+// 게임 선택창 켜고 끄는 함수
+const gameSelectModal = createSlice({
+  name: "gameSelectModal",
+  initialState: true,
+  reducers: {
+    showGameSelectModal(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
+// 선택한 게임ID 구분
+const selectGameId = createSlice({
+  name: "selectGameId",
+  initialState: "",
+  reducers: {
+    selectGame(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 //
 export const store = configureStore({
   // store에서 만든 state를 전역에서 사용할 수 있도록 등록하기
@@ -539,6 +561,8 @@ export const store = configureStore({
     roomDeleteFriendModalCheck: roomDeleteFriendModalCheck.reducer,
     // Game관련
     rouletteResultModal : rouletteResultModal.reducer,
+    gameSelectModal : gameSelectModal.reducer,
+    selectGameId : selectGameId.reducer,
   },
 });
 //주석추가
@@ -607,6 +631,8 @@ export const { changeFriendSearchState } = friendSearchState.actions;
 export const { changeRoomDeleteFriendModalCheck } = roomDeleteFriendModalCheck.actions;
 // Game관련
 export const { showRouletteResultModal } = rouletteResultModal.actions;
+export const { showGameSelectModal } = gameSelectModal.actions;
+export const { selectGame } = selectGameId.actions;
 
 // store의 타입 미리 export 해둔 것.
 export type RootState = ReturnType<typeof store.getState>;

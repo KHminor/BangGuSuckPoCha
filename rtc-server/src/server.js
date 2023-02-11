@@ -218,9 +218,13 @@ wsServer.on("connection", (socket) => {
   /////////////////////////////////////////////////
 
   // 게임 기능!!
-  // 게임선택창 
-  socket.on("game_select", (roomName, elementId) => {
-    wsServer.to(roomName).emit("game_select", elementId);
+  // 게임선택버튼 호버
+  socket.on("game_btn_hover", (roomName, elementId) => {
+    wsServer.to(roomName).emit("game_btn_hover", elementId);
+  })
+  // 게임 선택
+  socket.on("game_select", (roomName, gameId) => {
+    wsServer.to(roomName).emit("game_select", gameId);
   })
   // 룰렛
   socket.on("game_roulette", (roomName, random) => {
