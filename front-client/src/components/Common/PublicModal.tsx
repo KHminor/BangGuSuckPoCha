@@ -110,8 +110,8 @@ const PublicModal = ({
       //   waiting: false,
       // });
       navigate(`/main`);
-      toast.success("방에서 나오셨습니다");
-      // window.location.reload();
+      sessionStorage.reloadExit = true;
+      window.location.reload();
     } catch (error) {
       console.log("포차나가기 error", error);
     }
