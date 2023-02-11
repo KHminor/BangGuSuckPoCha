@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { changeAlarmApiDataState } from "../../store/store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function WaitingRoom({
   pochaId,
@@ -21,9 +22,12 @@ function WaitingRoom({
   const [pochaInfo, setPochaInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [introduce, setIntroduce] = useState<string>("");
+  const [myIntroduce, setMyIntroduce] = useState<Array<string>>([]);
+  const [timer, setTimer] = useState<number>(0);
+
+  const navigate = useNavigate();
 
   const ChangeIntroduce = (event: any) => {
-    console.log(event.target.value);
     setIntroduce(event.target.value);
   };
 
@@ -49,19 +53,42 @@ function WaitingRoom({
     }
   };
 
-  const setMyIntroduce = async () => {
+  // 자기소개 추가
+  const addMyIntroduce = async () => {
     if (introduce === "" || introduce == null || introduce === undefined)
       return;
-    let myIntroduce = [];
-    let localIntroduce = localStorage.getItem("MyIntroduce");
-    if (localIntroduce != null && localIntroduce !== undefined) {
-      myIntroduce = JSON.parse(localIntroduce);
+
+    let flag = true;
+    for (const entity of myIntroduce) {
+      if (entity === introduce) {
+        flag = false;
+        break;
+      }
     }
 
-    myIntroduce.push(introduce);
-    localStorage.setItem("MyIntroduce", JSON.stringify(myIntroduce));
+    if (flag && myIntroduce.length < 5) {
+      setMyIntroduce([...myIntroduce, introduce]);
+    }
 
     setIntroduce("");
+  };
+
+  // 자기소개 요소 삭제
+  const deleteMyIntroduce = async (event: any) => {
+    const deleteIntorduce = event.target.innerText.substring(
+      1,
+      event.target.innerText.length - 1
+    );
+    const changeIntroduce = myIntroduce.filter(
+      (entity) => entity !== deleteIntorduce
+    );
+    setMyIntroduce(changeIntroduce);
+  };
+
+  // 미팅 포차 대기방 나가기
+  const exitWaitingRoom = () => {
+    navigate("/main");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -71,7 +98,6 @@ function WaitingRoom({
       getPochaInfo(false);
     });
     socket.on("wait_end", (time: string) => {
-      alert("참여 인원 모집 완료! 30초 후 이동합니다");
       getPochaInfo(false);
       let goal = new Date(time);
 
@@ -83,7 +109,7 @@ function WaitingRoom({
       console.log(startTime);
 
       const diff = waitTime - startTime;
-
+      setTimer(Math.floor(diff / 1000));
       setTimeout(waitEnd, diff);
     });
 
@@ -95,6 +121,20 @@ function WaitingRoom({
     ////////////////////////////////////////////
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("myIntroduce", JSON.stringify(myIntroduce));
+  }, [myIntroduce]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimer((timer) => timer - 1);
+    }, 1000);
+    if (timer === 0) {
+      clearInterval(id);
+    }
+    return () => clearInterval(id);
+  }, [timer]);
+
   return (
     <>
       {isLoading ? (
@@ -102,29 +142,39 @@ function WaitingRoom({
       ) : (
         <>
           <div className="text-white">
-            <h2>헌팅 포차 대기방!!!!!!!!</h2>
-            <h3>
+            <div className="text-center text-4xl ">미팅 포차 대기방</div>
+            <div className="text-center text-2xl ">
               {pochaInfo.totalCount} / {pochaInfo.limitUser}
-            </h3>
-            <div className="text-center pl-5 text-3xl ">Introduce :</div>
+            </div>
+            <div className="text-center text-2xl ">자기소개</div>
             <input
               type="text"
-              className="col-span-4 bg-black border-2 caret-white"
+              className="w-[30%] text-center bg-black border-2 caret-white"
               placeholder="소개할 정보를 입력하세요"
               value={introduce}
               onChange={ChangeIntroduce}
             />
-            <div
-              className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
-              onClick={setMyIntroduce}
+            <button
+              className="text-center w-20 border-white border-2 cursor-pointer"
+              onClick={addMyIntroduce}
             >
               입력
+            </button>
+            <div>
+              {myIntroduce.map((input, index) => (
+                <div
+                  key={index}
+                  onClick={deleteMyIntroduce}
+                >{`[${input}]`}</div>
+              ))}
             </div>
-            <div>{localStorage.getItem("MyIntroduce")}</div>
+            <button className="w-200 text-center" onClick={exitWaitingRoom}>
+              나가기
+            </button>
+            {timer > 0 ? <div>타이머 : {timer}</div> : <div></div>}
           </div>
         </>
       )}
-      ;
     </>
   );
 }

@@ -78,7 +78,7 @@ function MeetingRoom(): JSX.Element {
     getPochaInfo();
     getMyInfo();
     return () => {
-      localStorage.removeItem("MyIntroduce");
+      localStorage.removeItem("myIntroduce");
     };
   }, []);
 
