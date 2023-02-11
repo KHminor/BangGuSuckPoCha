@@ -103,7 +103,6 @@ const PublicModal = ({
   // 포차 나가기 요청
   async function handlePochaExit() {
     try {
-      // 포차 나가기는 socket 서버에서 실행
       // await api.put("/pocha/exit", {
       //   isHost: false,
       //   pochaId: roomName,
@@ -111,10 +110,8 @@ const PublicModal = ({
       //   waiting: false,
       // });
       navigate(`/main`);
-      window.location.reload();
-      setTimeout(() => {
-        toast.success("방에서 나오셨습니다");
-      }, 1000);
+      toast.success("방에서 나오셨습니다");
+      // window.location.reload();
     } catch (error) {
       console.log("포차나가기 error", error);
     }
