@@ -148,7 +148,7 @@ function FriendList(): JSX.Element {
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
       >
         <div className="flex justify-center items-center h-full pl-2">
-          <img className="object-contain h-[80%] " src={e.f_profile} alt="" onClick={()=>{
+          <img className="object-fill rounded-full h-[2.6rem]" src={e.f_profile} alt="" onClick={()=>{
             console.log(e)
             UserStateSearch(e.f_username)
           }}/>
@@ -179,9 +179,8 @@ function FriendList(): JSX.Element {
                   chat_id: chat_id
                 })
               );
+              dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
             });
-  
-            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
           }}
         >
           {e.f_nickname}
@@ -228,16 +227,13 @@ function FriendList(): JSX.Element {
                 style={{ gridTemplateColumns: "2fr 1.5fr 1fr 1fr" }}
               >
                 <div></div>
-                <div className="flex justify-center items-center h-full text-base">
+                <div className={`flex justify-center items-center h-full text-base`}>
                   친구목록
                 </div>
                 <div></div>
                 {/* 친구 리스트 및 채팅창 닫기 */}
                 <div className="flex justify-center items-center h-full">
-                  <img
-                    className="h-[50%] cursor-pointer"
-                    src={require("../../assets/roomIcon/cancel.png")}
-                    alt=""
+                  <span className={`text-2xl pb-[0.3rem] ${styles.xBtn}`}
                     onClick={() => {
                       if (menuFriendChatClickCheck) {
                         dispatch(changeMenuFriendChatState(false));
@@ -246,8 +242,10 @@ function FriendList(): JSX.Element {
                         dispatch(changeMenuFriendState());
                       }
                       dispatch(changeFriendSearchState(false))
-                    }}
-                  />
+                    }}>
+                    ×
+                  </span>
+                  
                 </div>
               </div>
               <div className="flex justify-between items-center rounded-full bg-white h-[80%] border-2 border-stone-400">
@@ -280,7 +278,7 @@ function FriendList(): JSX.Element {
                 <div className={`h-full overflow-scroll ${styles.hideScroll} `}>
                   {friendList}
                 </div>
-                <div><span className={`cursor-pointer ${styles.friendName}`} onClick={()=> {
+                <div><span className={`cursor-pointer ${styles.friendName} ${styles.friendRequestName}`} onClick={()=> {
                   // 친구 요청 검색 모달 상태
                   dispatch(changeFriendSearchState(true))
                 }}>친구요청</span></div>
