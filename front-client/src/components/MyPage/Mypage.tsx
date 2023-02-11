@@ -638,18 +638,33 @@ function Mypage(): JSX.Element {
                             //수정가능
 
                             console.log("앞쪽꺼", SelectedFirst.substr(0, 2));
+                            console.log("city", city);
+                            let back = Selected2;
+
                             city.map((it: any) => {
+                              console.log("it", it.regionCode);
+                              console.log(
+                                "it substr",
+                                it.regionCode.substr(0, 2)
+                              );
+                              console.log(
+                                "조건문",
+                                it.regionCode.substr(0, 2) ===
+                                  SelectedFirst.substr(0, 2)
+                              );
+
                               if (
-                                it.substr(0, 2) === SelectedFirst.substr(0, 2)
+                                it.regionCode.substr(0, 2) ===
+                                SelectedFirst.substr(0, 2)
                               ) {
+                                console.log("나바뀐다!");
+                                back = "0000000000";
                                 setSelected2("0000000000");
-                                console.log("뒤쪽꺼", Selected2.substr(2, 8));
                               }
                             });
-
+                            console.log("뒤쪽꺼", back.substr(2, 8));
                             const Code =
-                              SelectedFirst.substr(0, 2) +
-                              Selected2.substr(2, 8);
+                              SelectedFirst.substr(0, 2) + back.substr(2, 8);
                             console.log("수정될Code입니다", Code);
 
                             axios({

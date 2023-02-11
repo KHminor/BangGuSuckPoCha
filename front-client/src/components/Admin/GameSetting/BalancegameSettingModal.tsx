@@ -11,8 +11,11 @@ const BalancegameSettingModal = () => {
   //useState
   const [Select, setSelect] = useState("0");
   const [Balance, setBalance] = useState<any>();
-  const [LeftInput, setLeftInput] = useState();
-  const [RightInput, setRightInput] = useState();
+  const [LeftInput, setLeftInput] = useState<any>();
+  const [RightInput, setRightInput] = useState<any>();
+  //수정
+  const [ModifyCheck, setModifyCheck] = useState(false);
+  const [ModifybalanceId, setModifybalanceId] = useState<any>();
 
   //백그라운드 div
   const bgDiv = useRef<any>();
@@ -35,11 +38,24 @@ const BalancegameSettingModal = () => {
     setRightInput(event.target.value);
   };
 
+  const ShowModify = (data: any) => {
+    console.log(ModifyCheck);
+
+    console.log("수정하자");
+    setModifybalanceId(data.balanceId);
+    setLeftInput(data.question1);
+    setRightInput(data.question2);
+    setModifyCheck(true);
+  };
+
+  const CloseModify = () => {
+    setModifybalanceId(``);
+    setLeftInput(``);
+    setRightInput(``);
+    setModifyCheck(false);
+  };
+
   const Save = () => {
-    // console.log("저장버튼 누름");
-    // console.log("지금 선택된 type은 먼가요?", Select);
-    // console.log("왼쪽 값은 뭔가요?", LeftInput);
-    // console.log("오른쪽 값은 뭔가요?", RightInput);
     axios({
       method: "post",
       url: "https://i8e201.p.ssafy.io/api/admin/game/balance",
@@ -70,7 +86,7 @@ const BalancegameSettingModal = () => {
       method: "get",
       url: "https://i8e201.p.ssafy.io/api/pocha/game/balance/0",
     }).then((r) => {
-      console.log("밸런스 게임 데이터 0", r.data.data);
+      // console.log("밸런스 게임 데이터 0", r.data.data);
       setBalance(r.data.data);
     });
 
@@ -84,7 +100,7 @@ const BalancegameSettingModal = () => {
         onMouseDown={CloseBalanceSettingModal}
         className={`z-10 bg-slate-900 bg-opacity-90 fixed top-0 right-0 bottom-0 left-0 flex flex-col justify-center items-center text-white`}
       >
-        <div className="w-[50rem] h-[50rem] border-2 border-white rounded-[6rem] flex flex-col justify-center items-center">
+        <div className="w-[80rem] h-[50rem] border-2 border-white rounded-[6rem] flex flex-col justify-center items-center">
           <div className="h-[11%] w-[78%]">양세찬게임 데이터 header</div>
           <div className="h-[10%] w-[78%] flex flex-row justify-start p-">
             <div className="h-[100%] w-[30%] p-5">
@@ -128,18 +144,14 @@ const BalancegameSettingModal = () => {
             style={{ overflow: "auto" }}
           >
             {/* <div className={`h-[60%] w-[90%] border-2  overflow-y-auto`}> */}
-            <table className="table-auto h-[100%]">
-              <tr className="border-2">
-                <th className="w-[45%]">선택1</th>
-                <th className="w-[45%]">선택2</th>
-                <th className="w-[10%]">삭제</th>
-              </tr>
+            <table className="table-auto h-[100%] w-[100%]">
               <thead>
-                {/* <tr className="border-2">
-                  <th className="w-[10%]">번호</th>
+                <tr className="border-2">
                   <th className="w-[45%]">선택1</th>
                   <th className="w-[45%]">선택2</th>
-                </tr> */}
+                  <th className="w-[5%]">수정</th>
+                  <th className="w-[5%]">삭제</th>
+                </tr>
               </thead>
               <tbody className="max-h-[10rem]">
                 {Balance
@@ -148,7 +160,34 @@ const BalancegameSettingModal = () => {
                         <tr className="h-10 border-b-[1px] border-dashed">
                           <td>{it.question1}</td>
                           <td>{it.question2}</td>
-                          <td>❌</td>
+                          <td
+                            className="p-2 cursor-pointer hover:scale-125"
+                            onClick={() => {
+                              ShowModify(it);
+                            }}
+                          >
+                            ⚙
+                          </td>
+                          <td
+                            className=" p-2 cursor-pointer hover:scale-125"
+                            onClick={() => {
+                              console.log("나 클릭");
+                              axios({
+                                method: "delete",
+                                url: `https://i8e201.p.ssafy.io/api/admin/game/balance/${it.balanceId}`,
+                              }).then((r) => {
+                                axios({
+                                  method: "get",
+                                  url: `https://i8e201.p.ssafy.io/api/pocha/game/balance/${Select}`,
+                                }).then((r) => {
+                                  setBalance(r.data.data);
+                                });
+                                toast.success("삭제완료");
+                              });
+                            }}
+                          >
+                            ❌
+                          </td>
                         </tr>
                       );
                     })
@@ -157,48 +196,117 @@ const BalancegameSettingModal = () => {
             </table>
           </div>
           <>
-            <div className="h-[10%] w-[90%] flex flex-row p-3">
-              <input
-                className="w-[45%] bg-transparent text-center border-2"
-                type={"text"}
-                placeholder="선택 ⚪ "
-                onChange={ChangeLeftInput}
-                value={LeftInput}
-              />
-              <div className="w-[10%] text-center flex justify-center items-center">
-                <div> VS</div>
-              </div>
-              <input
-                className="w-[45%] bg-transparent text-center border-2"
-                type={"text"}
-                placeholder="선택 ⚫ "
-                onChange={ChangeRightInput}
-                value={RightInput}
-              />
-            </div>
-            <div className="h-[10%] w-[78%] flex flex-row justify-center items-center">
-              <div
-                className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
-                onClick={() => {
-                  Save();
-                }}
-              >
-                {" "}
-                저장하기
-              </div>
-              <div className="w-[40%]"> </div>
-              <div
-                className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
-                onClick={() => {
-                  console.log("모달창 off");
+            <>
+              {ModifyCheck === false ? (
+                // 양세찬 게임 입력
+                <div className="h-[10%] w-[90%] flex flex-row p-3">
+                  <input
+                    className="w-[45%] bg-transparent text-center border-2"
+                    type={"text"}
+                    placeholder="선택 ⚪ "
+                    onChange={ChangeLeftInput}
+                    value={LeftInput}
+                  />
+                  <div className="w-[10%] text-center flex justify-center items-center">
+                    <div> VS</div>
+                  </div>
+                  <input
+                    className="w-[45%] bg-transparent text-center border-2"
+                    type={"text"}
+                    placeholder="선택 ⚫ "
+                    onChange={ChangeRightInput}
+                    value={RightInput}
+                  />
+                </div>
+              ) : (
+                // 양세찬 게임 수정
+                <div className="h-[10%] w-[90%] flex flex-row p-3">
+                  <input
+                    className="w-[45%] bg-transparent text-center border-2"
+                    type={"text"}
+                    placeholder="선택 ⚪ "
+                    onChange={ChangeLeftInput}
+                    value={LeftInput}
+                  />
+                  <div className="w-[10%] text-center flex justify-center items-center">
+                    <div> 수정</div>
+                  </div>
+                  <input
+                    className="w-[45%] bg-transparent text-center border-2"
+                    type={"text"}
+                    placeholder="선택 ⚫ "
+                    onChange={ChangeRightInput}
+                    value={RightInput}
+                  />
+                </div>
+              )}
+            </>
+            <>
+              {ModifyCheck === false ? (
+                <div className="h-[10%] w-[78%] flex flex-row justify-center items-center">
+                  <div
+                    className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
+                    onClick={() => {
+                      Save();
+                    }}
+                  >
+                    {" "}
+                    저장하기
+                  </div>
+                  <div className="w-[40%]"> </div>
+                  <div
+                    className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
+                    onClick={() => {
+                      console.log("모달창 off");
 
-                  dispatch(showBalancegameeSettingModal());
-                }}
-              >
-                {" "}
-                나가기
-              </div>
-            </div>
+                      dispatch(showBalancegameeSettingModal());
+                    }}
+                  >
+                    {" "}
+                    나가기
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="h-[10%] w-[78%] flex flex-row justify-center items-center">
+                    <div
+                      className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
+                      onClick={() => {
+                        axios({
+                          method: "put",
+                          url: `https://i8e201.p.ssafy.io/api/admin/game/balance/${ModifybalanceId}`,
+                          data: {
+                            question1: LeftInput,
+                            question2: RightInput,
+                            type: Select,
+                          },
+                        }).then((r) => {
+                          toast.success("수정완료");
+                          axios({
+                            method: "get",
+                            url: `https://i8e201.p.ssafy.io/api/pocha/game/balance/${Select}`,
+                          }).then((r) => {
+                            setBalance(r.data.data);
+                          });
+                        });
+                      }}
+                    >
+                      수정하기
+                    </div>
+                    <div className="w-[40%]"> </div>
+                    <div
+                      className="w-[30%] p-2 border-2 rounded-full cursor-pointer"
+                      onClick={() => {
+                        CloseModify();
+                        console.log("수정취소");
+                      }}
+                    >
+                      입력하러가기
+                    </div>
+                  </div>
+                </>
+              )}
+            </>
           </>
         </div>
       </div>
