@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
-import { showPublicModal, showRouletteResultModal } from "../../store/store";
+import { selectGame, showPublicModal, showRouletteResultModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
 const PublicModal = ({
@@ -141,8 +141,8 @@ const PublicModal = ({
       if (fx) {
         fx!();
       }
-      // Roulette방에서 모달끄기
-      dispatch(showRouletteResultModal(false));
+      // // Roulette방에서 모달끄기
+      // dispatch(showRouletteResultModal(false));
     }
   };
 
@@ -169,7 +169,8 @@ const PublicModal = ({
         inviteMyFriend();
         break;
       case "roulette":
-        dispatch(showRouletteResultModal(false));
+        // 게임선택창으로 돌아가기
+        socket.emit("game_back_select", roomName);
         break;
     }
     // RoomFooterNavbar에서 모달 끄기
