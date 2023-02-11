@@ -192,7 +192,7 @@ wsServer.on("connection", (socket) => {
         url: `https://i8e201.p.ssafy.io/api/pocha/meeting/start/${roomName}`,
         method: "put",
       }).then((result) => {
-        if (result.message === "success") {
+        if (result.data.message === "success") {
           const now = new Date();
 
           waitUsers[roomName].forEach((element) => {
