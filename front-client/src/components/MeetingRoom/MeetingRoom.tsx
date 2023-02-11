@@ -23,9 +23,12 @@ function MeetingRoom(): JSX.Element {
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
 
+  // 본인 정보 가져오기
+  const [myInfo, setMyInfo] = useState<any>(null);
+
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
-  
+
   const propIsHost = (isHost: boolean) => {
     setIsHost(isHost);
   };
@@ -41,6 +44,18 @@ function MeetingRoom(): JSX.Element {
     }
   };
 
+  const getMyInfo = async () => {
+    try {
+      const { data } = await axios({
+        url: `https://i8e201.p.ssafy.io/api/user/myinfo/${localStorage.getItem(
+          "Username"
+        )}`,
+      });
+      setMyInfo({ username: data.data.username, nickname: data.data.nickname });
+    } catch (error) {
+      console.log("내 정보 가져오기 ", error);
+    }
+  };
 
   //const test = io("https://pocha.online")
   // const socket = io("https://pocha.online");
@@ -61,17 +76,23 @@ function MeetingRoom(): JSX.Element {
 
   useEffect(() => {
     getPochaInfo();
-    return () => { 
-      localStorage.removeItem("MyIntroduce");
-    }
+    getMyInfo();
+    return () => {
+      localStorage.removeItem("myIntroduce");
+    };
   }, []);
 
   return (
     <>
-      {socket == null ? (
+      {socket == null || myInfo == null ? (
         <div></div>
       ) : isWaiting ? (
-        <WaitingRoom pochaId={PochaId!} socket={socket} waitEnd={waitEnd} />
+        <WaitingRoom
+          pochaId={PochaId!}
+          socket={socket}
+          waitEnd={waitEnd}
+          myInfo={myInfo}
+        />
       ) : (
         <div
           className={`w-screen min-h-screen ${styles.gameroomimg} bg-cover bg-no-repeat bg-center bg-scroll`}
@@ -82,17 +103,17 @@ function MeetingRoom(): JSX.Element {
               pochaId={PochaId!}
               socket={socket}
               propIsHost={propIsHost}
-              getPochaInfo={getPochaInfo}  
+              getPochaInfo={getPochaInfo}
             />
           </div>
           <div className="relative bottom-0 left-0 right-0">
             {socket && (
               // <RoomMeetingFooterNav pochaId={PochaId!} socket={socket} />
               <RoomFooterNav
-              pochaId={PochaId!}
-              socket={socket}
-              isHost={isHost}
-            />
+                pochaId={PochaId!}
+                socket={socket}
+                isHost={isHost}
+              />
             )}
           </div>
         </div>

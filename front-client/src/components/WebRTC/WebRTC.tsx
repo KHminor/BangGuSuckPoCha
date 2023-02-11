@@ -93,12 +93,12 @@ const WebRTC = ({
       console.log("참여 유저들 데이터?", data);
 
       // 방장 여부 체크
-      data.forEach((user : any) => {
+      data.forEach((user: any) => {
         if (user.username === myUserName) {
           setIsHost(user.isHost);
           propIsHost(user.isHost);
         }
-      })
+      });
       dispatch(isRtcLoading(false));
       handleWelcomeSubmit(data[lastIndex]);
     } catch (error) {
@@ -573,7 +573,11 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost} />
+            <RoomUserProfile
+              userData={userProfileData}
+              pochaId={pochaId}
+              isHost={isHost}
+            />
           )}
           {count && (
             <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">

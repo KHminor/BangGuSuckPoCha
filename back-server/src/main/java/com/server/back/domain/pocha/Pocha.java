@@ -86,7 +86,9 @@ public class Pocha{
         this.ssulTitle = reqeustDto.getSsulTitle();
     }
     public void startHuntingPocha(){
-        this.createAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.createAt = now;
+        this.endAt = now.plusHours(2);
         this.isWaiting = false;
     }
 }

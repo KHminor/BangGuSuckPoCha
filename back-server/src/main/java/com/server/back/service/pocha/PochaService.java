@@ -30,13 +30,13 @@ public interface PochaService {
 
     List<InviteResponseDto> pochaInviteList(String username);
 
-    void pochaInvite(InviteRequestDto requestDto);
+    boolean pochaInvite(InviteRequestDto requestDto);
 
     void pochaInviteRefuse(Long inviteId);
 
     Map<String, Object> pochaInviteAccept(Long inviteId, Long pochaId);
 
-    void pochaHuntingStart(Long pochaId);
-
     List<PochaResponseDto> allPochaList();
+
+    boolean pochaMeetingStart(Long pochaId);
 }

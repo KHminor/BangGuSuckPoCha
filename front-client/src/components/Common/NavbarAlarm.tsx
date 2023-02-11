@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { changeMenuState, changeAlarmClickState, changeAlarmApiDataState } from "../../store/store";
+import { changeMenuState, changeAlarmClickState, changeAlarmApiDataState, changeAlarmState } from "../../store/store";
 import AlarmRequest from "./AlarmRequest";
 
 function NavbarAlarm(): JSX.Element {
@@ -35,7 +35,14 @@ function NavbarAlarm(): JSX.Element {
   }, [alarmClickCheck])
   
   return (
-    <div ref={alarmIcon} className={`absolute w-[16rem] `} style={{ right: "3rem", top: "11.5rem", height: "35.2rem"}}>
+    <div ref={alarmIcon} className={`absolute w-[16rem] `} style={{ right: "3rem", top: "11.5rem", height: "35.2rem"}} 
+      onClick={()=> {
+        // 이왜진...?
+        if (alarmClickCheck) {
+          dispatch(changeAlarmState());
+        }
+      }}
+    >
       <div className="grid h-full w-full rounded-3xl bg-black text-white" style={{gridTemplateRows: '0.5fr 0.5fr 5fr' }}>
         <div className="grid" style={{gridTemplateColumns: '2fr 1fr 1fr 1fr'}}>
           <div></div>
