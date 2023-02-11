@@ -11,6 +11,7 @@ import {
   showGameSelectModal,
   showPublicModal,
   showRoomUserProfile,
+  showRouletteResultModal,
 } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
@@ -558,26 +559,27 @@ const WebRTC = ({
   };
   // ---------------- 게임 관련 --------------------
   useEffect(() => {
+    // 게임 선택하기
     socket.on("game_select", (gameId) => {
-      // switch (gameId) {
-      //   case "bal":
-      //     break;
-      //   case "son":
-      //     break;
-      //   case "liar":
-      //     break;
-      //   case "yang":
-      //     break;
-      //   case "ladder":
-      //     break;
-      //   case "roul":
-      //     break;
-      // }
+      console.log("게임아이디 오냐--------",gameId)
       // 선택한 게임Id 세팅
       dispatch(selectGame(gameId));
       // 게임 선택창 끄기
       dispatch(showGameSelectModal(false));
     });
+
+    // 게임 선택창으로 돌아오기
+    socket.on("game_back_select", () => {
+      // 진행중인 게임 닫기
+      dispatch(selectGame("exit"));
+      // 게임 선택창 켜기
+      dispatch(showGameSelectModal(true));
+    })
+
+    return () => {
+      socket.off("game_select");
+      socket.off("game_back_select");    
+    };
   }, []);
 
   // 게임 선택창 상태
