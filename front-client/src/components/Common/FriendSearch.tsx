@@ -30,7 +30,7 @@ function FriendSearch(): JSX.Element {
             <div className="grid min-h-full h-full w-full " style={{gridTemplateRows: '0.5fr 1fr'}}>
               <div className={`h-[100%] text-[1.1rem] opacity-60 ${styles.friednSentence}`}>친구의 닉네임을 알고 계신다면 친구요청을 보내보세요!</div>
               <div className="h-[100%] flex justify-center items-center" >
-                <div className={`h-full w-[80%] flex justify-start items-end pl-6 pb-1 text-[1rem] cursor-pointer ${styles.friendName}`} style={{borderBottom: 'groove 3px rgba(255,255,255,0.3)'}}> <label htmlFor="friendInput">NAME <input id='friendInput' className={`pl-6 bg-black ${styles.friendInput}`} type="text" 
+                <div className={`h-full w-[80%] flex justify-start items-end pl-6 pb-1 text-[1rem] cursor-pointer ${styles.friendName}`} style={{borderBottom: 'groove 3px rgba(255,255,255,0.3)'}}> <label htmlFor="friendInput">NAME <input id='friendInput' autoFocus  className={`pl-6 bg-black ${styles.friendInput}`} type="text" 
                   onChange={(e:any)=> {
                     setChat(e.target.value)
                   }}
@@ -57,6 +57,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                     }  
@@ -84,6 +87,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                 }}

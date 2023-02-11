@@ -48,7 +48,7 @@ function FriendList(): JSX.Element {
       url: `https://i8e201.p.ssafy.io/api/user/info/${f_username}`,
     })
     .then((r)=> {
-      console.log('넣어따', r.data)
+      // console.log('넣어따', r.data)
       dispatch(changeNavAlarmReviewEmojiUserData(r.data))
       dispatch(showRoomUserProfile())
     })
@@ -75,13 +75,13 @@ function FriendList(): JSX.Element {
   
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter') {
-      console.log(searchFriend)
-      console.log(username)
+      // console.log(searchFriend)
+      // console.log(username)
       axios({
         method: 'get',
         url: `https://i8e201.p.ssafy.io/api/user/friend/${username}/${searchFriend}`,
       }).then((r)=> {
-        console.log('요청한 친구: ',r.data.data)
+        // console.log('요청한 친구: ',r.data.data)
         dispatch(changeMenuFriendListApiDataState(r.data.data));
         setSearchFriend("") 
       })
@@ -94,7 +94,7 @@ function FriendList(): JSX.Element {
       method: "get",
       url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
     }).then((r) => {
-      console.log('친구 리스트 조회: ',r.data.data)
+      // console.log('친구 리스트 조회: ',r.data.data)
       const friendDataList:any[] = r.data.data
       const bestFriend:any = []
       const normalFriend:any = []
@@ -106,16 +106,14 @@ function FriendList(): JSX.Element {
           normalFriend.push(data)
         }
       })
-      console.log('베프: ',bestFriend)
-      console.log('친구: ',normalFriend)
-      
-      // dispatch(changeMenuFriendState());
+      // console.log('베프: ',bestFriend)
+      // console.log('친구: ',normalFriend)
       dispatch(changeMenuFriendListApiDataState([...bestFriend,...normalFriend]));
     });
   }
 
   const friendList = menuFriendListApiData.map((e: any, idx: any) => {
-    console.log('친구리스트 데이터: ', e);
+    // console.log('친구리스트 데이터: ', e);
     const checkBestFriend:boolean = e.best_friend
 
     function bestFriend():any {
@@ -125,7 +123,7 @@ function FriendList(): JSX.Element {
         url: `https://i8e201.p.ssafy.io/api/user/friend/${username}/${e.you_id}`
       })
       .then((r)=> {
-        console.log('베프니? ',checkBestFriend)
+        // console.log('베프니? ',checkBestFriend)
         if (checkBestFriend) {
           toast.success(`${e.f_nickname} 즐겨찾기에서 제거하였습니다`)
         } else {
@@ -148,8 +146,8 @@ function FriendList(): JSX.Element {
         style={{ gridTemplateColumns: "1fr 3fr 1fr" }}
       >
         <div className="flex justify-center items-center h-full pl-2">
-          <img className="object-contain h-[80%] " src={e.f_profile} alt="" onClick={()=>{
-            console.log(e)
+          <img className="object-fill rounded-full h-[2.6rem]" src={e.f_profile} alt="" onClick={()=>{
+            // console.log(e)
             UserStateSearch(e.f_username)
           }}/>
         </div>
@@ -179,9 +177,8 @@ function FriendList(): JSX.Element {
                   chat_id: chat_id
                 })
               );
+              dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
             });
-  
-            dispatch(changeMenuFriendChatState(!menuFriendChatClickCheck));
           }}
         >
           {e.f_nickname}
@@ -228,16 +225,13 @@ function FriendList(): JSX.Element {
                 style={{ gridTemplateColumns: "2fr 1.5fr 1fr 1fr" }}
               >
                 <div></div>
-                <div className="flex justify-center items-center h-full text-base">
+                <div className={`flex justify-center items-center h-full text-base`}>
                   친구목록
                 </div>
                 <div></div>
                 {/* 친구 리스트 및 채팅창 닫기 */}
                 <div className="flex justify-center items-center h-full">
-                  <img
-                    className="h-[50%] cursor-pointer"
-                    src={require("../../assets/roomIcon/cancel.png")}
-                    alt=""
+                  <span className={`text-2xl pb-[0.3rem] ${styles.xBtn}`}
                     onClick={() => {
                       if (menuFriendChatClickCheck) {
                         dispatch(changeMenuFriendChatState(false));
@@ -246,8 +240,10 @@ function FriendList(): JSX.Element {
                         dispatch(changeMenuFriendState());
                       }
                       dispatch(changeFriendSearchState(false))
-                    }}
-                  />
+                    }}>
+                    ×
+                  </span>
+                  
                 </div>
               </div>
               <div className="flex justify-between items-center rounded-full bg-white h-[80%] border-2 border-stone-400">
@@ -256,7 +252,7 @@ function FriendList(): JSX.Element {
                   style={{ borderRadius: "100% 0px 0px 100%" }}
                   type="text"
                   onChange={(e)=> {
-                    console.log(e.target.value)
+                    // console.log(e.target.value)
                     setSearchFriend(e.target.value)
                   }}
                   onKeyDown={handleKeyPress}
@@ -280,7 +276,7 @@ function FriendList(): JSX.Element {
                 <div className={`h-full overflow-scroll ${styles.hideScroll} `}>
                   {friendList}
                 </div>
-                <div><span className={`cursor-pointer ${styles.friendName}`} onClick={()=> {
+                <div><span className={`cursor-pointer ${styles.friendName} ${styles.friendRequestName}`} onClick={()=> {
                   // 친구 요청 검색 모달 상태
                   dispatch(changeFriendSearchState(true))
                 }}>친구요청</span></div>
