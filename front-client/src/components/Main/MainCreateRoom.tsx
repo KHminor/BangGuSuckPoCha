@@ -29,7 +29,7 @@ const MainCreateRoom = ({
   // username (현재는 내꺼)
   const username = localStorage.getItem("Username");
 
-  const roomTitle = ["소통포차", "게임포차", "헌팅포차"];
+  const roomTitle = ["소통포차", "게임포차", "미팅포차"];
   // 후에 내 지역과 내 나이 세팅해야함
   const regionOption = ["지역", "전국", "부산광역시"];
   const ageOption = ["나이", "ALL", "20대"];
@@ -71,7 +71,7 @@ const MainCreateRoom = ({
 
   // 태그 리스트
   const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
-  console.log('태그리스트',choiceTagList);
+  console.log("태그리스트", choiceTagList);
   // 태그 선택 기능
   const onSelectTag = (
     tag: string,
@@ -270,11 +270,11 @@ const MainCreateRoom = ({
                     console.log("방 허용 지역", createRoomChoiceRegion);
                     console.log("클릭한 태그", createRoomChoiceTag);
                     console.log("클릭한 테마Id", createRoomThemeCheck);
-                    let themeId; 
+                    let themeId;
                     if (roomTheme === 2) {
-                      themeId = "T1B0"
+                      themeId = "T1B0";
                     } else {
-                      themeId = "T2B0"
+                      themeId = "T2B0";
                     }
                     axios({
                       method: "post",
@@ -302,7 +302,7 @@ const MainCreateRoom = ({
                           navigate(`/gameroom/${PochaId}`);
                         } else if (roomTheme === 3) {
                           navigate(`/meetingroom/${PochaId}`);
-                        } 
+                        }
                         // 방 만들기 창 종료
                         dispatch(changeThemeRoomState(0));
                       });

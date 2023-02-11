@@ -21,9 +21,9 @@ function WaitingRoom({
   const [pochaInfo, setPochaInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [introduce, setIntroduce] = useState<string>("");
+  const [myIntroduce, setMyIntroduce] = useState<Array<string>>([]);
 
   const ChangeIntroduce = (event: any) => {
-    console.log(event.target.value);
     setIntroduce(event.target.value);
   };
 
@@ -49,19 +49,34 @@ function WaitingRoom({
     }
   };
 
-  const setMyIntroduce = async () => {
+  const addMyIntroduce = async () => {
     if (introduce === "" || introduce == null || introduce === undefined)
       return;
-    let myIntroduce = [];
-    let localIntroduce = localStorage.getItem("MyIntroduce");
-    if (localIntroduce != null && localIntroduce !== undefined) {
-      myIntroduce = JSON.parse(localIntroduce);
+
+    let flag = true;
+    for (const entity of myIntroduce) {
+      if (entity === introduce) {
+        flag = false;
+        break;
+      }
     }
 
-    myIntroduce.push(introduce);
-    localStorage.setItem("MyIntroduce", JSON.stringify(myIntroduce));
+    if (flag && myIntroduce.length < 5) {
+      setMyIntroduce([...myIntroduce, introduce]);
+    }
 
     setIntroduce("");
+  };
+
+  const deleteMyIntroduce = async (event: any) => {
+    const deleteIntorduce = event.target.innerText.substring(
+      1,
+      event.target.innerText.length - 1
+    );
+    const changeIntroduce = myIntroduce.filter(
+      (entity) => entity !== deleteIntorduce
+    );
+    setMyIntroduce(changeIntroduce);
   };
 
   useEffect(() => {
@@ -95,6 +110,10 @@ function WaitingRoom({
     ////////////////////////////////////////////
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("myIntroduce", JSON.stringify(myIntroduce));
+  }, [myIntroduce]);
+
   return (
     <>
       {isLoading ? (
@@ -102,29 +121,35 @@ function WaitingRoom({
       ) : (
         <>
           <div className="text-white">
-            <h2>헌팅 포차 대기방!!!!!!!!</h2>
-            <h3>
+            <div className="text-center text-4xl ">미팅 포차 대기방</div>
+            <div className="text-center text-2xl ">
               {pochaInfo.totalCount} / {pochaInfo.limitUser}
-            </h3>
-            <div className="text-center pl-5 text-3xl ">Introduce :</div>
+            </div>
+            <div className="text-center text-2xl ">자기소개</div>
             <input
               type="text"
-              className="col-span-4 bg-black border-2 caret-white"
+              className="w-[30%] text-center bg-black border-2 caret-white"
               placeholder="소개할 정보를 입력하세요"
               value={introduce}
               onChange={ChangeIntroduce}
             />
-            <div
-              className="right-7 w-[100%] border-white border-2 text-white cursor-pointer"
-              onClick={setMyIntroduce}
+            <button
+              className="text-center w-20 border-white border-2 cursor-pointer"
+              onClick={addMyIntroduce}
             >
               입력
+            </button>
+            <div>
+              {myIntroduce.map((input, index) => (
+                <div
+                  key={index}
+                  onClick={deleteMyIntroduce}
+                >{`[${input}]`}</div>
+              ))}
             </div>
-            <div>{localStorage.getItem("MyIntroduce")}</div>
           </div>
         </>
       )}
-      ;
     </>
   );
 }
