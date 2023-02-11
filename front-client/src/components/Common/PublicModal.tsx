@@ -6,8 +6,16 @@ import { useAppDispatch } from "../../store/hooks";
 import { showPublicModal, showRouletteResultModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
-const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Function }) => {
-  console.log("여기까지는 오니??ㅇㅇ", data)
+const PublicModal = ({
+  data,
+  socket,
+  fx,
+}: {
+  data: any;
+  socket?: any;
+  fx?: Function;
+}) => {
+  console.log("여기까지는 오니??ㅇㅇ", data);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // 내 아이디
@@ -95,17 +103,18 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
   // 포차 나가기 요청
   async function handlePochaExit() {
     try {
-      await api.put("/pocha/exit", {
-        isHost: false,
-        pochaId: roomName,
-        username: myName, // << 여기 내 유저네임 가져와야함
-        waiting: false,
-      });
+      // 포차 나가기는 socket 서버에서 실행
+      // await api.put("/pocha/exit", {
+      //   isHost: false,
+      //   pochaId: roomName,
+      //   username: myName, // << 여기 내 유저네임 가져와야함
+      //   waiting: false,
+      // });
       navigate(`/main`);
       window.location.reload();
       setTimeout(() => {
         toast.success("방에서 나오셨습니다");
-      }, 1000)
+      }, 1000);
     } catch (error) {
       console.log("포차나가기 error", error);
     }
@@ -117,11 +126,11 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
         method: "POST",
         url: `/api/pocha/invite`,
         data: {
-          "fromUsername": myName,
-          "pochaId": roomName,
-          "youId": toUsername,
-        }
-      })
+          fromUsername: myName,
+          pochaId: roomName,
+          youId: toUsername,
+        },
+      });
       toast.success(`${nickname}님에게 초대요청을 보냈습니다`);
     } catch (error) {
       console.log("포차에 친구초대 실패", error);
@@ -132,7 +141,7 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
   const BgCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === bgDiv.current) {
       dispatch(showPublicModal(false));
-      if(fx) {
+      if (fx) {
         fx!();
       }
       // Roulette방에서 모달끄기
@@ -144,7 +153,7 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
   const onClickConfirm = () => {
     switch (data.type) {
       case "tag":
-        if(fx) {
+        if (fx) {
           fx!();
         }
         break;
@@ -168,7 +177,6 @@ const PublicModal = ({ data, socket, fx }: { data: any; socket?: any, fx?: Funct
     }
     // RoomFooterNavbar에서 모달 끄기
     dispatch(showPublicModal(false));
-    
   };
 
   // 취소 클릭시 모달 끄는 함수

@@ -249,7 +249,7 @@ function Tag(): JSX.Element {
             <option className="text-center bg-[rgb(25, 25, 25)]" value="테마">테마</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="소통포차">소통포차</option>
             <option className="text-center bg-[rgb(25, 25, 25)]" value="게임포차">게임포차</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="헌팅포차">헌팅포차</option>
+            <option className="text-center bg-[rgb(25, 25, 25)]" value="미팅포차">미팅포차</option>
           </select>
         </div>
         {/* 술 종류 */}

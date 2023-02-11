@@ -218,8 +218,8 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public void requestFriendToNickname(String username, String nickname) {
-		User toId = userRepository.findByUsername(username);
-		User fromId = userRepository.findByNickname(nickname);
+		User fromId = userRepository.findByUsername(username);
+		User toId = userRepository.findByNickname(nickname);
 		FRequestDto requestDto = new FRequestDto();
 		fRequestRepository.save(requestDto.toEntity(toId, fromId));
 		

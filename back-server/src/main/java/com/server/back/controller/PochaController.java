@@ -120,12 +120,12 @@ public class PochaController {
         response.put("message", "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @ApiOperation(value = "헌팅 포차 시작")
-    @PutMapping("/hunting/start/{pocha_id}")
-    public ResponseEntity<Map<String, Object>> pochaHuntingStart(@RequestBody @PathVariable(value = "pocha_id") Long pochaId){
+    @ApiOperation(value = "미팅 포차 시작")
+    @PutMapping("/meeting/start/{pocha_id}")
+    public ResponseEntity<Map<String, Object>> pochaMeetingStart(@RequestBody @PathVariable(value = "pocha_id") Long pochaId){
         Map<String, Object> response = new HashMap<>();
-        pochaService.pochaHuntingStart(pochaId);
-        response.put("message", "success");
+        if(pochaService.pochaMeetingStart(pochaId)) response.put("message", "success");
+        else response.put("message", "fail");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @ApiOperation(value = "주량 카운트")
@@ -169,8 +169,12 @@ public class PochaController {
     @PostMapping("/invite")
     public ResponseEntity<Map<String, Object>> pochaInvite(@RequestBody InviteRequestDto requestDto){
         Map<String, Object> response = new HashMap<>();
-        pochaService.pochaInvite(requestDto);
-        response.put("message", "success");
+
+        if(pochaService.pochaInvite(requestDto)) {
+            response.put("message", "success");
+        }else{
+            response.put("message", "fail");
+        }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

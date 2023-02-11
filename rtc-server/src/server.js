@@ -73,36 +73,63 @@ wsServer.on("connection", (socket) => {
     socket.to(roomName).emit("ice", ice, socket.id);
   });
 
-  socket.on("disconnect", () => {
+  // 포차 나가기를 socket 서버에서 실행.
+  socket.on("disconnect", async () => {
+    let roomID;
+    let username;
     if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
-      const roomID = socketToRoom[socket.id];
+      roomID = socketToRoom[socket.id];
       delete socketToRoom[socket.id];
       let room = users[roomID];
       socket.leave(roomID);
       if (room) {
-        room = room.filter((user) => user.id !== socket.id);
-        users[roomID] = room;
-        if (room.length === 0) {
-          delete users[roomID];
-          return;
-        }
+        username = room.filter((user) => user.id == socket.id)[0].username;
+        await axios({
+          url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
+          method: "put",
+          data: {
+            isHost: true,
+            pochaId: Number(roomID),
+            username: username,
+            waiting: true,
+          },
+        }).then(() => {
+          room = room.filter((user) => user.id !== socket.id);
+          users[roomID] = room;
+          if (room.length === 0) {
+            delete users[roomID];
+            return;
+          }
+          socket.to(roomID).emit("user_exit", { id: socket.id });
+        });
       }
-      socket.to(roomID).emit("user_exit", { id: socket.id });
     } else {
-      const roomID = waitToRoom[socket.id];
+      roomID = waitToRoom[socket.id];
       delete waitToRoom[socket.id];
       let room = waitUsers[roomID];
       if (room) {
-        room = room.filter((user) => user.id !== socket.id);
-        waitUsers[roomID] = room;
-        if (room.length === 0) {
-          delete waitUsers[roomID];
-          return;
-        }
+        username = room.filter((user) => user.id == socket.id)[0].username;
+        await axios({
+          url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
+          method: "put",
+          data: {
+            isHost: true,
+            pochaId: Number(roomID),
+            username: username,
+            waiting: true,
+          },
+        }).then(() => {
+          room = room.filter((user) => user.id !== socket.id);
+          waitUsers[roomID] = room;
+          if (room.length === 0) {
+            delete waitUsers[roomID];
+            return;
+          }
+          room.forEach((element) => {
+            wsServer.to(element.id).emit("wait_update");
+          });
+        });
       }
-      room.forEach((element) => {
-        wsServer.to(element.id).emit("wait_update");
-      });
     }
   });
 
@@ -164,16 +191,18 @@ wsServer.on("connection", (socket) => {
       await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/meeting/start/${roomName}`,
         method: "put",
-      });
+      }).then((result) => {
+        if (result.data.message === "success") {
+          const now = new Date();
 
-      const now = new Date();
-
-      waitUsers[roomName].forEach((element) => {
-        wsServer.to(element.id).emit("wait_end", now);
-        delete waitToRoom[element.id];
+          waitUsers[roomName].forEach((element) => {
+            wsServer.to(element.id).emit("wait_end", now);
+            delete waitToRoom[element.id];
+          });
+          delete waitUsers[roomName];
+          delete waitRoom[roomName];
+        }
       });
-      delete waitUsers[roomName];
-      delete waitRoom[roomName];
     } else {
       waitUsers[roomName].forEach((element) => {
         wsServer.to(element.id).emit("wait_update");
@@ -186,20 +215,20 @@ wsServer.on("connection", (socket) => {
   // 룰렛
   socket.on("game_roulette", (roomName, random) => {
     wsServer.to(roomName).emit("game_roulette", random);
-  })
+  });
 
   // 밸런스게임
   socket.on("game_balance", (roomName) => {
     wsServer.to(roomName).emit("game_balance");
-  })
+  });
 
   // 손병호 게임
   // 게임 시작 신호
-  socket.on("game_son", roomName => {
+  socket.on("game_son", (roomName) => {
     wsServer.to(roomName).emit("game_son");
-  })
+  });
   // 손가락 접기
   socket.on("game_son_fold", (roomName, socketId) => {
     wsServer.to(roomName).emit("game_son_fold", socketId);
-  })
+  });
 });
