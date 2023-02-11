@@ -23,6 +23,7 @@ function WaitingRoom({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [introduce, setIntroduce] = useState<string>("");
   const [myIntroduce, setMyIntroduce] = useState<Array<string>>([]);
+  const [timer, setTimer] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -97,7 +98,6 @@ function WaitingRoom({
       getPochaInfo(false);
     });
     socket.on("wait_end", (time: string) => {
-      alert("참여 인원 모집 완료! 30초 후 이동합니다");
       getPochaInfo(false);
       let goal = new Date(time);
 
@@ -109,7 +109,7 @@ function WaitingRoom({
       console.log(startTime);
 
       const diff = waitTime - startTime;
-
+      setTimer(Math.floor(diff / 1000));
       setTimeout(waitEnd, diff);
     });
 
@@ -124,6 +124,16 @@ function WaitingRoom({
   useEffect(() => {
     localStorage.setItem("myIntroduce", JSON.stringify(myIntroduce));
   }, [myIntroduce]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimer((timer) => timer - 1);
+    }, 1000);
+    if (timer === 0) {
+      clearInterval(id);
+    }
+    return () => clearInterval(id);
+  }, [timer]);
 
   return (
     <>
@@ -161,6 +171,7 @@ function WaitingRoom({
             <button className="w-200 text-center" onClick={exitWaitingRoom}>
               나가기
             </button>
+            {timer > 0 ? <div>타이머 : {timer}</div> : <div></div>}
           </div>
         </>
       )}
