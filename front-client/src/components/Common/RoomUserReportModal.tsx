@@ -7,10 +7,10 @@ import { useState } from "react";
 
 const RoomUserRepotModal = ({ userData }: { userData: any }) => {
   let dispatch = useAppDispatch();
-  const { username, nickname } = userData.data;
+  const { username, nickname, userId } = userData.data;
   const [reportReason, setReportReason] = useState<string>("");
   const [reportType, setReportType] = useState<number>(0);
-  console.log(reportType)
+  console.log('데이터보자', userData.data)
   //주석추가
   const onChange = (event: React.ChangeEvent<any>) => {
     const { name, value } = event.target;
@@ -25,19 +25,19 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
   };
 
   // 나의 아이디 값
-  const myId = localStorage.getItem("Username");
+  const myId = localStorage.getItem("userId");
   
 
   // 신고하는 함수
   const reportUser = async (event: any) => {
     event.preventDefault();
-    console.log(username, reportReason, reportType);
+    console.log('신고내역', username, reportReason, reportType, myId);
     try {
       const rreport = await axios({
         method: "POST",
         url: "https://i8e201.p.ssafy.io/api/user/report",
         data: {
-          attackerId: username,
+          attackerId: userId,
           reportReason: reportReason,
           reportType: reportType,
           reporterId: myId,
@@ -46,7 +46,7 @@ const RoomUserRepotModal = ({ userData }: { userData: any }) => {
       toast.success(`${nickname}을 신고하였습니다`)
       console.log("report", rreport);
     } catch (error) {
-      console.log(error);
+      console.log("유저신고에러", error);
     }
     dispatch(showRoomUserReportModal());
   };

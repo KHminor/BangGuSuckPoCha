@@ -22,6 +22,7 @@ function RoomFooterNav({
 }): JSX.Element {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const myName = localStorage.getItem("Username");
   // 룸 이름
   const roomName = pochaId;
   // Public모달 데이터
@@ -39,7 +40,7 @@ function RoomFooterNav({
       setRoomTheme(3);
     }
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(false);
     }, 1000);
   }, []);
 
@@ -126,7 +127,7 @@ function RoomFooterNav({
         msg: "방장만 가능합니다",
       });
       dispatch(showPublicModal(true));
-      return
+      return;
     }
     dispatch(showUpdateRoom(true));
   };
@@ -137,7 +138,7 @@ function RoomFooterNav({
   };
 
   // ----- 소켓 관련 썰 변경 이벤트 ------
-  function handleSsulClick() {
+  async function handleSsulClick() {
     // 방장 체크후 처리
     if (!isHost) {
       setModalData({
@@ -146,13 +147,24 @@ function RoomFooterNav({
         msg: "변경은 방장만 가능합니다",
       });
       dispatch(showPublicModal(true));
-      return
+      return;
     }
     let input = prompt("Ssul을 입력하세요!", "새로운 타이틀!");
     if (input == null) return;
-
-    // 썰 변경.
-    socket.emit("ssul_change", roomName, input);
+    try {
+      await axios({
+        method: "PUT",
+        url: `https://i8e201.p.ssafy.io//api/pocha/talk/ssul/${roomName}`,
+        data: {
+          ssulTitle: input,
+          username: myName,
+        },
+      });
+      // webRTC 썰 변경.
+      socket.emit("ssul_change", roomName, input);
+    } catch (error) {
+      console.log("썰 변경 요청에러", error);
+    }
   }
 
   return (
@@ -184,18 +196,16 @@ function RoomFooterNav({
             />
             <span className="text-[0.8rem] mt-1">시간추가</span>
           </div>
-          {roomTheme === 1 ? (
-            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-              <img
-                onClick={onClickShowModal}
-                className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
-                src={require("src/assets/roomIcon/cheers.png")}
-                alt="jjan"
-                id="jjan"
-              />
-              <span className="text-[0.8rem] mt-1">짠</span>
-            </div>
-          ) : null}
+          <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+            <img
+              onClick={onClickShowModal}
+              className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+              src={require("src/assets/roomIcon/cheers.png")}
+              alt="jjan"
+              id="jjan"
+            />
+            <span className="text-[0.8rem] mt-1">짠</span>
+          </div>
           <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
             <img
               onClick={onClickInviteFriend}
@@ -206,15 +216,17 @@ function RoomFooterNav({
             />
             <span className="text-[0.8rem] mt-1">친구초대</span>
           </div>
-          <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
-            <img
-              onClick={handleSsulClick}
-              className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
-              src={require("src/assets/roomIcon/communication.png")}
-              alt="ssul"
-            />
-            <span className="text-[0.8rem] mt-1">썰</span>
-          </div>
+          {roomTheme === 1 ? (
+            <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+              <img
+                onClick={handleSsulClick}
+                className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+                src={require("src/assets/roomIcon/communication.png")}
+                alt="ssul"
+              />
+              <span className="text-[0.8rem] mt-1">썰</span>
+            </div>
+          ) : null}
           <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
             <img
               onClick={onClickUpdateModal}
