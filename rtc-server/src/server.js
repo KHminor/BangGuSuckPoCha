@@ -74,7 +74,7 @@ wsServer.on("connection", (socket) => {
   });
 
   // 포차 나가기를 socket 서버에서 실행.
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     let roomID;
     let username;
     if (waitToRoom[socket.id] == null || waitToRoom[socket.id] == undefined) {
@@ -84,7 +84,7 @@ wsServer.on("connection", (socket) => {
       socket.leave(roomID);
       if (room) {
         username = room.filter((user) => user.id == socket.id)[0].username;
-        axios({
+        await axios({
           url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
           method: "put",
           data: {
@@ -93,23 +93,23 @@ wsServer.on("connection", (socket) => {
             username: username,
             waiting: true,
           },
+        }).then(() => {
+          room = room.filter((user) => user.id !== socket.id);
+          users[roomID] = room;
+          if (room.length === 0) {
+            delete users[roomID];
+            return;
+          }
+          socket.to(roomID).emit("user_exit", { id: socket.id });
         });
-
-        room = room.filter((user) => user.id !== socket.id);
-        users[roomID] = room;
-        if (room.length === 0) {
-          delete users[roomID];
-          return;
-        }
       }
-      socket.to(roomID).emit("user_exit", { id: socket.id });
     } else {
       roomID = waitToRoom[socket.id];
       delete waitToRoom[socket.id];
       let room = waitUsers[roomID];
       if (room) {
         username = room.filter((user) => user.id == socket.id)[0].username;
-        axios({
+        await axios({
           url: `https://i8e201.p.ssafy.io/api/pocha/exit`,
           method: "put",
           data: {
@@ -118,18 +118,18 @@ wsServer.on("connection", (socket) => {
             username: username,
             waiting: true,
           },
+        }).then(() => {
+          room = room.filter((user) => user.id !== socket.id);
+          waitUsers[roomID] = room;
+          if (room.length === 0) {
+            delete waitUsers[roomID];
+            return;
+          }
+          room.forEach((element) => {
+            wsServer.to(element.id).emit("wait_update");
+          });
         });
-
-        room = room.filter((user) => user.id !== socket.id);
-        waitUsers[roomID] = room;
-        if (room.length === 0) {
-          delete waitUsers[roomID];
-          return;
-        }
       }
-      room.forEach((element) => {
-        wsServer.to(element.id).emit("wait_update");
-      });
     }
   });
 
@@ -191,16 +191,18 @@ wsServer.on("connection", (socket) => {
       await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/meeting/start/${roomName}`,
         method: "put",
-      });
+      }).then((result) => {
+        if (result.message === "success") {
+          const now = new Date();
 
-      const now = new Date();
-
-      waitUsers[roomName].forEach((element) => {
-        wsServer.to(element.id).emit("wait_end", now);
-        delete waitToRoom[element.id];
+          waitUsers[roomName].forEach((element) => {
+            wsServer.to(element.id).emit("wait_end", now);
+            delete waitToRoom[element.id];
+          });
+          delete waitUsers[roomName];
+          delete waitRoom[roomName];
+        }
       });
-      delete waitUsers[roomName];
-      delete waitRoom[roomName];
     } else {
       waitUsers[roomName].forEach((element) => {
         wsServer.to(element.id).emit("wait_update");
