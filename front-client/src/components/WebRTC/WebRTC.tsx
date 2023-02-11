@@ -483,13 +483,15 @@ const WebRTC = ({
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
         navigate(`/main`);
+        sessionStorage.reloadBan = true;
+        window.location.reload();
       }
     })
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
       socket.off("pocha_cheers");
-      // socket.off("ban");
+      socket.off("ban");
     };
   }, []);
 
