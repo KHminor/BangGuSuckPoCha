@@ -11,18 +11,21 @@ function GameSelect({
   socket: any;
   pochaId: string;
 }): React.ReactElement {
+  const roomName = pochaId;
   const hoverBtn = (event: React.MouseEvent<HTMLImageElement>) => {
     event.currentTarget.classList.toggle(`${styles.gameBox}`);
   };
 
   const goWebRTC = (event: React.MouseEvent<HTMLImageElement>) => {
-    socket.emit("game_select", event);
+    const element = event.currentTarget;
+    socket.emit("game_select", roomName, element);
   }
 
   useEffect(() => {
-    socket.on("game_select", (event: React.MouseEvent<HTMLImageElement>) => {
-      hoverBtn(event);
-    })
+
+    return () => {
+      socket.off("game_select");
+    };
   }, [])
 
   return (
@@ -35,8 +38,9 @@ function GameSelect({
       <div className="flex flex-col h-[90%] justify-evenly">
         <div className="flex justify-evenly">
           <img
-            onMouseOver={goWebRTC}
-            onMouseLeave={goWebRTC}
+            // onMouseOver={goWebRTC}
+            // onMouseLeave={goWebRTC}
+            onClick={goWebRTC}
             className={`transition-all duration-500 rounded-lg cursor-pointer`}
             src={require("src/assets/game_select/bal.png")}
             alt="bal"
