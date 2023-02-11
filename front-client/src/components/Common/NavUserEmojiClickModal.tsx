@@ -86,6 +86,7 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
     })
     .then(()=> {
       requestFriendList()
+      
     })
   })
 
