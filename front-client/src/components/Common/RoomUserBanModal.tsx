@@ -8,7 +8,8 @@ const RoomUserBanModal = ({ userData, pochaId, socket }: { userData: any, pochaI
   let dispatch = useAppDispatch();
   const { nickname, username } = userData.data;
   const pochaID = Number(pochaId);
-  console.log(' 유유유저데이터j', userData);
+  const roomName = pochaId;
+  // console.log(' 유유유저데이터j', userData);
   // 강퇴하는 함수
   const banUser = async () => {
     try {
@@ -22,9 +23,9 @@ const RoomUserBanModal = ({ userData, pochaId, socket }: { userData: any, pochaI
           waiting: true,
         },
       });
-      socket.emit("ban", pochaId);
+      socket.emit("ban", roomName, username);
       toast.success(`${nickname}을 강퇴하였습니다`);
-      console.log("강퇴성공", bban);
+      console.log("강퇴성공", bban, "유저네임 :" , username);
     } catch (error) {
       console.log("강퇴에러", error);
     }

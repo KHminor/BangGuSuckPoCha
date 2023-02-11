@@ -489,9 +489,10 @@ const WebRTC = ({
       socket.off("pocha_change");
       socket.off("pocha_extension");
       socket.off("pocha_cheers");
-      socket.off("ban");
+      // socket.off("ban");
     };
   }, []);
+
 
   // ------------- RTC Code --------------
   function makeConnection() {
