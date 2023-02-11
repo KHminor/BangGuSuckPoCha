@@ -109,8 +109,8 @@ const PublicModal = ({
       //   username: myName, // << 여기 내 유저네임 가져와야함
       //   waiting: false,
       // });
+      localStorage.setItem("reloadExit", "true");
       navigate(`/main`);
-      sessionStorage.reloadExit = true;
       window.location.reload();
     } catch (error) {
       console.log("포차나가기 error", error);

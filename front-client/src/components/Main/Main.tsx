@@ -51,14 +51,25 @@ function Main(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (sessionStorage.reloadExit) {
+    console.log(localStorage.getItem("reloadExit"),'@@@@ 리롵에싯')
+    console.log(localStorage.getItem("reloadBan"),'@@@@ 리롵에싯')
+    // console.log(sessionStorage.reloadBan,'@@@@ 뱁냅냅내')
+    if (localStorage.getItem("reloadExit") === "true") {
       toast.success("방에서 나오셨습니다");
-      sessionStorage.reloadAfterPageLoad = false;
+      setTimeout(() => {
+        localStorage.removeItem("reloadExit");
+      }, 500)
     }
-    if (sessionStorage.reloadBan) {
-      toast.error("방에서 강퇴 당하셨습니다");
-      sessionStorage.reloadBan = false;
+    if (localStorage.getItem("reloadBan") === "true") {
+      toast.success("방에서 나오셨습니다");
+      setTimeout(() => {
+        localStorage.removeItem("reloadBan");
+      }, 500)
     }
+    // if (sessionStorage.reloadBan === "true") {
+    //   toast.error("방에서 강퇴 당하셨습니다");
+    //   sessionStorage.reloadBan = "false";
+    // }
   }, []);
 
   // 방 생성 관련
