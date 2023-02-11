@@ -175,6 +175,7 @@ const WebRTC = ({
       }
       console.log("마이스트림 오냐?", myStream.current);
       myFace.current!.srcObject = myStream.current;
+      myFace.current!.volume = 0;
       if (!deviceId) {
         await getCameras();
       }
@@ -476,10 +477,19 @@ const WebRTC = ({
       console.log("포차 짠!!!!!------------ㅇ----------");
       jjan();
     });
+
+    // 포차 강퇴 기능 : 이름찾아서 내보내기
+    socket.on("ban", (username) => {
+      console.log(username, "강퇴!!!!-------");
+      if (myUserName === username) {
+        navigate(`/main`);
+      }
+    })
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
       socket.off("pocha_cheers");
+      socket.off("ban");
     };
   }, []);
 
@@ -579,6 +589,7 @@ const WebRTC = ({
               userData={userProfileData}
               pochaId={pochaId}
               isHost={isHost}
+              socket={socket}
             />
           )}
           {count && (

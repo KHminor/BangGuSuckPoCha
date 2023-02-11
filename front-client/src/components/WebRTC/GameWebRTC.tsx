@@ -545,6 +545,7 @@ const WebRTC = ({
               userData={userProfileData}
               pochaId={pochaId}
               isHost={isHost}
+              socket={socket}
             />
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
