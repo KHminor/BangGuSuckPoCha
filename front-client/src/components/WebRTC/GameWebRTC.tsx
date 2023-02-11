@@ -7,6 +7,8 @@ import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
   isRtcLoading,
+  selectGame,
+  showGameSelectModal,
   showPublicModal,
   showRoomUserProfile,
 } from "../../store/store";
@@ -517,17 +519,9 @@ const WebRTC = ({
   function handleAddStream(stream: any, username: string, nickname: string) {
     console.log("handleAddStream---------------------");
     const indexData = userCount.current;
-    // const indexData = userCount;
-    // peerFace.current[indexData - 1].classList.toggle("hidden");
-    // peerFace.current[indexData - 1].srcObject = stream;
+
     console.log("사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ", indexData);
-    // if (userCount.current === 1) {
-    //   peerFace.current[0].srcObject = data.stream;
-    // } else if (userCount.current === 2) {
-    //   peerFace.current[1].srcObject = data.stream;
-    // } else if (userCount.current === 3) {
-    //   peerFace.current[2].srcObject = data.stream;
-    // }
+
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
@@ -545,17 +539,10 @@ const WebRTC = ({
       peerFace5.current.id = username;
     }
 
-    // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
-    // peerFace.current.srcObject = data.stream;
-    // userCount += 1;
-    // setUserCount((prev) => prev + 1);
     userCount.current += 1;
-
-    // currentUsers.current.push(1);
-    // dispatch(isRtcLoading());
   }
   // 유저들 프로파일 모달 띄우기
-  const ShowUserProfile = async (event: React.MouseEvent<any>) => {
+  const showUserProfile = async (event: React.MouseEvent<any>) => {
     if (userCount.current >= 2) {
       const username = event.currentTarget.id;
 
@@ -569,6 +556,38 @@ const WebRTC = ({
       dispatch(showRoomUserProfile());
     }
   };
+  // ---------------- 게임 관련 --------------------
+  useEffect(() => {
+    socket.on("game_select", (gameId) => {
+      // switch (gameId) {
+      //   case "bal":
+      //     break;
+      //   case "son":
+      //     break;
+      //   case "liar":
+      //     break;
+      //   case "yang":
+      //     break;
+      //   case "ladder":
+      //     break;
+      //   case "roul":
+      //     break;
+      // }
+      // 선택한 게임Id 세팅
+      dispatch(selectGame(gameId));
+      // 게임 선택창 끄기
+      dispatch(showGameSelectModal(false));
+    });
+  }, []);
+
+  // 게임 선택창 상태
+  const isGameSelect = useAppSelector((state) => {
+    return state.gameSelectModal;
+  });
+  // 선택한 게임
+  const selectedId = useAppSelector((state) => {
+    return state.selectGameId;
+  });
 
   return (
     <>
@@ -603,7 +622,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace2}
                   playsInline
@@ -612,7 +631,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace4}
                   playsInline
@@ -624,21 +643,23 @@ const WebRTC = ({
 
             <div className="flex justify-center overflow-hidden min-w-fit w-[47vw] mt-5 items-center border-2 border-blue-400 rounded-[20px]">
               {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
-              {<GameSelect socket={socket} pochaId={pochaId}/>}
-              {/* {pochaUsers && (
-                <Roulette
-                  socket={socket}
-                  pochaId={pochaId}
-                  pochaUsers={pochaUsers}
-                />
-              )} */}
+              {isGameSelect && <GameSelect socket={socket} pochaId={pochaId} />}
+              {selectedId === "roul"
+                ? pochaUsers && (
+                    <Roulette
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}
             </div>
 
             {/* 사람 공간 */}
             <div className="flex flex-col justify-evenly items-center">
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace1}
                   playsInline
@@ -647,7 +668,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace3}
                   playsInline
@@ -656,7 +677,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace5}
                   playsInline

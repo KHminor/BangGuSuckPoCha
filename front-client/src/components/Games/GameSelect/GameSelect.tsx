@@ -20,11 +20,16 @@ function GameSelect({
   const liar = useRef<HTMLImageElement>(null);
   const roul = useRef<HTMLImageElement>(null);
   // 이미지들 리스트
-  const [imgLists, setImgLists] = useState<any[]>([balance, ladder, son, yang, liar, roul]);
-
+  const [imgLists, setImgLists] = useState<any[]>([
+    balance,
+    ladder,
+    son,
+    yang,
+    liar,
+    roul,
+  ]);
+  // 버튼 호버시 이펙트
   const hoverBtn = (elementId: string) => {
-    console.log("여긴오나?ㅋㅋ");
-    console.log(imgLists);
     imgLists.forEach((img) => {
       if (img.current!.id === elementId) {
         img.current!.classList.toggle(`${styles.gameBox}`);
@@ -32,20 +37,27 @@ function GameSelect({
     });
   };
 
+  // web서버로 보내자
   const goWebRTC = (event: React.MouseEvent<HTMLImageElement>) => {
     const elementId = event.currentTarget.id;
-    socket.emit("game_select", roomName, elementId);
+    socket.emit("game_btn_hover", roomName, elementId);
   };
+
+  // 게임 선택할때
+  const selectGame = (event: React.MouseEvent<HTMLImageElement>) => {
+    const gameId = event.currentTarget.id;
+    socket.emit("game_select", roomName, gameId);
+  }
 
   useEffect(() => {
     setImgLists([balance, ladder, son, yang, liar, roul]);
-    
-    socket.on("game_select", (elementId: string) => {
-      console.log("오냐?")
+
+    // 게임 버튼 호버할때
+    socket.on("game_btn_hover", (elementId: string) => {
       hoverBtn(elementId);
     });
     return () => {
-      socket.off("game_select");
+      socket.off("game_btn_hover");
     };
   }, []);
 
@@ -59,6 +71,7 @@ function GameSelect({
       <div className="flex flex-col h-[90%] justify-evenly">
         <div className="flex justify-evenly">
           <img
+            onClick={selectGame}
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-500 rounded-lg cursor-pointer`}
@@ -82,10 +95,10 @@ function GameSelect({
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
-            src={require("src/assets/game_select/ladder.png")}
-            alt="ladder"
-            id="ladder"
-            ref={ladder}
+            src={require("src/assets/game_select/liar.png")}
+            alt="liar"
+            id="liar"
+            ref={liar}
           />
           <img
             onMouseOver={goWebRTC}
@@ -102,10 +115,10 @@ function GameSelect({
             onMouseOver={goWebRTC}
             onMouseLeave={goWebRTC}
             className={`transition-all duration-300 rounded-lg cursor-pointer`}
-            src={require("src/assets/game_select/liar.png")}
-            alt="liar"
-            id="liar"
-            ref={liar}
+            src={require("src/assets/game_select/ladder.png")}
+            alt="ladder"
+            id="ladder"
+            ref={ladder}
           />
           <img
             onMouseOver={goWebRTC}
