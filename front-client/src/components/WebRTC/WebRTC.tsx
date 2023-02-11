@@ -401,7 +401,7 @@ const WebRTC = ({
     });
 
     socket.on("room_full", () => {
-      toast.info("응 풀방이야~");
+      toast.info("풀방입니다");
       navigate(`/main`);
     });
 
