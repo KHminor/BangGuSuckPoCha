@@ -67,13 +67,37 @@
 .friendName {
   color: #D8B9FF;
   transition: all 0.5s;
-  
 }
 
 .friendName:hover {
   text-shadow: 0 0 3px #7300ff,
               0 0 8px #a962ff,
               0 0 15px #d45dff;
+}
+
+@keyframes friendName-blink {
+  10% {
+    opacity: 0.1;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  70% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.1;
+  }
+}
+
+.friendRequestName {
+  animation: friendName-blink 3s ease-in-out infinite;
+}
+.friendRequestName:hover {
+  animation: none;
 }
 
 .friendSendMsg {
@@ -120,4 +144,13 @@
 .friednSentence {
   animation: blink-effect 1s step-end infinite;
 
+}
+
+.xBtn {
+  color: #ffdcc5;
+}
+
+.xBtn:hover {
+  color: #EF6003;
+  transition: all 0.3s;
 }
