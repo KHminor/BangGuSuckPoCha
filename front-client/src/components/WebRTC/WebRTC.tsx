@@ -554,16 +554,18 @@ const WebRTC = ({
 
   // 유저들 프로파일 모달 띄우기
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    const username = event.currentTarget.id;
-
-    // console.log("모달용 데이터 닉?", username);
-    const { data } = await axios({
-      url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
-    });
-    console.log("모달용 데이터?", data);
-    setUserProfileData(data);
-    // dispatch(isRtcLoading(false));
-    dispatch(showRoomUserProfile());
+    if(userCount.current >= 2) {
+      const username = event.currentTarget.id;
+  
+      // console.log("모달용 데이터 닉?", username);
+      const { data } = await axios({
+        url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
+      });
+      console.log("모달용 데이터?", data);
+      setUserProfileData(data);
+      // dispatch(isRtcLoading(false));
+      dispatch(showRoomUserProfile());
+    }
   };
 
   return (
