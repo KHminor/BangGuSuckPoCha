@@ -475,11 +475,6 @@ const WebRTC = ({
       }
     });
 
-    socket.on("game_select", (element) => {
-      console.log("그래서 오나?", element)
-      // hoverBtn(event);
-    })
-
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
