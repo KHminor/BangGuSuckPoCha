@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
-import styles from "./Waiting.module.css";
+import btnStyles from "./RoomUserProfile.module.css";
+import aniStyles from "./WaitingRoom.module.css";
 import { useState, useRef, useEffect } from "react";
 import { changeAlarmApiDataState } from "../../store/store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -54,30 +55,32 @@ function WaitingRoom({
   };
 
   // 자기소개 추가
-  const addMyIntroduce = async () => {
-    if (introduce === "" || introduce == null || introduce === undefined)
-      return;
+  const addMyIntroduce = async (e: any) => {
+    if (e.key === "Enter") {
+      if (introduce === "" || introduce == null || introduce === undefined)
+        return;
 
-    let flag = true;
-    for (const entity of myIntroduce) {
-      if (entity === introduce) {
-        flag = false;
-        break;
+      let flag = true;
+      for (const entity of myIntroduce) {
+        if (entity === introduce) {
+          flag = false;
+          break;
+        }
       }
-    }
 
-    if (flag && myIntroduce.length < 5) {
-      setMyIntroduce([...myIntroduce, introduce]);
-    }
+      if (flag && myIntroduce.length < 5) {
+        setMyIntroduce([...myIntroduce, introduce]);
+      }
 
-    setIntroduce("");
+      setIntroduce("");
+    }
   };
 
   // 자기소개 요소 삭제
   const deleteMyIntroduce = async (event: any) => {
     const deleteIntorduce = event.target.innerText.substring(
       1,
-      event.target.innerText.length - 1
+      event.target.innerText.length
     );
     const changeIntroduce = myIntroduce.filter(
       (entity) => entity !== deleteIntorduce
@@ -141,37 +144,79 @@ function WaitingRoom({
         <div></div>
       ) : (
         <>
-          <div className="text-white">
-            <div className="text-center text-4xl ">미팅 포차 대기방</div>
-            <div className="text-center text-2xl ">
-              {pochaInfo.totalCount} / {pochaInfo.limitUser}
-            </div>
-            <div className="text-center text-2xl ">자기소개</div>
-            <input
-              type="text"
-              className="w-[30%] text-center bg-black border-2 caret-white"
-              placeholder="소개할 정보를 입력하세요"
-              value={introduce}
-              onChange={ChangeIntroduce}
-            />
-            <button
-              className="text-center w-20 border-white border-2 cursor-pointer"
-              onClick={addMyIntroduce}
-            >
-              입력
-            </button>
-            <div>
-              {myIntroduce.map((input, index) => (
+          <div
+            className={`flex text-white w-screen min-h-screen bg-cover bg-no-repeat bg-center bg-scroll`}
+          >
+            <div className="w-[30%]"></div>
+            <div className="flex-col w-[100%] self-center">
+              {timer > 0 ? (
                 <div
-                  key={index}
-                  onClick={deleteMyIntroduce}
-                >{`[${input}]`}</div>
-              ))}
+                  className="text-center text-9xl"
+                  style={{ height: "158px" }}
+                >
+                  {timer}
+                </div>
+              ) : (
+                <div className="text-center">
+                  <img
+                    src={require("../../assets/roomIcon/wait-time.png")}
+                    alt=""
+                    className={`${aniStyles.rotate}`}
+                    style={{
+                      margin: "auto",
+                    }}
+                  />
+                </div>
+              )}
+              <div className="text-center m-2 text-2xl font-bold">
+                {pochaInfo.totalCount} / {pochaInfo.limitUser}
+              </div>
+              {timer > 0 ? (
+                <div className="text-center m-1 text-3xl font-bold">
+                  매칭 완료
+                </div>
+              ) : (
+                <div className="text-center m-1 text-3xl font-bold">매칭중</div>
+              )}
+
+              <div className="text-center m-2 text-3xl text-red-500 font-bold">
+                Tips!
+              </div>
+              <div className="text-center m-2 text-2xl">
+                매칭을 기다리면서 자기 소개 키워드를 작성해보세요!
+              </div>
+
+              <div className="text-center m-2 text-xl">{`ex) 반려동물, MBTI, 관심사, 좋아하는 음식, 영화, 계절`}</div>
+              <input
+                type="text"
+                className="w-[50%] rounded-lg p-1 text-center m-2 text-xl text-black border-2 caret-black"
+                placeholder="소개할 정보를 입력하세요"
+                value={introduce}
+                onChange={ChangeIntroduce}
+                onKeyDown={addMyIntroduce}
+              />
+              <div className="flex m-2">
+                <div className="w-[25%]"></div>
+                <div className="flex-wrap text-left w-[50%]">
+                  {myIntroduce.map((input, index) => (
+                    <div
+                      className="inline-block border-2 border-white text-xl p-2 m-2 rounded-xl cursor-pointer"
+                      key={index}
+                      onClick={deleteMyIntroduce}
+                    >{`#${input}`}</div>
+                  ))}
+                </div>
+                <div className="w-[25%]"></div>
+              </div>
+              <input
+                className={`${btnStyles.cancelBtn} cursor-pointer`}
+                onClick={exitWaitingRoom}
+                style={{ fontSize: "1.3rem" }}
+                type="button"
+                value="취소하기"
+              />
             </div>
-            <button className="w-200 text-center" onClick={exitWaitingRoom}>
-              나가기
-            </button>
-            {timer > 0 ? <div>타이머 : {timer}</div> : <div></div>}
+            <div className="w-[30%]"></div>
           </div>
         </>
       )}
