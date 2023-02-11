@@ -7,8 +7,6 @@ import {
   changeMenuState,
   changeAlarmState,
   changeMainCreateRoomList,
-  changeMenuFriendState,
-  changeMenuFriendChatState,
 } from "../../store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
@@ -90,11 +88,6 @@ function Main(): JSX.Element {
     return state.RoomUserProfileClickCheck;
   });
 
-  // 메뉴 -> 친구 클릭 상태
-  const menuFriendClickCheck = useAppSelector((state) => {
-    return state.menuFriendClickCheck;
-  });
-
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
     if (checkMenuState) {
@@ -135,21 +128,6 @@ function Main(): JSX.Element {
           backgroundColor: "rgb(25, 25, 25)",
           gridTemplateRows: "11rem 1fr",
           overflow: "auto",
-        }}
-        onClick={()=> {
-          // 메뉴 클릭한 상태의 경우 없애기
-          if (checkMenuState) {
-            dispatch(changeMenuState());
-          }
-          if (alarmClickCheck) {
-            dispatch(changeAlarmState());
-          }
-          if (menuFriendClickCheck) {
-            dispatch(changeMenuFriendState());
-          }
-          if (menuFriendChatClickCheck) {
-            dispatch(changeMenuFriendChatState(false));
-          }
         }}
       >
         <Navbar />
