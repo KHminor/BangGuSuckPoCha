@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { changeAlarmApiDataState } from "../../store/store";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function WaitingRoom({
   pochaId,
@@ -22,6 +23,8 @@ function WaitingRoom({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [introduce, setIntroduce] = useState<string>("");
   const [myIntroduce, setMyIntroduce] = useState<Array<string>>([]);
+
+  const navigate = useNavigate();
 
   const ChangeIntroduce = (event: any) => {
     setIntroduce(event.target.value);
@@ -49,6 +52,7 @@ function WaitingRoom({
     }
   };
 
+  // 자기소개 추가
   const addMyIntroduce = async () => {
     if (introduce === "" || introduce == null || introduce === undefined)
       return;
@@ -68,6 +72,7 @@ function WaitingRoom({
     setIntroduce("");
   };
 
+  // 자기소개 요소 삭제
   const deleteMyIntroduce = async (event: any) => {
     const deleteIntorduce = event.target.innerText.substring(
       1,
@@ -77,6 +82,12 @@ function WaitingRoom({
       (entity) => entity !== deleteIntorduce
     );
     setMyIntroduce(changeIntroduce);
+  };
+
+  // 미팅 포차 대기방 나가기
+  const exitWaitingRoom = () => {
+    navigate("/main");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -147,6 +158,9 @@ function WaitingRoom({
                 >{`[${input}]`}</div>
               ))}
             </div>
+            <button className="w-200 text-center" onClick={exitWaitingRoom}>
+              나가기
+            </button>
           </div>
         </>
       )}
