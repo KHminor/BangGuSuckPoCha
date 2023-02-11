@@ -15,7 +15,7 @@ function FriendChat():JSX.Element {
 
   
   // 채팅구역
-  const chatArea = useRef<any>(null)
+  const chatArea = useRef<any>(null) 
   const client = useRef<any>({});
 
   useEffect(()=> {
