@@ -4,11 +4,13 @@ import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
   inviteMyFriend,
   showPublicModal,
+  showUpdatePocha,
   showUpdateRoom,
 } from "src/store/store";
 import InviteFriend from "./InviteFriend";
 import Loading from "./Loading";
 import PublicModal from "./PublicModal";
+import UpdateChangeStoryAndGame from "./UpdateChangeStoryAndGame";
 import UpdateRoomInfo from "./UpdateRoomInfo";
 
 function RoomFooterNav({
@@ -59,10 +61,16 @@ function RoomFooterNav({
     return state.PublicModal;
   });
 
+  // 포차변경 모달 보이기 관련
+  const showChangeUpdatePocha = useAppSelector((state) => {
+    return state.changeUpdatePocha;
+  });
+
   // Update 모달 보이기 관련
   const showUpdateModal = useAppSelector((state) => {
     return state.updateRoomInfo;
   });
+
 
   // 친구 초대 모달 보이기 관련
   const showInviteFriend = useAppSelector((state) => {
@@ -132,6 +140,20 @@ function RoomFooterNav({
     dispatch(showUpdateRoom(true));
   };
 
+  const onClickChangePocha = () => {
+    // 방장 체크후 처리
+    if (!isHost) {
+      setModalData({
+        type: "host",
+        nickname: "포차수정은",
+        msg: "방장만 가능합니다",
+      });
+      dispatch(showPublicModal(true));
+      return;
+    }
+    dispatch(showUpdatePocha(true));
+  }
+
   // 친구 초대 창 켜기
   const onClickInviteFriend = () => {
     dispatch(inviteMyFriend(true));
@@ -178,6 +200,13 @@ function RoomFooterNav({
           socket={socket}
         />
       )}
+      {showChangeUpdatePocha && (
+        <UpdateChangeStoryAndGame
+          pochaId={pochaId}
+          roomTheme={roomTheme!}
+          socket={socket}
+        />
+      )}
       {showInviteFriend && (
         <InviteFriend pochaId={pochaId} onClickShowInvite={onClickShowInvite} />
       )}
@@ -195,6 +224,16 @@ function RoomFooterNav({
               id="addTime"
             />
             <span className="text-[0.8rem] mt-1">시간추가</span>
+          </div>
+          <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
+            <img
+              onClick={onClickChangePocha}
+              className="h-[2.2rem] py-auto transition-all duration-300 hover:scale-110"
+              src={require("src/assets/roomIcon/exclamation-mark.png")}
+              alt="change"
+              id="change"
+            />
+            <span className="text-[0.8rem] mt-1">포차변경</span>
           </div>
           <div className="flex flex-col justify-center items-center min-h-full max-h-full cursor-pointer">
             <img

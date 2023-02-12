@@ -6,6 +6,7 @@ import {
   changeCreateRoomChoiceAddTag,
   changeCreateRoomChoiceRemoveTag,
   changeCreateRoomChoiceTagReset,
+  showUpdatePocha,
   showUpdateRoom,
 } from "../../store/store";
 import MainCreateRoomTheme from "src/components/Main/MainCreateRoomTheme";
@@ -14,7 +15,7 @@ import { useEffect, useState, useRef } from "react";
 import PublicModal from "./PublicModal";
 import Loading from "./Loading";
 
-const UpdateRoomInfo = ({
+const UpdateChangeStoryAndGame = ({
   roomTheme,
   pochaId,
   socket,
@@ -70,7 +71,7 @@ const UpdateRoomInfo = ({
   // 전달받아온 함수를 실행해서 창끄기
   const closeModal = () => {
     // onClickHiddenBtn();
-    dispatch(showUpdateRoom(false));
+    dispatch(showUpdatePocha(false));
   };
 
   // 태그 리스트
@@ -168,7 +169,7 @@ const UpdateRoomInfo = ({
   }, []);
 
   // 포차 정보 업데이트 요청
-  const updateRoom = async (event: React.MouseEvent<HTMLInputElement>) => {
+  const updateRoom = async (event: React.MouseEvent<HTMLInputElement> ) => {
     const changeThemeId = event.currentTarget.id;
     try {
       const updateInfo = await axios({
@@ -195,7 +196,7 @@ const UpdateRoomInfo = ({
 
   return (
     <>
-      {roomTheme === 1 ? (
+      {roomTheme === 2 ? (
         <>
           {showModal && <PublicModal data={modalData} fx={onClickModalState} />}
           {isLoading && <Loading />}
@@ -261,7 +262,7 @@ const UpdateRoomInfo = ({
                   className={`${style.createBtn} cursor-pointer`}
                   type="button"
                   id="story"
-                  value="정보수정"
+                  value="소통포차변경"
                 />
                 <input
                   onClick={() => {
@@ -341,8 +342,8 @@ const UpdateRoomInfo = ({
                   onClick={updateRoom}
                   className={`${style.createBtn} cursor-pointer`}
                   type="button"
-                  id={roomTheme === 2 ? "game" : "meeting"}
-                  value="정보수정"
+                  id="game"
+                  value="게임포차변경"
                 />
                 <input
                   onClick={closeModal}
@@ -359,4 +360,4 @@ const UpdateRoomInfo = ({
   );
 };
 
-export default UpdateRoomInfo;
+export default UpdateChangeStoryAndGame;
