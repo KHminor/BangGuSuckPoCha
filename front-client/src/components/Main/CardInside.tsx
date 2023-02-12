@@ -20,8 +20,7 @@ function CardInside({ TagList, themeType, themeId, femaleCount, maleCount, ssulT
       break
     case ('Meeting'):
       themeTypeColor = "#DE145D"
-      themeTypeHoverNeon = 'meeting'
-      
+      themeTypeHoverNeon = 'meeting'      
   }
   
   // 테마ID에 따른 이미지url
