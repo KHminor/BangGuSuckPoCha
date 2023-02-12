@@ -153,7 +153,7 @@ function Main(): JSX.Element {
 
       {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
       {mainCreateRoomCarouselCheck ? (
-        <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
+        <MainCreateRoomCarousel />
       ) : null}
 
       {/* 선택한 테마에 따른 방만들기 셋팅 */}
@@ -186,14 +186,15 @@ function Main(): JSX.Element {
           <div
             className="grid mx-auto min-w-f"
             style={{
-              gridTemplateRows: "20rem 1fr 3rem",
+              gridTemplateRows: "25rem 1fr 3rem",
               backgroundColor: "rgb(25, 25, 25)",
             }}
           >
             {/* 태그 */}
-            <div className="grid" style={{ gridTemplateRows: "12rem 8rem" }}>
+            <div className="grid" style={{ gridTemplateRows: "12rem 1fr" }}>
               <div></div>
               <Tag />
+
             </div>
             {/* 방 보이기 */}
             <div
@@ -207,7 +208,8 @@ function Main(): JSX.Element {
         </div>
 
         {/* 방 생성 버튼 */}
-        <div
+        {/* Tag 컴포넌트로 이동 */}
+        {/* <div
           ref={createBtn}
           onClick={() => {
             dispatch(changeCarouselState());
@@ -221,7 +223,7 @@ function Main(): JSX.Element {
             alt=""
             className="w-1/6 min-w-1/6"
           />
-        </div>
+        </div> */}
 
         {/* 메뉴 클릭시 보이기 */}
         <NavbarMenu />
@@ -272,9 +274,10 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
     // { age: 0, region:'전국', gender: '',}
     // 헌팅방 입장
     if (themeId === 'T2') {
+      console.log(themeId)
       // 나이,지역,잠금,총인원수,성비 체크
       if ((myState.gender === 'M')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
-        (limitUser > totalCount) && (limitUser/2 >maleCount)) {
+        (limitUser > totalCount) && (limitUser/2 >maleCount) && (isWaiting)) {
           axios({
             method: 'post',
             url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
@@ -287,7 +290,7 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
             navigate(`/meetingroom/${pochaId}`);
           })
         } else if ((myState.gender === 'F')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
-        (limitUser > totalCount) && (limitUser/2 >femaleCount)) {
+        (limitUser > totalCount) && (limitUser/2 >femaleCount) && (isWaiting)) {
           axios({
             method: 'post',
             url: 'https://i8e201.p.ssafy.io/api/pocha/enter',

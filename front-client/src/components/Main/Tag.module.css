@@ -16,3 +16,42 @@
   color: rgba(249, 249, 249, 0.5);
   font-size: 0.95rem;
 }
+
+
+.tagBtn {
+  border: solid 1px #FFCC66;
+  box-shadow: 0 0 5px #a97000,
+              0 0 10px #c78400;
+  transition: all 0.4s;
+  border: groove 2px none;
+}
+
+.selectBtn {
+  color: #272727;
+  background-color: blue;
+}
+
+.tagSelect {
+  background-color: rgb(25, 25, 25);
+  -webkit-appearance:none; /* 크롬 화살표 없애기 */
+  -moz-appearance:none; /* 파이어폭스 화살표 없애기 */
+  appearance:none; /* 화살표 없애기 */
+  transition: all 0.5s;
+}
+
+.tagSelect:focus {
+  color: #272727;
+  background-color: #FFCC66;
+}
+
+.tagFixed {
+  transition: all 0.5s;
+}
+.tagFixed:hover {
+  color: #5E2F00;
+  font-size: 1.3rem;
+  transition: all 0.3s;
+  text-shadow: 0 0 5px #a97000,
+              0 0 10px #c78400;
+
+}

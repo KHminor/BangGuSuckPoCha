@@ -2,8 +2,9 @@ import axios from 'axios'
 import {useEffect, useState, useRef} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch } from 'src/store/hooks'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import {
+  changeCarouselState,
   changeMainCreateRoomList,
 } from "../../store/store";
 import styles from './Tag.module.css'
@@ -20,7 +21,15 @@ function Tag(): JSX.Element {
   const themeRef = useRef<any>(null)
   const sulRef = useRef<any>(null)
   const hobbyRef = useRef<any>(null)
-  // console.log(ageRef.current.value)
+   // 방 생성 관련
+  const createBtn = useRef<any>(null);
+  const mainCreateRoomCarouselCheck: any = useAppSelector(
+    (state: any) => state.mainCreateRoomCarouselCheck
+  );
+   // 선택한 포차 테마 체크
+  const createThemeRoomCheck: number = useAppSelector((state) => {
+    return state.createThemeRoomCheck;
+  });
 
   // 유저 정보(연령, 지역)조사
   useEffect(()=> {
@@ -39,6 +48,15 @@ function Tag(): JSX.Element {
     })
   },[])
   
+  // useEffect(()=> {
+  //   if (mainCreateRoomCarouselCheck) {
+  //     createBtn.current.classList.add("hidden");
+  //   } else if (createThemeRoomCheck){
+  //     createBtn.current.classList.add("hidden");
+  //   } else {
+  //     createBtn.current.classList.remove("hidden");
+  //   }
+  // })
 
   useEffect(()=> {
     console.log(ageRegion, setAgeRegion)
@@ -206,95 +224,126 @@ function Tag(): JSX.Element {
 
 
   return (
-    <div className="grid w-full min-w-[75rem] h-full " style={{gridTemplateColumns:'7fr 4fr', backgroundColor: "rgb(25, 25, 25)"}}>
-      <div className="grid items-center w-full text-white " style={{gridTemplateColumns:'2.5rem 0.6fr 1fr 1fr 1fr 1fr 1fr'}}>
-        <div className="flex justify-center items-center font-normal ml-2 h-1/3"> &nbsp;&nbsp;&nbsp;&nbsp;</div>
-        {/* All */}
-        <div className="flex justify-center items-center font-normal border-0 rounded-full h-1/3 w-full cursor-pointer" style={{ backgroundColor: "rgb(233, 61, 107)" }} onClick={()=> {
-          setFilter((preState:any)=> {
-            return {...preState, isAll:true, age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'태그', speedEnter: false}
-          })
-        }}>전체</div>
-        {/* 연령 */}
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3 select-wrap">
-          <select ref={ageRef} className={`flex justify-center items-center cursor-pointer ${styles.select}`} name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
-            setFilter((preState:any)=> {
-              return {...preState, isAll:false, age: e.target.value}
-            } )
-          }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="연령">연령</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="ALL">ALL</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.age}>{ageRegion.age}</option>
-          </select>
+    <>
+    
+      <div className='flex flex-col justify-end '>
+      <div className='h-[100%] grid' style={{gridTemplateRows: '1fr 0.8fr'}}>
+        <div className='flex justify-start items-end h-full pl-[2.5rem]'>
+          <span className='text-5xl text-white font-extrabold '>일취월장&nbsp;</span><span className='text-lg font-bold text-yellow-500'>홈술 환영</span>
         </div>
-        {/* 지역 */}
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
-          <select ref={regionRef} className='flex justify-center items-center cursor-pointer' name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
-            setFilter((preState:any)=> {
-              return {...preState, isAll:false ,region: e.target.value}
-            } )
-          }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="지역">지역</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="전국">전국</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value={ageRegion.region}>{ageRegion.region}</option>
-          </select>
-        </div>
-        {/* 테마 */}
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
-          <select ref={themeRef} className='flex justify-center items-center cursor-pointer' name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
-            setFilter((preState:any)=> {
-              return {...preState, isAll:false ,theme: e.target.value}
-            } )
-          }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="테마">테마</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="소통포차">소통포차</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="게임포차">게임포차</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="미팅포차">미팅포차</option>
-          </select>
-        </div>
-        {/* 술 종류 */}
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
-          <select ref={sulRef} className='flex justify-center items-center cursor-pointer' name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
-            setFilter((preState:any)=> {
-              return {...preState, isAll:false ,sul: e.target.value}
-            } )
-          }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="술">술</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="소주">소주</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="맥주">맥주</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="와인">와인</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="위스키">위스키</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="보드카">보드카</option>
-          </select>
-        </div>
-        <div className="flex justify-center items-center font-normal ml-2 border-2 rounded-full h-1/3">
-          <select ref={hobbyRef} className='flex justify-center items-center cursor-pointer' name="" id="" style={{backgroundColor:'rgb(25, 25, 25)'}} onChange={(e)=> {
-            setFilter((preState:any)=> {
-              return {...preState, isAll:false ,hobby: e.target.value}
-            } )
-          }}>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="태그">태그</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="애니메이션">애니메이션</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="게임">게임</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="연애">연애</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="영화">영화</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="음악">음악</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="연예인">연예인</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="직장">직장</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="잡담">잡담</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="운동">운동</option>
-            <option className="text-center bg-[rgb(25, 25, 25)]" value="축구">축구</option>
-          </select>
+        <div className='flex justify-start items-center h-full pl-[2.9rem]'>
+          <span className='text-white font-semibold text-lg '>일요일날 취하면 월요일날 장난 아님</span>
         </div>
       </div>
-      <div className="flex justify-end items-center w-full h-full">
-        <div className={`flex justify-center items-center text-white rounded-3xl cursor-pointer w-[6rem] h-[2.65rem] ${styles.cancelBtn}`} onClick={()=> {
-          setFilter((preState:any)=> {
-            return {...preState, speedEnter: true}
-          })
-        }}>빠른 입장</div>
+      <div className="grid w-full min-w-[75rem] h-[40%] pb-5" style={{gridTemplateColumns:'7fr 5fr', backgroundColor: "rgb(25, 25, 25)"}}>
+        <div className="grid items-end w-full h-full text-white" style={{gridTemplateColumns:'2.5rem 0.6fr 1fr 1fr 1fr 1fr 1fr'}}>
+          <div className="flex justify-center items-center font-normal ml-2 "> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+          {/* All */}
+          <div className={`flex justify-center items-center font-normal rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn}`}>
+            <select className={`flex justify-center items-center font-bold text-lg border-0 rounded-full ml-auto h-[2rem] w-full cursor-pointer  ${styles.tagSelect}`} onClick={()=> {
+                setFilter((preState:any)=> {
+                  return {...preState, isAll:true, age:'연령',region:'지역',theme:'테마',sul:'술',hobby:'태그', speedEnter: false}
+                })
+              }}>
+                <option className='text-center' value="전체" selected disabled>전체</option>
+            </select>
+          </div>
+          {/* 연령 */}
+          <div className={`flex justify-center items-center font-normal rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn} `}>
+            <select ref={ageRef} className={`flex justify-center font-bold text-lg items-center w-full rounded-full h-full cursor-pointer ${styles.tagSelect}`} name="" id="" onChange={(e)=> {
+              setFilter((preState:any)=> {
+                return {...preState, isAll:false, age: e.target.value}
+              } )
+            }}>
+              <option className={`text-center rounded-full`} style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="연령" selected>연령</option>
+              <option className={`text-center rounded-full`} style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="ALL">ALL</option>
+              <option className={`text-center rounded-full`} style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value={ageRegion.age}>{ageRegion.age}</option>
+            </select>
+          </div>
+          {/* 지역 */}
+          <div className={`flex justify-center items-center font-normal border-2 rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn}`}>
+            <select ref={regionRef} className={`flex justify-center font-bold text-lg items-center  w-full rounded-full h-full cursor-pointer ${styles.tagSelect}`} name="" id="" onChange={(e)=> {
+              setFilter((preState:any)=> {
+                return {...preState, isAll:false ,region: e.target.value}
+              } )
+            }}>
+              <option className="text-center rounded-full" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="지역">지역</option>
+              <option className="text-center rounded-full" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="전국">전국</option>
+              <option className="text-center rounded-full" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value={ageRegion.region}>{ageRegion.region}</option>
+            </select>
+          </div>
+          {/* 테마 */}
+          <div className={`flex justify-center items-center font-normal border-2 rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn}`}>
+            <select ref={themeRef} className={`flex justify-center font-bold text-lg items-center w-full rounded-full h-full cursor-pointer ${styles.tagSelect}`} name="" id=""  onChange={(e)=> {
+              setFilter((preState:any)=> {
+                return {...preState, isAll:false ,theme: e.target.value}
+              } )
+            }}>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="테마">테마</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="소통포차">소통포차</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="게임포차">게임포차</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="미팅포차">미팅포차</option>
+            </select>
+          </div>
+          {/* 술 종류 */}
+          <div className={`flex justify-center items-center font-normal border-2 rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn}`}>
+            <select ref={sulRef} className={`flex justify-center items-center font-bold text-lg w-full rounded-full h-full cursor-pointer ${styles.tagSelect}`} name="" id=""  onChange={(e)=> {
+              setFilter((preState:any)=> {
+                return {...preState, isAll:false ,sul: e.target.value}
+              } )
+            }}>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="술">술</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="소주">소주</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="맥주">맥주</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="와인">와인</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="위스키">위스키</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="보드카">보드카</option>
+            </select>
+          </div>
+          <div className={`flex justify-center items-center font-normal border-2 rounded-full ml-auto w-[85%] h-[2rem] ${styles.tagBtn}`}>
+            <select ref={hobbyRef} className={`flex justify-center items-center font-bold text-lg  w-full rounded-full h-full cursor-pointer ${styles.tagSelect}`} name="" id=""  onChange={(e)=> {
+              setFilter((preState:any)=> {
+                return {...preState, isAll:false ,hobby: e.target.value}
+              } )
+            }}>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="태그">태그</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="애니메이션">애니메이션</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="게임">게임</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="연애">연애</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="영화">영화</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="음악">음악</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="연예인">연예인</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="직장">직장</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="잡담">잡담</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="운동">운동</option>
+              <option className="text-center" style={{backgroundColor: 'rgb(25, 25, 25)', color: 'white'}} value="축구">축구</option>
+            </select>
+          </div>
+        </div>
+        <div className={`fixed flex flex-col justify-end items-end rounded-[1.25rem] bg-[#FFCC66] w-[12rem] h-[7.3rem] bottom-12 right-12 text-xl font-black text-[#5E2F00] ${styles.tagBtn}`}>
+          <div className={`flex justify-center items-center w-[60%] mx-auto h-full `} style={{borderBottom: 'solid 2px white'}} onClick={()=> {
+            setFilter((preState:any)=> {
+              return {...preState, speedEnter: true}
+            })
+            }}>
+              <span className={`cursor-pointer ${styles.tagFixed}`}>빠른 입장</span>
+          </div>
+          {/* 방 생성 버튼 */}
+          <div
+            ref={createBtn}
+            onClick={() => {
+              dispatch(changeCarouselState());
+              // onClickHiddenBtn();
+            }}
+            className={`flex justify-center items-center w-[60%] mx-auto h-full cursor-pointer`}
+          >
+            <span className={`cursor-pointer ${styles.tagFixed}`}>포차</span>
+          </div>
+
+        </div>
       </div>
     </div>
+    </>
     
   )
 }
