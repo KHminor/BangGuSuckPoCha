@@ -445,6 +445,17 @@ const updateRoomInfo = createSlice({
   },
 });
 
+// 포차변경 켜고 끄는 함수
+const changeUpdatePocha = createSlice({
+  name: "changeUpdatePocha",
+  initialState: false,
+  reducers: {
+    showUpdatePocha(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 // 친구 초대창 켜고 끄는 함수
 const inviteFriendModal = createSlice({
   name: "inviteFriendModal",
@@ -554,6 +565,7 @@ export const store = configureStore({
     webRtcLoading: webRtcLoading.reducer,
     // room관련
     updateRoomInfo: updateRoomInfo.reducer,
+    changeUpdatePocha: changeUpdatePocha.reducer,
     inviteFriendModal: inviteFriendModal.reducer,
     // 친구 요청 검색 모달
     friendSearchState: friendSearchState.reducer,
@@ -624,6 +636,7 @@ export const { changeMyPageCheck } = myPageCheck.actions;
 export const { isRtcLoading } = webRtcLoading.actions;
 // room
 export const { showUpdateRoom } = updateRoomInfo.actions;
+export const { showUpdatePocha } = changeUpdatePocha.actions;
 export const { inviteMyFriend } = inviteFriendModal.actions;
 // 친구 요청 검색 모달
 export const { changeFriendSearchState } = friendSearchState.actions;
