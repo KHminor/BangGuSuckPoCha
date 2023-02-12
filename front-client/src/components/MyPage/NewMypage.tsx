@@ -245,7 +245,7 @@ const NewMyPage = () => {
           >
             <Navbar />
             <div className="w-full"></div>
-            {/* 여기가 배경색 */} 
+            {/* 여기가 배경색 */}
             <div className="w-full flex flex-col  text-white">
               <div className="flex flex-row h-[15%] ">
                 <div className="w-[25%] "></div>
@@ -523,8 +523,7 @@ const NewMyPage = () => {
                     <div
                       className="w-full h-[30%] cursor-pointer"
                       onClick={() => {
-                        console.log("포인트로 간다");
-                        // navigate("pointhistory");
+                        navigate("/pointhistory");
                       }}
                     >
                       포인트 내역
