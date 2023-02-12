@@ -80,26 +80,20 @@ function Main(): JSX.Element {
   //   });
   // }, []);
 
+  // 메인 입장시 나오는것과 강퇴당한것 구분
   useEffect(() => {
-    console.log(localStorage.getItem("reloadExit"),'@@@@ 리롵에싯')
-    console.log(localStorage.getItem("reloadBan"),'@@@@ 리롵에싯')
-    // console.log(sessionStorage.reloadBan,'@@@@ 뱁냅냅내')
-    if (localStorage.getItem("reloadExit") === "true") {
+    if (localStorage.getItem("reloadExit")) {
       toast.success("방에서 나오셨습니다");
       setTimeout(() => {
         localStorage.removeItem("reloadExit");
       }, 500)
     }
-    if (localStorage.getItem("reloadBan") === "true") {
-      toast.success("방에서 나오셨습니다");
+    if (localStorage.getItem("reloadBan")) {
+      toast.error("방에서 강퇴당하셨습니다");
       setTimeout(() => {
         localStorage.removeItem("reloadBan");
       }, 500)
     }
-    // if (sessionStorage.reloadBan === "true") {
-    //   toast.error("방에서 강퇴 당하셨습니다");
-    //   sessionStorage.reloadBan = "false";
-    // }
   }, []);
 
   // 방 생성 관련
@@ -273,7 +267,8 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
     const totalCount = e.totalCount
     const maleCount = e.maleCount
     const femaleCount = e.femaleCount
-    console.log(isPrivate,limitUser,totalCount,maleCount,femaleCount);
+    const isWaiting = e.isWaiting
+    console.log(isPrivate,limitUser,totalCount,maleCount,femaleCount, isWaiting);
     // { age: 0, region:'전국', gender: '',}
     // 헌팅방 입장
     if (themeId === 'T2') {
@@ -289,11 +284,7 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
               username: username,
             }
           }).then(()=> {
-            if (themeId === 'T0') {
-              navigate(`/storyroom/${pochaId}`);
-            } else if (themeId === 'T1') {
-                navigate(`/gameroom/${pochaId}`);
-              }
+            navigate(`/meetingroom/${pochaId}`);
           })
         } else if ((myState.gender === 'F')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
         (limitUser > totalCount) && (limitUser/2 >femaleCount)) {
@@ -306,11 +297,7 @@ function Room({ mainCreateRoomList, myState }: any): JSX.Element {
               username: username,
             }
           }).then(()=> {
-            if (themeId === 'T0') {
-              navigate(`/storyroom/${pochaId}`);
-            } else if (themeId === 'T1') {
-                navigate(`/gameroom/${pochaId}`);
-              }
+            navigate(`/meetingroom/${pochaId}`);
           })
         } else {
           toast.error('입장할 수 없는 방입니다')
