@@ -250,7 +250,7 @@ const WebRTC = ({
     console.log("@@@@@@@@@@@@@@@@", userData);
     setHeartInfo((hearts: any) => {
       hearts[heartUser.myHeart] = 0;
-      return hearts;
+      return { ...hearts };
     });
     socket.emit("join_room", {
       roomName,
@@ -537,16 +537,17 @@ const WebRTC = ({
     // } else if (userCount.current === 3) {
     //   peerFace.current[2].srcObject = data.stream;
     // }
-    setHeartInfo((hearts: any) => {
-      hearts[username] = 0;
-      return { ...hearts };
-    });
+    if (heartInfo[username] == null || heartInfo[username] === undefined) {
+      setHeartInfo((hearts: any) => {
+        hearts[username] = 0;
+        return { ...hearts };
+      });
+    }
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
       setHeartUser((prev: any) => {
-        prev.peerHeart1 = username;
-        return prev;
+        return { ...prev, peerHeart1: username };
       });
       peerHeart1.current.setAttribute("value", username);
       peerHeart1.current.style.display = "block";
