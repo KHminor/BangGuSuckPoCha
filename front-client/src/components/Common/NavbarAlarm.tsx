@@ -17,21 +17,21 @@ function NavbarAlarm(): JSX.Element {
     return state.alarmClickCheck;
   });
   // 메뉴 클릭 상태
-  const checkMenuState: any = useAppSelector((state: any) => {
+  const menuClickCheck: any = useAppSelector((state: any) => {
     return state.menuClickCheck;
   });
   const alarmClickState = useAppSelector((state:any)=> {return state.alarmClickState})
 
   // 알람 클릭시 조건 분기
   useEffect(()=> {
-    if ((alarmClickCheck) && (checkMenuState)) {
+    if ((alarmClickCheck) && (menuClickCheck)) {
       dispatch(changeMenuState())
       alarmIcon.current.classList.remove("hidden");
     } else if (alarmClickCheck) {
       alarmIcon.current.classList.remove("hidden");
     } else if (!(alarmClickCheck)) {
       alarmIcon.current.classList.add("hidden");
-    }
+    } 
   }, [alarmClickCheck])
   
   return (

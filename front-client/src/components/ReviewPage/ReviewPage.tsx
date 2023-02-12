@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { changeAlarmApiDataState, changeNavAlarmReviewEmojiUserData, showRoomUserProfile } from "src/store/store";
+import { changeAlarmApiDataState, changeAlarmState, changeMenuState, changeNavAlarmReviewEmojiUserData, showRoomUserProfile } from "src/store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
 import FriendSearch from "../Common/FriendSearch";
@@ -40,6 +40,19 @@ function ReviewPage():JSX.Element {
 
   // 친구 요청 검색 모달
   const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
+
+  useEffect(()=> {
+    exitMethod()
+    return () =>  exitMethod()
+  },[])
+
+  function exitMethod() {
+    if (checkMenuState === true) {
+      dispatch(changeMenuState());
+    } else if (alarmClickCheck === true) {
+      dispatch(changeAlarmState());
+    }
+  }
 
   
   useEffect(()=> {
