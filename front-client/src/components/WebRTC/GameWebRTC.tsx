@@ -558,32 +558,42 @@ const WebRTC = ({
     }
   };
   // ---------------- 게임 관련 --------------------
+  const transitionDiv = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     // 게임 선택하기
     socket.on("game_select", (gameId) => {
-      console.log("게임아이디 오냐--------",gameId)
-      // 선택한 게임Id 세팅
-      dispatch(selectGame(gameId));
-      // 게임 선택창 끄기
-      dispatch(showGameSelectModal(false));
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("게임아이디 오냐--------", gameId);
+      setTimeout(() => {
+        // 게임 선택창 끄기
+        dispatch(showGameSelectModal(false));
+        // 선택한 게임Id 세팅
+        dispatch(selectGame(gameId));
+        transitionDiv.current!.classList.remove("opacity-0");
+      }, 1000);
     });
 
     // 게임 선택창으로 돌아오기
     socket.on("game_back_select", () => {
-      console.log("선택창돌아오기오냐--------")
-      // 룰렛 결과창 끄기
-      dispatch(showRouletteResultModal(false));
-      // 퍼블릭 모달 끄기
-      dispatch(showPublicModal(false));
-      // 진행중인 게임 닫기
-      dispatch(selectGame("exit"));
-      // 게임 선택창 켜기
-      dispatch(showGameSelectModal(true));
-    })
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("선택창돌아오기오냐--------");
+      setTimeout(() => {
+        transitionDiv.current!.classList.remove("opacity-0");
+        // 룰렛 결과창 끄기
+        dispatch(showRouletteResultModal(false));
+        // 퍼블릭 모달 끄기
+        dispatch(showPublicModal(false));
+        // 진행중인 게임 닫기
+        dispatch(selectGame("exit"));
+        // 게임 선택창 켜기
+        dispatch(showGameSelectModal(true));
+      }, 1000);
+    });
 
     return () => {
       socket.off("game_select");
-      socket.off("game_back_select");    
+      socket.off("game_back_select");
     };
   }, []);
 
@@ -648,7 +658,10 @@ const WebRTC = ({
             </div>
             {/* 게임 공간 */}
 
-            <div className="flex justify-center overflow-hidden min-w-fit w-[47vw] mt-5 items-center border-2 border-blue-400 rounded-[20px]">
+            <div
+              ref={transitionDiv}
+              className="flex justify-center items-center min-w-fit w-[47vw] overflow-hidden mt-5 border-2 border-blue-400 rounded-[20px] transition-all duration-1000"
+            >
               {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
               {isGameSelect && <GameSelect socket={socket} pochaId={pochaId} />}
               {selectedId === "roul"
