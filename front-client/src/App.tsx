@@ -21,6 +21,7 @@ import FriendSearch from "./components/Common/FriendSearch";
 import AdminAdd from "./components/Admin/AdminAdd";
 import AdminGameSetting from "./components/Admin/AdminGameSetting";
 import NewMyPage from "./components/MyPage/NewMypage";
+import PointHistory from "./components/MyPage/PointHistory";
 
 function App() {
   return (
@@ -58,8 +59,9 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/gameroom/:PochaId" element={<GameRoom />} />
         <Route path="/storyroom/:PochaId" element={<StoryRoom />} />
-        <Route path="/meetingroom/:PochaId" element={<MeetingRoom />} />        
+        <Route path="/meetingroom/:PochaId" element={<MeetingRoom />} />
         <Route path="/newmypage" element={<NewMyPage />} />
+        <Route path="/pointhistory" element={<PointHistory />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/adminmain" element={<AdminMain />} />
         <Route path="/adminadd" element={<AdminAdd />} />
