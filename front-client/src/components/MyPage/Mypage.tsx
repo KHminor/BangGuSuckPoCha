@@ -77,7 +77,7 @@ function Mypage(): JSX.Element {
   const Username: any = localStorage.getItem("Username");
 
   //Store
-  const myInfo: any = useAppSelector((state: any) => {
+  let myInfo: any = useAppSelector((state: any) => {
     // console.log("store에 넣은 내정보", state.myInfo);
     return state.myInfo;
   });
@@ -152,31 +152,38 @@ function Mypage(): JSX.Element {
   }, [SelectedFirst]);
 
   //최초 호출시 axios호출
-  useEffect(() => {    
+  useEffect(() => {
+    // console.log("useEffect실행");
     //토큰처리
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-   
-    // axios({
-    //   method: "get",
-    //   url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
-    //   headers: {
-    //     accessToken: `${accessToken}`,
-    //   },
-    // }).then((r) => {
-    //   console.log("성공인가요?", r.data);
-
-    //   //
-    //   axios({
-    //     method: "post",
-    //     url: `https://i8e201.p.ssafy.io/api/user/auth/refresh/${Username}`,
-    //     headers: {
-    //       accessToken: `${accessToken}`,
-    //     },
-    //   }).then((r) => {
-    //     console.log(r.data);
+    // axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+    // axios
+    //   .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`)
+    //   .then((r) => {
+    //     console.log("성공인가요?", r.data);
     //   });
-    // });
+
+    axios({
+      method: "get",
+      url: `https://i8e201.p.ssafy.io/api/user/myinfo/${Username}`,
+      headers: {
+        accessToken: `${accessToken}`,
+      },
+    }).then((r) => {
+      console.log("성공인가요?", r.data);
+
+      //
+      axios({
+        method: "post",
+        url: `https://i8e201.p.ssafy.io/api/user/auth/refresh/${Username}`,
+        headers: {
+          accessToken: `${accessToken}`,
+        },
+      }).then((r) => {
+        console.log(r.data);
+      });
+    });
 
     axios({
       method: "get",
@@ -219,13 +226,10 @@ function Mypage(): JSX.Element {
       setAge(age);
       // console.log("내 지역입니다!", a.region);
       setRegion(a.region);
-
-
       setRegioncode(a.regioncode);
       // 일단 내 regioncode를 받는다
       setSelectedFirst(a.regioncode);
       // console.log("a.regionCode가 들어왔어", a.regioncode);
-
       if (a.regioncode.substr(2, 8) !== "00000000") {
         setIsSelected(false);
       } else {
@@ -331,7 +335,18 @@ function Mypage(): JSX.Element {
                         alt="로딩중"
                       />
                     )}
-                    
+                    <img
+                      className="h-[1.5rem] w-[1.5rem] cursor-pointer"
+                      style={{ objectFit: "contain" }}
+                      src={require("../../assets/myPage/settings.png")}
+                      alt=""
+                      onClick={() => {
+                        //톱니바퀴 클릭하면 modal클릭변경
+                        console.log("클릭했다");
+                        dispatch(showMyPageProfileSelect());
+                        console.log("안녕");
+                      }}
+                    />
                     <div className="right-7 w-[3rem] " />
                     <div className="flex flex-col items-start">
                       <div
@@ -505,7 +520,16 @@ function Mypage(): JSX.Element {
                           >
                             {regionlist
                               ? regionlist.map(
-                                  (it: any): any => (                                    
+                                  (it: any): any => (
+                                    console.log("Selected는", SelectedFirst),
+                                    console.log(
+                                      "Selected는",
+                                      SelectedFirst.substr(0, 2)
+                                    ),
+                                    console.log(
+                                      "비교할거",
+                                      it.regionCode.substr(0, 2)
+                                    ),
                                     it.regionCode.substr(0, 2) ===
                                     SelectedFirst.substr(0, 2) ? (
                                       <option value={it.regionCode} selected>
@@ -609,7 +633,9 @@ function Mypage(): JSX.Element {
                       {modifydisplay === true ? (
                         <div
                           className="flex flex-col justify-end items-center w-[80%] h-full mx-auto cursor-pointer"
-                          onClick={() => {                            
+                          onClick={() => {
+                            // console.log("modifydisplay : " + modifydisplay);
+                            //수정가능
 
                             console.log("앞쪽꺼", SelectedFirst.substr(0, 2));
                             console.log("city", city);

@@ -42,6 +42,7 @@ function FriendList(): JSX.Element {
   // 친구 요청 검색 모달
   const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
 
+  // 유저 조회
   function UserStateSearch(f_username:any) {
     axios({
       method: 'get',

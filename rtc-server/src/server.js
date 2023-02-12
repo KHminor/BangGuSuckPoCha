@@ -247,6 +247,10 @@ wsServer.on("connection", (socket) => {
   });
 
   // 손병호 게임
+  // 손병호게임 여러 시그널
+  socket.on("game_son_signal", (roomName, signalData) => {
+    wsServer.to(roomName).emit("game_son_signal", signalData);
+  });
   // 게임 시작 신호
   socket.on("game_son", (roomName) => {
     wsServer.to(roomName).emit("game_son");

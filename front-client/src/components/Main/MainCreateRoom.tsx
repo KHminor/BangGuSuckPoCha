@@ -36,6 +36,7 @@ const MainCreateRoom = ({
   const themeOption = ["테마", "이자카야", "포장마차", "맥주"];
   const peopleOption = ["인원", "2", "3", "4", "5", "6"];
   const meetingPeopleOption = ["인원", "2", "4", "6"];
+  const [secret, setSecret] = useState<boolean>(false);
   const tagList = [
     "소주",
     "맥주",
@@ -68,7 +69,16 @@ const MainCreateRoom = ({
     dispatch(changeThemeRoomState(0));
     dispatch(changeCarouselState());
   };
-
+  // 비밀방 체크 여부
+  const onCheckedSecret = (event: any) => {
+    event.preventDefault();
+    console.log(event.currentTarget.id);
+    if (event.currentTarget.id === "padlock") {
+      setSecret(true);
+      return;
+    }
+    setSecret(false);
+  };
   // 태그 리스트
   const [choiceTagList, setChoiceTagList] = useState<string[]>([]);
   console.log("태그리스트", choiceTagList);
@@ -164,23 +174,38 @@ const MainCreateRoom = ({
                 })}
               </div>
               <div className="flex justify-end w-full mt-10">
+                <div className="flex justify-start items-center w-20">
+                  {secret === false ? (
+                    <img
+                      className="h-10 cursor-pointer"
+                      onClick={onCheckedSecret}
+                      src={require("src/assets/roomIcon/padlock.png")}
+                      id="padlock"
+                      alt="padlock"
+                    />
+                  ) : null}
+                  {secret === true ? (
+                    <img
+                      className="h-10 cursor-pointer"
+                      onClick={onCheckedSecret}
+                      src={require("src/assets/roomIcon/lock.png")}
+                      id="lock"
+                      alt="lock"
+                    />
+                  ) : null}
+                </div>
                 <input
                   className={`${style.createBtn} cursor-pointer`}
                   type="submit"
                   value="포차생성"
                   onClick={() => {
-                    console.log("방 허용 나이", createRoomChoiceAge);
-                    console.log("현재 인원수", createRoomChoicePeople);
-                    console.log("방 허용 지역", createRoomChoiceRegion);
-                    console.log("클릭한 태그", createRoomChoiceTag);
-                    console.log("클릭한 테마Id", createRoomThemeCheck);
-
+                    console.log("비번여부!ㅔ----------!", secret);
                     axios({
                       method: "post",
                       url: "https://i8e201.p.ssafy.io/api/pocha",
                       data: {
                         age: createRoomChoiceAge,
-                        isPrivate: false,
+                        isPrivate: secret,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
                         tagList: choiceTagList,
@@ -260,6 +285,26 @@ const MainCreateRoom = ({
                 })}
               </div>
               <div className="flex justify-end w-full mt-10">
+                <div className="flex justify-start items-center w-20">
+                  {secret === false ? (
+                    <img
+                      className="h-10 cursor-pointer"
+                      onClick={onCheckedSecret}
+                      src={require("src/assets/roomIcon/padlock.png")}
+                      id="padlock"
+                      alt="padlock"
+                    />
+                  ) : null}
+                  {secret === true ? (
+                    <img
+                      className="h-10 cursor-pointer"
+                      onClick={onCheckedSecret}
+                      src={require("src/assets/roomIcon/lock.png")}
+                      id="lock"
+                      alt="lock"
+                    />
+                  ) : null}
+                </div>
                 <input
                   className={`${style.createBtn} cursor-pointer`}
                   type="submit"
@@ -281,7 +326,7 @@ const MainCreateRoom = ({
                       url: "https://i8e201.p.ssafy.io/api/pocha",
                       data: {
                         age: createRoomChoiceAge,
-                        isPrivate: false,
+                        isPrivate: secret,
                         limitUser: createRoomChoicePeople,
                         region: createRoomChoiceRegion,
                         tagList: choiceTagList,
