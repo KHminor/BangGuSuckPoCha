@@ -1,15 +1,17 @@
 import Loading from "../Common/Loading";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./GameRoom.module.css";
 import GameWebRTC from "../WebRTC/GameWebRTC";
 import RoomFooterNav from "../Common/RoomFooterNav";
+import { toast } from "react-toastify";
 
 function GameRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
   const [socket, setSocket] = useState<any>(null);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
@@ -31,7 +33,25 @@ function GameRoom(): JSX.Element {
         url: `https://i8e201.p.ssafy.io/api/pocha/${Number(PochaId)}`,
       });
       setPochaInfo(data.data);
+      switch (data.data.themeId) {
+        case "T0B0":
+          navigate(`/storyroom/${PochaId}`);
+          toast.success("포차 설정이 변경되었습니다");
+          break;
+        case "T0B1":
+          navigate(`/storyroom/${PochaId}`);
+          toast.success("포차 설정이 변경되었습니다");
+          break;
+        case "T0B2":
+          navigate(`/storyroom/${PochaId}`);
+          toast.success("포차 설정이 변경되었습니다");
+          break;
+        case "T1B0":
+          navigate(`/gameroom/${PochaId}`);
+          break;
+      }
       setIsLoading(false);
+      
     } catch (error) {
       console.log("포차 정보 받아오기", error);
     }
