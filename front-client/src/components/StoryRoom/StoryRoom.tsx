@@ -1,14 +1,16 @@
 import RoomFooterNav from "../Common/RoomFooterNav";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WebRTC from "../WebRTC/WebRTC";
 import axios from "axios";
 import Loading from "../Common/Loading";
+import { toast } from "react-toastify";
 
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
   const { PochaId } = useParams();
   const [socket, setSocket] = useState<any>(null);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // 처음에 받아오는 포차 정보
   const [pochaInfo, setPochaInfo] = useState<any>(null);
@@ -37,13 +39,20 @@ function StoryRoom(): JSX.Element {
       console.log("테마", data.data.themeId);
       switch (data.data.themeId) {
         case "T0B0":
+          navigate(`/storyroom/${PochaId}`);
           setUrlImg("bg-rain");
           break;
         case "T0B1":
+          navigate(`/storyroom/${PochaId}`);
           setUrlImg(`bg-pocha`);
           break;
         case "T0B2":
+          navigate(`/storyroom/${PochaId}`);
           setUrlImg(`bg-hof`);
+          break;
+        case "T1B0":
+          navigate(`/gameroom/${PochaId}`);
+          toast.success("포차 설정이 변경되었습니다");
           break;
       }
       setIsLoading(false);
@@ -55,6 +64,7 @@ function StoryRoom(): JSX.Element {
   useEffect(() => {
     getPochaInfo();
   }, []);
+
 
   return (
     <>
