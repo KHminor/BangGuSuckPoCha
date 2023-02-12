@@ -177,7 +177,7 @@ const MainCreateRoom = ({
                 <div className="flex justify-start items-center w-20">
                   {secret === false ? (
                     <img
-                      className="h-10"
+                      className="h-10 cursor-pointer"
                       onClick={onCheckedSecret}
                       src={require("src/assets/roomIcon/padlock.png")}
                       id="padlock"
@@ -186,7 +186,7 @@ const MainCreateRoom = ({
                   ) : null}
                   {secret === true ? (
                     <img
-                      className="h-10"
+                      className="h-10 cursor-pointer"
                       onClick={onCheckedSecret}
                       src={require("src/assets/roomIcon/lock.png")}
                       id="lock"
@@ -288,7 +288,7 @@ const MainCreateRoom = ({
                 <div className="flex justify-start items-center w-20">
                   {secret === false ? (
                     <img
-                      className="h-10"
+                      className="h-10 cursor-pointer"
                       onClick={onCheckedSecret}
                       src={require("src/assets/roomIcon/padlock.png")}
                       id="padlock"
@@ -297,7 +297,7 @@ const MainCreateRoom = ({
                   ) : null}
                   {secret === true ? (
                     <img
-                      className="h-10"
+                      className="h-10 cursor-pointer"
                       onClick={onCheckedSecret}
                       src={require("src/assets/roomIcon/lock.png")}
                       id="lock"
