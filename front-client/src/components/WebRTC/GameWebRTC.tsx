@@ -15,6 +15,7 @@ import {
 } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
+import Balance from "../Games/Balance/Balance";
 import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
@@ -691,6 +692,15 @@ const WebRTC = ({
               {selectedId === "son"
                 ? pochaUsers && (
                     <SonIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}   
+              {selectedId === "bal"
+                ? pochaUsers && (
+                    <Balance
                       socket={socket}
                       pochaId={pochaId}
                       pochaUsers={pochaUsers}
