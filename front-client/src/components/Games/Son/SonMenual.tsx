@@ -1,8 +1,4 @@
 import styles from "./SonMenual.module.css";
-import { useState, useRef, useEffect } from "react";
-import PublicModal from "src/components/Common/PublicModal";
-import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { showRouletteResultModal } from "src/store/store";
 
 function SonMenual({
   socket,
@@ -13,23 +9,12 @@ function SonMenual({
   pochaId: string;
   pochaUsers: any;
 }): React.ReactElement {
-  const dispatch = useAppDispatch();
-  // Public모달 데이터
-  const [modalData, setModalData] = useState<any>(null);
-  // 방 이름
   const roomName = pochaId;
-  // 메뉴얼 클릭
-  const menual = true;
-  // const startRoulette = () => {
-  //   console.log("서버로 손병호가냐?")
-  //   const roomName = pochaId;
-  //   console.log("랜덤값");
-  //   socket.emit("game_roulette", roomName);
-  // }
 
   const onClickClose = () => {
+    const signalData = "INTRO";
     // 선택창으로 돌아가기
-    socket.emit("game_son_signal", roomName);
+    socket.emit("game_son_signal", roomName, signalData);
   };
 
   return (
@@ -45,7 +30,7 @@ function SonMenual({
               <br />
               한 사람씩 돌아가며 조건을 외칩니다.
               <br />
-              :: “안경 낀 사람 접어!”
+              “안경 낀 사람 접어!”
               <br />
               <br />
               해당되는 사람은 손가락을 하나씩 접습니다.
