@@ -165,7 +165,7 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}
-        className={`bg-slate-800 bg-opacity-50 fixed w-full h-full text-white`}
+        className={`bg-slate-800 bg-opacity-50 fixed w-full h-full text-white z-10`}
       >
         <div
           className={`min-w-[24rem] bg-black w-[20%] px-10 pt-10 pb-5 rounded-3xl relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}

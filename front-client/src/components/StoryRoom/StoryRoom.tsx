@@ -5,6 +5,9 @@ import WebRTC from "../WebRTC/WebRTC";
 import axios from "axios";
 import Loading from "../Common/Loading";
 import { toast } from "react-toastify";
+import { useAppSelector } from "src/store/hooks";
+import FriendSearch from "../Common/FriendSearch";
+import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
 
 function StoryRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
@@ -20,8 +23,16 @@ function StoryRoom(): JSX.Element {
   const [urlImg, setUrlImg] = useState<any>("bg-rain");
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
-
+  // 친구 요청 검색 모달
+  const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
   console.log("pochaInfo", pochaInfo);
+
+  const navAlarmReviewEmojiUserData: any = useAppSelector((state: any) => {
+    return state.navAlarmReviewEmojiUserData;
+  });
+  const RoomUserProfileClickCheck: any = useAppSelector((state: any) => {
+    return state.RoomUserProfileClickCheck;
+  });
 
   const propSocket = (socket: any) => {
     setSocket(socket);
@@ -71,10 +82,18 @@ function StoryRoom(): JSX.Element {
       {isLoading ? (
         <Loading />
       ) : (
+          
+        
         <div
           ref={bgDiv}
           className={`w-screen min-h-screen ${urlImg} bg-contain bg-no-repeat bg-center bg-scroll`}
         >
+          {
+            friendSearchState? <FriendSearch/>:null
+          }
+          {RoomUserProfileClickCheck ? (
+            <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData} />
+          ) : null}
           {/* 화면 및 게임 공간 */}
           <div className="min-h-[90vh]">
             <WebRTC
