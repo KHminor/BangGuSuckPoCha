@@ -215,9 +215,27 @@ wsServer.on("connection", (socket) => {
     wsServer.to(roomName).emit("ban", username);
   });
 
+  // 포차 하트 시그널 기능.
+  socket.on("add_heart", (info) => {
+    wsServer.to(info.roomName).emit("add_heart", info.targetUser);
+  });
+
   /////////////////////////////////////////////////
 
   // 게임 기능!!
+  // 게임선택버튼 호버
+  socket.on("game_btn_hover", (roomName, elementId) => {
+    wsServer.to(roomName).emit("game_btn_hover", elementId);
+  });
+  // 게임 선택
+  socket.on("game_select", (roomName, gameId) => {
+    wsServer.to(roomName).emit("game_select", gameId);
+  });
+  // 게임 선택창으로 돌아가기
+  socket.on("game_back_select", (roomName) => {
+    wsServer.to(roomName).emit("game_back_select");
+  });
+
   // 룰렛
   socket.on("game_roulette", (roomName, random) => {
     wsServer.to(roomName).emit("game_roulette", random);
@@ -229,6 +247,10 @@ wsServer.on("connection", (socket) => {
   });
 
   // 손병호 게임
+  // 손병호게임 여러 시그널
+  socket.on("game_son_signal", (roomName, signalData) => {
+    wsServer.to(roomName).emit("game_son_signal", signalData);
+  });
   // 게임 시작 신호
   socket.on("game_son", (roomName) => {
     wsServer.to(roomName).emit("game_son");

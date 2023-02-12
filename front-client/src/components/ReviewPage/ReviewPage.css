@@ -5,14 +5,12 @@
 .nickNameNeon {
   transition: all 0.5s;
   color: white;
-  text-shadow: 0 0 3px #FC5E01,
-              0 0 5px #EF6003;
+  font-weight: bold;
 }
 
 .nickNameNeon:hover {
-  color: #e19a6a;
-  text-shadow: 0 0 3px #FC5E01,
-              0 0 5px #EF6003;
+  color: #6185EE;
+  font-weight: bold;
 }
 
 .reviewpage{
@@ -28,6 +26,10 @@
 
 .blink {
   animation: 3s infinite alternate sliedin;
+}
+
+.textblack{
+  color: rgb(0, 0, 0);
 }
 
 @keyframes sliedin {

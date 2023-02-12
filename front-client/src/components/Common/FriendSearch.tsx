@@ -13,7 +13,7 @@ function FriendSearch(): JSX.Element {
   return (
     <div>
       <div
-        className={`bg-slate-800 bg-opacity-50 fixed  w-full h-full text-white`}
+        className={`bg-slate-800 bg-opacity-50 fixed  w-full h-full text-white z-10`}
         ref={searchFriend}
         onClick={(e)=> {
           if (e.target === searchFriend.current) {

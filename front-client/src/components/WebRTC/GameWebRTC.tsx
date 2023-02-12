@@ -5,11 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showRoomUserProfile } from "../../store/store";
+import {
+  isRtcLoading,
+  selectGame,
+  showGameSelectModal,
+  showPublicModal,
+  showRoomUserProfile,
+  showRouletteResultModal,
+} from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
+import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
+import SonIntro from "../Games/Son/SonIntro";
 // webRTC관련
 const socket = io("https://pocha.online");
 
@@ -37,8 +46,8 @@ const WebRTC = ({
   const cameraSelect = useRef<HTMLSelectElement>(null);
   // 옵션 태그 리스트
   const [optionList, setOptionList] = useState<any[]>([]);
-  // 사람수 체크 리스트(카메라 생성용);
-  // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
+  // 짠 카운트
+  const [count, setCount] = useState<string>("");
   // const currentUsers = useRef<any>([1]);
   // useRef 배열
   // const peerFace = useRef<any>([]);
@@ -395,7 +404,7 @@ const WebRTC = ({
     });
 
     socket.on("room_full", () => {
-      toast.info("응 풀방이야~");
+      toast.info("풀방입니다");
       navigate(`/main`);
     });
 
@@ -419,6 +428,23 @@ const WebRTC = ({
   //     "Content-Type": "application/json;charset=utf-8",
   //   },
   // });
+  //  포차 짠 함수
+  const jjan = () => {
+    let time: number = 3;
+    setCount(String(time));
+    const interval = setInterval(() => {
+      time -= 1;
+      setCount(String(time));
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+      setCount("짠!!!!");
+    }, 3900);
+    setTimeout(() => {
+      setCount("");
+      dispatch(showPublicModal(false));
+    }, 5000);
+  };
 
   useEffect(() => {
     // 포차 설정 변경! : 방 설정 다시 불러오기.
@@ -426,7 +452,8 @@ const WebRTC = ({
       console.log("포차 설정 변경!----------------------");
       // 방 설정 다시 불러오기!!! 테스트
       getPochaInfo();
-      toast.success("포차 정보가 변경되었습니다");
+      window.location.reload();
+      // toast.success("포차 정보가 변경되었습니다");
       // await pocha_config_update("3");
     });
 
@@ -437,19 +464,26 @@ const WebRTC = ({
       // await pocha_config_update("3");
     });
 
+    // 포차 짠! 기능 : 방 설정 다시 불러오기.
+    socket.on("pocha_cheers", async () => {
+      console.log("포차 짠!!!!!------------ㅇ----------");
+      jjan();
+    });
+
     // 포차 강퇴 기능 : 이름찾아서 내보내기
     socket.on("ban", (username) => {
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
+        localStorage.setItem("reloadBan", "true");
         navigate(`/main`);
-        sessionStorage.reloadBan = true;
         window.location.reload();
       }
-    })
+    });
 
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
+      socket.off("pocha_cheers");
       socket.off("ban");
     };
   }, []);
@@ -488,17 +522,9 @@ const WebRTC = ({
   function handleAddStream(stream: any, username: string, nickname: string) {
     console.log("handleAddStream---------------------");
     const indexData = userCount.current;
-    // const indexData = userCount;
-    // peerFace.current[indexData - 1].classList.toggle("hidden");
-    // peerFace.current[indexData - 1].srcObject = stream;
+
     console.log("사람수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ", indexData);
-    // if (userCount.current === 1) {
-    //   peerFace.current[0].srcObject = data.stream;
-    // } else if (userCount.current === 2) {
-    //   peerFace.current[1].srcObject = data.stream;
-    // } else if (userCount.current === 3) {
-    //   peerFace.current[2].srcObject = data.stream;
-    // }
+
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
@@ -516,20 +542,13 @@ const WebRTC = ({
       peerFace5.current.id = username;
     }
 
-    // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
-    // peerFace.current.srcObject = data.stream;
-    // userCount += 1;
-    // setUserCount((prev) => prev + 1);
     userCount.current += 1;
-
-    // currentUsers.current.push(1);
-    // dispatch(isRtcLoading());
   }
   // 유저들 프로파일 모달 띄우기
-  const ShowUserProfile = async (event: React.MouseEvent<any>) => {
-    if(userCount.current >= 2) {
+  const showUserProfile = async (event: React.MouseEvent<any>) => {
+    if (userCount.current >= 2) {
       const username = event.currentTarget.id;
-  
+
       // console.log("모달용 데이터 닉?", username);
       const { data } = await axios({
         url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
@@ -540,6 +559,67 @@ const WebRTC = ({
       dispatch(showRoomUserProfile());
     }
   };
+  // ---------------- 게임 관련 --------------------
+  const transitionDiv = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      transitionDiv.current!.classList.remove("opacity-0");
+    }, 1000);
+    // 게임 선택하기
+    socket.on("game_select", (gameId) => {
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("게임아이디 오냐--------", gameId);
+      setTimeout(() => {
+        // 게임 선택창 끄기
+        dispatch(showGameSelectModal(false));
+        // 선택한 게임Id 세팅
+        dispatch(selectGame(gameId));
+        transitionDiv.current!.classList.remove("opacity-0");
+      }, 1000);
+    });
+
+    // 게임 선택창으로 돌아오기
+    socket.on("game_back_select", () => {
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("선택창돌아오기오냐--------");
+      setTimeout(() => {
+        transitionDiv.current!.classList.remove("opacity-0");
+        // 룰렛 결과창 끄기
+        dispatch(showRouletteResultModal(false));
+        // 퍼블릭 모달 끄기
+        dispatch(showPublicModal(false));
+        // 진행중인 게임 닫기
+        dispatch(selectGame("exit"));
+        // 게임 선택창 켜기
+        dispatch(showGameSelectModal(true));
+      }, 1000);
+    });
+
+    // 손병호 게임 시그널받기
+    socket.on("game_son_signal", (signalData) => {
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("시그널 gameWebRTC에서 받았냐?", signalData);
+      setTimeout(() => {
+        transitionDiv.current!.classList.remove("opacity-0");
+      }, 1000);
+    })
+
+    return () => {
+      socket.off("game_select");
+      socket.off("game_back_select");
+      socket.off("game_son_signal");
+    };
+  }, []);
+
+  // 게임 선택창 상태
+  const isGameSelect = useAppSelector((state) => {
+    return state.gameSelectModal;
+  });
+  // 선택한 게임
+  const selectedId = useAppSelector((state) => {
+    return state.selectGameId;
+  });
 
   return (
     <>
@@ -555,6 +635,11 @@ const WebRTC = ({
               socket={socket}
             />
           )}
+          {count && (
+            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
+              <div className="text-7xl font-bold text-white">{count}</div>
+            </div>
+          )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
               {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
@@ -569,7 +654,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace2}
                   playsInline
@@ -578,7 +663,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace4}
                   playsInline
@@ -588,16 +673,37 @@ const WebRTC = ({
             </div>
             {/* 게임 공간 */}
 
-            <div className="flex justify-center min-w-fit w-[48vw] items-center border-2 border-blue-400 rounded-[20px]">
+            <div
+              ref={transitionDiv}
+              className="flex justify-center items-center min-w-fit w-[47vw] overflow-hidden mt-5 border-2 border-blue-400 rounded-[20px] transition-all duration-1000 opacity-0"
+            >
               {/* {pochaUsers && <LadderIntro socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>} */}
-              {pochaUsers && <Roulette socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} />}
+              {isGameSelect && <GameSelect socket={socket} pochaId={pochaId} />}
+              {selectedId === "roul"
+                ? pochaUsers && (
+                    <Roulette
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}
+              {selectedId === "son"
+                ? pochaUsers && (
+                    <SonIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}   
             </div>
 
             {/* 사람 공간 */}
             <div className="flex flex-col justify-evenly items-center">
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace1}
                   playsInline
@@ -606,7 +712,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace3}
                   playsInline
@@ -615,7 +721,7 @@ const WebRTC = ({
               </div>
               <div className="rounded-[1rem] overflow-hidden h-[15rem] flex items-center ">
                 <video
-                  onClick={ShowUserProfile}
+                  onClick={showUserProfile}
                   className=" h-[17rem] cursor-pointer"
                   ref={peerFace5}
                   playsInline

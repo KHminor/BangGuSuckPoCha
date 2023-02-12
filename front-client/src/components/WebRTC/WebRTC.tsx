@@ -401,7 +401,7 @@ const WebRTC = ({
     });
 
     socket.on("room_full", () => {
-      toast.info("응 풀방이야~");
+      toast.info("풀방입니다");
       navigate(`/main`);
     });
 
@@ -460,7 +460,8 @@ const WebRTC = ({
       console.log("포차 설정 변경!----------------------");
       // setUpdateCheck((prev) => !prev);
       getPochaInfo();
-      toast.success("포차 정보가 변경되었습니다");
+      window.location.reload();
+      // toast.success("포차 정보가 변경되었습니다");
       // 방 설정 다시 불러오기!!! 테스트
       // await pocha_config_update("3");
     });
@@ -482,8 +483,8 @@ const WebRTC = ({
     socket.on("ban", (username) => {
       console.log(username, "강퇴!!!!-------");
       if (myUserName === username) {
+        localStorage.setItem("reloadBan", "true");
         navigate(`/main`);
-        sessionStorage.reloadBan = true;
         window.location.reload();
       }
     })

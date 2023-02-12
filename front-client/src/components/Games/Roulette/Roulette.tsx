@@ -16,9 +16,9 @@ function Roulette({
   const dispatch = useAppDispatch();
   // Public모달 데이터
   const [modalData, setModalData] = useState<any>(null);
+  // 방 이름
+  const roomName = pochaId;
 
-  const [random, setRando] = useState<number>(0);
-  console.log("소케에에에에에엣 여기는 룰렛",socket)
   const product = [
     " 벌칙주 2잔",
     " 벌칙주 1잔",
@@ -45,6 +45,7 @@ function Roulette({
   useEffect(() => {
     console.log("이거있냐?", canvasSketch);
     setCtx(canvasSketch.current!.getContext(`2d`));
+
     socket.on("game_roulette", async (random: number) => {
       console.log("룰렛 돌아가냐!!!@!@여기는 룰렛??", random);
       rotate(random);
@@ -103,8 +104,6 @@ function Roulette({
   }
 
 
-  
-
   const rotate = (random : number) => {
     canvasSketch.current!.style.transform = `initial`;
     canvasSketch.current!.style.transition = `initial`;
@@ -119,11 +118,12 @@ function Roulette({
     setModalData({
       type: "roulette",
       msg: product[random],
+      pochaId: pochaId,
     });
     setTimeout(() =>  {
       // 모달 켜는 dispatch
       dispatch(showRouletteResultModal(true));
-    }, 2000);
+    }, 3000);
 
   };
 
@@ -136,7 +136,8 @@ function Roulette({
   }
 
   const onClickClose = () => {
-    console.log("클릭!!");
+    // 선택창으로 돌아가기
+    socket.emit("game_back_select", roomName);
   };
 
   return (
@@ -147,11 +148,13 @@ function Roulette({
           <img
             src={require("src/assets/game_roulette/trident.png")}
             className={`${styles.image}`}
+            alt="trident"
           />
           벌칙 룰렛
           <img
             src={require("src/assets/game_roulette/free-icon-devil-725040.png")}
             className={`${styles.image}`}
+            alt="devil"
           />
         </div>
         <div className={`${styles.detail}`}>
@@ -163,6 +166,7 @@ function Roulette({
             <img
               src={require("src/assets/game_roulette/free-icon-right-arrow-724847.png")}
               className={`${styles.arrowImg}`}
+              alt="arrow"
             />
           </div>
           <canvas ref={canvasSketch} width="480" height="480"></canvas>
