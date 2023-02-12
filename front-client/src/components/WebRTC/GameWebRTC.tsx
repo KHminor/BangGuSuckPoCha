@@ -18,6 +18,7 @@ import RoomUserProfile from "../Common/RoomUserProfile";
 import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
+import SonIntro from "../Games/Son/SonIntro";
 // webRTC관련
 const socket = io("https://pocha.online");
 
@@ -595,9 +596,19 @@ const WebRTC = ({
       }, 1000);
     });
 
+    // 손병호 게임 시그널받기
+    socket.on("game_son_signal", (signalData) => {
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("시그널 gameWebRTC에서 받았냐?", signalData);
+      setTimeout(() => {
+        transitionDiv.current!.classList.remove("opacity-0");
+      }, 1000);
+    })
+
     return () => {
       socket.off("game_select");
       socket.off("game_back_select");
+      socket.off("game_son_signal");
     };
   }, []);
 
@@ -677,6 +688,15 @@ const WebRTC = ({
                     />
                   )
                 : null}
+              {selectedId === "son"
+                ? pochaUsers && (
+                    <SonIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}   
             </div>
 
             {/* 사람 공간 */}

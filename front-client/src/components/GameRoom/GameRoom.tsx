@@ -6,6 +6,9 @@ import styles from "./GameRoom.module.css";
 import GameWebRTC from "../WebRTC/GameWebRTC";
 import RoomFooterNav from "../Common/RoomFooterNav";
 import { toast } from "react-toastify";
+import FriendSearch from "../Common/FriendSearch";
+import { useAppSelector } from "src/store/hooks";
+import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
 
 function GameRoom(): JSX.Element {
   // const dispatch = useAppDispatch();
@@ -17,10 +20,18 @@ function GameRoom(): JSX.Element {
   const [pochaInfo, setPochaInfo] = useState<any>(null);
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
-
+// 친구 요청 검색 모달
+  const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
   const propSocket = (socket: any) => {
     setSocket(socket);
   };
+  const navAlarmReviewEmojiUserData: any = useAppSelector((state: any) => {
+    return state.navAlarmReviewEmojiUserData;
+  });
+  const RoomUserProfileClickCheck: any = useAppSelector((state: any) => {
+    return state.RoomUserProfileClickCheck;
+  });
+
   const propIsHost = (isHost: boolean) => {
     setIsHost(isHost);
   };
@@ -69,6 +80,12 @@ function GameRoom(): JSX.Element {
         <div
           className={`w-screen min-h-screen ${styles.gameroomimg} bg-cover bg-no-repeat bg-center bg-scroll`}
         >
+          {
+            friendSearchState? <FriendSearch/>:null
+          }
+          {RoomUserProfileClickCheck ? (
+            <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData} />
+          ) : null}
           {/* 화면 및 게임 공간 */}
           <div className="min-h-[90vh]">
             <GameWebRTC
