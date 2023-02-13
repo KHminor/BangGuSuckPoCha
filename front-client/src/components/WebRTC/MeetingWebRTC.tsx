@@ -537,12 +537,10 @@ const WebRTC = ({
     // } else if (userCount.current === 3) {
     //   peerFace.current[2].srcObject = data.stream;
     // }
-    if (heartInfo[username] == null || heartInfo[username] === undefined) {
-      setHeartInfo((hearts: any) => {
-        hearts[username] = 0;
-        return { ...hearts };
-      });
-    }
+    setHeartInfo((hearts: any) => {
+      hearts[username] = hearts[username] ? hearts[username] : 0;
+      return { ...hearts };
+    });
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
@@ -612,17 +610,6 @@ const WebRTC = ({
   const addHeart = (event: any) => {
     const targetUser = event.target.getAttribute("value");
     socket.emit("add_heart", { roomName, targetUser });
-  };
-
-  // 하트 시그널 증가
-  const tempHeart = (event: any) => {
-    setHeartInfo((hearts: any) => {
-      const targetUser = event.target.getAttribute("value");
-      console.log(hearts);
-      hearts[targetUser] = hearts[targetUser] + 1;
-      console.log(hearts);
-      return { ...hearts };
-    });
   };
 
   return (
