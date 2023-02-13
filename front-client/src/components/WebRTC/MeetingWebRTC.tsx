@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { isRtcLoading, showRoomUserProfile } from "../../store/store";
+import { changeNavAlarmReviewEmojiUserData, isRtcLoading, showRoomUserProfile } from "../../store/store";
 import Loading from "../Common/Loading";
 import RoomUserProfile from "../Common/RoomUserProfile";
 import LadderIntro from "../Games/Ladder/LadderIntro";
@@ -250,7 +250,7 @@ const WebRTC = ({
     console.log("@@@@@@@@@@@@@@@@", userData);
     setHeartInfo((hearts: any) => {
       hearts[heartUser.myHeart] = 0;
-      return hearts;
+      return { ...hearts };
     });
     socket.emit("join_room", {
       roomName,
@@ -538,15 +538,14 @@ const WebRTC = ({
     //   peerFace.current[2].srcObject = data.stream;
     // }
     setHeartInfo((hearts: any) => {
-      hearts[username] = 0;
+      hearts[username] = hearts[username] ? hearts[username] : 0;
       return { ...hearts };
     });
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
       setHeartUser((prev: any) => {
-        prev.peerHeart1 = username;
-        return prev;
+        return { ...prev, peerHeart1: username };
       });
       peerHeart1.current.setAttribute("value", username);
       peerHeart1.current.style.display = "block";
@@ -602,26 +601,16 @@ const WebRTC = ({
       url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
     });
     console.log("모달용 데이터?", data);
-    setUserProfileData(data);
-    // dispatch(isRtcLoading(false));
+    dispatch(changeNavAlarmReviewEmojiUserData(data))
     dispatch(showRoomUserProfile());
+    // setUserProfileData(data);
+    // dispatch(isRtcLoading(false));
   };
 
   // 하트 시그널 클릭
   const addHeart = (event: any) => {
     const targetUser = event.target.getAttribute("value");
     socket.emit("add_heart", { roomName, targetUser });
-  };
-
-  // 하트 시그널 증가
-  const tempHeart = (event: any) => {
-    setHeartInfo((hearts: any) => {
-      const targetUser = event.target.getAttribute("value");
-      console.log(hearts);
-      hearts[targetUser] = hearts[targetUser] + 1;
-      console.log(hearts);
-      return { ...hearts };
-    });
   };
 
   return (

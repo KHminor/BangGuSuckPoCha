@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
+  changeNavAlarmReviewEmojiUserData,
   isRtcLoading,
   showPublicModal,
   showRoomUserProfile,
@@ -419,6 +420,7 @@ const WebRTC = ({
   // ------------ 포차 기능 code --------------
   const ssulTitle = useRef<HTMLDivElement>(null);
   const [ssul, setSsul] = useState<string>("");
+  const [jjanImg, setJjanImg] = useState<any>(require("src/assets/theme/jjan1.png"));
 
   // //  axios
   // const api = axios.create({
@@ -432,18 +434,20 @@ const WebRTC = ({
   const jjan = () => {
     let time: number = 3;
     setCount(String(time));
+    setJjanImg(require("src/assets/theme/jjan1.png"));
     const interval = setInterval(() => {
       time -= 1;
       setCount(String(time));
     }, 1000);
     setTimeout(() => {
       clearInterval(interval);
+      setJjanImg(require("src/assets/theme/jjan2.png"));
       setCount("짠!!!!");
-    }, 3900);
+    }, 3000);
     setTimeout(() => {
       setCount("");
       dispatch(showPublicModal(false));
-    }, 5000);
+    }, 4000);
   };
 
   useEffect(() => {
@@ -570,15 +574,17 @@ const WebRTC = ({
   const ShowUserProfile = async (event: React.MouseEvent<any>) => {
     if(userCount.current >= 2) {
       const username = event.currentTarget.id;
-  
+      console.log('여긴 이벤트: ',event);
+      
       // console.log("모달용 데이터 닉?", username);
       const { data } = await axios({
         url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
       });
       console.log("모달용 데이터?", data);
-      setUserProfileData(data);
-      // dispatch(isRtcLoading(false));
+      dispatch(changeNavAlarmReviewEmojiUserData(data))
       dispatch(showRoomUserProfile());
+      // setUserProfileData(data);
+      // dispatch(isRtcLoading(false));
     }
   };
 
@@ -596,11 +602,13 @@ const WebRTC = ({
               socket={socket}
             />
           )}
-          {count && (
-            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
-              <div className="text-7xl font-bold text-white">{count}</div>
+          {/* 여기가 짠 나타나는곳 */}
+          {count ? (
+            <div className=" bg-black bg-opacity-70 flex flex-col justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
+              <img src={jjanImg} alt="jjan" />
+              <div className="text-7xl font-bold text-white fixed top-28 z-30">{count}</div>
             </div>
-          )}
+          ) : null}
           <div className="text-white w-full min-h-[85vh]">
             <span
               className="font-bold text-3xl fixed left-0 right-0 top-10"
@@ -609,7 +617,7 @@ const WebRTC = ({
             <div className="flex flex-wrap justify-evenly items-center p-24 min-h-[85vh]">
               {/* 내 비디오 공간 */}
               <video
-                className="w-[30rem] h-80 py-3"
+                className="w-[30rem] h-80 py-3 border-2"
                 ref={myFace}
                 playsInline
                 autoPlay
@@ -617,35 +625,35 @@ const WebRTC = ({
               {/* 다른 사람들 비디오 공간 */}
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer"
+                className="w-[30rem] h-80 py-3 cursor-pointer border-2"
                 ref={peerFace1}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
+                className="w-[30rem] h-80 py-3 cursor-pointer border-2 hidden"
                 ref={peerFace2}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
+                className="w-[30rem] h-80 py-3 cursor-pointer border-2 hidden"
                 ref={peerFace3}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
+                className="w-[30rem] h-80 py-3 cursor-pointer border-2 hidden"
                 ref={peerFace4}
                 playsInline
                 autoPlay
               ></video>
               <video
                 onClick={ShowUserProfile}
-                className="w-[30rem] h-80 py-3 cursor-pointer hidden"
+                className="w-[30rem] h-80 py-3 cursor-pointer border-2 hidden"
                 ref={peerFace5}
                 playsInline
                 autoPlay
