@@ -193,7 +193,7 @@ const YanggameSettingModal = () => {
                       value={Type}
                     />
                     <div className="w-[10%] text-center flex justify-center items-center">
-                      <div> VS</div>
+                      <div> -</div>
                     </div>
                     <input
                       className="w-[45%] bg-transparent text-center border-2"
