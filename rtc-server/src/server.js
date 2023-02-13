@@ -248,8 +248,8 @@ wsServer.on("connection", (socket) => {
 
   // 손병호 게임
   // 손병호게임 여러 시그널
-  socket.on("game_son_signal", (roomName, signalData) => {
-    wsServer.to(roomName).emit("game_son_signal", signalData);
+  socket.on("game_son_signal", (roomName, signalData, data) => {
+    wsServer.to(roomName).emit("game_son_signal", signalData, data);
   });
   // 게임 시작 신호
   socket.on("game_son", (roomName) => {
@@ -258,5 +258,11 @@ wsServer.on("connection", (socket) => {
   // 손가락 접기
   socket.on("game_son_fold", (roomName, socketId) => {
     wsServer.to(roomName).emit("game_son_fold", socketId);
+  });
+
+  // 라이어 게임
+  // 라이어게임 여러 시그널
+  socket.on("game_liar_signal", (roomName, signalData, data) => {
+    wsServer.to(roomName).emit("game_liar_signal", signalData, data);
   });
 });
