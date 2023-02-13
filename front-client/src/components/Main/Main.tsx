@@ -1,14 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   changeCarouselState,
   changeMenuState,
   changeAlarmState,
   changeMainCreateRoomList,
-  changeMenuFriendState,
-  changeMenuFriendChatState,
 } from "../../store/store";
 import FriendChat from "../Common/FriendChat";
 import FriendList from "../Common/FriendList";
@@ -24,31 +23,77 @@ import Tag from "./Tag";
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
+  const [myState,setMyState] = useState<any>({ age: 0, region:'전국', gender: '',})
   const mainCreateRoomList: any = useAppSelector((state) => {
     return state.mainCreateRoomList;
   });
 
-  // 메인 페이지 들어올 시 현재 userId가 localStorage에 저장이 안되어있을 경우 axios 요청하여 넣어주기
+  // 메인 페이지 들어올 시 현재 Username에 대한 유저정보 저장
   useEffect(() => {
     const userName = localStorage.getItem("Username");
-    if (localStorage.getItem("userId") === null) {
-      axios
-        .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
-        .then((r) => {
-          localStorage.setItem("userId", r.data.data.userId);
-        });
-    }
+    axios
+      .get(`https://i8e201.p.ssafy.io/api/user/myinfo/${userName}`)
+      .then((r) => {
+        localStorage.setItem("userId", r.data.data.userId);
+        console.log('나의 데이터',r.data.data)
+        const now:any = new Date
+        const myData:any = r.data.data
+        const birth:string[] = myData.birth.split('.')
+        let age:number 
+        if (Number(birth[1]) > now.getMonth()) {
+          age = Math.floor((now.getFullYear() - Number(birth[0])-1)/10)*10
+        } else {
+          age = Math.floor((now.getFullYear() - Number(birth[0]))/10)*10
+        }
+        // console.log('내 나이는?',age)
+        localStorage.setItem('age',`${age}`)
+        localStorage.setItem('region',`${myData.region}`)
+        localStorage.setItem('gender',`${myData.gender}`)
+        setMyState((preState:any)=> {
+          return {...preState, age: age, region: myData.region, gender:myData.gender}
+        })
+      });
   }, []);
 
+  // useEffect(()=> {
+  //   exitMethod()
+  //   return () =>  exitMethod()
+  // },[])
+
+  // function exitMethod() {
+  //   if (checkMenuState) {
+  //     dispatch(changeMenuState());
+  //   } else if (alarmClickCheck) {
+  //     dispatch(changeAlarmState());
+  //   }
+  // }
+
   // 메인에 들어올 시 현재 생성된 방 리스트 state 갱신
+  // useEffect(() => {
+  //   axios({
+  //     method: "get",
+  //     url: "https://i8e201.p.ssafy.io/api/pocha/",
+  //   }).then((r) => {
+  //     console.log(r.data)
+  //     dispatch(changeMainCreateRoomList(r.data.data));
+
+  //   });
+  // }, []);
+
+  // 메인 입장시 나오는것과 강퇴당한것 구분
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "https://i8e201.p.ssafy.io/api/pocha/",
-    }).then((r) => {
-      console.log(r.data)
-      // dispatch(changeMainCreateRoomList(r.data.data));
-    });
+    if (localStorage.getItem("reloadExit")) {
+      toast.success("방에서 나오셨습니다");
+      setTimeout(() => {
+        localStorage.removeItem("reloadExit");
+      }, 500)
+    }
+    if (localStorage.getItem("reloadBan")) {
+      toast.error("방에서 강퇴당하셨습니다");
+      setTimeout(() => {
+        localStorage.removeItem("reloadBan");
+      }, 500)
+    }
   }, []);
 
   // 방 생성 관련
@@ -90,11 +135,6 @@ function Main(): JSX.Element {
     return state.RoomUserProfileClickCheck;
   });
 
-  // 메뉴 -> 친구 클릭 상태
-  const menuFriendClickCheck = useAppSelector((state) => {
-    return state.menuFriendClickCheck;
-  });
-
   // 캐러셀 클릭시 알림&메뉴 컴포넌트 조건분기
   if (mainCreateRoomCarouselCheck) {
     if (checkMenuState) {
@@ -104,7 +144,6 @@ function Main(): JSX.Element {
     }
   }
 
-  
   return (
     <>
       {/* nav의 메뉴 => friend 클릭 시 친구 목록 보이기 */}
@@ -114,7 +153,7 @@ function Main(): JSX.Element {
 
       {/* 포차+ 클릭에 따른 테마선택 캐러셀 보이기 */}
       {mainCreateRoomCarouselCheck ? (
-        <MainCreateRoomCarousel onClickHiddenBtn={onClickHiddenBtn} />
+        <MainCreateRoomCarousel />
       ) : null}
 
       {/* 선택한 테마에 따른 방만들기 셋팅 */}
@@ -136,55 +175,41 @@ function Main(): JSX.Element {
           gridTemplateRows: "11rem 1fr",
           overflow: "auto",
         }}
-        onClick={()=> {
-          // 메뉴 클릭한 상태의 경우 없애기
-          if (checkMenuState) {
-            dispatch(changeMenuState());
-          }
-          if (alarmClickCheck) {
-            dispatch(changeAlarmState());
-          }
-          if (menuFriendClickCheck) {
-            dispatch(changeMenuFriendState());
-          }
-          if (menuFriendChatClickCheck) {
-            dispatch(changeMenuFriendChatState(false));
-          }
-        }}
       >
         <Navbar />
 
         <div
           className="grid"
           style={{ gridTemplateColumns: "12rem 1fr 12rem" }}
-          
         >
           <div></div>
           <div
             className="grid mx-auto min-w-f"
             style={{
-              gridTemplateRows: "20rem 1fr 3rem",
+              gridTemplateRows: "25rem 1fr 3rem",
               backgroundColor: "rgb(25, 25, 25)",
             }}
           >
             {/* 태그 */}
-            <div className="grid" style={{ gridTemplateRows: "12rem 8rem" }}>
+            <div className="grid" style={{ gridTemplateRows: "12rem 1fr" }}>
               <div></div>
               <Tag />
+
             </div>
             {/* 방 보이기 */}
             <div
               className="grid grid-cols-1 w-full min-w-[75rem]"
               style={{ backgroundColor: "rgb(25, 25, 25)" }}
             >
-              <Room mainCreateRoomList={mainCreateRoomList} />
+              <Room mainCreateRoomList={mainCreateRoomList} myState={myState}/>
             </div>
           </div>
           <div></div>
         </div>
 
         {/* 방 생성 버튼 */}
-        <div
+        {/* Tag 컴포넌트로 이동 */}
+        {/* <div
           ref={createBtn}
           onClick={() => {
             dispatch(changeCarouselState());
@@ -198,7 +223,7 @@ function Main(): JSX.Element {
             alt=""
             className="w-1/6 min-w-1/6"
           />
-        </div>
+        </div> */}
 
         {/* 메뉴 클릭시 보이기 */}
         <NavbarMenu />
@@ -210,9 +235,7 @@ function Main(): JSX.Element {
 }
 export default Main;
 
-
-
-function Room({ mainCreateRoomList }: any): JSX.Element {
+function Room({ mainCreateRoomList, myState }: any): JSX.Element {
 
   console.log('생성된 방 리스트: ',mainCreateRoomList)
   const navigate = useNavigate();
@@ -222,40 +245,91 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
   const randomTitleList = [
     "즐겁게 웃으며 한잔😛",
     "이거 마시면 나랑 사귀는거다?😏",
-    "오늘 여기 오길 참 잘 해따😵",
-    "술이 달아서 네 생각이 나🤬",
+    "오늘 여기 오길 참 잘 해따💕",
+    "술이 달아서 네 생각이 나👭",
     "흥청망청 취해보자👾",
-    "즐겁게 웃으며 한잔😛",
-    "이거 마시면 나랑 사귀는거다?😏",
-    "오늘 여기 오길 참 잘 해따😵",
-    "술이 달아서 네 생각이 나🤬",
-    "흥청망청 취해보자👾",
+    "흥해도 청춘 망해도 청춘🥂",
+    "넌 예쁘니까 예쁜 것만 먹어라🍷",
+    "저녁은 춥고 술은 달아서🍹",
+    "오늘따라 밤이 더 아름답다🌙",
+    "잘했고,잘하고있고,잘할거야💪",
   ];
   // 방에 입장하는 함수
-  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>,e:any) => {
+  const enterRoom = async (event: React.MouseEvent<HTMLDivElement>, e: any) => {
     const pochaId = event.currentTarget.id;
-    console.log('여기 방은?',e.themeId )
-    try {
-      await axios({
-        method: "POST",
-        url: `https://i8e201.p.ssafy.io/api/pocha/enter`,
-        data: {
-          isHost: false,
-          pochaId: pochaId,
-          username: username,
-          waiting: false,
-        },
-      });
-      let roomTheme = (e.themeId).slice(0,2) 
-      if (roomTheme === 'T0') {
-        navigate(`/storyroom/${pochaId}`);
-      } else if (roomTheme === 'T1') {
-        navigate(`/gameroom/${pochaId}`);
-      } else {
-        navigate(`/meetingroom/${pochaId}`);
-      }
-    } catch (error) {
-      console.log("포차 입장 에러", error);
+    // console.log('클릭한 포차 데이터: ', e);
+    
+    // console.log('포차 아이디',pochaId)
+    // console.log('나의 데이터: ',myState)
+    const themeId = e.themeId.slice(0,2) 
+    const age = e.age
+    const region = e.region
+    const isPrivate = e.isPrivate
+    const limitUser = e.limitUser
+    const totalCount = e.totalCount
+    const maleCount = e.maleCount
+    const femaleCount = e.femaleCount
+    const isWaiting = e.isWaiting
+    console.log(isPrivate,limitUser,totalCount,maleCount,femaleCount, isWaiting);
+    // { age: 0, region:'전국', gender: '',}
+    // 헌팅방 입장
+    if (themeId === 'T2') {
+      console.log(themeId)
+      // 나이,지역,잠금,총인원수,성비 체크
+      if ((myState.gender === 'M')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
+        (limitUser > totalCount) && (limitUser/2 >maleCount) && (isWaiting)) {
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              isHost: false,
+              pochaId: pochaId,
+              username: username,
+            }
+          }).then(()=> {
+            navigate(`/meetingroom/${pochaId}`);
+          })
+        } else if ((myState.gender === 'F')&&(age===0 || age===myState.age) && (region === '전국' || region === myState.region) &&
+        (limitUser > totalCount) && (limitUser/2 >femaleCount) && (isWaiting)) {
+          axios({
+            method: 'post',
+            url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+            data: {
+              isHost: false,
+              pochaId: pochaId,
+              username: username,
+            }
+          }).then(()=> {
+            navigate(`/meetingroom/${pochaId}`);
+          })
+        } else {
+          toast.error('입장할 수 없는 방입니다')
+        }
+
+    } else {
+        // 소통&게임방
+        // 나이,지역,잠금,총인원수 체크
+        if ((age===0 || age===myState.age) && (region === '전국' || region === myState.region) 
+          && (isPrivate === false) && (limitUser > totalCount)) {
+            axios({
+              method: 'post',
+              url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+              data: {
+                isHost: false,
+                pochaId: pochaId,
+                username: username,
+              }
+            }).then(()=> {
+              if (themeId === 'T0') {
+                navigate(`/storyroom/${pochaId}`);
+              } else if (themeId === 'T1') {
+                  navigate(`/gameroom/${pochaId}`);
+                } 
+            })
+        } else {
+          toast.error('입장할 수 없는 방입니다')
+        }
+      
     }
   };
 
@@ -283,20 +357,17 @@ function Room({ mainCreateRoomList }: any): JSX.Element {
     }
 
     return (
-      <div
-        className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8"
-      >
+      <div className="w-full h-[30rem] min-h-[30rem] min-w-[100%] max-w-[100%] my-8">
         <div
           className="grid grid-cols-2 h-full rounded-2xl w-full min-w-[100%]"
           style={{ gridTemplateColumns: "2.5rem 1fr 2.5rem" }}
         >
           <div></div>
           {/* 카드 내부 */}
-          <div 
-            onClick={(event)=> {
-              enterRoom(event,e)
+          <div
+            onClick={(event) => {
+              enterRoom(event, e);
             }}
-            
             key={e.pochaId}
             id={e.pochaId}
           >

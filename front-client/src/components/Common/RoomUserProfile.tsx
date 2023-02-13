@@ -10,7 +10,7 @@ import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
 import RoomUserReportModal from "./RoomUserReportModal";
 
-const RoomUserProfile = ({ userData, pochaId, isHost }: { userData: any, pochaId: string, isHost?: boolean }) => {
+const RoomUserProfile = ({ userData, pochaId, isHost, socket }: { userData: any, pochaId: string, isHost?: boolean, socket: any }) => {
   let dispatch = useAppDispatch();
   let { manner, gender, birth, region, comment, profile } = userData.data;
   const { nickname } = userData.data;
@@ -125,7 +125,7 @@ const RoomUserProfile = ({ userData, pochaId, isHost }: { userData: any, pochaId
       {roomAddFriendModalCheck ? (
         <RoomUserFriendModal userData={userData} />
       ) : null}
-      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} pochaId={pochaId} /> : null}
+      {RoomUserBanClickCheck ? <RoomUserBanModal userData={userData} pochaId={pochaId} socket={socket} /> : null}
       {RoomUserReportClickCheck ? <RoomUserReportModal userData={userData} /> : null}
       <div
         ref={bgDiv}

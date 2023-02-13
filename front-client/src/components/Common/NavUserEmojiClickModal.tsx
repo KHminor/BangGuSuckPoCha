@@ -4,14 +4,11 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   roomAddFriendModalState,
   showRoomUserProfile,
-  showRoomUserBanModal,
-  showRoomUserReportModal,
-  changeRoomDeleteFriendModalCheck
+  changeRoomDeleteFriendModalCheck,
+  changeMenuFriendListApiDataState
 } from "../../store/store";
-import RoomUserBanModal from "./RoomUserBanModal";
 import RoomUserFriendDeleteModal from "./RoomUserFriendDeleteModal";
 import RoomUserFriendModal from "./RoomUserFriendModal";
-import RoomUserReportModal from "./RoomUserReportModal";
 
 const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
   // console.log('클릭한 유저데이터 닉네임: ',userData.data.profile)
@@ -43,6 +40,32 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
   const [userInfoFootTitle, setUserInfoFootTitle] = useState<any>()
   const [userInfoFootIcons, setUserInfoFootIcons] = useState<any>()
 
+  // 친구 요청에 따른 친구 목록 정렬하기
+  function requestFriendList():any {
+    // 요청 이후 친구창 재정렬
+    axios({
+      method: "get",
+      url: `https://i8e201.p.ssafy.io/api/user/friend/${username}`,
+    }).then((r) => {
+      console.log('친구 리스트 조회: ',r.data.data)
+      const friendDataList:any[] = r.data.data
+      const bestFriend:any = []
+      const normalFriend:any = []
+
+      friendDataList.forEach((data:any)=> {
+        if (data.best_friend) {
+          bestFriend.push(data)
+        } else {
+          normalFriend.push(data)
+        }
+      })
+      console.log('베프: ',bestFriend)
+      console.log('친구: ',normalFriend)
+      
+      dispatch(changeMenuFriendListApiDataState([...bestFriend,...normalFriend]));
+    });
+  }
+
   useEffect(()=> {
     axios({
       method: 'get',
@@ -60,6 +83,10 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
         setUserInfoFootTitle('친구삭제') 
         setUserInfoFootIcons(require("../../assets/roomIcon/remove-user.png"))
       }
+    })
+    .then(()=> {
+      requestFriendList()
+      
     })
   })
 
@@ -138,14 +165,14 @@ const NavUserEmojiClickModal = ({ userData }: { userData: any }) => {
       <div
         ref={bgDiv}
         onMouseDown={CloseProfileModal}
-        className={`bg-slate-800 bg-opacity-50 fixed w-full h-full text-white`}
+        className={`bg-slate-800 bg-opacity-50 fixed w-full h-full text-white z-10`}
       >
         <div
           className={`min-w-[24rem] bg-black w-[20%] px-10 pt-10 pb-5 rounded-3xl relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
         >
           <div className={`w-full h-24 flex justify-center items-center`}>
             <img
-              className={`h-full`}
+              className={`object-fill rounded-full h-[6rem] w-[6rem]`}
               src={userData.data.profile}
               alt=""
             />

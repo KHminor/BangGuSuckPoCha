@@ -1,0 +1,21 @@
+.neonTitle {
+  color: #fff9c2;
+  text-shadow: 0 0 5px rgb(248, 99, 0), 0 0 10px rgb(197, 183, 100),
+    0 0 20px;
+}
+
+.gameBox {
+  /* cursor: pointer;
+  transition: all 0.5s; */
+  box-shadow: 0 0 5px #A63268,
+  0 0 10px #A63268,
+  0 0 20px #A63268;
+  transform: scale(1.1);
+}
+
+/* .gameBox:hover {
+  box-shadow: 0 0 5px #A63268,
+  0 0 10px #A63268,
+  0 0 20px #A63268;
+  transform: scale(1.1);
+} */

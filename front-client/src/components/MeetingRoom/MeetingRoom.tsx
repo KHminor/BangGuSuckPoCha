@@ -11,6 +11,8 @@ import { io } from "socket.io-client";
 import MeetingWebRTC from "../WebRTC/MeetingWebRTC";
 import WaitingRoom from "../Common/WaitingRoom";
 import RoomFooterNav from "../Common/RoomFooterNav";
+import FriendSearch from "../Common/FriendSearch";
+import NavUserEmojiClickModal from "../Common/NavUserEmojiClickModal";
 
 const socket = io("https://pocha.online");
 
@@ -25,6 +27,17 @@ function MeetingRoom(): JSX.Element {
 
   // 본인 정보 가져오기
   const [myInfo, setMyInfo] = useState<any>(null);
+
+  // 친구 요청 검색 모달
+  const friendSearchState = useAppSelector((state)=> {return  state.friendSearchState})
+
+  const RoomUserProfileClickCheck: any = useAppSelector((state: any) => {
+    return state.RoomUserProfileClickCheck;
+  });
+
+  const navAlarmReviewEmojiUserData: any = useAppSelector((state: any) => {
+    return state.navAlarmReviewEmojiUserData;
+  });
 
   // 방장 여부
   const [isHost, setIsHost] = useState<boolean>(false);
@@ -97,6 +110,12 @@ function MeetingRoom(): JSX.Element {
         <div
           className={`w-screen min-h-screen ${styles.gameroomimg} bg-cover bg-no-repeat bg-center bg-scroll`}
         >
+          {
+            friendSearchState? <FriendSearch/>:null
+          }
+          {RoomUserProfileClickCheck ? (
+            <NavUserEmojiClickModal userData={navAlarmReviewEmojiUserData} />
+          ) : null}
           {/* 화면 및 게임 공간 */}
           <div className="h-[90%]">
             <MeetingWebRTC

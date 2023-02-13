@@ -46,7 +46,7 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                   url: `https://i8e201.p.ssafy.io/api/pocha/invite/accept/${invite_id}/${pocha_id}`
                 })
                 .then((r)=> {
-                  console.log('초대 승인해따', r.data);
+                  console.log('초대 승인해따', r.data.data);
                   // 못들어 갈 경우
                   if (r.data.message === 'fail') {
                     toast.error('만료된 요청입니다')
@@ -70,28 +70,47 @@ function RequestListComponent({from_nickname,sentence,invite_id,pocha_id,f_reque
                       dispatch(changeAlarmApiDataState(setData))
                     })
                   } else {
+                    console.log('현재 방 데이터: ', r.data.data);
+                    const myAge = Number(localStorage.getItem('age'))
+                    const myRegion = localStorage.getItem('region')
                     // 요청에 성공해서 들어가려고 할 때
-                    const pochaId = r.data.data.pochaId
-                    const themeId = r.data.data.themeId
-                    axios({
-                      method: 'post',
-                      url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
-                      data: {
-                        // 초대 받은거를 승인하는거라 false
-                        "isHost": 'false',
-                        "pochaId": pochaId,
-                        'username': username
+                    const e = r.data.data
+                    const pochaId = e.pochaId
+                    const themeId = e.themeId.slice(0,2) 
+                    const age = e.age
+                    const region = e.region
+                    const isPrivate = e.isPrivate
+                    const limitUser = e.limitUser
+                    const totalCount = e.totalCount
+
+                    // 헌팅방 입장
+                    if (themeId === 'T2') {
+                      toast.error('입장할 수 없는 방입니다')
+                    } else {
+                        // 소통&게임방
+                        // 나이,지역,잠금,총인원수 체크
+                        if ((age===0 || age===myAge) && (region === '전국' || region === myRegion) 
+                          && (isPrivate === false) && (limitUser > totalCount)) {
+                            axios({
+                              method: 'post',
+                              url: 'https://i8e201.p.ssafy.io/api/pocha/enter',
+                              data: {
+                                isHost: false,
+                                pochaId: pochaId,
+                                username: username,
+                              }
+                            }).then(()=> {
+                              if (themeId === 'T0') {
+                                navigate(`/storyroom/${pochaId}`);
+                              } else if (themeId === 'T1') {
+                                  navigate(`/gameroom/${pochaId}`);
+                                } 
+                            })
+                        } else {
+                          toast.error('입장할 수 없는 방입니다')
                         }
-                      })
-                      .then((r)=> {
-                        if (themeId.slice(0,2) === 'T0') {
-                          navigate(`/storyroom/${pochaId}`)
-                        } else if (themeId.slice(0,2) === 'T1') {
-                          navigate(`/gameroom/${pochaId}`)
-                        }
-                      })
                     }
-                  
+                  }
                 })
               }
             }}/>

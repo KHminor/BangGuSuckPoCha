@@ -13,7 +13,7 @@ function FriendSearch(): JSX.Element {
   return (
     <div>
       <div
-        className={`bg-slate-800 bg-opacity-50 fixed  w-full h-full text-white`}
+        className={`bg-slate-800 bg-opacity-50 fixed  w-full h-full text-white z-10`}
         ref={searchFriend}
         onClick={(e)=> {
           if (e.target === searchFriend.current) {
@@ -57,6 +57,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                     }  
@@ -84,6 +87,9 @@ function FriendSearch(): JSX.Element {
                           toast.error(`이미 ${chat}님께 요청을 보냈습니다`);
                         } else {
                           toast.success(`${chat}님께 요청을 보냈습니다`);
+                          setTimeout(() => {
+                            dispatch(changeFriendSearchState(false))
+                          }, 100);
                         }
                       })
                 }}

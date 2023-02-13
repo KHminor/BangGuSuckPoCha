@@ -28,6 +28,7 @@ const WebRTC = ({
   // const socket = io("https://pocha.online");
   // 나의 비디오 ref
   const myFace = useRef<HTMLVideoElement>(null);
+  const myHeart = useRef<HTMLDivElement>(null);
   // 음소거 버튼
   const muteBtn = useRef<HTMLButtonElement>(null);
   // 카메라 온오프 버튼
@@ -36,6 +37,18 @@ const WebRTC = ({
   const cameraSelect = useRef<HTMLSelectElement>(null);
   // 옵션 태그 리스트
   const [optionList, setOptionList] = useState<any[]>([]);
+  // 하트 시그널 정보
+  const [heartInfo, setHeartInfo] = useState<any>({
+    // myHeart: 0,
+    // peerHeart1: 0,
+    // peerHeart2: 0,
+    // peerHeart3: 0,
+    // peerHeart4: 0,
+    // peerHeart5: 0,
+  });
+  const [heartUser, setHeartUser] = useState<any>({
+    myHeart: myUserName,
+  });
   // 사람수 체크 리스트(카메라 생성용);
   // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
   // const currentUsers = useRef<any>([1]);
@@ -47,7 +60,14 @@ const WebRTC = ({
   const peerFace4 = useRef<any>(null);
   const peerFace5 = useRef<any>(null);
 
+  const peerHeart1 = useRef<any>(null);
+  const peerHeart2 = useRef<any>(null);
+  const peerHeart3 = useRef<any>(null);
+  const peerHeart4 = useRef<any>(null);
+  const peerHeart5 = useRef<any>(null);
+
   const myStream = useRef<any>(null);
+
   // let myStream: any;
   const roomName: any = pochaId;
   const myPeerConnections = useRef<any>({});
@@ -83,18 +103,19 @@ const WebRTC = ({
       } = await axios({
         url: `https://i8e201.p.ssafy.io/api/pocha/participant/${pochaId}`,
       });
-      const lastIndex = data.length - 1;
       console.log("참여 유저들 데이터?", data);
       // 방장 여부 체크
-      data.forEach((user : any) => {
+      data.forEach((user: any) => {
         if (user.username === myUserName) {
           setIsHost(user.isHost);
           propIsHost(user.isHost);
         }
-      })
+      });
       // setPochaUsers(data);
       dispatch(isRtcLoading(false));
-      handleWelcomeSubmit(data[lastIndex]);
+      handleWelcomeSubmit(
+        data.filter((entity: any) => entity.username === myUserName)[0]
+      );
     } catch (error) {
       console.log("포차 참여유저 데이터 axios error", error);
     }
@@ -168,6 +189,10 @@ const WebRTC = ({
       }
       console.log("마이스트림 오냐?", myStream.current);
       myFace.current!.srcObject = myStream.current;
+      myHeart.current?.setAttribute(
+        "value",
+        myUserName == null ? "" : myUserName
+      );
       if (!deviceId) {
         await getCameras();
       }
@@ -223,6 +248,10 @@ const WebRTC = ({
     // event.preventDefault();
     await getMedia();
     console.log("@@@@@@@@@@@@@@@@", userData);
+    setHeartInfo((hearts: any) => {
+      hearts[heartUser.myHeart] = 0;
+      return hearts;
+    });
     socket.emit("join_room", {
       roomName,
       username: userData.username,
@@ -237,7 +266,7 @@ const WebRTC = ({
   // ------ Socket Code ------
   // Socket Code
   useEffect(() => {
-    socket.on("users_of_room", async (users : any) => {
+    socket.on("users_of_room", async (users: any) => {
       console.log("--------------------");
       await users.forEach((user: any) => {
         console.log(user);
@@ -252,7 +281,7 @@ const WebRTC = ({
       });
     });
 
-    socket.on("welcome", async (socketId : any, user : any) => {
+    socket.on("welcome", async (socketId: any, user: any) => {
       let myPeer = makeConnection();
 
       myPeerConnections.current[socketId] = {
@@ -289,7 +318,7 @@ const WebRTC = ({
       });
     });
 
-    socket.on("offer", async (offer : any, socketId : any, userInfo : any) => {
+    socket.on("offer", async (offer: any, socketId: any, userInfo: any) => {
       console.log("received the offer");
       myPeerConnections.current[socketId]["peer"] = makeConnection();
       myPeerConnections.current[socketId]["peer"].setRemoteDescription(offer);
@@ -314,12 +343,12 @@ const WebRTC = ({
       console.log("sent the answer");
     });
 
-    socket.on("answer", (answer : any, socketId : any) => {
+    socket.on("answer", (answer: any, socketId: any) => {
       console.log("received the answer");
       myPeerConnections.current[socketId]["peer"].setRemoteDescription(answer);
     });
 
-    socket.on("ice", (ice : any, socketId : any) => {
+    socket.on("ice", (ice: any, socketId: any) => {
       console.log("received the candidate");
       if (
         myPeerConnections.current[socketId]["peer"] === null ||
@@ -330,7 +359,14 @@ const WebRTC = ({
       myPeerConnections.current[socketId]["peer"].addIceCandidate(ice);
     });
 
-    socket.on("user_exit", ({ id } : any) => {
+    socket.on("user_exit", ({ id }: any) => {
+      const deleteUsername = myPeerConnections.current[id].username;
+      setHeartInfo((prev: any) => {
+        delete prev[deleteUsername];
+        return { ...prev };
+      });
+      setHeartUser({ myHeart: myUserName });
+
       delete myPeerConnections.current[id];
       // 사람수 - 2 해야 마지막인덱스값
       // const lastIndex = userCount.current - 2;
@@ -379,14 +415,19 @@ const WebRTC = ({
           // }
           if (temp === 1) {
             peerFace1.current.srcObject = null;
+            peerHeart1.current.style.display = "none";
           } else if (temp === 2) {
             peerFace2.current.srcObject = null;
+            peerHeart2.current.style.display = "none";
           } else if (temp === 3) {
             peerFace3.current.srcObject = null;
+            peerHeart3.current.style.display = "none";
           } else if (temp === 4) {
             peerFace4.current.srcObject = null;
+            peerHeart4.current.style.display = "none";
           } else if (temp === 5) {
             peerFace5.current.srcObject = null;
+            peerHeart5.current.style.display = "none";
           }
           temp += 1;
         }
@@ -428,7 +469,7 @@ const WebRTC = ({
       toast.success("포차 정보가 변경되었습니다");
       // await pocha_config_update("3");
     });
-  
+
     // 포차 시간 연장! : 방 설정 다시 불러오기.
     socket.on("pocha_extension", async () => {
       console.log("포차 시간 연장!----------------------");
@@ -436,12 +477,20 @@ const WebRTC = ({
       // await pocha_config_update("3");
     });
 
+    // 하트 시그널 신호! : 하트 시그널 증가!!
+    socket.on("add_heart", (targetUser: any) => {
+      setHeartInfo((prev: any) => {
+        prev[targetUser] = prev[targetUser] + 1;
+        return { ...prev };
+      });
+    });
+
     return () => {
       socket.off("pocha_change");
       socket.off("pocha_extension");
+      socket.off("add_heart");
     };
-  }, [])
-
+  }, []);
 
   // ------------- RTC Code --------------
   function makeConnection() {
@@ -488,21 +537,51 @@ const WebRTC = ({
     // } else if (userCount.current === 3) {
     //   peerFace.current[2].srcObject = data.stream;
     // }
+    setHeartInfo((hearts: any) => {
+      hearts[username] = 0;
+      return { ...hearts };
+    });
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
+      setHeartUser((prev: any) => {
+        prev.peerHeart1 = username;
+        return prev;
+      });
+      peerHeart1.current.setAttribute("value", username);
+      peerHeart1.current.style.display = "block";
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
       peerFace2.current.id = username;
+      setHeartUser((prev: any) => {
+        return { ...prev, peerHeart2: username };
+      });
+      peerHeart2.current.setAttribute("value", username);
+      peerHeart2.current.style.display = "block";
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
       peerFace3.current.id = username;
+      setHeartUser((prev: any) => {
+        return { ...prev, peerHeart3: username };
+      });
+      peerHeart3.current.setAttribute("value", username);
+      peerHeart3.current.style.display = "block";
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
       peerFace4.current.id = username;
+      setHeartUser((prev: any) => {
+        return { ...prev, peerHeart4: username };
+      });
+      peerHeart4.current.setAttribute("value", username);
+      peerHeart4.current.style.display = "block";
     } else if (userCount.current === 5) {
       peerFace5.current.srcObject = stream;
       peerFace5.current.id = username;
+      setHeartUser((prev: any) => {
+        return { ...prev, peerHeart5: username };
+      });
+      peerHeart5.current.setAttribute("value", username);
+      peerHeart5.current.style.display = "block";
     }
 
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
@@ -528,6 +607,23 @@ const WebRTC = ({
     dispatch(showRoomUserProfile());
   };
 
+  // 하트 시그널 클릭
+  const addHeart = (event: any) => {
+    const targetUser = event.target.getAttribute("value");
+    socket.emit("add_heart", { roomName, targetUser });
+  };
+
+  // 하트 시그널 증가
+  const tempHeart = (event: any) => {
+    setHeartInfo((hearts: any) => {
+      const targetUser = event.target.getAttribute("value");
+      console.log(hearts);
+      hearts[targetUser] = hearts[targetUser] + 1;
+      console.log(hearts);
+      return { ...hearts };
+    });
+  };
+
   return (
     <>
       {isLoading ? (
@@ -535,7 +631,12 @@ const WebRTC = ({
       ) : (
         <>
           {isRoomUserProfile && userProfileData && (
-            <RoomUserProfile userData={userProfileData} pochaId={pochaId} isHost={isHost}/>
+            <RoomUserProfile
+              userData={userProfileData}
+              pochaId={pochaId}
+              isHost={isHost}
+              socket={socket}
+            />
           )}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
@@ -547,6 +648,7 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div ref={myHeart}>💖 x {heartInfo[heartUser.myHeart]}</div>
               <video
                 onClick={ShowUserProfile}
                 className=" h-[17rem] py-3 cursor-pointer"
@@ -554,6 +656,14 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div
+                ref={peerHeart2}
+                className="cursor-pointer"
+                onClick={addHeart}
+                style={{ display: "none" }}
+              >
+                💖 x {heartInfo[heartUser.peerHeart2]}
+              </div>
               <video
                 onClick={ShowUserProfile}
                 className=" h-[17rem] py-3 cursor-pointer"
@@ -561,6 +671,14 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div
+                ref={peerHeart4}
+                className="cursor-pointer"
+                onClick={addHeart}
+                style={{ display: "none" }}
+              >
+                💖 x {heartInfo[heartUser.peerHeart4]}
+              </div>
             </div>
             {/* 게임 공간 */}
 
@@ -577,6 +695,14 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div
+                ref={peerHeart1}
+                className="cursor-pointer"
+                onClick={addHeart}
+                style={{ display: "none" }}
+              >
+                💖 x {heartInfo[heartUser.peerHeart1]}
+              </div>
               <video
                 onClick={ShowUserProfile}
                 className=" h-[17rem] py-3 cursor-pointer"
@@ -584,6 +710,14 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div
+                ref={peerHeart3}
+                className="cursor-pointer"
+                onClick={addHeart}
+                style={{ display: "none" }}
+              >
+                💖 x {heartInfo[heartUser.peerHeart3]}
+              </div>
               <video
                 onClick={ShowUserProfile}
                 className=" h-[17rem] py-3 cursor-pointer"
@@ -591,6 +725,14 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div
+                ref={peerHeart5}
+                className="cursor-pointer"
+                onClick={addHeart}
+                style={{ display: "none" }}
+              >
+                💖 x {heartInfo[heartUser.peerHeart5]}
+              </div>
             </div>
           </div>
           <div className="flex justify-center items-center ">

@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
-import { showPublicModal, showRouletteResultModal } from "../../store/store";
+import { selectGame, showPublicModal, showRouletteResultModal } from "../../store/store";
 import styles from "./RoomUserProfile.module.css";
 
 const PublicModal = ({
@@ -73,6 +73,7 @@ const PublicModal = ({
         setIsCancelBtn(true);
         break;
       case "roulette":
+        setRoomName(pochaId);
         break;
     }
   }, []);
@@ -103,18 +104,15 @@ const PublicModal = ({
   // 포차 나가기 요청
   async function handlePochaExit() {
     try {
-      // 포차 나가기는 socket 서버에서 실행
       // await api.put("/pocha/exit", {
       //   isHost: false,
       //   pochaId: roomName,
       //   username: myName, // << 여기 내 유저네임 가져와야함
       //   waiting: false,
       // });
+      localStorage.setItem("reloadExit", "true");
       navigate(`/main`);
       window.location.reload();
-      setTimeout(() => {
-        toast.success("방에서 나오셨습니다");
-      }, 1000);
     } catch (error) {
       console.log("포차나가기 error", error);
     }
@@ -144,8 +142,8 @@ const PublicModal = ({
       if (fx) {
         fx!();
       }
-      // Roulette방에서 모달끄기
-      dispatch(showRouletteResultModal(false));
+      // // Roulette방에서 모달끄기
+      // dispatch(showRouletteResultModal(false));
     }
   };
 
@@ -172,7 +170,9 @@ const PublicModal = ({
         inviteMyFriend();
         break;
       case "roulette":
-        dispatch(showRouletteResultModal(false));
+        console.log("게임선택창게임선택창", roomName);
+        // 게임선택창으로 돌아가기
+        socket.emit("game_back_select", roomName);
         break;
     }
     // RoomFooterNavbar에서 모달 끄기
