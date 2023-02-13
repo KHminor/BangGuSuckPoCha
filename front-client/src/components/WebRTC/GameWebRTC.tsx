@@ -18,6 +18,7 @@ import RoomUserProfile from "../Common/RoomUserProfile";
 import Balance from "../Games/Balance/Balance";
 import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
+import LiarIntro from "../Games/Liar/LiarIntro";
 import Roulette from "../Games/Roulette/Roulette";
 import SonIntro from "../Games/Son/SonIntro";
 // webRTC관련
@@ -709,16 +710,16 @@ const WebRTC = ({
                       pochaUsers={pochaUsers}
                     />
                   )
-                : null}
-              {selectedId === "ladder"
+                : null}   
+              {selectedId === "liar"
                 ? pochaUsers && (
-                    <LadderIntro
+                    <LiarIntro
                       socket={socket}
                       pochaId={pochaId}
                       pochaUsers={pochaUsers}
                     />
                   )
-                : null}
+                : null}   
             </div>
 
             {/* 사람 공간 */}
