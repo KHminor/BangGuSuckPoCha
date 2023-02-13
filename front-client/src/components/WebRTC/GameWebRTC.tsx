@@ -179,6 +179,7 @@ const WebRTC = ({
       }
       console.log("마이스트림 오냐?", myStream.current);
       myFace.current!.srcObject = myStream.current;
+      myFace.current!.volume = 0;
       if (!deviceId) {
         await getCameras();
       }
@@ -421,7 +422,7 @@ const WebRTC = ({
   }, []);
 
   // ------------ 포차 기능 code --------------
-
+  const [jjanImg, setJjanImg] = useState<any>(require("src/assets/theme/jjan1.png"));
   //  axios
   // const api = axios.create({
   //   baseURL: "https://i8e201.p.ssafy.io/api",
@@ -433,18 +434,20 @@ const WebRTC = ({
   const jjan = () => {
     let time: number = 3;
     setCount(String(time));
+    setJjanImg(require("src/assets/theme/jjan1.png"));
     const interval = setInterval(() => {
       time -= 1;
       setCount(String(time));
     }, 1000);
     setTimeout(() => {
       clearInterval(interval);
+      setJjanImg(require("src/assets/theme/jjan2.png"));
       setCount("짠!!!!");
-    }, 3900);
+    }, 3000);
     setTimeout(() => {
       setCount("");
       dispatch(showPublicModal(false));
-    }, 5000);
+    }, 4000);
   };
 
   useEffect(() => {
@@ -604,7 +607,7 @@ const WebRTC = ({
       setTimeout(() => {
         transitionDiv.current!.classList.remove("opacity-0");
       }, 1000);
-    })
+    });
 
     return () => {
       socket.off("game_select");
@@ -636,11 +639,12 @@ const WebRTC = ({
               socket={socket}
             />
           )}
-          {count && (
-            <div className="bg-orange-500 bg-opacity-30 flex justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
-              <div className="text-7xl font-bold text-white">{count}</div>
+          {count ? (
+            <div className=" bg-black bg-opacity-70 flex flex-col justify-center z-20 items-center fixed top-0 right-0 bottom-0 left-0">
+              <img src={jjanImg} alt="jjan" />
+              <div className="text-7xl font-bold text-white fixed top-28 z-30">{count}</div>
             </div>
-          )}
+          ) : null}
           <div className="text-white w-full min-h-[85vh] flex justify-center">
             <div className="flex flex-col justify-evenly items-center">
               {/* <div className="flex flex-wrap justify-evenly items-center p-24"> */}
@@ -697,7 +701,7 @@ const WebRTC = ({
                       pochaUsers={pochaUsers}
                     />
                   )
-                : null}   
+                : null}
               {selectedId === "bal"
                 ? pochaUsers && (
                     <Balance
@@ -706,7 +710,16 @@ const WebRTC = ({
                       pochaUsers={pochaUsers}
                     />
                   )
-                : null}   
+                : null}
+              {selectedId === "ladder"
+                ? pochaUsers && (
+                    <LadderIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}
             </div>
 
             {/* 사람 공간 */}

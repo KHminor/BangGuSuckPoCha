@@ -13,10 +13,12 @@ function LadderIntro({
 }): React.ReactElement {
   const usersLength = pochaUsers.length;
   const [isLadder, setIsLadder] = useState<boolean>(false);
+  // 방 이름
+  const roomName = pochaId;
 
   const onClickClose = () => {
-    console.log("클릭!!");
-    setIsLadder(true);
+    // 선택창으로 돌아가기
+    socket.emit("game_back_select", roomName);
   };
 
   return (
@@ -52,7 +54,7 @@ function LadderIntro({
               <input
                 type="button"
                 className={`${styles.retry}`}
-                onClick={onClickClose}
+                onClick={() => {}}
                 value="PLAY"
               />
             </div>

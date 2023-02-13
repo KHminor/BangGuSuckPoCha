@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import SonMenual from "./SonMenual";
 import SonPlay from "./SonPlay";
 import axios from "axios";
+import SonResult from "./SonResult";
 
 function SonIntro({
   socket,
@@ -17,6 +18,7 @@ function SonIntro({
   const roomName = pochaId;
   // 메뉴얼 클릭
   const [signal, setSignal] = useState<string>("INTRO");
+  const [resultData, setResultData] = useState<any>(null);
 
   const [pochaInfo, setPochaInfo] = useState<any>(null)
 
@@ -36,10 +38,11 @@ function SonIntro({
 
   useEffect(() => {
     // 손병호 게임 시그널받기
-    socket.on("game_son_signal", (signalData: string) => {
+    socket.on("game_son_signal", (signalData: string, data: any) => {
       getPochaInfo();
       setTimeout(() => {
         setSignal(signalData);
+        setResultData(data);
       }, 1000);
     });
     return () => {
@@ -64,6 +67,7 @@ function SonIntro({
       {signal === "PLAY" ? (
         <SonPlay socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} pochaInfo={pochaInfo} />
       ) : null}
+      {signal === "RESULT" ? <SonResult socket={socket} pochaId={pochaId} resultData={resultData}/> : null}
       {signal === "MENUAL" ? (
         <SonMenual socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} />
       ) : null}
