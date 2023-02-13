@@ -67,7 +67,7 @@ function MainCreateRoomCarousel() {
         >
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
-            style={{ objectFit: "contain", width: "70%", height: "100%" }}
+            style={{ objectFit: "contain", height: "100%" }}
             src={require("src/assets/img/Talk2.png")}
             alt=""
             onClick={() => {
@@ -85,7 +85,7 @@ function MainCreateRoomCarousel() {
         >
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
-            style={{ objectFit: "contain", width: "70%", height: "100%" }}
+            style={{ objectFit: "contain", height: "100%" }}
             src={require("src/assets/img/Game2.png")}
             alt=""
             onClick={() => {
@@ -103,7 +103,7 @@ function MainCreateRoomCarousel() {
         >
           <img
             className={`transition-all duration-300 ${styles.carouselImg}`}
-            style={{ objectFit: "contain", width: "70%", height: "100%" }}
+            style={{ objectFit: "contain", height: "100%" }}
             src={require("src/assets/img/Meeting2.png")}
             alt=""
             onClick={() => {
