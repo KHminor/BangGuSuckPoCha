@@ -20,6 +20,7 @@ import GameSelect from "../Games/GameSelect/GameSelect";
 import LadderIntro from "../Games/Ladder/LadderIntro";
 import Roulette from "../Games/Roulette/Roulette";
 import SonIntro from "../Games/Son/SonIntro";
+import TwentyIntro from "../Games/Twenty/TwentyIntro";
 // webRTC관련
 const socket = io("https://pocha.online");
 
@@ -609,10 +610,20 @@ const WebRTC = ({
       }, 1000);
     });
 
+    // 스무고개 시그널 받기
+    socket.on("game_twenty_signal", (signalData) => {
+      transitionDiv.current!.classList.add("opacity-0");
+      console.log("twenty : 시그널 gameWebRTC에서 받았냐?", signalData);
+      setTimeout(() => {
+        transitionDiv.current!.classList.remove("opacity-0");
+      }, 1000);
+    });
+
     return () => {
       socket.off("game_select");
       socket.off("game_back_select");
       socket.off("game_son_signal");
+      socket.off("game_twenty_signal");
     };
   }, []);
 
@@ -714,6 +725,15 @@ const WebRTC = ({
               {selectedId === "ladder"
                 ? pochaUsers && (
                     <LadderIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}
+              {selectedId === "twenty"
+                ? pochaUsers && (
+                    <TwentyIntro
                       socket={socket}
                       pochaId={pochaId}
                       pochaUsers={pochaUsers}
