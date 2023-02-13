@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
+  changeNavAlarmReviewEmojiUserData,
   isRtcLoading,
   selectGame,
   showGameSelectModal,
@@ -555,9 +556,10 @@ const WebRTC = ({
         url: `https://i8e201.p.ssafy.io/api/user/info/${username}`,
       });
       console.log("모달용 데이터?", data);
-      setUserProfileData(data);
-      // dispatch(isRtcLoading(false));
+      dispatch(changeNavAlarmReviewEmojiUserData(data))
       dispatch(showRoomUserProfile());
+      // setUserProfileData(data);
+      // dispatch(isRtcLoading(false));
     }
   };
   // ---------------- 게임 관련 --------------------
