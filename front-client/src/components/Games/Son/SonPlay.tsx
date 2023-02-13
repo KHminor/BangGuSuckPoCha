@@ -72,16 +72,17 @@ function SonPlay({
       }
     });
   };
+  
   // 최초 실행
   useEffect(() => {
     // 유저 정보들 세팅
     setPeopleInfo();
     gamestart();
     // 접을때 ..
-    socket.on("game_son_fold", (socketId : number) => {
+    socket.on("game_son_fold", (myNum : number) => {
       // console.log("새로운배열 왜갱신안되지", peopleScore);
       const newArray = peopleScore.map((score, index) => {
-        if (index === socketId) {
+        if (index === myNum) {
           return score - 1;
         }
         return score
@@ -96,11 +97,6 @@ function SonPlay({
       socket.off("game_son_fold");
     };
   }, [peopleScore]);
-  // //데이터 받아오기 (인원수, 이름들, 이거보는 사람번호)
-  // function people() {
-  //   // initData();
-  //   gamestart();
-  // }
 
   //손 만들기(인원수 넘어가는 손은 가리기)
   function gamestart() {
@@ -149,14 +145,15 @@ function SonPlay({
       }
     })
     if(resultList.length) {
-      alert(`우선 잠오니까 여기까지 ${[...resultList]} 니들 탈락`)
-      socket.emit("game_back_select", roomName);
+      // alert(`우선 잠오니까 여기까지 ${[...resultList]} 니들 탈락`)
+      const signalData = "RESULT"
+      const data = resultList;
+      socket.emit("game_son_signal", roomName, signalData, data);
     }
   }
 
   const onClickFold = () => {
     fold();
-    console.log("d");
   };
 
   return (
