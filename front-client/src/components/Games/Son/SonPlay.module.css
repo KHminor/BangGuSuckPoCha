@@ -1,0 +1,138 @@
+.background { 
+  width: 54rem;
+  margin: 0 auto;
+  height: 48.9rem;
+  background-color: #000000;
+  /* border: solid 10px red; */
+  border-radius: 1rem;
+
+  /* display: flex; */
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.title{ 
+  padding-top: 10px;
+  width: 652px;
+  height: 100px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 55px;
+  line-height: 85px;
+  text-align: center;
+
+  color: #FFA149;
+  margin: auto;
+  text-shadow: 0px 0px 30px #FF0000;
+}
+
+.fingersImg{
+  height: 180px;
+  margin: 0 20px;
+}
+
+.fingertext{
+  width: 169px;
+  height: 51px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+
+  color: #FFFFFF;
+
+  -webkit-text-stroke: 1px #FFA149;
+  text-shadow: 0px 0px 30px #FF0000;
+
+  margin-top: 10px;
+}
+/* .txtSpan{
+  height: 250px;
+  width: 230px;
+  display:flex;
+  align-items:center; 
+  flex-direction: column;
+} */
+
+.hands1{
+  display: flex;
+  height: 250px;
+
+}
+.hands2{
+  display: flex;
+  height: 250px;
+
+}
+
+.button{
+  box-sizing: border-box;
+  border-radius: 0.3rem;
+  margin: 0 20px;
+  margin-top: -10px;
+
+  width: 207px;
+  height: 78px;
+
+  background: #131313;
+  box-shadow: 0px 0px 20px #FFA0A0;
+
+  /* PLAY */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+
+  color: #FFFFFF;
+
+  border: 2px solid #FFD098;
+  text-shadow: 0px 0px 15px #FF0000;
+  cursor: pointer;
+}
+
+.button:hover{
+  box-sizing: border-box;
+  border-radius: 0.3rem;
+  margin: 0 20px;
+  margin-top: -10px;
+
+  width: 207px;
+  height: 78px;
+
+  background: #131313;
+  box-shadow: 0px 0px 20px #FFA0A0;
+
+  /* PLAY */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+
+  color: #FFA149;
+
+  border: 1px solid #FFD098;
+  text-shadow: 0px 0px 15px #FF0000;
+  cursor: pointer;
+}
+
+.layout{
+  display:flex;
+  align-items:center; 
+  flex-direction: column;
+  margin: 35px;
+}
+
+.layout2{
+  display:flex;
+  align-items:center; 
+  flex-direction: column;
+}
