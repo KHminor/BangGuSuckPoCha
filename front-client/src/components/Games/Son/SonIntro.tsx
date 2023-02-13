@@ -29,7 +29,7 @@ function SonIntro({
         method: "GET",
         url: `https://i8e201.p.ssafy.io/api/pocha/${pochaId}`,
       })
-      console.log("포차정보 데이터 잘 오냐!? SON",data);
+      console.log("포차정보 데이터 잘 오냐!? SON에서",data);
       setPochaInfo(data);
     } catch(error) {
       console.log("Son게임에서 포차정보 에러", error);
