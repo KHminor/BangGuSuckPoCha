@@ -14,11 +14,13 @@ const WebRTC = ({
   pochaId,
   socket,
   propIsHost,
+  pochaInfo,
   getPochaInfo,
 }: {
   pochaId: string;
   socket: any;
   propIsHost: Function;
+  pochaInfo: any;
   getPochaInfo: Function;
 }) => {
   const dispatch = useAppDispatch();
@@ -28,6 +30,7 @@ const WebRTC = ({
   // const socket = io("https://pocha.online");
   // 나의 비디오 ref
   const myFace = useRef<HTMLVideoElement>(null);
+  const myIntroduce = useRef<HTMLDivElement>(null);
   const myHeart = useRef<HTMLDivElement>(null);
   // 음소거 버튼
   const muteBtn = useRef<HTMLButtonElement>(null);
@@ -49,6 +52,11 @@ const WebRTC = ({
   const [heartUser, setHeartUser] = useState<any>({
     myHeart: myUserName,
   });
+  // 자기소개 정보
+  const [introduceInfo, setIntroduceInfo] = useState<any>({});
+
+  //비디오 시작
+  const [videoOnTime, setVideoOnTime] = useState<any>(null);
   // 사람수 체크 리스트(카메라 생성용);
   // const currentUsers = useRef<number[]>([1, 2, 3, 4, 5]);
   // const currentUsers = useRef<any>([1]);
@@ -66,6 +74,12 @@ const WebRTC = ({
   const peerHeart4 = useRef<any>(null);
   const peerHeart5 = useRef<any>(null);
 
+  const peerIntroduce1 = useRef<HTMLDivElement>(null);
+  const peerIntroduce2 = useRef<HTMLDivElement>(null);
+  const peerIntroduce3 = useRef<HTMLDivElement>(null);
+  const peerIntroduce4 = useRef<HTMLDivElement>(null);
+  const peerIntroduce5 = useRef<HTMLDivElement>(null);
+
   const myStream = useRef<any>(null);
 
   // let myStream: any;
@@ -79,9 +93,7 @@ const WebRTC = ({
   const [isHost, setIsHost] = useState<boolean>(false);
 
   // webRTC Loading 상태 가져옴
-  const isLoading = useAppSelector((state) => {
-    return state.webRtcLoading;
-  });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // 유저들 프로파일 모달 상태 가져옴
   const isRoomUserProfile = useAppSelector((state) => {
@@ -120,6 +132,46 @@ const WebRTC = ({
       console.log("포차 참여유저 데이터 axios error", error);
     }
   }
+  
+  // 포차 비디오 10분간 확인 불가
+  async function videoOn() {
+    const now = new Date();
+    let endTime = new Date(pochaInfo.createAt);
+    endTime.setMinutes(endTime.getMinutes() + 10);
+    // endTime.setSeconds(endTime.getSeconds() + 20);
+    const diff = endTime.getTime() - now.getTime();
+    setVideoOnTime(endTime.getTime());
+
+    peerFace1.current!.style.display = "none";
+    peerFace2.current!.style.display = "none";
+    peerFace3.current!.style.display = "none";
+    peerFace4.current!.style.display = "none";
+    peerFace5.current!.style.display = "none";
+
+    myIntroduce.current!.style.display = "block";
+    peerIntroduce1.current!.style.display = "block";
+    peerIntroduce2.current!.style.display = "block";
+    peerIntroduce3.current!.style.display = "block";
+    peerIntroduce4.current!.style.display = "block";
+    peerIntroduce5.current!.style.display = "block";
+
+    setTimeout(() => {
+      myFace.current!.style.display = "block";
+      peerFace1.current!.style.display = "block";
+      peerFace2.current!.style.display = "block";
+      peerFace3.current!.style.display = "block";
+      peerFace4.current!.style.display = "block";
+      peerFace5.current!.style.display = "block";
+
+      myIntroduce.current!.style.display = "none";
+      peerIntroduce1.current!.style.display = "none";
+      peerIntroduce2.current!.style.display = "none";
+      peerIntroduce3.current!.style.display = "none";
+      peerIntroduce4.current!.style.display = "none";
+      peerIntroduce5.current!.style.display = "none";
+    }, diff);
+
+  }
 
   // 카메라 뮤트
   let muted = false;
@@ -130,8 +182,17 @@ const WebRTC = ({
   // 최초실행
   useEffect(() => {
     //propSocket(socket);
+    setIsLoading(false);
     getUsersProfile();
   }, []);
+
+  useEffect(() => {
+    if(myFace.current && peerFace1.current && peerFace2.current && peerFace3.current && peerFace4.current && peerFace5.current &&
+      myIntroduce.current && peerIntroduce1.current && peerIntroduce2.current && peerIntroduce3.current && peerIntroduce4.current && peerIntroduce5.current){
+      videoOn();
+    }
+  }, [myFace.current && peerFace1.current && peerFace2.current && peerFace3.current && peerFace4.current && peerFace5.current &&
+    myIntroduce.current && peerIntroduce1.current && peerIntroduce2.current && peerIntroduce3.current && peerIntroduce4.current && peerIntroduce5.current])
 
   const getCameras = async () => {
     try {
@@ -281,13 +342,14 @@ const WebRTC = ({
       });
     });
 
-    socket.on("welcome", async (socketId: any, user: any) => {
+    socket.on("welcome", async (socketId: any, user: any,) => {
       let myPeer = makeConnection();
 
       myPeerConnections.current[socketId] = {
         peer: myPeer,
         username: user.username,
         nickname: user.nickname,
+        introduce: user.introduce
       };
       console.log(
         "환영!!!!----------------------------",
@@ -308,13 +370,15 @@ const WebRTC = ({
       handleAddStream(
         peerStream,
         myPeerConnections.current[socketId].username,
-        myPeerConnections.current[socketId].nickname
+        myPeerConnections.current[socketId].nickname,
+        myPeerConnections.current[socketId].introduce
       );
       console.log("sent the offer");
 
       socket.emit("offer", offer, socketId, roomName, {
         username: user.username,
         nickname: user.nickname,
+        introduce: user.introduce
       });
     });
 
@@ -336,7 +400,8 @@ const WebRTC = ({
       handleAddStream(
         peerStream,
         myPeerConnections.current[socketId].username,
-        myPeerConnections.current[socketId].nickname
+        myPeerConnections.current[socketId].nickname,
+        myPeerConnections.current[socketId].introduce,
       );
 
       socket.emit("answer", answer, socketId, roomName);
@@ -396,7 +461,8 @@ const WebRTC = ({
         handleAddStream(
           peerStream,
           myPeerConnections.current[socketID].username,
-          myPeerConnections.current[socketID].nickname
+          myPeerConnections.current[socketID].nickname,
+          myPeerConnections.current[socketID].introduce
         );
       }
 
@@ -523,7 +589,7 @@ const WebRTC = ({
   }
 
   // addStream 이벤트시 실행 함수
-  function handleAddStream(stream: any, username: string, nickname: string) {
+  function handleAddStream(stream: any, username: string, nickname: string, introduce : any) {
     console.log("handleAddStream---------------------");
     const indexData = userCount.current;
     // const indexData = userCount;
@@ -541,6 +607,13 @@ const WebRTC = ({
       hearts[username] = hearts[username] ? hearts[username] : 0;
       return { ...hearts };
     });
+    setIntroduceInfo((prev: any) => {
+      prev[username] = prev[username] ? prev[username] : introduce;
+      return { ...prev };
+    });
+
+    const now = new Date().getTime();
+
     if (userCount.current === 1) {
       peerFace1.current.srcObject = stream;
       peerFace1.current.id = username;
@@ -548,7 +621,13 @@ const WebRTC = ({
         return { ...prev, peerHeart1: username };
       });
       peerHeart1.current.setAttribute("value", username);
-      peerHeart1.current.style.display = "block";
+      if(videoOnTime <=  now){
+        peerHeart1.current.style.display = "block";
+        peerIntroduce1.current!.style.display = "none";
+      } else {
+        peerHeart1.current.style.display = "none";
+        peerIntroduce1.current!.style.display = "block";
+      }
     } else if (userCount.current === 2) {
       peerFace2.current.srcObject = stream;
       peerFace2.current.id = username;
@@ -556,7 +635,13 @@ const WebRTC = ({
         return { ...prev, peerHeart2: username };
       });
       peerHeart2.current.setAttribute("value", username);
-      peerHeart2.current.style.display = "block";
+      if(videoOnTime.getTime() <=  now){
+        peerHeart1.current.style.display = "block";
+        peerIntroduce1.current!.style.display = "none";
+      } else {
+        peerHeart2.current.style.display = "none";
+        peerIntroduce2.current!.style.display = "block";
+      }
     } else if (userCount.current === 3) {
       peerFace3.current.srcObject = stream;
       peerFace3.current.id = username;
@@ -564,7 +649,13 @@ const WebRTC = ({
         return { ...prev, peerHeart3: username };
       });
       peerHeart3.current.setAttribute("value", username);
-      peerHeart3.current.style.display = "block";
+      if(videoOnTime.getTime() <=  now){
+        peerHeart3.current.style.display = "block";
+        peerIntroduce3.current!.style.display = "none";
+      } else {
+        peerHeart3.current.style.display = "none";
+        peerIntroduce3.current!.style.display = "block";
+      }
     } else if (userCount.current === 4) {
       peerFace4.current.srcObject = stream;
       peerFace4.current.id = username;
@@ -572,7 +663,13 @@ const WebRTC = ({
         return { ...prev, peerHeart4: username };
       });
       peerHeart4.current.setAttribute("value", username);
-      peerHeart4.current.style.display = "block";
+      if(videoOnTime.getTime() <=  now){
+        peerHeart4.current.style.display = "block";
+        peerIntroduce4.current!.style.display = "none";
+      } else {
+        peerHeart4.current.style.display = "none";
+        peerIntroduce4.current!.style.display = "block";
+      }
     } else if (userCount.current === 5) {
       peerFace5.current.srcObject = stream;
       peerFace5.current.id = username;
@@ -580,7 +677,13 @@ const WebRTC = ({
         return { ...prev, peerHeart5: username };
       });
       peerHeart5.current.setAttribute("value", username);
-      peerHeart5.current.style.display = "block";
+      if(videoOnTime.getTime() <=  now){
+        peerHeart5.current.style.display = "block";
+        peerIntroduce5.current!.style.display = "none";
+      } else {
+        peerHeart5.current.style.display = "none";
+        peerIntroduce5.current!.style.display = "block";
+      }
     }
 
     // console.log("여기 오ㅗㅗㅗㅗㅗㅗㅗㅗㅗ냐?", userCount.current);
@@ -636,14 +739,17 @@ const WebRTC = ({
                 playsInline
                 autoPlay
               ></video>
+              <div ref={myIntroduce} className="border-2 h-[17rem] py-3">{localStorage.getItem("myIntroduce")}</div>
               <div ref={myHeart}>💖 x {heartInfo[heartUser.myHeart]}</div>
               <video
                 onClick={ShowUserProfile}
                 className=" h-[17rem] py-3 cursor-pointer"
+                style={{ display: "none" }}
                 ref={peerFace2}
                 playsInline
                 autoPlay
-              ></video>
+                ></video>
+              <div ref={peerIntroduce2} className="border-2 h-[17rem] py-3" style={{display:"none"}}>peer2</div>
               <div
                 ref={peerHeart2}
                 className="cursor-pointer"
@@ -658,7 +764,8 @@ const WebRTC = ({
                 ref={peerFace4}
                 playsInline
                 autoPlay
-              ></video>
+                ></video>
+              <div ref={peerIntroduce4} className="border-2 h-[17rem] py-3" style={{display:"none"}}>peer4</div>
               <div
                 ref={peerHeart4}
                 className="cursor-pointer"
@@ -682,7 +789,8 @@ const WebRTC = ({
                 ref={peerFace1}
                 playsInline
                 autoPlay
-              ></video>
+                ></video>
+              <div ref={peerIntroduce1} className="border-2 h-[17rem] py-3" style={{display:"none"}}>peer1</div>
               <div
                 ref={peerHeart1}
                 className="cursor-pointer"
@@ -697,7 +805,8 @@ const WebRTC = ({
                 ref={peerFace3}
                 playsInline
                 autoPlay
-              ></video>
+                ></video>
+              <div ref={peerIntroduce3} className="border-2 h-[17rem] py-3" style={{display:"none"}}>peer3</div>
               <div
                 ref={peerHeart3}
                 className="cursor-pointer"
@@ -712,7 +821,8 @@ const WebRTC = ({
                 ref={peerFace5}
                 playsInline
                 autoPlay
-              ></video>
+                ></video>
+              <div ref={peerIntroduce5} className="border-2 h-[17rem] py-3" style={{display:"none"}}>peer5</div>
               <div
                 ref={peerHeart5}
                 className="cursor-pointer"
