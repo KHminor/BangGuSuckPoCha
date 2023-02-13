@@ -131,7 +131,7 @@ function SonPlay({
     console.log("자 여기 결과가기전", peopleScore, resultList.length);
     peopleScore.forEach((score, index) => {
       console.log("s여기@@@@@@@@@@@@", score, index);
-      if(score < 0) {
+      if(score === 0) {
         resultList.push(peopleName[index]);
         console.log("여기오냐?",peopleScore)
       }
