@@ -603,7 +603,7 @@ const WebRTC = ({
       setTimeout(() => {
         transitionDiv.current!.classList.remove("opacity-0");
       }, 1000);
-    })
+    });
 
     return () => {
       socket.off("game_select");
@@ -696,7 +696,16 @@ const WebRTC = ({
                       pochaUsers={pochaUsers}
                     />
                   )
-                : null}   
+                : null}
+              {selectedId === "ladder"
+                ? pochaUsers && (
+                    <LadderIntro
+                      socket={socket}
+                      pochaId={pochaId}
+                      pochaUsers={pochaUsers}
+                    />
+                  )
+                : null}
             </div>
 
             {/* 사람 공간 */}
