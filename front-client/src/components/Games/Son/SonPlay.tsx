@@ -82,7 +82,6 @@ function SonPlay({
     gamestart();
     // 접을때 ..
     socket.on("game_son_fold", (myNum : number) => {
-      finish();
       console.log("새로운배열 갱신되고있냐?", peopleScore);
       const newArray = peopleScore.map((score, index) => {
         if (index === myNum) {
@@ -92,6 +91,7 @@ function SonPlay({
       });
       console.log("새로운배열?", newArray);
       setPeopleScore((prev) => [...newArray]);
+      finish();
       // console.log("새로운배열zzzzzzzz?", peopleScore);
     })
 
@@ -130,7 +130,8 @@ function SonPlay({
     const resultList: string[] = [];
     console.log("자 여기 결과가기전", peopleScore, resultList.length);
     peopleScore.forEach((score, index) => {
-      if(score === 0) {
+      console.log("s여기@@@@@@@@@@@@", score, index);
+      if(score < 0) {
         resultList.push(peopleName[index]);
         console.log("여기오냐?",peopleScore)
       }
