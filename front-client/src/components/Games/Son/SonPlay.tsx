@@ -82,6 +82,7 @@ function SonPlay({
     gamestart();
     // 접을때 ..
     socket.on("game_son_fold", (myNum : number) => {
+      finish();
       console.log("새로운배열 갱신되고있냐?", peopleScore);
       const newArray = peopleScore.map((score, index) => {
         if (index === myNum) {
@@ -91,7 +92,6 @@ function SonPlay({
       });
       console.log("새로운배열?", newArray);
       setPeopleScore((prev) => [...newArray]);
-      finish();
       // console.log("새로운배열zzzzzzzz?", peopleScore);
     })
 
@@ -128,13 +128,15 @@ function SonPlay({
   //게임 끝인지 확인 > 주먹이냐?? 오키 그럼 넘겨
   function finish(){
     const resultList: string[] = [];
+    console.log("자 여기 결과가기전", peopleScore, resultList.length);
     peopleScore.forEach((score, index) => {
-      if(score === 1) {
+      if(score === 0) {
         resultList.push(peopleName[index]);
+        console.log("여기오냐?",peopleScore)
       }
     })
-    if(resultList.length) {
-      // alert(`우선 잠오니까 여기까지 ${[...resultList]} 니들 탈락`)
+    if(resultList.length >= 1) {
+      console.log("여기오냐 결과가기전?",peopleScore)
       const signalData = "RESULT"
       const data = resultList;
       socket.emit("game_son_signal", roomName, signalData, data);

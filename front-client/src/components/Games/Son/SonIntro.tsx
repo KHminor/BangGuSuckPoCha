@@ -55,6 +55,7 @@ function SonIntro({
     getPochaUsers();
     // 손병호 게임 시그널받기
     socket.on("game_son_signal", (signalData: string, data: any) => {
+      console.log("끝나는 시그널?", signalData);
       getPochaInfo();
       setTimeout(() => {
         setSignal(signalData);
