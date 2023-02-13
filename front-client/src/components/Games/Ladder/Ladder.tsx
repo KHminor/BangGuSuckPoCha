@@ -9,8 +9,7 @@ function Ladder({
   pochaId: string;
   pochaUsers: any;
 }): React.ReactElement {
-  const usersLength = pochaUsers.length;
-  
+  const usersLength = pochaUsers.length; 
 
   const onClickClose = () => {
     console.log("클릭!!");
