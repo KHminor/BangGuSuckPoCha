@@ -128,13 +128,16 @@ function SonPlay({
   //게임 끝인지 확인 > 주먹이냐?? 오키 그럼 넘겨
   function finish(){
     const resultList: string[] = [];
+    console.log("자 여기 결과가기전", peopleScore, resultList.length);
     peopleScore.forEach((score, index) => {
-      if(score === 1) {
+      console.log("s여기@@@@@@@@@@@@", score, index);
+      if(score < 0) {
         resultList.push(peopleName[index]);
+        console.log("여기오냐?",peopleScore)
       }
     })
-    if(resultList.length) {
-      // alert(`우선 잠오니까 여기까지 ${[...resultList]} 니들 탈락`)
+    if(resultList.length >= 1) {
+      console.log("여기오냐 결과가기전?",peopleScore)
       const signalData = "RESULT"
       const data = resultList;
       socket.emit("game_son_signal", roomName, signalData, data);
