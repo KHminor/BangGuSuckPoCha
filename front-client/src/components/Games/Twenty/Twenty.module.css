@@ -72,7 +72,7 @@
 }
 
 
-.manual-button {
+.manualButton {
     width : 12rem;
     height : 3.5rem;
     line-height: 3.5rem;
@@ -89,7 +89,7 @@
     margin: 5rem 0;
 }
 
-.manual-button:hover {
+.manualButton:hover {
     color : #50C785;
     cursor: pointer;
 }
@@ -154,6 +154,7 @@
     text-align: start;
     width: 50%;
     margin: 1.2rem auto;
+    cursor: pointer;
 }
 
 .subjects:hover {
@@ -169,8 +170,9 @@
 .subject {
      background: linear-gradient(180deg, #FDDB92 50%, #D1FDFF 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #FDDB92;
     background-clip: text;
+    font-size: 1.8rem;
     text-shadow: 0px 0px 60px rgba(0, 182, 62, 0.6);
 }
 
@@ -185,11 +187,13 @@
 
 
 .text {
-    font-size: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 9rem;
     font-weight: bold;
     color: red;
     height: 11rem;
-    margin: 0 auto;
     text-shadow: 0px 0px 20px #FF0000;
 }
 .answerSuccess {
@@ -205,6 +209,7 @@
     margin: 1rem auto;
     width: 80%;
     border-radius: 2rem;
+    color: #131313;
 }
 .answer {
     font-size: 4rem;
@@ -225,20 +230,19 @@
 
 .countDetail {
     font-size: 1.5rem;
-    color: #fff;
 }
 
 .buttons {
-    display: none;
+    display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .button {
-    display: block;
     margin : 5px;
     padding : 5px 10px;
     width : 12rem;
-    height : 3rem;
+    height : 4rem;
     line-height: 3rem;
     box-shadow: 0px 0px 30px rgba(222, 236, 221, 0.5);
     text-shadow: 0px 0px 10px #008F5F;
@@ -250,6 +254,7 @@
     border: 3px solid transparent;
     border-image: linear-gradient(178.55deg, #CBBACC -0.42%, #C1DFC4 -0.41%, #DEECDD 97.7%);
     border-image-slice: 1;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -257,6 +262,6 @@
 }
 
 .reset {
-    display: none;
+    display: flex;
     justify-content: center;
 }

@@ -1,18 +1,15 @@
 import styles from "./Twenty.module.css";
 import { useState, useEffect } from "react";
 import TwentyManual from "./TwentyManual";
-import TwentyResult from "./TwentyResult";
 import TwentyPlay from "./TwentyPlay";
 import axios from "axios";
 
 function TwentyIntro({
   socket,
   pochaId,
-  pochaUsers,
 }: {
   socket: any;
   pochaId: string;
-  pochaUsers: any;
 }): React.ReactElement {
 
   // 방 이름
@@ -21,7 +18,10 @@ function TwentyIntro({
   const [signal, setSignal] = useState<string>("INTRO");
   const [resultData, setResultData] = useState<any>(null);
 
-  const [pochaInfo, setPochaInfo] = useState<any>(null)
+  // 포차 정보
+  const [pochaInfo, setPochaInfo] = useState<any>(null);
+
+
 
   // 포차 정보 요청
   const getPochaInfo = async () => {
@@ -36,6 +36,8 @@ function TwentyIntro({
       console.log("Son게임에서 포차정보 에러", error);
     }
   }
+
+  // 
 
   useEffect(() => {
     // 스무고개 게임 시그널받기
@@ -69,9 +71,8 @@ function TwentyIntro({
     <>
       {signal === "PLAY" ? (
         // <TwentyPlay socket={socket} pochaId={pochaId} pochaUsers={pochaUsers} pochaInfo={pochaInfo} />
-        <TwentyPlay socket={socket} pochaId={pochaId} pochaUsers={pochaUsers}/>
+        <TwentyPlay socket={socket} pochaId={pochaId} />
       ) : null}
-      {signal === "RESULT" ? <TwentyResult socket={socket}/> : null}
       {signal === "MANUAL" ? (
         <TwentyManual socket={socket} pochaId={pochaId} />
       ) : null}

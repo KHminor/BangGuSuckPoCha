@@ -736,7 +736,6 @@ const WebRTC = ({
                     <TwentyIntro
                       socket={socket}
                       pochaId={pochaId}
-                      pochaUsers={pochaUsers}
                     />
                   )
                 : null}
